@@ -1,7 +1,16 @@
 <template>
-  <v-container>
-    <SurveyComponent :model="survey" />
-  </v-container>
+  <v-main>
+    <v-container class="flex-grow-1">
+      <v-row>
+        <v-col class="text-center mt-6">
+          <v-img :src="'/src/assets/img/header-colombia.png'" :width="360" class="mx-auto" />
+        </v-col>
+      </v-row>
+      <div class="main-container">
+        <SurveyComponent :model="survey" />
+      </div>
+    </v-container>
+  </v-main>
 </template>
 
 <script setup lang="ts">
@@ -10,369 +19,86 @@
   import { SurveyComponent } from "survey-vue3-ui";
 
   const json = {
-    "title": "Pizza Order Form",
+    "title": "Preinscripción Núcleos Familiares Individuales - Convención, El Tarra, Tibú y Sardinata",
+    "description": "Ficha de preinscripción para el \"Establecimiento y/o fortalecimiento de actividades económicas para el tránsito a economías lícitas en el marco de procesos de sustitución de cultivos de uso ilícito en los municipios de Convención, El Tarra, Tibú y Sardinata de Norte de Santander\"",
     "logoPosition": "right",
-    "completedHtml": "<h3>Thank you for placing the order!</h3>",
-    "questionErrorLocation": "bottom",
     "pages": [
       {
         "name": "page1",
+        "title": "\n",
+        "description": "\n",
         "elements": [
           {
-            "type": "panel",
-            "name": "neapolitan",
-            "elements": [
-              {
-                "type": "expression",
-                "name": "price_n",
-                "minWidth": "220px",
-                "title": "Pizza Neapolitan",
-                "description": "tomato sauce, mozzarella, anchovies, bazil",
-                "descriptionLocation": "underTitle",
-                "expression": "5 + {size_n}",
-                "displayStyle": "currency"
-              },
-              {
-                "type": "image",
-                "name": "pic_n",
-                "width": "180px",
-                "minWidth": "180px",
-                "maxWidth": "180px",
-                "startWithNewLine": false,
-                "imageLink": "https://api.surveyjs.io/private/Surveys/files?name=c5b0302a-d6c8-46b4-ac57-7d519d0df0d1",
-                "contentMode": "image",
-                "imageFit": "cover",
-                "imageHeight": 80,
-                "imageWidth": 180
-              },
-              {
-                "type": "dropdown",
-                "name": "size_n",
-                "minWidth": "220px",
-                "title": "Size",
-                "titleLocation": "left",
-                "defaultValue": 1,
-                "choices": [
-                  {
-                    "value": 0,
-                    "text": "Small"
-                  },
-                  {
-                    "value": 1,
-                    "text": "Medium"
-                  },
-                  {
-                    "value": 2,
-                    "text": "Large"
-                  }
-                ],
-                "allowClear": false
-              },
-              {
-                "type": "dropdown",
-                "name": "qty_n",
-                "minWidth": "220px",
-                "startWithNewLine": false,
-                "title": "Qty",
-                "titleLocation": "left",
-                "choices": [
-                  1,
-                  2,
-                  3,
-                  4,
-                  5
-                ]
-              }
-            ]
+            "type": "boolean",
+            "name": "posee_predios",
+            "title": "¿Tiene, posee u ocupa usted un predio con presencia de cultivos de uso ilícito del cual depende su subsistencia?",
+            "isRequired": true
           },
           {
-            "type": "panel",
-            "name": "pepperoni",
-            "elements": [
-              {
-                "type": "expression",
-                "name": "price_p",
-                "title": "Pepperoni",
-                "titleLocation": "top",
-                "description": "tomato sauce, pepperoni, red peppers, onion",
-                "expression": "5 + {size_p}",
-                "displayStyle": "currency"
-              },
-              {
-                "type": "image",
-                "name": "pic_p",
-                "width": "180px",
-                "minWidth": "180px",
-                "maxWidth": "180px",
-                "startWithNewLine": false,
-                "imageLink": "https://api.surveyjs.io/private/Surveys/files?name=8bcd88b7-df19-466d-8622-19100e400383",
-                "contentMode": "image",
-                "imageFit": "cover",
-                "imageHeight": 80,
-                "imageWidth": 180
-              },
-              {
-                "type": "dropdown",
-                "name": "size_p",
-                "minWidth": "220px",
-                "title": "Size",
-                "titleLocation": "left",
-                "defaultValue": 1,
-                "choices": [
-                  {
-                    "value": 0,
-                    "text": "Small"
-                  },
-                  {
-                    "value": 1,
-                    "text": "Medium"
-                  },
-                  {
-                    "value": 2,
-                    "text": "Large"
-                  }
-                ],
-                "allowClear": false
-              },
-              {
-                "type": "dropdown",
-                "name": "qty_p",
-                "minWidth": "220px",
-                "startWithNewLine": false,
-                "title": "Qty",
-                "titleLocation": "left",
-                "choices": [
-                  1,
-                  2,
-                  3,
-                  4,
-                  5
-                ]
-              }
-            ]
-          },
-          {
-            "type": "panel",
-            "name": "marinara",
-            "elements": [
-              {
-                "type": "expression",
-                "name": "price_m",
-                "title": "Marinara",
-                "description": "tomato sauce, tuna, shrimps, mushrooms, cheese, onion",
-                "expression": "5 + {size_m}",
-                "displayStyle": "currency"
-              },
-              {
-                "type": "image",
-                "name": "pic_m",
-                "width": "180px",
-                "minWidth": "180px",
-                "maxWidth": "180px",
-                "startWithNewLine": false,
-                "imageLink": "https://api.surveyjs.io/private/Surveys/files?name=24735b69-0ffe-4e49-9c90-1d9db1c8b83b",
-                "contentMode": "image",
-                "imageFit": "cover",
-                "imageHeight": 80,
-                "imageWidth": 180
-              },
-              {
-                "type": "dropdown",
-                "name": "size_m",
-                "minWidth": "220px",
-                "title": "Size",
-                "titleLocation": "left",
-                "defaultValue": 1,
-                "choices": [
-                  {
-                    "value": 0,
-                    "text": "Small"
-                  },
-                  {
-                    "value": 1,
-                    "text": "Medium"
-                  },
-                  {
-                    "value": 2,
-                    "text": "Large"
-                  }
-                ],
-                "allowClear": false
-              },
-              {
-                "type": "dropdown",
-                "name": "qty_m",
-                "minWidth": "220px",
-                "startWithNewLine": false,
-                "title": "Qty",
-                "titleLocation": "left",
-                "choices": [
-                  1,
-                  2,
-                  3,
-                  4,
-                  5
-                ]
-              }
-            ]
-          },
-          {
-            "type": "expression",
-            "name": "question5",
-            "title": "Total",
-            "expression": "{price_n} * {qty_n} + {price_m} * {qty_m} + {price_p} * {qty_p}",
-            "displayStyle": "currency"
+            "type": "text",
+            "name": "numero_documento",
+            "visibleIf": "{posee_predios} = true",
+            "title": "Ingrese el número de documento",
+            "isRequired": true
           }
         ]
       },
       {
         "name": "page2",
+        "visibleIf": "{posee_predios} = true",
         "elements": [
           {
-            "type": "panel",
-            "name": "toppings-panel",
-            "elements": [
-              {
-                "type": "checkbox",
-                "name": "toppings",
-                "title": "Toppings",
-                "choices": [
-                  "Olives",
-                  "Mozzarella",
-                  "Mushrooms",
-                  "Red pepper",
-                  "Pepperoni",
-                  "Shrimps"
-                ],
-                "colCount": 3
-              }
-            ]
-          },
-          {
-            "type": "panel",
-            "name": "delivery-panel",
-            "elements": [
-              {
-                "type": "boolean",
-                "name": "need-delivery",
-                "title": "Would you like the order delivered?",
-                "defaultValue": "false"
-              },
-              {
-                "type": "text",
-                "name": "pickup-date",
-                "visibleIf": "{need-delivery} = false",
-                "title": "Pickup Date",
-                "inputType": "date"
-              },
-              {
-                "type": "text",
-                "name": "Pickup-time",
-                "visibleIf": "{need-delivery} = false",
-                "startWithNewLine": false,
-                "title": "Pickup Time",
-                "isRequired": true,
-                "inputType": "time"
-              },
-              {
-                "type": "text",
-                "name": "delivery-address",
-                "visibleIf": "{need-delivery} = true",
-                "title": "Delivery Address"
-              },
-              {
-                "type": "text",
-                "name": "delivery-date",
-                "visibleIf": "{need-delivery} = true",
-                "title": "Delivery Date",
-                "isRequired": true,
-                "inputType": "date"
-              },
-              {
-                "type": "text",
-                "name": "delivery-time",
-                "visibleIf": "{need-delivery} = true",
-                "startWithNewLine": false,
-                "title": "Delivery Time",
-                "isRequired": true,
-                "inputType": "time"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "page3",
-        "elements": [
-          {
-            "type": "panel",
-            "name": "contacts",
-            "elements": [
-              {
-                "type": "text",
-                "name": "phone",
-                "title": "Phone number",
-                "autocomplete": "tel",
-                "maskType": "pattern",
-                "maskSettings": {
-                  "saveMaskedValue": true,
-                  "pattern": "+1 (999) 999-99-99"
-                }
-              },
-              {
-                "type": "text",
-                "name": "email",
-                "startWithNewLine": false,
-                "title": "Email",
-                "validators": [
-                  {
-                    "type": "email",
-                    "text": "Please enter a valid email in the example@example.com format."
-                  }
-                ],
-                "inputType": "email",
-                "autocomplete": "email",
-                "placeholder": "Enter your email to receive an order confirmation and a receipt"
-              }
-            ]
-          },
-          {
-            "type": "panel",
-            "name": "full-name-panel",
-            "elements": [
-              {
-                "type": "multipletext",
-                "name": "full-name",
-                "title": "Full name",
-                "items": [
-                  {
-                    "name": "first-name",
-                    "title": "First name"
-                  },
-                  {
-                    "name": "last-name",
-                    "title": "Last name"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "html",
-            "name": "question4",
-            "html": "<iframe src=\"/paypaldemo\" width=\"100%\" height=\"200px\" frameBorder=\"0\"/>"
+            "type": "boolean",
+            "name": "victima_desplazamiento",
+            "title": "¿Ha sido victima de desplazamiento forzado con fecha igual o posterior al 15 de enero de 2025?",
+            "isRequired": true
           }
         ]
       }
     ],
-    "showQuestionNumbers": "off",
-    "checkErrorsMode": "onComplete",
-    "completeText": "Place Order",
-    "widthMode": "responsive"
-  };
+    "triggers": [
+      {
+        "type": "runexpression"
+      }
+    ],
+    "checkErrorsMode": "onValueChanged"
+  }
 
   const survey = new Model(json);
   survey.onComplete.add((sender, options) => {
     console.log(JSON.stringify(sender.data, null, 3));
   });
+
+  survey.onValueChanged.add(async (sender, options) => {
+    console.log('here')
+    sender.getQuestionByName("email").visible = false;
+
+    if (options.name === "ageGroup") {
+      const ageGroup = options.value;
+
+      // Llamar a un endpoint para decidir si mostrar el campo 'email'
+      try {
+        const response = await fetch(`https://myapi.com/validate-age/${ageGroup}`);
+        const data = await response.json();
+
+        if (data.showEmail) {
+          sender.getQuestionByName("email").visible = true;
+        } else {
+          sender.getQuestionByName("email").visible = false;
+        }
+      } catch (error) {
+        console.error("Error al consultar el endpoint:", error);
+      }
+    }
+  });
 </script>
+
+<style scoped>
+.v-main {
+  min-height: calc(100vh - 65px);
+  flex-grow: 1;
+  background-image: url("/src/assets/img/bg-catatumbo.png");
+  background-position: bottom;
+  background-size: contain;
+}
+</style>
