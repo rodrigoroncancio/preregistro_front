@@ -19,9 +19,46 @@
   import { SurveyComponent } from "survey-vue3-ui";
   import useCrud from "@/composables/useCrud";
   import useToast from "@/composables/useToast";
+  import { useLoading } from "vue-loading-overlay";
+  import { ref, onMounted } from "vue";
+  import axios from "axios";
+
+  const uLoading = useLoading();
 
   const uCrud = useCrud("forms/catatumbo/preinscripciongrupoproductores");
   const uToast = useToast();
+
+  const itemsDepartments = ref<Array<{ id: number; label: string }>>([]);
+
+  const getDepartmentList = async () => {
+    try {
+      const response = await axios.get("/api/1.0/core/departments");
+      itemsDepartments.value = response.data.map((dept: any) => ({
+        value: dept.id,
+        text: dept.nombre || dept.name || "Sin nombre" // Asegurar compatibilidad
+      }));
+
+    } catch (error) {
+      console.error("Error fetching department list:", error);
+    }
+  };
+
+  const itemsMunicipalities = ref<Array<{ id: number; label: string }>>([]);
+  const getMunicipalityList = async (departmentId: number) => {
+    try {
+      const response = await axios.get(`/api/1.0/core/municipalities/by-department/${departmentId}/`);
+      itemsMunicipalities.value = response.data.map((dept: any) => ({
+        value: dept.id,
+        text: dept.nombre || dept.name || "Sin nombre" // Asegurar compatibilidad
+      }));
+    } catch (error) {
+      console.error("Error fetching municipality list:", error);
+    }
+  };
+
+  onMounted(async () => {
+    getDepartmentList();
+  });
 
   const json = {
       "title": "Preinscripción Grupo de Productores Convención, El Tarra, Tibú y Sardinata - Norte de Santander",
@@ -188,9 +225,7 @@
               "description": "Seleccione una opción.",
               "isRequired": true,
               "choices": [
-                  "Item 1",
-                  "Item 2",
-                  "Item 3"
+                  "sin municipio"
               ]
               },
               {
@@ -415,6 +450,25 @@
   survey.onValueChanged.add(async (sender, options) => {
     if (options.name === "ocupacion_asociados") {
       survey.showNavigationButtons = options.value;
+    }
+
+    const departamentoQuestion = survey.getQuestionByName("departamento");
+    const departamentocoberturaQuestion = survey.getQuestionByName("departamento_cobertura");
+    
+    if (departamentoQuestion) {
+      departamentoQuestion.choices = itemsDepartments.value;
+      departamentocoberturaQuestion.choices = itemsDepartments.value;
+    }
+    const municipioQuestion = survey.getQuestionByName("municipio");
+    
+    if (options.name === "departamento") {
+        const departamento_id = options.value;
+        let loading = uLoading.show({});
+        await getMunicipalityList(departamento_id);
+          if (municipioQuestion) {
+              municipioQuestion.choices = itemsMunicipalities.value
+          }
+        loading.hide()
     }
 
     if (options.name === "ageGroup") {

@@ -56,6 +56,19 @@
     }
   };
 
+  const itemSTownShips = ref<Array<{ id: number; label: string }>>([]);
+  const getTownShipsList = async (municipalityId: number) => {
+    try {
+      const response = await axios.get(`/api/1.0/core/townships/by-municipality/${municipalityId}/`);
+      itemSTownShips.value = response.data.map((dept: any) => ({
+        value: dept.id,
+        text: dept.nombre || dept.name || "Sin nombre" // Asegurar compatibilidad
+      }));
+    } catch (error) {
+      console.error("Error fetching municipality list:", error);
+    }
+  };
+
   onMounted(async () => {
     getDepartmentList();
   });
@@ -481,19 +494,19 @@
               "title": "Municipio",
               "choices": [
                 {
-                  "value": "Item 1",
+                  "value": "787",
                   "text": "CONVENCION"
                 },
                 {
-                  "value": "Item 2",
+                  "value": "791",
                   "text": "EL TARRA"
                 },
                 {
-                  "value": "Item 3",
+                  "value": "811",
                   "text": "SARDINATA"
                 },
                 {
-                  "value": "Item 4",
+                  "value": "814",
                   "text": "TIBÚ"
                 }
               ]
@@ -1230,40 +1243,46 @@
 
       // Asegurarse de que lineas_productivas sea un string separado por comas
 
-      sender.data = Object.assign({}, sender.data, {
-          foto_frente: sender.data.foto_frente.content
-      });
+      // sender.data = Object.assign({}, sender.data, {
+      //     foto_frente: sender.data.foto_frente.content
+      // });
 
-      sender.data = Object.assign({}, sender.data, {
-          foto_frente: sender.data.foto_frente.content
-      });
+      // if (Array.isArray(sender.data.foto_frente) && sender.data.foto_frente.length > 0) {
+      //   sender.data.foto_frente = sender.data.foto_frente[0].content;
+      // } else {
+      //   sender.data.foto_frente = "";
+      // }
 
-
-      sender.data = Object.assign({}, sender.data, {
-          foto_relacion_predio1: sender.data.foto_relacion_predio1.content
-      });
-
-
-      sender.data = Object.assign({}, sender.data, {
-          foto_relacion_predio2: sender.data.foto_relacion_predio2.content
-      });
-
-      sender.data = Object.assign({}, sender.data, {
-          foto_relacion_predio3: sender.data.foto_relacion_predio3.content
-      });
+      // sender.data = Object.assign({}, sender.data, {
+      //     foto_frente: sender.data.foto_frente.content
+      // });
 
 
-      sender.data = Object.assign({}, sender.data, {
-          foto_relacion_predio4: sender.data.foto_relacion_predio4.content
-      });
+      // sender.data = Object.assign({}, sender.data, {
+      //     foto_relacion_predio1: sender.data.foto_relacion_predio1.content
+      // });
 
-      sender.data = Object.assign({}, sender.data, {
-          foto_respaldo: sender.data.foto_respaldo.content
-      });
 
-      sender.data = Object.assign({}, sender.data, {
-          foto_respaldo: sender.data.foto_respaldo.content
-      });
+      // sender.data = Object.assign({}, sender.data, {
+      //     foto_relacion_predio2: sender.data.foto_relacion_predio2.content
+      // });
+
+      // sender.data = Object.assign({}, sender.data, {
+      //     foto_relacion_predio3: sender.data.foto_relacion_predio3.content
+      // });
+
+
+      // sender.data = Object.assign({}, sender.data, {
+      //     foto_relacion_predio4: sender.data.foto_relacion_predio4.content
+      // });
+
+      // sender.data = Object.assign({}, sender.data, {
+      //     foto_respaldo: sender.data.foto_respaldo.content
+      // });
+
+      // sender.data = Object.assign({}, sender.data, {
+      //     foto_respaldo: sender.data.foto_respaldo.content
+      // });
 
       uCrud.create(sender.data)
           .then((item) => {
@@ -1293,6 +1312,17 @@
     }
     const municipioQuestion = survey.getQuestionByName("municipio");
     const municipioNucleoQuestion = survey.getQuestionByName("municipio_nucleo_familiar");
+    const veredapredio1Question = survey.getQuestionByName("vereda_predio1");
+
+    if (options.name === "municipio_predio1") {
+        const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (veredapredio1Question) {
+            veredapredio1Question.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
     
     if (options.name === "departamento") {
         const departamento_id = options.value;
