@@ -8,6 +8,10 @@
         </v-row>
         <v-row>
           <v-col className="general-asociaciones-catatumbo">
+            <router-link to="/catatumbo" class="back-section">
+                <font-awesome-icon icon="fa-arrow-left" class="login-icon" />
+                <span class="login-text"> Regresar</span>
+              </router-link>
             <div className="main-content-asociaciones-catatumbo">
                 <h1 className="title-asociaciones">
                     <span className="title-primary">Convocatoria abierta </span>
@@ -71,6 +75,30 @@
 </template>
 
 <style scoped>
+/* Sección de login */
+  .back-section {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: bold;
+      color: #585958;
+      transition: color 0.3s ease;
+      z-index: 99999;
+      position: absolute;
+      left: 20px;
+      top: 20px;
+  }
+  /* Efecto hover en el login */
+  .back-section:hover {
+  color: #106737; /* Cambia de color al pasar el mouse */
+  }
+
+  .back-section:hover {
+    .login-icon {
+      color: #106737; /* Cambia el color del icono en hover */
+    }
+  }
   .title-primary {
     color: #566181;
   }

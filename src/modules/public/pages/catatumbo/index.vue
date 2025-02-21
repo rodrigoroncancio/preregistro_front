@@ -8,6 +8,10 @@
       </v-row>
       <v-row>
         <v-col className="general">
+            <router-link to="/" class="back-section">
+                <font-awesome-icon icon="fa-arrow-left" class="login-icon" />
+                <span class="login-text"> Regresar</span>
+              </router-link>
           <div className="main-content">
             <h1 className="title">
               <span className="title-primary">Convocatoria abierta </span>
@@ -34,7 +38,7 @@
             <div className="button-group">
                 <a className="btnCat red"
                     target="_blank"
-                    href="https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/ScZ9D8KhyfMlrMpAohyxPqeUAWGGSyC?st=02FzOAJCo6zTYlaoOIdSGbobqMfnBvccipGw2m1C9o2SZKRdUWJR9ajHU9KK6jHe"
+                    href="/catatumbo/form5"
                     rel="noreferrer"
                 >
                     Familias PNIS que renegociaron y recolectores
@@ -87,6 +91,29 @@
     width: 100%;
     overflow: hidden;
 }
+.back-section {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: bold;
+      color: #585958;
+      transition: color 0.3s ease;
+      z-index: 99999;
+      position: absolute;
+      left: 20px;
+      top: 20px;
+  }
+  /* Efecto hover en el login */
+  .back-section:hover {
+  color: #106737; /* Cambia de color al pasar el mouse */
+  }
+
+  .back-section:hover {
+    .login-icon {
+      color: #106737; /* Cambia el color del icono en hover */
+    }
+  }
 
 /* Main content */
 .main-content {
