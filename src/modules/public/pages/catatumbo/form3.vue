@@ -17,6 +17,11 @@
     import 'survey-core/defaultV2.min.css';
     import { Model } from "survey-core";
     import { SurveyComponent } from "survey-vue3-ui";
+    import useCrud from "@/composables/useCrud";
+    import useToast from "@/composables/useToast";
+
+    const uCrud = useCrud("forms/catatumbo/preinscripcionnucleo");
+    const uToast = useToast();
   
     const json = {
         "title": "Preinscripción Núcleos Familiares del Grupo de Productores - Convención, El Tarra, Tibú y Sardinata",
@@ -63,8 +68,19 @@
         }
   
     const survey = new Model(json);
-    survey.onComplete.add((sender, options) => {
-      console.log(JSON.stringify(sender.data, null, 3));
+    
+    survey.onCompleting.add((sender, options) => {
+        options.allowComplete = false;
+        uCrud.create(sender.data)
+        .then((item: any) => {
+            uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
+            sender.clear(true);
+            survey.showNavigationButtons = false;
+        })
+        .catch((error: any) => {
+            uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
+        });
+        return false
     });
   
     survey.onValueChanged.add(async (sender, options) => {
