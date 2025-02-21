@@ -26,6 +26,21 @@ const router = {
           name: "public-catatumbo-form1",
           component: () => import( /* webpackChunkName: "CatatumboForm1" */ "@/modules/public/pages/catatumbo/form1.vue"),
         },
+        {
+          path: "form2",
+          name: "public-catatumbo-form2",
+          component: () => import( /* webpackChunkName: "CatatumboForm2" */ "@/modules/public/pages/catatumbo/form2.vue"),
+        },
+        {
+          path: "form3",
+          name: "public-catatumbo-form3",
+          component: () => import( /* webpackChunkName: "CatatumboForm3" */ "@/modules/public/pages/catatumbo/form3.vue"),
+        },
+        {
+          path: "form4",
+          name: "public-catatumbo-form4",
+          component: () => import( /* webpackChunkName: "CatatumboForm4" */ "@/modules/public/pages/catatumbo/form4.vue"),
+        },
       ]
     },
     {
