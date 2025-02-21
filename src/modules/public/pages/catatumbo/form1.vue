@@ -15,14 +15,20 @@
 
 <script setup lang="ts">
   import { ref } from "vue";
+  import axios from "axios";
+
   import 'survey-core/defaultV2.min.css';
+  import "survey-core/survey.i18n.js";
   import { Model } from "survey-core";
   import { SurveyComponent } from "survey-vue3-ui";
+
   import useCrud from "@/composables/useCrud";
   import useToast from "@/composables/useToast";
+  import { useLoading } from "vue-loading-overlay";
 
   const uCrud = useCrud("forms/catatumbo/preregistro");
   const uToast = useToast();
+  const uLoading = useLoading();
 
   const json = ref({
     "title": "Preinscripción Núcleos Familiares Individuales - Convención, El Tarra, Tibú y Sardinata",
@@ -42,7 +48,7 @@
             "type": "text",
             "name": "numero_documento",
             "visibleIf": "{posee_predios} = true",
-            "title": "Ingrese el número de documento",
+            "title": "Ingrese el número de documento (presione enter para continuar)",
             "isRequired": true
           }
         ]
@@ -109,9 +115,7 @@
         ]
       }
     ],
-    "pagePrevText": "Página anterior",
-    "pageNextText": "Página siguiente",
-    "completeText": "Enviar",
+    "locale": "es",
     "showNavigationButtons": false
   })
 
@@ -133,12 +137,26 @@
 
   survey.onValueChanged.add(async (sender, options) => {
     if (options.name === "posee_predios") {
-      survey.showNavigationButtons = options.value;
+      survey.showNavigationButtons = false;
+      sender.clearValue("numero_documento");
     }
     if (options.name === "numero_documento") {
+      if (options.value === null || options.value === "")
+        return;
+
       try {
-        //const response = await fetch(`https://myapi.com/validate-age/${ageGroup}`);
-        //const data = await response.json();
+        let loader = uLoading.show({});
+        axios.get(`forms/catatumbo/validar_documento/?documento=${options.value}`)
+          .then((resp: any) => {
+            if (resp.data) {
+              survey.showNavigationButtons = false;
+              sender.clearValue("numero_documento");
+              uToast.toastError("No se puede continuar con el formulario. El documento ya está registrado en las bases de datos de beneficiarios PNIS.");
+            } else
+              survey.showNavigationButtons = true;
+          })
+          .catch((err: any) => { console.log(err) })
+          .finally(() => { loader.hide() });
       } catch (error) {
         console.error("Error al consultar el endpoint:", error);
       }

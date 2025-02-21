@@ -32,6 +32,6 @@ export function registerPlugins(app: App) {
     .use(router)
     .use(createPinia())
     .use(Vue3Toasity, {
-      autoClose: 3000,
+      autoClose: 5000,
     })
 }
