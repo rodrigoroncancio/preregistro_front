@@ -25,8 +25,6 @@
     "pages": [
       {
         "name": "page1",
-        "title": "\n",
-        "description": "\n",
         "elements": [
           {
             "type": "boolean",
@@ -52,16 +50,63 @@
             "name": "victima_desplazamiento",
             "title": "¿Ha sido victima de desplazamiento forzado con fecha igual o posterior al 15 de enero de 2025?",
             "isRequired": true
+          },
+          {
+            "visibleIf": "{victima_desplazamiento} = true",
+            "type": "radiogroup",
+            "name": "actividades_transitar",
+            "title": "Actividad económica para transitar a economías licitas",
+            "isRequired": true,
+            "choices": [
+              {
+                "value": "agropecuaria",
+                "text": "Agropecuaría"
+              },
+              {
+                "value": "no_agropecuaria",
+                "text": "No Agropecuaría"
+              }
+            ]
+          },
+          {
+            "type": "radiogroup",
+            "name": "actividades_economicas",
+            "title": "Actividades económicas agropecuarias",
+            "isRequired": true,
+            "choices": [
+              {
+                "value": "establecimiento",
+                "text": "Establecimiento"
+              },
+              {
+                "value": "fortalecimiento",
+                "text": "Fortalecimiento"
+              }
+            ]
+          },
+          {
+            "type": "dropdown",
+            "name": "question3",
+            "title": "Línea productiva que selecciona",
+            "isRequired": true,
+            "choices": [
+              { "value": "cana", "text": "Caña" },
+              { "value": "cacao", "text": "Cacao" },
+              { "value": "cafe", "text": "Café" },
+              { "value": "yuca", "text": "Yuca" },
+              { "value": "maiz", "text": "Maíz" },
+              { "value": "aguacate", "text": "Aguacate" },
+              { "value": "pisicultura", "text": "Piscicultura" }
+            ],
+            "showOtherItem": true
           }
         ]
       }
     ],
-    "triggers": [
-      {
-        "type": "runexpression"
-      }
-    ],
-    "checkErrorsMode": "onValueChanged"
+    "pagePrevText": "Página anterior",
+    "pageNextText": "Página siguiente",
+    "completeText": "Enviar",
+    "showNavigationButtons": false
   }
 
   const survey = new Model(json);
@@ -70,22 +115,13 @@
   });
 
   survey.onValueChanged.add(async (sender, options) => {
-    console.log('here')
-    sender.getQuestionByName("email").visible = false;
-
-    if (options.name === "ageGroup") {
-      const ageGroup = options.value;
-
-      // Llamar a un endpoint para decidir si mostrar el campo 'email'
+    if (options.name === "posee_predios") {
+      survey.showNavigationButtons = options.value;
+    }
+    if (options.name === "numero_documento") {
       try {
-        const response = await fetch(`https://myapi.com/validate-age/${ageGroup}`);
-        const data = await response.json();
-
-        if (data.showEmail) {
-          sender.getQuestionByName("email").visible = true;
-        } else {
-          sender.getQuestionByName("email").visible = false;
-        }
+        //const response = await fetch(`https://myapi.com/validate-age/${ageGroup}`);
+        //const data = await response.json();
       } catch (error) {
         console.error("Error al consultar el endpoint:", error);
       }
@@ -93,12 +129,19 @@
   });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .v-main {
   min-height: calc(100vh - 65px);
   flex-grow: 1;
   background-image: url("/src/assets/img/bg-catatumbo.png");
   background-position: bottom;
   background-size: contain;
+}
+
+.main-container {
+  margin: auto;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 1200px;
 }
 </style>

@@ -374,7 +374,11 @@
                 }
             ]
             }
-        ]
+        ],
+        "pagePrevText": "Página anterior",
+        "pageNextText": "Página siguiente",
+        "completeText": "Enviar",
+        "showNavigationButtons": false
     }
   
     const survey = new Model(json);
@@ -383,8 +387,9 @@
     });
   
     survey.onValueChanged.add(async (sender, options) => {
-      console.log('here')
-      sender.getQuestionByName("email").visible = false;
+      if (options.name === "ocupacion_asociados") {
+        survey.showNavigationButtons = options.value;
+      }
   
       if (options.name === "ageGroup") {
         const ageGroup = options.value;
