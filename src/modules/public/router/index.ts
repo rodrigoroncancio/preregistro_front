@@ -10,7 +10,7 @@ const router = {
     {
       path: "catatumbo",
       name: "public-catatumbo",
-      component: () => import( /* webpackChunkName: "PublicCatatumbo" */ "@/modules/public/pages/catatumbo.vue"),
+      component: () => import( /* webpackChunkName: "PublicCatatumbo" */ "@/modules/public/pages/catatumbo/index.vue"),
     },
     {
       path: "catatumbo-asociaciones",
