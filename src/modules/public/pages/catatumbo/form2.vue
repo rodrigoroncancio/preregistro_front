@@ -17,6 +17,11 @@
   import 'survey-core/defaultV2.min.css';
   import { Model } from "survey-core";
   import { SurveyComponent } from "survey-vue3-ui";
+  import useCrud from "@/composables/useCrud";
+  import useToast from "@/composables/useToast";
+
+  const uCrud = useCrud("forms/catatumbo/preinscripciongrupoproductores");
+  const uToast = useToast();
 
   const json = {
       "title": "Preinscripción Grupo de Productores Convención, El Tarra, Tibú y Sardinata - Norte de Santander",
@@ -252,7 +257,7 @@
               },
               {
               "type": "text",
-              "name": "liner_nombre",
+              "name": "lider_nombre",
               "title": "Nombre del líder o lidereza que representa el grupo de productores",
               "description": "Indique nombres y apellidos del representante del grupo de produtores",
               "isRequired": true
@@ -382,9 +387,30 @@
   }
 
   const survey = new Model(json);
-  survey.onComplete.add((sender, options) => {
-    console.log(JSON.stringify(sender.data, null, 3));
+  
+  survey.onCompleting.add((sender, options) => {
+      options.allowComplete = false;
+
+      // Asegurarse de que lineas_productivas sea un string separado por comas
+      if (Array.isArray(sender.data.lineas_productivas)) {
+          sender.data = Object.assign({}, sender.data, {
+              lineas_productivas: sender.data.lineas_productivas.join(", ")
+          });
+      }
+
+      uCrud.create(sender.data)
+          .then((item) => {
+              uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
+              sender.clear(true);
+              survey.showNavigationButtons = false;
+          })
+          .catch((error) => {
+              uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
+          });
+
+      return false;
   });
+
 
   survey.onValueChanged.add(async (sender, options) => {
     if (options.name === "ocupacion_asociados") {
