@@ -10,12 +10,23 @@ const router = {
     {
       path: "catatumbo",
       name: "public-catatumbo",
-      component: () => import( /* webpackChunkName: "PublicCatatumbo" */ "@/modules/public/pages/catatumbo/index.vue"),
-    },
-    {
-      path: "catatumbo-asociaciones",
-      name: "public-catatumbo-asociaciones",
-      component: () => import( /* webpackChunkName: "PublicCatatumboAsociaciones" */ "@/modules/public/pages/catatumbo-asociaciones.vue"),
+      children: [
+        {
+          path: "",
+          name: "public-catatumbo-index",
+          component: () => import( /* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/catatumbo/index.vue"),
+        },
+        {
+          path: "asociaciones",
+          name: "public-catatumbo-asociaciones",
+          component: () => import( /* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/asociaciones.vue"),
+        },
+        {
+          path: "form1",
+          name: "public-catatumbo-form1",
+          component: () => import( /* webpackChunkName: "CatatumboForm1" */ "@/modules/public/pages/catatumbo/form1.vue"),
+        },
+      ]
     },
     {
       path: "argelia",

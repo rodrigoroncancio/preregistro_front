@@ -68,12 +68,12 @@ const itemsMenu = [
     }]
   },
   {
-    title: "modules.pnis.pnis",
+    title: "modules.pnis.fichaacuerdo",
     icon: "mdi-solar-panel",
     children: [{
-      title: "modules.pnis.survey",
+      title: "modules.pnis.fichaacuerdo",
       icon: "mdi-human-male-board-poll",
-      url: "/pnis/userspnis",
+      url: "/pnis/fichaacuerdo",
     }]
   },
 ];

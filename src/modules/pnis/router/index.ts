@@ -3,19 +3,14 @@ const router = {
   component: () => import("@/layouts/default.vue" ),
   children: [
     {
-      path: "survey",
-      name: "pnis-survey",
-      component: () => import( /* webpackChunkName: "PnisSurvey" */ "@/modules/pnis/pages/survey.vue"),
-    },
-    {
-      path: "userspnis",
-      name: "pnis-userspnis",
-      component: () => import( /* webpackChunkName: "PnisUserspnis" */ "@/modules/pnis/pages/userspnis.vue"),
-    },
-    {
-      path: "fichaacuerdo/:id",
+      path: "fichaacuerdo",
       name: "pnis-fichaacuerdo",
-      component: () => import( /* webpackChunkName: "PnisFichaacuerdo" */ "@/modules/pnis/pages/fichaacuerdo.vue"),
+      component: () => import( /* webpackChunkName: "PnisUserspnis" */ "@/modules/pnis/pages/fichaacuerdo.vue"),
+    },
+    {
+      path: "fichaacuerdo/open/:id",
+      name: "pnis-fichaacuerdo-open",
+      component: () => import( /* webpackChunkName: "PnisFichaacuerdoOpen" */ "@/modules/pnis/pages/fichaacuerdo-open.vue"),
     },
   ],
 };

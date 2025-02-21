@@ -16,25 +16,20 @@
             <h2 className="subtitle">Convención, Tibú, Sardinata y El Tarra</h2>
             <p className="date">Del <strong>13 de febrero</strong> <strong>al 27 de febrero</strong></p>
           </div>
-
           <div className="buttons-container">
             <div className="button-group">
-              <a className="btnCat red"
-                target="_blank"
-                href="https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/gxOFWKMp6s50fkgz96Ra3exIX7namha?st=xlVPjurNGeNCd6fVJftfHUBbAcgoADDGYlA9dYefk69OJ9rk6!oz3QGXGFoH3atL"
-                rel="noreferrer"
-              >
-                  Preregistro de núcleos familiares
-              </a>
-                <p className="btnCat description red">Para quienes no hacen parte de una asociación</p>
-                <button className="btnCat grey">ABC de la convocatoria</button>
+              <router-link :to="'/catatumbo/form1'" class="btnCat red">
+                Preregistro de núcleos familiares
+              </router-link>
+              <p className="btnCat description red">Para quienes no hacen parte de una asociación</p>
+              <button className="btnCat grey">ABC de la convocatoria</button>
             </div>
             <div className="button-group">
-                <a className="btnCat blue" href="/?pagina=catatumbo-asociaciones">
-                    Preregistro de grupo de productores
-                </a>
-                <p className="btnCat description blue">Para quienes se registran a través de su asociación</p>
-                <button className="btnCat grey">ABC de la convocatoria</button>
+              <router-link :to="'/catatumbo/asociaciones'" class="btnCat blue">
+                Preregistro de grupo de productores
+              </router-link>
+              <p className="btnCat description blue">Para quienes se registran a través de su asociación</p>
+              <button className="btnCat grey">ABC de la convocatoria</button>
             </div>
             <div className="button-group">
                 <a className="btnCat red"
@@ -47,20 +42,16 @@
                 <p className="btnCat description red">Beneficiarios del programa</p>
                 <button className="btnCat grey">ABC de la convocatoria</button>
             </div>
-            
           </div>
           <div className="pdf-container-catatumbo">
-                    <a className="pdf-catatumbo"
-                       target="blank"
-                       href="https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/13022025_ConvocatoriaFinal_v11.pdf"
-                       rel="noreferrer"
-                    >
-                        Ver términos de referencia de la convocatoria
-                    </a>
-                </div>
-
-      
-
+              <a className="pdf-catatumbo"
+                  target="blank"
+                  href="https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/13022025_ConvocatoriaFinal_v11.pdf"
+                  rel="noreferrer"
+              >
+                  Ver términos de referencia de la convocatoria
+              </a>
+            </div>
         </v-col>
       </v-row>
     </v-container>
