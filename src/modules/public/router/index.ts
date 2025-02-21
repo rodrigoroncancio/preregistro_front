@@ -36,6 +36,11 @@ const router = {
           name: "public-catatumbo-form3",
           component: () => import( /* webpackChunkName: "CatatumboForm3" */ "@/modules/public/pages/catatumbo/form3.vue"),
         },
+        {
+          path: "form4",
+          name: "public-catatumbo-form4",
+          component: () => import( /* webpackChunkName: "CatatumboForm4" */ "@/modules/public/pages/catatumbo/form4.vue"),
+        },
       ]
     },
     {
