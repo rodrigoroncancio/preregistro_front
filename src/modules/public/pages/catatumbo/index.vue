@@ -8,6 +8,10 @@
       </v-row>
       <v-row>
         <v-col className="general">
+            <router-link to="/" class="back-section">
+                <font-awesome-icon icon="fa-arrow-left" class="login-icon" />
+                <span class="login-text"> Regresar</span>
+              </router-link>
           <div className="main-content">
             <h1 className="title">
               <span className="title-primary">Convocatoria abierta </span>
@@ -16,30 +20,25 @@
             <h2 className="subtitle">Convención, Tibú, Sardinata y El Tarra</h2>
             <p className="date">Del <strong>13 de febrero</strong> <strong>al 27 de febrero</strong></p>
           </div>
-
           <div className="buttons-container">
             <div className="button-group">
-              <a className="btnCat red"
-                target="_blank"
-                href="https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/gxOFWKMp6s50fkgz96Ra3exIX7namha?st=xlVPjurNGeNCd6fVJftfHUBbAcgoADDGYlA9dYefk69OJ9rk6!oz3QGXGFoH3atL"
-                rel="noreferrer"
-              >
-                  Preregistro de núcleos familiares
-              </a>
-                <p className="btnCat description red">Para quienes no hacen parte de una asociación</p>
-                <button className="btnCat grey">ABC de la convocatoria</button>
+              <router-link :to="'/catatumbo/form1'" class="btnCat red">
+                Preregistro de núcleos familiares
+              </router-link>
+              <p className="btnCat description red">Para quienes no hacen parte de una asociación</p>
+              <button className="btnCat grey">ABC de la convocatoria</button>
             </div>
             <div className="button-group">
-                <a className="btnCat blue" href="/?pagina=catatumbo-asociaciones">
-                    Preregistro de grupo de productores
-                </a>
-                <p className="btnCat description blue">Para quienes se registran a través de su asociación</p>
-                <button className="btnCat grey">ABC de la convocatoria</button>
+              <router-link :to="'/catatumbo/asociaciones'" class="btnCat blue">
+                Preregistro de grupo de productores
+              </router-link>
+              <p className="btnCat description blue">Para quienes se registran a través de su asociación</p>
+              <button className="btnCat grey">ABC de la convocatoria</button>
             </div>
             <div className="button-group">
                 <a className="btnCat red"
                     target="_blank"
-                    href="https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/ScZ9D8KhyfMlrMpAohyxPqeUAWGGSyC?st=02FzOAJCo6zTYlaoOIdSGbobqMfnBvccipGw2m1C9o2SZKRdUWJR9ajHU9KK6jHe"
+                    href="/catatumbo/form5"
                     rel="noreferrer"
                 >
                     Familias PNIS que renegociaron y recolectores
@@ -47,20 +46,16 @@
                 <p className="btnCat description red">Beneficiarios del programa</p>
                 <button className="btnCat grey">ABC de la convocatoria</button>
             </div>
-            
           </div>
           <div className="pdf-container-catatumbo">
-                    <a className="pdf-catatumbo"
-                       target="blank"
-                       href="https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/13022025_ConvocatoriaFinal_v11.pdf"
-                       rel="noreferrer"
-                    >
-                        Ver términos de referencia de la convocatoria
-                    </a>
-                </div>
-
-      
-
+              <a className="pdf-catatumbo"
+                  target="blank"
+                  href="https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/13022025_ConvocatoriaFinal_v11.pdf"
+                  rel="noreferrer"
+              >
+                  Ver términos de referencia de la convocatoria
+              </a>
+            </div>
         </v-col>
       </v-row>
     </v-container>
@@ -96,6 +91,29 @@
     width: 100%;
     overflow: hidden;
 }
+.back-section {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: bold;
+      color: #585958;
+      transition: color 0.3s ease;
+      z-index: 99999;
+      position: absolute;
+      left: 20px;
+      top: 20px;
+  }
+  /* Efecto hover en el login */
+  .back-section:hover {
+  color: #106737; /* Cambia de color al pasar el mouse */
+  }
+
+  .back-section:hover {
+    .login-icon {
+      color: #106737; /* Cambia el color del icono en hover */
+    }
+  }
 
 /* Main content */
 .main-content {

@@ -25,6 +25,8 @@
     "leaflet": "^1.9.4",
     "pinia": "^2.0.23",
     "roboto-fontface": "*",
+    "survey-core": "^1.12.24",
+    "survey-vue3-ui": "^1.12.24",
     "vee-validate": "^4.13.1",
     "vue": "^3.4.31",
     "vue-advanced-cropper": "^2.8.9",
