@@ -318,6 +318,12 @@ const itemsLegalActivities = [
 const tab = ref(0);
 const formDataDefault = {
   Name: "", LastName: "", email: "",
+  departmentid: 0,
+  municipalityid: 0,
+  townshipid: 0,
+  departmentfarmid: 0,
+  municipalityfarmid: 0,
+  townshipfarmid: 0
 };
 const formData = ref({ ...formDataDefault });
 const passwordData = ref();
@@ -413,7 +419,7 @@ const rules = {
   first_name: { required, minLength: minLength(2) },
   last_name: { required, minLength: minLength(2) },
 };
-const validate = useVuelidate(rules, formData);
+const validate = useVuelidate(rules, (formData as any));
 
 onMounted(async () => {
   console.log('route.params.id:', route.params.id);
