@@ -33,7 +33,7 @@
 
                 </div>
                 <div className="button-group-argelia-page">
-                  <a href="/pnis/userspnis" target="blank" className="btn-arge-page green">Validación inscritos</a>
+                  <a href="/pnis/fichaacuerdo" target="blank" className="btn-arge-page green">Validación inscritos</a>
 
                 </div>
                 <div className="button-group-argelia-page">
