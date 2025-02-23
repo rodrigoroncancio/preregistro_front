@@ -86,6 +86,9 @@ import expModalForm from "@/components/expModalForm";
 import frmValida from "./forms/valida.vue";
 import useUtils from "@/composables/useUtils";
 import axios from "axios";
+import { useLoading } from "vue-loading-overlay";
+
+const uLoading = useLoading();
 const endpoint = "/api/1.0/core";
 const { t } = useI18n();
 const router = useRouter();
@@ -115,6 +118,7 @@ const headers: any[] = [
   { key: 'name', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: true, },
   { key: 'lastname', title: "Apellidos", width: "auto", align: "start", sortable: true, },
   { key: "number_completed", title: "Validados", width: "auto", align: "start", sortable: false, },
+  { key: "number_uncompleted", title: "No Validados", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
 const drawRefresh = ref("");
@@ -125,6 +129,8 @@ const formModalValidate = ref(false);
 const itemsValidation = ref<Array<{ id: number; label: string }>>([]);
 
 const getValidationItems = async () => {
+    let loader = uLoading.show({});
+    itemsValidation.value = []; 
     try {
       const response = await axios.get(
         `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/3/`
@@ -141,8 +147,10 @@ const getValidationItems = async () => {
       } else {
         console.warn("Formato inesperado en la respuesta:", response.data);
       }
+      loader.hide()
     } catch (error) {
       console.error("Error fetching validation items:", error);
+      loader.hide()
     }
   };
 
