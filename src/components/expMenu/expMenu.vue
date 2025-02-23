@@ -68,9 +68,19 @@ const itemsMenu = [
     }]
   },
   {
-    title: "modules.pnis.fichaacuerdo",
+    title: "Convocatoria Argelia",
     icon: "mdi-solar-panel",
     children: [{
+      title: "modules.pnis.preregistroasociado",
+      icon: "mdi-human-male-board-poll",
+      url: "/pnis/argeliagrupo",
+    },
+    {
+      title: "modules.pnis.preregistroindividual",
+      icon: "mdi-human-male-board-poll",
+      url: "/pnis/argeliapersonas",
+    },
+    {
       title: "modules.pnis.fichaacuerdo",
       icon: "mdi-human-male-board-poll",
       url: "/pnis/fichaacuerdo",

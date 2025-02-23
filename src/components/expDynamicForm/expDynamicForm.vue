@@ -25,6 +25,10 @@
   }
 
   const props = defineProps({
+    readOnly: {
+      type: Boolean,
+      default: false,
+    },
     schema: {
       type: Array
     },
@@ -98,6 +102,7 @@
             color="primary"
             class="ml-3"
             v-bind="attrs"
+            :readonly="readOnly"
           />
         </template>
         <v-menu :close-on-content-click="false" v-else-if="(item as any).type == 'color'">
@@ -117,6 +122,7 @@
           :label="(item as any).title"
           v-model="(modelValue as any)[(item as any).key]"
           v-bind="attrs"
+          :readonly="readOnly"
         />
         <template v-else-if="(item as any).type == 'editor'">
           <label>{{ (item as any).title }}</label>
@@ -151,18 +157,21 @@
           :label="(item as any).title"
           v-model="(modelValue as any)[(item as any).key]"
           type="date"
+          :readonly="readOnly"
         ></brs-date-time>
         <brs-date-time v-else-if="(item as any).type == 'time'"
           :label="(item as any).title"
           v-model="(modelValue as any)[(item as any).key]"
           type="time"
           :error="((errors as any)?.filter((x: any) => x.$property == (item as any).key)?.length > 0)"
+          :readonly="readOnly"
         ></brs-date-time>
         <brs-date-time v-else-if="(item as any).type == 'datetime'"
           :label="(item as any).title"
           v-model="(modelValue as any)[(item as any).key]"
           type="datetime"
           :error="((errors as any)?.filter((x: any) => x.$property == (item as any).key)?.length > 0)"
+          :readonly="readOnly"
         ></brs-date-time>
         <v-autocomplete v-else-if="(item as any).type == 'select'"
           :label="(item as any).title"
@@ -172,6 +181,7 @@
           item-value="id"
           v-bind="attrs"
           :error="((errors as any)?.filter((x: any) => x.$property == (item as any).key)?.length > 0)"
+          :readonly="readOnly"
         />
         <v-select v-else-if="(item as any).type == 'multi_select'"
           :label="(item as any).title"
@@ -182,6 +192,7 @@
           multiple
           v-bind="attrs"
           :error="((errors as any)?.filter((x: any) => x.$property == (item as any).key)?.length > 0)"
+          :readonly="readOnly"
         />
         <v-text-field v-else-if="(item as any).type == 'password'"
           :label="(item as any).title"
@@ -189,6 +200,7 @@
           type="password"
           v-bind="attrs"
           :error="((errors as any)?.filter((x: any) => x.$property == (item as any).key)?.length > 0)"
+          :readonly="readOnly"
         />
         <v-text-field v-else-if="(item as any).type == 'number'"
           :label="(item as any).title"
@@ -196,12 +208,14 @@
           type="number"
           v-bind="attrs"
           :error="((errors as any)?.filter((x: any) => x.$property == (item as any).key)?.length > 0)"
+          :readonly="readOnly"
         />
         <v-text-field v-else
           :label="(item as any).title"
           v-model="(modelValue as any)[(item as any).key]"
           v-bind="attrs"
           :error="((errors as any)?.filter((x: any) => x.$property == (item as any).key)?.length > 0)"
+          :readonly="readOnly"
         />
       </slot>
     </v-col>
