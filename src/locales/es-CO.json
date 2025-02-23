@@ -191,7 +191,9 @@
       "new_userspnis": "Nuevo usuario inscrito",
       "history_location": "Historial de ubicaciones",
       "history_sos_alert": "Historial de alertas de SOS",
-      "active_sos_alert": "Alertas de SOS activas"
+      "active_sos_alert": "Alertas de SOS activas",
+      "validate": "Validar",
+      "select": "Seleccionar"
     },
     "portal": {
       "portal": "Portal",
@@ -204,7 +206,15 @@
     },
     "pnis": {
       "pnis": "PNIS",
-      "survey": "Preregistro"
+      "convocatoria": "Convocatoria",
+      "survey": "Preregistro",
+      "fichaacuerdo": "Ficha de acuerdo",
+      "preregistroindividual": "Registro individual",
+      "preregistroasociado": "Registro asociado",
+      "modal_title_validateitems": "Lista de items de validación",
+      "modal_title_valodationform": "Formulario de validación",
+      "argeliapersonas": "Resgistos Argelia Individuales",
+      "argeliagrupo": "Resgistos Argelia Grupos"
     }
   }
 }

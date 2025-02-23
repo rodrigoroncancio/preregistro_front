@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <h1 class="mb-4">{{ $t('modules.core.userspnis') }}</h1>
+    <h1 class="mb-4">{{ $t('modules.pnis.argeliapersonas') }}</h1>
     <v-card>
       <v-card-text class="pa-0">
         <exp-data-table
           uuid="table-users_pnis"
-          :endpoint="`${endpoint}/userpnis/filterbysurvey/3`"
+          :endpoint="`${endpoint}/argeliapersonas/filterbysurvey/2`"
           :drawRefresh="drawRefresh"
           :headers="headers"
           :extraMenuItems="[{
@@ -15,7 +15,6 @@
           }]"
           :menuItems="menuItems"
           :labelNew="'modules.core.new_userspnis'"
-          @onClickEdit="clickEdit"
           @onClickView="clickView"
           @onClickAction="clickAction"
         >
@@ -45,7 +44,7 @@
         <frm-valida 
           :identificationnumber="identificationnumber"
           :validationitem="validationid"
-          :fomularioid="3"
+          :fomularioid="2"
           @onClickSave="fnReloadTable"
         />
       </v-col>
@@ -64,7 +63,7 @@
       <v-col cols="12">
         <v-radio-group v-model="validationid">
           <v-radio 
-            v-for="option in itemsValidation" 
+            v-for="option in options" 
             :key="option.id" 
             :label="option.label" 
             :value="option.id"
@@ -85,7 +84,7 @@ import expDataTable from "@/components/expDataTable";
 import expModalForm from "@/components/expModalForm";
 import frmValida from "./forms/valida.vue";
 import useUtils from "@/composables/useUtils";
-import axios from "axios";
+
 const endpoint = "/api/1.0/core";
 const { t } = useI18n();
 const router = useRouter();
@@ -93,7 +92,6 @@ const uAuth = useAuth();
 const uUtils = useUtils();
 
 const validationid = ref(null); // v-model para el radio group
-
 const identificationnumber = ref(null);
 
 const options = ref([
@@ -111,10 +109,10 @@ const options = ref([
 
 const headers: any[] = [
   { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: true },
-  { key: 'identificationnumber', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'name', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'lastname', title: "Apellidos", width: "auto", align: "start", sortable: true, },
-  { key: "number_completed", title: "Validados", width: "auto", align: "start", sortable: false, },
+  { key: 'identificacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: true, },
+  { key: 'nombres', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: true, },
+  { key: 'apellidos', title: "Apellidos", width: "auto", align: "start", sortable: true, },
+  { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
 const drawRefresh = ref("");
@@ -122,37 +120,12 @@ const drawRefresh = ref("");
 const formModal = ref(false);
 const formModalValidate = ref(false);
 
-const itemsValidation = ref<Array<{ id: number; label: string }>>([]);
-
-const getValidationItems = async () => {
-    try {
-      const response = await axios.get(
-        `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/3/`
-      );
-
-      console.log(response.data);
-
-      // Verifica si response.data tiene la estructura esperada
-      if (response.data.missing_items) {
-        itemsValidation.value = response.data.missing_items.map((item: any) => ({
-          id: item.id,
-          label: item.nombre || item.name || "Sin nombre",
-        }));
-      } else {
-        console.warn("Formato inesperado en la respuesta:", response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching validation items:", error);
-    }
-  };
-
 onMounted(async () => {});
 
 const fnReloadTable = () => {
   formModal.value = false;
   formModalValidate.value = false;
   drawRefresh.value = uUtils.createUUID();
-
 }
 
 const isUserAdmin = computed(() => {
@@ -166,7 +139,7 @@ const isUserAdmin = computed(() => {
 
 const menuItems = computed(() => {
   if (isUserAdmin.value) {
-    return ['view', 'edit', 'validate']
+    return ['view', 'validate']
   } else {
     return ['view', 'validate']
   }
@@ -176,22 +149,16 @@ const isValidForm = computed(() => {
   return false
 });
 
-const clickEdit = async (item: any) => {
-  router.push(`/pnis/fichaacuerdo/open/${item.id}`);
+const clickView = async (item: any) => {
+  router.push(`/pnis/argeliapersonas/open/${item.id}`);
 };
 
 const clickAction = (item: any, action: string) => {
   if (action === 'validate') {
     formModalValidate.value = true;
     console.log(item);
-    identificationnumber.value = item.identificationnumber || item.identificacionorganizacion;
-    getValidationItems();
+    identificationnumber.value = item.identificacion;
   }
-};
-
-const clickView = (item: any) => {
-  console.log(item);
-  router.push(`/pnis/fichaacuerdo/open/${item.id}`);
 };
 
 const clickSaveForm = () => {

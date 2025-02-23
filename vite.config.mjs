@@ -37,6 +37,8 @@ export default defineConfig({
     ],
   },
   server: {
-    port: 3333,
+    port: 3000,
+    // host: '0.0.0.0', // Permite acceder desde cualquier IP
+    // allowedHosts: ['local.expansionti.co'], // Mueve aquí allowedHosts
   },
 })
