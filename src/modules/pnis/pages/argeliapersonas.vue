@@ -78,7 +78,7 @@
     :title="$t('modules.pnis.modal_title_validateitems')"
     :width="450"
     v-model="formModalDocumentos"
-    :btnSaveEnabled="false"
+    :btnSave="false"
     @fnSave="clickSelectFormDocuments"
     :btnSaveText="$t('modules.core.select')"
   >
