@@ -114,9 +114,9 @@ const options = ref([
 
 const headers: any[] = [
   { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: true },
-  { key: 'identificationnumber', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'name', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'lastname', title: "Apellidos", width: "auto", align: "start", sortable: true, },
+  { key: 'identificationnumber', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'name', title: "Nombre", width: "auto", align: "start",  searchable: false, sortable: false, },
+  { key: 'lastname', title: "Apellidos", width: "auto", align: "start", sortable: false, },
   { key: "number_completed", title: "Validados", width: "auto", align: "start", sortable: false, },
   { key: "number_uncompleted", title: "No Validados", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
