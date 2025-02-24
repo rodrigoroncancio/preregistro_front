@@ -1,7 +1,6 @@
 <template>
   <v-main>
     <v-container class="flex-grow-1">
-
       <div class="main-container">
         <SurveyComponent :model="survey" />
       </div>
