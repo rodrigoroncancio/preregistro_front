@@ -41,7 +41,7 @@
   >
     <v-row>
       <v-col cols="12">
-        <frm-valida 
+        <frm-valida
           :identificationnumber="identificationnumber"
           :validationitem="validationid"
           :fomularioid="1"
@@ -62,10 +62,10 @@
     <v-row>
       <v-col cols="12">
         <v-radio-group v-model="validationid">
-          <v-radio 
-            v-for="option in itemsValidation" 
-            :key="option.id" 
-            :label="option.label" 
+          <v-radio
+            v-for="option in itemsValidation"
+            :key="option.id"
+            :label="option.label"
             :value="option.id"
           />
         </v-radio-group>
@@ -83,7 +83,7 @@ import useAuth from "@/modules/auth/composables/useAuth";
 import expDataTable from "@/components/expDataTable";
 import expModalForm from "@/components/expModalForm";
 import frmValida from "./forms/valida.vue";
-import useUtils from "@/composables/useUtils";  
+import useUtils from "@/composables/useUtils";
 import axios from "axios";
 import { useLoading } from "vue-loading-overlay";
 
@@ -111,11 +111,11 @@ const options = ref([
 ]);
 
 const headers: any[] = [
-  { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: true },
-  { key: 'identificacionorganizacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'cedularepresentante', title: "CC Representante", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'grupoproductores', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'departamentoinfluencia', title: "Dep. Influencia", width: "auto", align: "start", sortable: true, },
+  { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: false, },
+  { key: 'identificacionorganizacion', title: "Num. identificación", width: "auto", align: "start", sortable: false, },
+  { key: 'cedularepresentante', title: "CC Representante", width: "auto", align: "start", sortable: false, },
+  { key: 'grupoproductores', title: "Nombre", width: "auto", align: "start", sortable: false, },
+  { key: 'departamentoinfluencia', title: "Dep. Influencia", width: "auto", align: "start", sortable: false, },
   { key: "municipioinfluencia", title: "Mun. Influencia", width: "auto", align: "start", sortable: false, },
   { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
   { key: 'number_uncompleted', title: "No Validados", width: "auto", align: "start", sortable: false, },

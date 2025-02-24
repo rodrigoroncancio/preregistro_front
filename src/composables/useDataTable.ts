@@ -30,13 +30,16 @@ const useDataTable = (
     };
 
     // Construir los parámetros para las columnas usando los headers
-    headers.filter((item:any) => {!(item.virtual === true)}).forEach((header:any, index:number) => { headers.
+    //headers.filter((item:any) => {!(item.virtual === true)}).forEach((header:any, index:number) => { headers.
+    headers.forEach((header:any, index:number) => {
       listParams[`columns[${index}][data]`] = header.key;
       listParams[`columns[${index}][name]`] = header.key;
-      listParams[`columns[${index}][searchable]`] = header.searchable ? "true" : "false";
-      listParams[`columns[${index}][orderable]`] = header.sortable ? "true" : "false";
-      listParams[`columns[${index}][search][value]`] = search;
-      listParams[`columns[${index}][search][regex]`] = "false";
+      //listParams[`columns[${index}][searchable]`] = header.searchable ? "true" : "false";
+      //listParams[`columns[${index}][orderable]`] = false;//header.sortable ? "true" : "false";
+      //if (header.searchable) {
+      //  listParams[`columns[${index}][search][value]`] = search;
+      //  listParams[`columns[${index}][search][regex]`] = "false";
+      //}
     });
 
     if(sortBy.length > 0) {
@@ -47,18 +50,19 @@ const useDataTable = (
     }
 
     const _listParams = { ...listParams, ...extra };
+    const txtListParams = new URLSearchParams(_listParams).toString();
     return new Promise((resolve, reject) => {
+      let _endpoint = `${endpoint}/?format=datatables&${txtListParams}`
       axios
-        .get(endpoint + "/?format=datatables", {
-          params: _listParams,
-        })
+        .get(_endpoint)
         .then((resp: any) => {
           resolve({
             items: resp.data.data,
             total: resp.data.recordsFiltered,
+            endpoint: _endpoint
           });
         })
-        .catch((err) => {
+        .catch((err: any) => {
           reject(err);
         });
     });

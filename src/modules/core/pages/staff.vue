@@ -55,10 +55,10 @@ const endpoint = "/api/1.0/core";
 const { t } = useI18n();
 
 const headers: any[] = [
-  { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: true },
-  { key: 'first_name', title: t("modules.auth.first_name"), width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'last_name', title: t("modules.auth.last_name"), width: "auto", align: "start", sortable: true, },
-  { key: 'email', title: t("commons.common.email"), width: "auto", align: "start", sortable: false, },
+  { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: false },
+  { key: 'first_name', title: t("modules.auth.first_name"), width: "auto", align: "start",  sortable: false, },
+  { key: 'last_name', title: t("modules.auth.last_name"), width: "auto", align: "start",  sortable: false, },
+  { key: 'email', title: t("commons.common.email"), width: "auto", align: "start",  sortable: false, },
   { key: 'phone', title: t("commons.common.phone"), width: "auto", align: "start", sortable: false, },
   { key: 'is_superuser', title: t("modules.auth.role"), width: "auto", align: "start", sortable: false, },
   { key: 'is_active', title: t("modules.auth.active"), width: "auto", align: "center", type: "check", sortable: false, },
