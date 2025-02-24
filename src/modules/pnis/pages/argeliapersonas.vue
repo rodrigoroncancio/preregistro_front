@@ -83,15 +83,10 @@
     :btnSaveText="$t('modules.core.select')"
   >
     <v-row>
-      <v-col cols="12">
-        <v-radio-group v-model="validationid">
-          <v-radio 
-            v-for="item in itemsDocuments"
-            :key="item.id"
-            :label="item.label"
-            :value="item.id"
-          />
-        </v-radio-group>
+      <v-col cols="12" v-for="item in itemsDocuments" :key="item.id">
+        <div class="container-documents">
+          <a :href="item.link" target="blank" class="button-documents">{{ item.label }}</a>
+        </div>
       </v-col>
     </v-row>
   </exp-modal-form>
@@ -218,20 +213,34 @@ const clickView = async (item: any) => {
 
 const clickDocuments = (item: any) => {
   console.log(item);
+  itemsDocuments.value = []; // Reiniciar el array
   formModalDocumentos.value = true;
-  itemsDocuments.value.push({
-    id: 1,
-    label: 'Foto documento delatera'
-  });
-  itemsDocuments.value.push({
-    id: 2,
-    label: 'Foto documento respaldo'
-  });
-  itemsDocuments.value.push({
-    id: 3,
-    label: 'Foto de tenencia'
-  });
-}
+
+  if (item.fotodocumentofrente) {
+    itemsDocuments.value.push({
+      id: 1,
+      link: "/api/1.0/core/media/"+ item.id + "/?ruta=" + item.fotodocumentofrente,
+      label: "Foto de frente"
+    });
+  }
+
+  if (item.fotodocumentorespaldo) {
+    itemsDocuments.value.push({
+      id: 2,
+      link: "/api/1.0/core/media/"+ item.id + "/?ruta=" + item.fotodocumentorespaldo,
+      label: "Foto de respaldo"
+    });
+  }
+
+  if (item.fototenencia) {
+    itemsDocuments.value.push({
+      id: 3,
+      link: "/api/1.0/core/media/"+ item.id + "/?ruta=" + item.fototenencia,
+      label: "Foto de tenencia"
+    });
+  }
+};
+
 
 const clickAction = (item: any, action: string) => {
   console.log(item, action);
@@ -261,5 +270,29 @@ const clickSelectFormDocuments = (item: any) => {
 </script>
 
 <style lang="scss">
+.container-documents  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
 
+.button-documents {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4CAF50, rgb(59, 192, 103));
+    color: black;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.button-documents:hover {
+    background: linear-gradient(135deg, #4CAF50, rgb(59, 192, 103));
+}
 </style>

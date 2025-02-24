@@ -17,6 +17,7 @@
           :labelNew="'modules.core.new_userspnis'"
           @onClickView="clickView"
           @onClickAction="clickAction"
+          @onClickDocuments="clickDocuments"
         >
           <template v-slot:item.is_superuser="{item}">
             <v-icon v-if="item.is_superuser" color="blue" class="mr-2">
@@ -72,6 +73,29 @@
       </v-col>
     </v-row>
   </exp-modal-form>
+
+  <exp-modal-form
+    :title="$t('modules.pnis.modal_title_validateitems')"
+    :width="450"
+    v-model="formModalDocumentos"
+    :btnSaveEnabled="true"
+    @fnSave="clickSelectFormDocuments"
+    :btnSaveText="$t('modules.core.select')"
+  >
+    <v-row>
+      <v-col cols="12">
+        <v-radio-group v-model="validationid">
+          <v-radio 
+            v-for="item in itemsDocuments"
+            :key="item.id"
+            :label="item.label"
+            :value="item.id"
+          />
+        </v-radio-group>
+      </v-col>
+    </v-row>
+  </exp-modal-form>
+
 </template>
 
 <script lang="ts" setup>
@@ -97,6 +121,7 @@ const uUtils = useUtils();
 
 const validationid = ref(null); // v-model para el radio group
 const identificationnumber = ref(null);
+const itemsDocuments = ref([]);
 const options = ref([
   { id: 2, label: "Completitud de los datos" },
   { id: 3, label: "Representante núcleo familiar" },
@@ -125,6 +150,7 @@ const drawRefresh = ref("");
 
 const formModal = ref(false);
 const formModalValidate = ref(false);
+const formModalDocumentos = ref(false);
 
 const itemsValidation = ref<Array<{ id: number; label: string }>>([]);
 
@@ -186,6 +212,23 @@ const clickView = async (item: any) => {
   router.push(`/pnis/argeliagrupo/open/${item.id}`);
 };
 
+const clickDocuments = (item: any) => {
+  console.log(item);
+  formModalDocumentos.value = true;
+  itemsDocuments.value.push({
+    id: 1,
+    label: 'Foto documento delatera'
+  });
+  itemsDocuments.value.push({
+    id: 2,
+    label: 'Foto documento respaldo'
+  });
+  itemsDocuments.value.push({
+    id: 3,
+    label: 'Foto de tenencia'
+  });
+}
+
 const clickAction = (item: any, action: string) => {
   if (action === 'validate') {
     formModalValidate.value = true;
@@ -203,6 +246,12 @@ const clickSelectForm = () => {
   console.log('clickSelectForm');
   console.log(validationid.value);
   formModal.value = true;
+}
+
+const clickSelectFormDocuments = () => {
+  console.log('clickSelectFormDocuments');
+  console.log(validationid.value);
+  formModalDocumentos.value = true;
 }
 </script>
 
