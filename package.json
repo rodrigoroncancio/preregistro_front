@@ -9,6 +9,10 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
@@ -44,6 +48,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@types/bun": "latest",
     "@types/node": "^20.14.9",
     "@types/webfontloader": "^1.6.38",
     "@vitejs/plugin-vue": "^5.0.5",
@@ -54,8 +59,7 @@
     "typescript": "^5.5.2",
     "vite": "^5.3.3",
     "vite-plugin-vuetify": "^2.0.3",
-    "vue-tsc": "^2.0.22",
-    "@types/bun": "latest"
+    "vue-tsc": "^2.0.22"
   },
   "module": "index.ts",
   "type": "module"
