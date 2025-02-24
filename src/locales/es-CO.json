@@ -138,7 +138,8 @@
       "extensions_allowed": "Extensiones permitidas",
       "uploading_file": "Subiendo archivo",
       "processing_file": "Procesando archivo",
-      "crop": "Recortar"
+      "crop": "Recortar",
+      "documents": "Documentos"
     }
   },
   "modules": {
@@ -209,8 +210,8 @@
       "convocatoria": "Convocatoria",
       "survey": "Preregistro",
       "fichaacuerdo": "Ficha de acuerdo",
-      "preregistroindividual": "Registro individual",
-      "preregistroasociado": "Registro asociado",
+      "preregistroindividual": "Preregistro Personas",
+      "preregistroasociado": "Preregistro Asociados",
       "modal_title_validateitems": "Lista de items de validación",
       "modal_title_valodationform": "Formulario de validación",
       "argeliapersonas": "Resgistos Argelia Individuales",

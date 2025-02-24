@@ -41,6 +41,7 @@ const props = defineProps({
     default: () => [
       { title: "commons.forms.view", action: "view", icon: "mdi-eye" },
       { title: "commons.forms.edit", action: "edit", icon: "mdi-pencil" },
+      { title: "commons.forms.documents", action: "documents", icon: "mdi-file-document" },
       { title: "commons.forms.delete", action: "delete", icon: "mdi-delete" },
       { title: "commons.forms.print", action: "print", icon: "mdi-printer" },
     ],
@@ -54,7 +55,7 @@ const props = defineProps({
   },
   menuItems: {
     type: Array,
-    default: () => ["view", "edit", "delete", "print"],
+    default: () => ["view", "edit", "documents", "delete", "print"],
   },
   labelNew: {
     type: String,
@@ -66,6 +67,7 @@ const emit = defineEmits([
   "onClickNew",
   "onClickView",
   "onClickEdit",
+  "onClickDocuments",
   "onClickDelete",
   "onClickPrint",
   "onClickAction",
@@ -131,6 +133,9 @@ const fnAction = (action: string, item: any) => {
       break;
     case "edit":
       emit("onClickEdit", item);
+      break;
+    case "documents":
+      emit("onClickDocuments", item);
       break;
     case "delete":
       emit("onClickDelete", item);
