@@ -99,7 +99,7 @@
         document_number: props.identificationnumber,
         SurveyForms: props.fomularioid,
         validationitems: props.validationitem,
-        attachment: Array.isArray(sender.data.attachment) && sender.data.attachment.length > 0 ? sender.data.attachment[0].content : null,
+        attachment: Array.isArray(sender.data.attachment) && sender.data.attachment.length > 0 ? sender.data.attachment[0].content : "",
       };
 
       uCrud.create(senderData)
