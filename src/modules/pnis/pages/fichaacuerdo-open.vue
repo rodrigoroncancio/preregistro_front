@@ -67,7 +67,7 @@
   >
   </exp-dynamic-form>
 
-  <v-btn @click="clickSave()">Guardar</v-btn>
+  <!-- <v-btn @click="clickSave()">Guardar</v-btn> -->
 </template>
 
 

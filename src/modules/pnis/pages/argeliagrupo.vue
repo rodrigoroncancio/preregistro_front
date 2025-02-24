@@ -111,11 +111,11 @@ const options = ref([
 ]);
 
 const headers: any[] = [
-  { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: true },
-  { key: 'identificacionorganizacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'cedularepresentante', title: "CC Representante", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'grupoproductores', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'departamentoinfluencia', title: "Dep. Influencia", width: "auto", align: "start", sortable: true, },
+  { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: false },
+  { key: 'identificacionorganizacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'cedularepresentante', title: "CC Representante", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'grupoproductores', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'departamentoinfluencia', title: "Dep. Influencia", width: "auto", align: "start", sortable: false, },
   { key: "municipioinfluencia", title: "Mun. Influencia", width: "auto", align: "start", sortable: false, },
   { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
   { key: 'number_uncompleted', title: "No Validados", width: "auto", align: "start", sortable: false, },

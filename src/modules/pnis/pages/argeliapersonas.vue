@@ -111,10 +111,10 @@ const options = ref([
 ]);
 
 const headers: any[] = [
-  { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: true },
-  { key: 'identificacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'nombres', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: true, },
-  { key: 'apellidos', title: "Apellidos", width: "auto", align: "start", sortable: true, },
+  { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: false },
+  { key: 'identificacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'nombres', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'apellidos', title: "Apellidos", width: "auto", align: "start", searchable: true, sortable: false, },
   { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
   { key: 'number_uncompleted', title: "No Validados", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
