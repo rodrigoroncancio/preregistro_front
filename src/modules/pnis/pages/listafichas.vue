@@ -2,15 +2,10 @@
   <v-main>
     <v-container class="flex-grow-1">
       <v-row>
-        <v-col class="text-center mt-6">
-          <v-img :src="'/src/assets/img/header-colombia.png'" :width="360" class="mx-auto" />
-        </v-col>
-      </v-row>
-      <v-row>
         <v-col class="general-argelia">
           <v-row>
             <v-col>
-              <router-link to="/dashboard" class="back-section">
+              <router-link to="/argelia" class="back-section">
                 <font-awesome-icon icon="fa-arrow-left" class="login-icon" />
                 <span class="login-text"> Regresar</span>
               </router-link>
@@ -54,9 +49,12 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.v-main {
+  padding-top: 15px !important;
+}
 /* Main content */
 .main-content {
-    margin-top: 10px;
     text-align: center;
     display: flex;
     flex-direction: column;

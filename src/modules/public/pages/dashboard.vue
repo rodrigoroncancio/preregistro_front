@@ -27,7 +27,7 @@
             <v-col>
               <div className="buttons-container-argelia-page">
                 <div className="button-group-argelia-page">
-                  <a href="/listafichas" target="blank" className="btn-arge-page green">
+                  <a href="/pnis/listafichas" target="blank" className="btn-arge-page green">
                     Lista detallada de inscritos
                   </a>
 

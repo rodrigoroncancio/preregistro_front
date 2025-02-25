@@ -62,12 +62,7 @@ const router = {
       path: "cauca",
       name: "public-cauca",
       component: () => import( /* webpackChunkName: "PublicCauca" */ "@/modules/public/pages/cauca.vue"),
-    },
-    {
-      path: "listafichas",
-      name: "public-listafichas",
-      component: () => import( /* webpackChunkName: "PublicListafichas" */ "@/modules/public/pages/listafichas.vue"),
-    },
+    }
   ],
 };
 
