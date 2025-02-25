@@ -135,7 +135,7 @@
                     Ver evidencia
                   </v-btn>
                 </template>
-                <span v-else>Sin Evidencia</span>
+                <template v-else> <v-btn variant="text" color="red" block disabled>Sin Evidencia</v-btn></template>
               </td>
             </tr>
           </tbody>
