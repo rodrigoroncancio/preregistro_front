@@ -174,13 +174,14 @@ const uUtils = useUtils();
 const validationid = ref(null); // v-model para el radio group
 const identificationnumber = ref(null);
 
+// { id: 4, label: "Personas del núcleo familiar" },
+// { id: 7, label: "Georeferenciación" },
+// { id: 6, label: "Lugar de residencia" },
+
 const options = ref([
   { id: 2, label: "Completitud de los datos" },
   { id: 3, label: "Representante núcleo familiar" },
-  { id: 4, label: "Personas del núcleo familiar" },
   { id: 5, label: "Hectárea" },
-  { id: 6, label: "Lugar de residencia" },
-  { id: 7, label: "Georeferenciación" },
   { id: 8, label: "Usufructo" },
   { id: 9, label: "Acceso a tierras" },
   { id: 10, label: "Arraigo" },

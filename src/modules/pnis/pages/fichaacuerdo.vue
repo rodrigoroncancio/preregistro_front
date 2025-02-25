@@ -98,14 +98,57 @@ const uUtils = useUtils();
 const validationid = ref(null); // v-model para el radio group
 
 const identificationnumber = ref(null);
+const itemsValidados = ref([]);
+const itemsValidadosBase = ref([
+    {
+        "id": 2,
+        "name": "Completitud de los datos",
+    },
+    {
+        "id": 3,
+        "name": "Representante núcleo familiar"
+    },
+    {
+        "id": 4,
+        "name": "Personas del núcleo familiar"
+    },
+    {
+        "id": 5,
+        "name": "Hetarea"
+    },
+    {
+        "id": 6,
+        "name": "Lugar de residencia"
+    },
+    {
+        "id": 7,
+        "name": "Georeferenciación"
+    },
+    {
+        "id": 8,
+        "name": "Usufructo"
+    },
+    {
+        "id": 9,
+        "name": "Acceso a tierras"
+    },
+    {
+        "id": 10,
+        "name": "Arraigo"
+    },
+    {
+        "id": 11,
+        "name": "Técnica"
+    }]);
+
+// { id: 4, label: "Personas del núcleo familiar" },
+// { id: 7, label: "Georeferenciación" },
+// { id: 6, label: "Lugar de residencia" },
 
 const options = ref([
   { id: 2, label: "Completitud de los datos" },
   { id: 3, label: "Representante núcleo familiar" },
-  { id: 4, label: "Personas del núcleo familiar" },
   { id: 5, label: "Hectárea" },
-  { id: 6, label: "Lugar de residencia" },
-  { id: 7, label: "Georeferenciación" },
   { id: 8, label: "Usufructo" },
   { id: 9, label: "Acceso a tierras" },
   { id: 10, label: "Arraigo" },
