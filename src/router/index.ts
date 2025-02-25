@@ -84,7 +84,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: "listafichas", // Ruta relativa al path padre ("/listafichas")
         name: "public-listafichas",
-        component: () => import(/* webpackChunkName: "PublicListafichas" */ "@/modules/public/pages/listafichas.vue"),
+        component: () => import(/* webpackChunkName: "PublicListafichas" */ "@/modules/pnis/pages/listafichas.vue"),
       },
     ],
   },
