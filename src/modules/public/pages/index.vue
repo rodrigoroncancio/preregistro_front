@@ -12,7 +12,7 @@
             <h2>Convocatoria abierta</h2>
             <h1>Catatumbo</h1>
             <h3>Del <strong>13 de febrero al 27</strong> de febreo</h3>
-            <v-btn color="#d6513e" to="/catatumbo">INSCRÍBETE AQUÍ</v-btn>
+            <v-btn color="#d6513e" to="/catatumbo/inicio">INSCRÍBETE AQUÍ</v-btn>
           </v-col>
           <v-col md="6" cols="12" class="text-center div-argelia">
             <h2>Convocatoria abierta</h2>
