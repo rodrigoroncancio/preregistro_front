@@ -3,6 +3,11 @@ const router = {
   component: () => import("@/layouts/default.vue" ),
   children: [
     {
+      path: "personasvalidadas",
+      name: "pnis-personasvalidadas",
+      component: () => import( /* webpackChunkName: "PnisUserspnis" */ "@/modules/pnis/pages/personasvalidadas.vue"),
+    },
+    {
       path: "fichaacuerdo",
       name: "pnis-fichaacuerdo",
       component: () => import( /* webpackChunkName: "PnisUserspnis" */ "@/modules/pnis/pages/fichaacuerdo.vue"),

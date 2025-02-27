@@ -217,7 +217,9 @@
       "modal_title_valodationform": "Formulario de validación",
       "argeliapersonas": "Lista Pre-registro Personas",
       "argeliagrupo": "Lista Pre-registros Asociados",
-      "modal_title_documents": "Documentos"
+      "modal_title_documents": "Documentos",
+      "personasvalidadas": "Personas validadas",
+      "personasvalidadas_title": "Usuarios inscritos validados"
     }
   }
 }
