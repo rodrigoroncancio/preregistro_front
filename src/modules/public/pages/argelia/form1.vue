@@ -4948,9 +4948,108 @@ console.log(personas);
 
     
     const municipioNucleoQuestion = survey.getQuestionByName("municipio_nucleo_familiar");
-    const veredapredio1Question = survey.getQuestionByName("vereda_predio1");
+    const veredapredio1Question = survey.getQuestionByName("predio1_vereda");
+    const veredapredio2Question = survey.getQuestionByName("predio2_vereda");
+    const veredapredio3Question = survey.getQuestionByName("predio3_vereda");
+    const veredapredio4Question = survey.getQuestionByName("predio4_vereda");
+    const veredapredio5Question = survey.getQuestionByName("predio5_vereda");
+    const veredapredio6Question = survey.getQuestionByName("predio6_vereda");
+    const veredapredio7Question = survey.getQuestionByName("predio7_vereda");
+    const veredapredio8Question = survey.getQuestionByName("predio8_vereda");
+    const veredapredio9Question = survey.getQuestionByName("predio9_vereda");
+    const veredapredio10Question = survey.getQuestionByName("predio10_vereda");
 
-    if (options.name === "municipio_predio1") {
+    if (options.name === "predio1_municipio") {
+        const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (veredapredio1Question) {
+            veredapredio1Question.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio2_municipio") {
+        const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (veredapredio2Question) {
+            veredapredio2Question.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio3_municipio") {
+        const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (veredapredio3Question) {
+            veredapredio3Question.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio4_municipio") {
+        const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (veredapredio4Question) {
+            veredapredio4Question.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio5_municipio") {
+        const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (veredapredio5Question) {
+            veredapredio5Question.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio6_municipio") {
+        const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (veredapredio6Question) {
+            veredapredio6Question.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio7_municipio") {
+        const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (veredapredio7Question) {
+            veredapredio7Question.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio8_municipio") {
+        const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (veredapredio8Question) {
+            veredapredio8Question.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio10_municipio") {
+        const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (veredapredio10Question) {
+            veredapredio10Question.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio1_municipio") {
         const municipio_id = options.value;
         let loading = uLoading.show({});
         await getTownShipsList(municipio_id);
