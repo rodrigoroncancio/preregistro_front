@@ -68,6 +68,21 @@
       console.error("Error fetching municipality list:", error);
     }
   };
+  const personasNUcleo = ref({})
+  const enviarNucleoFamiliar = async () => {
+  try {
+    const response = await axios.post('http://localhost:8000/forms/argelia/fichaacuerdonucleo/', personasNUcleo.value, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('Respuesta del servidor:', response.data);
+    alert('Formulario enviado con éxito');
+  } catch (error) {
+    console.error('Error al enviar el formulario:', error.response?.data || error);
+    alert('Error al enviar los datos');
+  }
+};
 
   onMounted(async () => {
     getDepartmentList();
@@ -91,21 +106,27 @@
           "html": "<span style=\"font-weight: 999;\">1.1. Identificación del Núcleo Familiar </span>\n<p><strong>1.1.1. Titular del núcleo familiar (se recomienda como titular a la mujer)\n</strong></p>"
         },
         {
-          "type": "text",
-          "name": "nombre",
-          "title": "Nombres y apellidos",
-          "isRequired": true
-        },
-        {
           "type": "dropdown",
           "name": "tipo_identificacion",
           "title": "Tipo de identificación",
           "isRequired": true,
           "choices": [
-            "Cédula de ciudadanía",
-            "Pasaporte",
-            "Permiso especial de permanencia",
-            "Otro"
+            {
+              "value": "Cedula_de_Ciudadania",
+              "text": "Cedula de ciudadania"
+            },
+            {
+              "value": "Pasaporte",
+              "text": "Pasaporte"
+            },
+            {
+              "value": "Permiso_Especial_de_Permanencia PEP",
+              "text": "Permiso especial de permanencia"
+            },
+            {
+              "value": "Otro",
+              "text": "Otro"
+            }
           ]
         },
         {
@@ -120,6 +141,12 @@
           "name": "numero_identificacion",
           "title": "Número de identificación",
           "description": "Escriba el número de identificación del representante del núcleo familiar",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "nombre",
+          "title": "Nombres y apellidos",
           "isRequired": true
         },
         {
@@ -160,7 +187,7 @@
           "name": "email",
           "title": "Correo electrónico",
           "description": "Indicar el correo electrónico donde será notificado",
-          "isRequired": true,
+          "isRequired": false,
           "inputType": "email"
         },
         {
@@ -175,16 +202,16 @@
         },
         {
           "type": "dropdown",
-          "name": "question4",
+          "name": "identidad_genero",
           "title": "Tiene identidad de Género y/o Orientación sexual diversa (OSIGD)?\n",
           "isRequired": true,
           "choices": [
             {
-              "value": "si",
+              "value": "Si",
               "text": "Si"
             },
             {
-              "value": "no",
+              "value": "No",
               "text": "No"
             }
           ]
@@ -225,14 +252,14 @@
           "title": "Nivel de escolaridad",
           "isRequired": true,
           "choices": [
-            "Ninguno",
+            "NingunA",
             "Primaria incompleta",
             "Primaria",
             "Bachillerato incompleto",
-            "Bachiller",
-            "Técnica",
-            "Tecnológica",
-            "Universitario",
+            "Bachillerato",
+            "Tecnico",
+            "Tecnologo",
+            "Profesional",
             "Posgrado",
             "Otro"
           ]
@@ -4699,8 +4726,20 @@
           "title": "Línea productiva de intervención\n",
           "choices": [
             {
-              "value": "cafe",
+              "value": "Cafe",
               "text": "Café"
+            },
+            {
+              "value": "Cacao",
+              "text": "Cacao"
+            },
+            {
+              "value": "Aji",
+              "text": "Aji"
+            },
+            {
+              "value": "Caña_Panelera",
+              "text": "Caña Panelera"
             }
           ]
         },
@@ -4820,50 +4859,103 @@
         predio10_arraigo_documento_soporte: Array.isArray(sender.data.predio10_arraigo_documento_soporte) && sender.data.predio10_arraigo_documento_soporte.length > 0 ? sender.data.predio1_arraigo_documento_soporte[0].content : "",
       };
 
-    const personas: Record<string, any> = {}; // Define personas como un objeto con claves dinámicas
-
-    for (let i = 1; i <= 10; i++) {
-        if (senderData[`persona${i}_nombre`]) { // Verifica si existen datos
-            personas[`persona${i}`] = {
-                nombre: senderData[`persona${i}_nombre`],
-                tipo_identificacion: senderData[`persona${i}_tipo_identificacion`],
-                num_identificacion: senderData[`persona${i}_num_identificación`],
-                parentezco: senderData[`persona${i}_parentezco`],
-                parentezco_cual: senderData[`persona${i}_parentezco_cual`],
-                fecha_nacimiento: senderData[`persona${i}_fecha_nacimiento`],
-                sexo: senderData[`persona${i}_sexo`],
-                estado_civil: senderData[`persona${i}_estado_civil`],
-                atencion_especial: senderData[`persona${i}_atencion_especial`]
-            };
-        }
-    }
-
-    console.log(personas);
+    
+    // personasNUcleo.value = personas
 
 
-// Ahora `personas` contiene los datos extraídos de senderData
-console.log(personas);
+    uCrud.create(senderData)
+        .then((item) => {
+            
+            console.log(item)
+            const personas= []// Define personas como un objeto con claves dinámicas
 
-      console.log('senderData')
-      console.log(senderData)
+            for (let i = 1; i <= 10; i++) {
+                if (senderData[`persona${i}_nombre`]) { // Verifica si existen datos
+                    personas.push({
+                        ficha: ( item as any).id,
+                        nombre: senderData[`persona${i}_nombre`],
+                        tipo_identificacion: senderData[`persona${i}_tipo_identificacion`],
+                        num_identificacion: senderData[`persona${i}_num_identificación`],
+                        parentezco: senderData[`persona${i}_parentezco`],
+                        parentezco_cual: senderData[`persona${i}_parentezco_cual`],
+                        fecha_nacimiento: senderData[`persona${i}_fecha_nacimiento`],
+                        sexo: senderData[`persona${i}_sexo`],
+                        estado_civil: senderData[`persona${i}_estado_civil`],
+                        atencion_especial: senderData[`persona${i}_atencion_especial`]
+                    });
+                }
+            }
+            personasNUcleo.value = personas;
+            console.log(personas)
+            enviarNucleoFamiliar();
 
-      uCrud.create(senderData)
-          .then((item) => {
-              uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
-              sender.clear(true);
-              survey.showNavigationButtons = false;
-          })
-          .catch((error) => {
+            uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
+            sender.clear(true);
+            survey.showNavigationButtons = false;
+        })
+        .catch((error) => {
               uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
-          });
+        });
 
       return false;
   });
 
 
   survey.onValueChanged.add(async (sender, options) => {
-    if (options.name === "ocupacion_beneficiario") {
-      survey.showNavigationButtons = options.value;
+
+
+    if (options.name === "numero_identificacion") {
+      if (options.value === null || options.value === "")
+        return;
+
+      try {
+        let loader = uLoading.show({});
+        axios.get(`forms/argelia/ficha/validar_documento/?documento=${options.value}`)
+          .then((resp: any) => {
+            console.log(resp.data.success)
+            if (resp.data.success) {
+              const data = resp.data.data
+              const fields = [
+                { "origin":['nombres', 'apellidos'], target:'nombre' },
+                { "origin": ["fechanacimiento"], "target": "fecha_nacimiento" },
+                { "origin": ["fechanacimiento"], "target": "fecha_nacimiento" },
+                { "origin": ["sexo"], "target": "sexo" },
+                { "origin": ["correo"], "target": "email" },
+                { "origin": ["lineaproductiva"], "target": "linea_productiva" },
+                { "origin": ["tipodocumento"], "target": "tipo_identificacion" },
+                { "origin": ["orientacion"], "target": "identidad_genero" },
+                { "origin": ["educacion"], "target": "escolaridad" },
+                { "origin": ["telefono"], "target": "numero_contacto" },
+                { "origin": ["areapredio"], "target": "predio1_area" },
+                { "origin": ["areacoca"], "target": "predio1_area_coca" },
+                
+              ]
+
+              fields.forEach(field => {
+                let dataOrigin = field.origin.map(key => (data as any)[key]).filter(Boolean).join(" ");
+                if (survey.getQuestionByName(field.target)) {
+                  survey.setValue(field.target, dataOrigin);
+                  survey.getQuestionByName(field.target).readOnly = true;
+                } else {
+                  console.warn(`El campo '${field.target}' no existe en la encuesta.`);
+                }
+              });
+
+              // survey.setValue("nombre", `${data.nombres} ${data.apellidos}`)
+              // survey.getQuestionByName("nombre").readOnly = true;
+              survey.showNavigationButtons = true;
+              
+            } else {
+              uToast.toastError("No se puede continuar con el formulario. El documento no se encuentra en la lista de pre registro");
+              survey.showNavigationButtons = false;
+            }
+            
+          })
+          .catch((err: any) => { console.log(err) })
+          .finally(() => { loader.hide() });
+      } catch (error) {
+        console.error("Error al consultar el endpoint:", error);
+      }
     }
 
     const departamentoQuestion = survey.getQuestionByName("departamento");
