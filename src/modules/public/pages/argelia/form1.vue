@@ -391,9 +391,7 @@
           "name": "municipio",
           "title": "Municipio",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3"
+            "sin municipio",
           ]
         },
         {
@@ -401,9 +399,7 @@
           "name": "vereda",
           "title": "Vereda",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3"
+            "sin vereda"
           ]
         },
         {
@@ -1945,9 +1941,7 @@
           "name": "predio2_vereda",
           "title": "Vereda",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
+            "sin vereda",
             {
               "value": "otro",
               "text": "Otro"
@@ -2251,9 +2245,7 @@
           "name": "predio3_vereda",
           "title": "Vereda",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
+            "sin vereda",
             {
               "value": "otro",
               "text": "Otro"
@@ -2557,9 +2549,7 @@
           "name": "predio4_vereda",
           "title": "Vereda",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
+            "sin vereda",
             {
               "value": "otro",
               "text": "Otro"
@@ -2863,9 +2853,7 @@
           "name": "predio5_vereda",
           "title": "Vereda",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
+            "sin vereda",
             {
               "value": "otro",
               "text": "Otro"
@@ -3169,9 +3157,7 @@
           "name": "predio6_vereda",
           "title": "Vereda",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
+            "sin vereda",
             {
               "value": "otro",
               "text": "Otro"
@@ -3475,9 +3461,7 @@
           "name": "predio7_vereda",
           "title": "Vereda",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
+            "sin vereda",
             {
               "value": "otro",
               "text": "Otro"
@@ -3781,9 +3765,7 @@
           "name": "predio8_vereda",
           "title": "Vereda",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
+            "sin vereda",
             {
               "value": "otro",
               "text": "Otro"
@@ -4087,9 +4069,7 @@
           "name": "predio9_vereda",
           "title": "Vereda",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
+            "sin vereda",
             {
               "value": "otro",
               "text": "Otro"
@@ -4393,9 +4373,7 @@
           "name": "predio10_vereda",
           "title": "Vereda",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
+            "sin vereda",
             {
               "value": "otro",
               "text": "Otro"
@@ -4948,6 +4926,7 @@ console.log(personas);
 
     
     const municipioNucleoQuestion = survey.getQuestionByName("municipio_nucleo_familiar");
+    const veredaQuestion = survey.getQuestionByName("vereda");
     const veredapredio1Question = survey.getQuestionByName("predio1_vereda");
     const veredapredio2Question = survey.getQuestionByName("predio2_vereda");
     const veredapredio3Question = survey.getQuestionByName("predio3_vereda");
@@ -4958,6 +4937,16 @@ console.log(personas);
     const veredapredio8Question = survey.getQuestionByName("predio8_vereda");
     const veredapredio9Question = survey.getQuestionByName("predio9_vereda");
     const veredapredio10Question = survey.getQuestionByName("predio10_vereda");
+
+    if (options.name === "municipio") {
+        const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (veredaQuestion) {
+            veredaQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
 
     if (options.name === "predio1_municipio") {
         const municipio_id = options.value;
