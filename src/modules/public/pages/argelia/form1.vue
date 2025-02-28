@@ -68,6 +68,20 @@
       console.error("Error fetching municipality list:", error);
     }
   };
+
+  const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
+  const getVillageList = async (townshipId: number) => {
+    try {
+      const response = await axios.get(`/api/1.0/core/villages/by-township/${townshipId}/`);
+      itemsVillages.value = response.data.map((dept: any) => ({
+        id: dept.id,
+        label: dept.nombre || dept.name || "Sin nombre" // Asegurar compatibilidad
+      }));
+    } catch (error) {
+      console.error("Error fetching village list:", error);
+    }
+  };
+
   const personasNUcleo = ref({})
   const enviarNucleoFamiliar = async () => {
   try {
@@ -115,18 +129,12 @@
               "value": "Cedula_de_Ciudadania",
               "text": "Cedula de ciudadania"
             },
-            {
-              "value": "Pasaporte",
-              "text": "Pasaporte"
-            },
+            "Pasaporte",
             {
               "value": "Permiso_Especial_de_Permanencia PEP",
               "text": "Permiso especial de permanencia"
             },
-            {
-              "value": "Otro",
-              "text": "Otro"
-            }
+            "Otro"
           ]
         },
         {
@@ -187,7 +195,6 @@
           "name": "email",
           "title": "Correo electrónico",
           "description": "Indicar el correo electrónico donde será notificado",
-          "isRequired": false,
           "inputType": "email"
         },
         {
@@ -206,14 +213,8 @@
           "title": "Tiene identidad de Género y/o Orientación sexual diversa (OSIGD)?\n",
           "isRequired": true,
           "choices": [
-            {
-              "value": "Si",
-              "text": "Si"
-            },
-            {
-              "value": "No",
-              "text": "No"
-            }
+            "Si",
+            "No"
           ]
         },
         {
@@ -418,7 +419,7 @@
           "name": "municipio",
           "title": "Municipio",
           "choices": [
-            "sin municipio",
+            "sin municipio"
           ]
         },
         {
@@ -4729,14 +4730,8 @@
               "value": "Cafe",
               "text": "Café"
             },
-            {
-              "value": "Cacao",
-              "text": "Cacao"
-            },
-            {
-              "value": "Aji",
-              "text": "Aji"
-            },
+            "Cacao",
+            "Aji",
             {
               "value": "Caña_Panelera",
               "text": "Caña Panelera"
@@ -4813,8 +4808,21 @@
           "title": "Documento pertenencia"
         }
       ]
+    },
+    {
+      "name": "page17",
+      "elements": [
+        {
+          "type": "signaturepad",
+          "name": "firma",
+          "title": "Firma de aceptación",
+          "signatureWidth": 500,
+          "signatureHeight": 400,
+          "placeholder": "Firmar aqui"
+        }
+      ]
     }
-    ],
+  ],
     "pagePrevText": "Página anterior",
     "pageNextText": "Página siguiente",
     "completeText": "Enviar",
