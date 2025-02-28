@@ -37,7 +37,7 @@
 
                 </div>
                 <div className="button-group-argelia-page">
-                  <a href="/pnis/fichaacuerdo/0" target="blank" className="btn-arge-page green">Diligenciar ficha</a>
+                  <a href="/argelia/fichaacuerdo" target="blank" className="btn-arge-page green">Diligenciar ficha</a>
 
                 </div>
 

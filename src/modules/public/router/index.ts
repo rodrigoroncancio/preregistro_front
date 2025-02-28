@@ -8,6 +8,22 @@ const router = {
       component: () => import( /* webpackChunkName: "PublicIndex" */ "@/modules/public/pages/index.vue"),
     },
     {
+      path: "argelia",
+      name: "public-argelia",
+      children: [
+        {
+          path: "",
+          name: "public-argelia-index",
+          component: () => import( /* webpackChunkName: "argeliaIndex" */ "@/modules/public/pages/argelia/index.vue"),
+        },
+        {
+          path: "argelia/fichaacuerdo",
+          name: "public-argelia-fichaacuerdo",
+          component: () => import( /* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/argelia/form1.vue"),
+        }
+      ]
+    },
+    {
       path: "catatumbo",
       name: "public-catatumbo",
       children: [
@@ -49,7 +65,7 @@ const router = {
       ]
     },
     {
-      path: "argelia",
+      path: "argeliainicio",
       name: "public-argelia",
       component: () => import( /* webpackChunkName: "PublicArgelia" */ "@/modules/public/pages/argelia.vue"),
     },

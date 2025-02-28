@@ -25,6 +25,23 @@ const routes: RouteRecordRaw[] = [
         component: () => import(/* webpackChunkName: "PublicIndex" */ "@/modules/public/pages/index.vue"),
       },
       {
+        path: "argelia", // Ruta relativa al path padre ("/argelia")
+        name: "public-argelia",
+        component: () => import("@/modules/public/pages/argelia/index.vue"), // Añade un componente para el layout de argelia
+        children: [
+          {
+            path: "", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-argelia-index",
+            component: () => import(/* webpackChunkName: "argeliaIndex" */ "@/modules/public/pages/argelia/index.vue"),
+          },
+          {
+            path: "fichaacuerdo", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+            name: "public-argelia-ficha",
+            component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/argelia/form1.vue"),
+          }
+        ],
+      },
+      {
         path: "catatumbo", // Ruta relativa al path padre ("/catatumbo")
         name: "public-catatumbo",
         component: () => import("@/modules/public/pages/catatumbo/index.vue"), // Añade un componente para el layout de Catatumbo
@@ -67,8 +84,8 @@ const routes: RouteRecordRaw[] = [
         ],
       },
       {
-        path: "argelia", // Ruta relativa al path padre ("/argelia")
-        name: "public-argelia",
+        path: "argeliainicio", // Ruta relativa al path padre ("/argelia")
+        name: "public-argeliainicio",
         component: () => import(/* webpackChunkName: "PublicArgelia" */ "@/modules/public/pages/argelia.vue"),
       },
       {

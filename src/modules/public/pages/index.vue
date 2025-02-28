@@ -12,13 +12,13 @@
             <h2>Convocatoria abierta</h2>
             <h1>Catatumbo</h1>
             <h3>Del <strong>13 de febrero al 27</strong> de febreo</h3>
-            <v-btn color="#d6513e" to="/catatumbo">INSCRÍBETE AQUÍ</v-btn>
+            <v-btn color="#d6513e" to="/catatumbo/inicio">INSCRÍBETE AQUÍ</v-btn>
           </v-col>
           <v-col md="6" cols="12" class="text-center div-argelia">
             <h2>Convocatoria abierta</h2>
             <h1>Argelia</h1>
             <h3>Del <strong>de 5 al 25</strong> de febrero</h3>
-            <v-btn color="#0d6efd" to="/argelia">INSCRÍBETE AQUÍ</v-btn>
+            <v-btn color="#0d6efd" to="/argeliainicio">INSCRÍBETE AQUÍ</v-btn>
           </v-col>
         </v-row>
       </div>
