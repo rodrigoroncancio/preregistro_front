@@ -71,7 +71,7 @@
   const personasNUcleo = ref({})
   const enviarNucleoFamiliar = async () => {
   try {
-    const response = await axios.post('http://localhost:8000/forms/argelia/fichaacuerdonucleo/', personasNUcleo.value, {
+    const response = await axios.post('/forms/argelia/fichaacuerdonucleo/', personasNUcleo.value, {
       headers: {
         'Content-Type': 'application/json'
       }
