@@ -18,7 +18,7 @@
                     <span className="title-highlight">Catatumbo</span>
                 </h1>
                 <h2 className="subtitle-asociaciones">Convención, Tibú, Sardinata y El Tarra</h2>
-                <p className="date">Del <strong>13 de febrero</strong> <strong>al 27 de febrero</strong></p>
+                <p className="date">Del <strong>13 de febrero</strong> <strong>al 28 de febrero</strong></p>
             </div>
             <div className="text-information">
                 <p className="subtitle-asociaciones-text">
