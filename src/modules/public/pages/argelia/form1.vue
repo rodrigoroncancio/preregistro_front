@@ -5050,8 +5050,10 @@
             } else {
               if (resp.data.status === 2) {
                 uToast.toastError("Usuario con ficha diligenciada. No se puede continuar con el formulario.");
-              }else {
+              }  else if (resp.data.status === 3) {
                 uToast.toastError("El documento no se encuentra en la lista de pre registro. No se puede continuar con el formulario.");
+              } else {
+                uToast.toastError("El usuario no se encuentra Validado. No se puede continuar con el formulario.");
               }
               survey.showNavigationButtons = false;
             }
