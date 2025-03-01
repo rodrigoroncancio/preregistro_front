@@ -74,8 +74,8 @@
     try {
       const response = await axios.get(`/api/1.0/core/villages/by-township/${townshipId}/`);
       itemsVillages.value = response.data.map((dept: any) => ({
-        id: dept.id,
-        label: dept.nombre || dept.name || "Sin nombre" // Asegurar compatibilidad
+        value: dept.id,
+        text: dept.name // Asegurar compatibilidad
       }));
     } catch (error) {
       console.error("Error fetching village list:", error);
@@ -290,7 +290,7 @@
         {
           "type": "tagbox",
           "name": "grupo_especial",
-          "title": "Grupo de atención especial \n",
+          "title": "Grupo de atención especial ",
           "isRequired": true,
           "choices": [
             "Desplazados",
@@ -300,7 +300,8 @@
             "Indígenas",
             "ROM/gitano",
             "LGTBI",
-            "Palenquero y/o raizall",
+            "Palenquero y/o raizal",
+            "Victima",
             "Campesinado",
             {
               "value": "ninguno",
@@ -424,8 +425,16 @@
         },
         {
           "type": "dropdown",
+          "name": "corregimiento",
+          "title": "corregimiento",
+          "choices": [
+            "sin vereda"
+          ]
+        },
+        {
+          "type": "dropdown",
           "name": "vereda",
-          "title": "Vereda",
+          "title": "vereda",
           "choices": [
             "sin vereda"
           ]
@@ -469,7 +478,8 @@
           "type": "text",
           "name": "permanencia",
           "title": "Permanencia",
-          "description": "Indique hace cuántos años su núcleo familiar cuenta con la tenencia del predio\n"
+          "description": "Indique hace cuántos años su núcleo familiar cuenta con la tenencia del predio",
+          "inputType": "number"
         },
         {
           "type": "dropdown",
@@ -1596,7 +1606,8 @@
         {
           "type": "comment",
           "name": "question9",
-          "title": "1.1. 3. Caracterización productiva del núcleo familiar"
+          "title": "1.1. 3. Caracterización productiva del núcleo familiar",
+          "description": "Indique cuáles son las actividades económicas que desarrolla el núcleo familiar"
         }
       ]
     },
@@ -1637,7 +1648,7 @@
           "html": "<h4>Identificación Predio 1</h4>\n"
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio1_departamento",
           "title": "Departamento",
           "choices": [
@@ -1648,7 +1659,7 @@
           ]
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio1_municipio",
           "title": "Municipio",
           "choices": [
@@ -1660,16 +1671,18 @@
         },
         {
           "type": "dropdown",
+          "name": "predio1_corregimiento",
+          "title": "corregimiento",
+          "choices": [
+            "sin corregimiento"
+          ]
+        },
+        {
+          "type": "dropdown",
           "name": "predio1_vereda",
           "title": "Vereda",
           "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
-            {
-              "value": "otro",
-              "text": "Otro"
-            }
+            "sin vereda"
           ]
         },
         {
@@ -1724,12 +1737,6 @@
           "name": "predio1_latitud",
           "minWidth": "150px",
           "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "predio1_altitud",
-          "minWidth": "150px",
-          "title": "Altitud"
         },
         {
           "type": "text",
@@ -1943,7 +1950,7 @@
           "html": "<h4>Identificación Predio 2</h4>\n"
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio2_departamento",
           "title": "Departamento",
           "choices": [
@@ -1954,7 +1961,7 @@
           ]
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio2_municipio",
           "title": "Municipio",
           "choices": [
@@ -1962,6 +1969,14 @@
               "value": "787",
               "text": "sin municipio"
             }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "predio2_corregimiento",
+          "title": "corregimiento",
+          "choices": [
+            "sin corregimiento"
           ]
         },
         {
@@ -2028,12 +2043,6 @@
           "name": "predio2_latitud",
           "minWidth": "150px",
           "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "predio2_altitud",
-          "minWidth": "150px",
-          "title": "Altitud"
         },
         {
           "type": "text",
@@ -2247,7 +2256,7 @@
           "html": "<h4>Identificación Predio 3</h4>\n"
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio3_departamento",
           "title": "Departamento",
           "choices": [
@@ -2258,7 +2267,7 @@
           ]
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio3_municipio",
           "title": "Municipio",
           "choices": [
@@ -2266,6 +2275,14 @@
               "value": "787",
               "text": "sin municipio"
             }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "predio3_corregimiento",
+          "title": "corregimiento",
+          "choices": [
+            "sin corregimiento"
           ]
         },
         {
@@ -2332,12 +2349,6 @@
           "name": "predio3_latitud",
           "minWidth": "150px",
           "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "predio3_altitud",
-          "minWidth": "150px",
-          "title": "Altitud"
         },
         {
           "type": "text",
@@ -2562,7 +2573,7 @@
           ]
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio4_municipio",
           "title": "Municipio",
           "choices": [
@@ -2570,6 +2581,14 @@
               "value": "787",
               "text": "sin municipio"
             }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "predio4_corregimiento",
+          "title": "corregimiento",
+          "choices": [
+            "sin corregimiento"
           ]
         },
         {
@@ -2636,12 +2655,6 @@
           "name": "predio4_latitud",
           "minWidth": "150px",
           "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "predio4_altitud",
-          "minWidth": "150px",
-          "title": "Altitud"
         },
         {
           "type": "text",
@@ -2855,7 +2868,7 @@
           "html": "<h4>Identificación Predio 5</h4>\n"
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio5_departamento",
           "title": "Departamento",
           "choices": [
@@ -2866,7 +2879,7 @@
           ]
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio5_municipio",
           "title": "Municipio",
           "choices": [
@@ -2874,6 +2887,14 @@
               "value": "787",
               "text": "sin municipio"
             }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "predio5_corregimiento",
+          "title": "corregimiento",
+          "choices": [
+            "sin corregimiento"
           ]
         },
         {
@@ -2940,12 +2961,6 @@
           "name": "predio5_latitud",
           "minWidth": "150px",
           "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "predio5_altitud",
-          "minWidth": "150px",
-          "title": "Altitud"
         },
         {
           "type": "text",
@@ -3182,6 +3197,14 @@
         },
         {
           "type": "dropdown",
+          "name": "predio6_corregimiento",
+          "title": "corregimiento",
+          "choices": [
+            "sin corregimiento"
+          ]
+        },
+        {
+          "type": "dropdown",
           "name": "predio6_vereda",
           "title": "Vereda",
           "choices": [
@@ -3244,12 +3267,6 @@
           "name": "predio6_latitud",
           "minWidth": "150px",
           "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "predio6_altitud",
-          "minWidth": "150px",
-          "title": "Altitud"
         },
         {
           "type": "text",
@@ -3463,7 +3480,7 @@
           "html": "<h4>Identificación Predio 7</h4>\n"
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio7_departamento",
           "title": "Departamento",
           "choices": [
@@ -3474,7 +3491,7 @@
           ]
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio7_municipio",
           "title": "Municipio",
           "choices": [
@@ -3482,6 +3499,14 @@
               "value": "787",
               "text": "sin municipio"
             }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "predio7_corregimiento",
+          "title": "corregimiento",
+          "choices": [
+            "sin corregimiento"
           ]
         },
         {
@@ -3548,12 +3573,6 @@
           "name": "predio7_latitud",
           "minWidth": "150px",
           "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "predio7_altitud",
-          "minWidth": "150px",
-          "title": "Altitud"
         },
         {
           "type": "text",
@@ -3767,7 +3786,7 @@
           "html": "<h4>Identificación Predio 8</h4>\n"
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio8_departamento",
           "title": "Departamento",
           "choices": [
@@ -3778,7 +3797,7 @@
           ]
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio8_municipio",
           "title": "Municipio",
           "choices": [
@@ -3786,6 +3805,14 @@
               "value": "787",
               "text": "sin municipio"
             }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "predio8_corregimiento",
+          "title": "corregimiento",
+          "choices": [
+            "sin corregimiento"
           ]
         },
         {
@@ -3852,12 +3879,6 @@
           "name": "predio8_latitud",
           "minWidth": "150px",
           "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "predio8_altitud",
-          "minWidth": "150px",
-          "title": "Altitud"
         },
         {
           "type": "text",
@@ -4071,7 +4092,7 @@
           "html": "<h4>Identificación Predio 9</h4>\n"
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio9_departamento",
           "title": "Departamento",
           "choices": [
@@ -4082,7 +4103,7 @@
           ]
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio9_municipio",
           "title": "Municipio",
           "choices": [
@@ -4090,6 +4111,14 @@
               "value": "787",
               "text": "sin municipio"
             }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "predio9_corregimiento",
+          "title": "corregimiento",
+          "choices": [
+            "sin corregimiento"
           ]
         },
         {
@@ -4156,12 +4185,6 @@
           "name": "predio9_latitud",
           "minWidth": "150px",
           "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "predio9_altitud",
-          "minWidth": "150px",
-          "title": "Altitud"
         },
         {
           "type": "text",
@@ -4375,7 +4398,7 @@
           "html": "<h4>Identificación Predio 10</h4>\n"
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio10_departamento",
           "title": "Departamento",
           "choices": [
@@ -4386,7 +4409,7 @@
           ]
         },
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "predio10_municipio",
           "title": "Municipio",
           "choices": [
@@ -4394,6 +4417,14 @@
               "value": "787",
               "text": "sin municipio"
             }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "predio10_corregimiento",
+          "title": "corregimiento",
+          "choices": [
+            "sin corregimiento"
           ]
         },
         {
@@ -4460,12 +4491,6 @@
           "name": "predio10_latitud",
           "minWidth": "150px",
           "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "predio10_altitud",
-          "minWidth": "150px",
-          "title": "Altitud"
         },
         {
           "type": "text",
@@ -4695,7 +4720,11 @@
         {
           "type": "tagbox",
           "name": "actividades_otro_predio",
+          "visibleIf": "{nucleo_usufructa_otro} = 'si'",
           "title": "¿Qué actividad económica desarrolla en dicho predio?\n",
+          "defaultValue": [
+            "Agrícolas"
+          ],
           "isRequired": true,
           "choices": [
             "Pecuarias",
@@ -4709,6 +4738,7 @@
         {
           "type": "text",
           "name": "actividad_otro_predio_otra",
+          "visibleIf": "{actividades_otro_predio} allof ['Otra']",
           "title": "Otra"
         }
       ]
@@ -4813,12 +4843,34 @@
       "name": "page17",
       "elements": [
         {
+          "type": "dropdown",
+          "name": "tipo_firma",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "firmatactil",
+              "text": "Firma Tactil"
+            },
+            {
+              "value": "cargarfirma",
+              "text": "Cargar firma"
+            }
+          ]
+        },
+        {
           "type": "signaturepad",
           "name": "firma",
+          "visibleIf": "{tipo_firma} = 'firmatactil'",
           "title": "Firma de aceptación",
           "signatureWidth": 500,
           "signatureHeight": 400,
           "placeholder": "Firmar aqui"
+        },
+        {
+          "type": "file",
+          "name": "firma_file",
+          "visibleIf": "{tipo_firma} = 'cargarfirma'",
+          "title": "Cargar Firma de aceptación"
         }
       ]
     }
@@ -4828,7 +4880,6 @@
     "completeText": "Enviar",
     "showNavigationButtons": true
 }
-
 
     
   const survey = new Model(json);
@@ -4923,7 +4974,33 @@
             console.log(resp.data.success)
             if (resp.data.success) {
               const data = resp.data.data
+
+              const match = data.coordenadas.match(/\(([^)]+)\)/);
+              console.log(match)
+              const [longitud, latitud, altitud] = String(match[1]).split(" ")
+
+
+              survey.setValue("latitud", latitud)
+              survey.setValue("longitud", longitud)
+              survey.setValue("altura", altitud)
+                
+              survey.setValue("predio1_latitud", latitud)
+              survey.getQuestionByName("altura").readOnly = true;
+              survey.setValue("predio1_longitud", longitud)
+              survey.getQuestionByName("altura").readOnly = true;
+              survey.setValue("predio1_altura", altitud)
+              survey.getQuestionByName("altura").readOnly = true;
+
+              if (data.fotodocumentofrente && data.fotodocumentofrente.trim().length > 0) {
+                survey.getQuestionByName("foto_doc_frente").visible = false;
+              }
+              if (data.fotodocumentorespaldo && data.fotodocumentorespaldo.trim().length > 0) {
+                survey.getQuestionByName("foto_doc_atras").visible = false;
+              }
+
+
               const fields = [
+                { "origin":['nombres', 'apellidos'], target:'nombre' },
                 { "origin":['nombres', 'apellidos'], target:'nombre' },
                 { "origin": ["fechanacimiento"], "target": "fecha_nacimiento" },
                 { "origin": ["fechanacimiento"], "target": "fecha_nacimiento" },
@@ -4939,6 +5016,8 @@
                 
               ]
 
+              
+
               fields.forEach(field => {
                 let dataOrigin = field.origin.map(key => (data as any)[key]).filter(Boolean).join(" ");
                 if (survey.getQuestionByName(field.target)) {
@@ -4949,8 +5028,7 @@
                 }
               });
 
-              // survey.setValue("nombre", `${data.nombres} ${data.apellidos}`)
-              // survey.getQuestionByName("nombre").readOnly = true;
+              
               survey.showNavigationButtons = true;
               
             } else {
@@ -5026,24 +5104,45 @@
 
     
     const municipioNucleoQuestion = survey.getQuestionByName("municipio_nucleo_familiar");
+    const corregimientoQuestion = survey.getQuestionByName("corregimiento");
     const veredaQuestion = survey.getQuestionByName("vereda");
+    const predio1corregimientoQuestion = survey.getQuestionByName("predio1_corregimiento");
     const veredapredio1Question = survey.getQuestionByName("predio1_vereda");
+    const predio2corregimientoQuestion = survey.getQuestionByName("predio2_corregimiento");
     const veredapredio2Question = survey.getQuestionByName("predio2_vereda");
+    const predio3corregimientoQuestion = survey.getQuestionByName("predio3_corregimiento");
     const veredapredio3Question = survey.getQuestionByName("predio3_vereda");
+    const predio4corregimientoQuestion = survey.getQuestionByName("predio4_corregimiento");
     const veredapredio4Question = survey.getQuestionByName("predio4_vereda");
+    const predio5corregimientoQuestion = survey.getQuestionByName("predio5_corregimiento");
     const veredapredio5Question = survey.getQuestionByName("predio5_vereda");
+    const predio6corregimientoQuestion = survey.getQuestionByName("predio6_corregimiento");
     const veredapredio6Question = survey.getQuestionByName("predio6_vereda");
+    const predio7corregimientoQuestion = survey.getQuestionByName("predio7_corregimiento");
     const veredapredio7Question = survey.getQuestionByName("predio7_vereda");
+    const predio8corregimientoQuestion = survey.getQuestionByName("predio8_corregimiento");
     const veredapredio8Question = survey.getQuestionByName("predio8_vereda");
+    const predio9corregimientoQuestion = survey.getQuestionByName("predio9_corregimiento");
     const veredapredio9Question = survey.getQuestionByName("predio9_vereda");
+    const predio10corregimientoQuestion = survey.getQuestionByName("predio10_corregimiento");
     const veredapredio10Question = survey.getQuestionByName("predio10_vereda");
 
     if (options.name === "municipio") {
         const municipio_id = options.value;
         let loading = uLoading.show({});
         await getTownShipsList(municipio_id);
+          if (corregimientoQuestion) {
+            corregimientoQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "corregimiento") {
+        const vereda_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(vereda_id);
           if (veredaQuestion) {
-            veredaQuestion.choices = itemSTownShips.value
+            veredaQuestion.choices = itemsVillages.value
           }
         loading.hide()
     }
@@ -5052,8 +5151,18 @@
         const municipio_id = options.value;
         let loading = uLoading.show({});
         await getTownShipsList(municipio_id);
+          if (predio1corregimientoQuestion) {
+            predio1corregimientoQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio1_corregimiento") {
+        const vereda_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(vereda_id);
           if (veredapredio1Question) {
-            veredapredio1Question.choices = itemSTownShips.value
+            veredapredio1Question.choices = itemsVillages.value
           }
         loading.hide()
     }
@@ -5062,78 +5171,178 @@
         const municipio_id = options.value;
         let loading = uLoading.show({});
         await getTownShipsList(municipio_id);
+          if (predio2corregimientoQuestion) {
+            predio2corregimientoQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio2_corregimiento") {
+        const vereda_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(vereda_id);
           if (veredapredio2Question) {
-            veredapredio2Question.choices = itemSTownShips.value
+            veredapredio2Question.choices = itemsVillages.value
           }
         loading.hide()
     }
 
     if (options.name === "predio3_municipio") {
-        const municipio_id = options.value;
+      const municipio_id = options.value;
         let loading = uLoading.show({});
         await getTownShipsList(municipio_id);
+          if (predio3corregimientoQuestion) {
+            predio3corregimientoQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio3_corregimiento") {
+        const vereda_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(vereda_id);
           if (veredapredio3Question) {
-            veredapredio3Question.choices = itemSTownShips.value
+            veredapredio3Question.choices = itemsVillages.value
           }
         loading.hide()
     }
 
     if (options.name === "predio4_municipio") {
-        const municipio_id = options.value;
+      const municipio_id = options.value;
         let loading = uLoading.show({});
         await getTownShipsList(municipio_id);
+          if (predio4corregimientoQuestion) {
+            predio4corregimientoQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio4_corregimiento") {
+        const vereda_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(vereda_id);
           if (veredapredio4Question) {
-            veredapredio4Question.choices = itemSTownShips.value
+            veredapredio4Question.choices = itemsVillages.value
           }
         loading.hide()
     }
 
     if (options.name === "predio5_municipio") {
-        const municipio_id = options.value;
+      const municipio_id = options.value;
         let loading = uLoading.show({});
         await getTownShipsList(municipio_id);
+          if (predio5corregimientoQuestion) {
+            predio5corregimientoQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio5_corregimiento") {
+        const vereda_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(vereda_id);
           if (veredapredio5Question) {
-            veredapredio5Question.choices = itemSTownShips.value
+            veredapredio5Question.choices = itemsVillages.value
           }
         loading.hide()
     }
 
     if (options.name === "predio6_municipio") {
-        const municipio_id = options.value;
+      const municipio_id = options.value;
         let loading = uLoading.show({});
         await getTownShipsList(municipio_id);
+          if (predio6corregimientoQuestion) {
+            predio6corregimientoQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio6_corregimiento") {
+        const vereda_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(vereda_id);
           if (veredapredio6Question) {
-            veredapredio6Question.choices = itemSTownShips.value
+            veredapredio6Question.choices = itemsVillages.value
           }
         loading.hide()
     }
 
     if (options.name === "predio7_municipio") {
-        const municipio_id = options.value;
+      const municipio_id = options.value;
         let loading = uLoading.show({});
         await getTownShipsList(municipio_id);
+          if (predio7corregimientoQuestion) {
+            predio7corregimientoQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio7_corregimiento") {
+        const vereda_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(vereda_id);
           if (veredapredio7Question) {
-            veredapredio7Question.choices = itemSTownShips.value
+            veredapredio7Question.choices = itemsVillages.value
           }
         loading.hide()
     }
 
     if (options.name === "predio8_municipio") {
-        const municipio_id = options.value;
+      const municipio_id = options.value;
         let loading = uLoading.show({});
         await getTownShipsList(municipio_id);
+          if (predio8corregimientoQuestion) {
+            predio8corregimientoQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio8_corregimiento") {
+        const vereda_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(vereda_id);
           if (veredapredio8Question) {
-            veredapredio8Question.choices = itemSTownShips.value
+            veredapredio8Question.choices = itemsVillages.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio9_municipio") {
+      const municipio_id = options.value;
+        let loading = uLoading.show({});
+        await getTownShipsList(municipio_id);
+          if (predio9corregimientoQuestion) {
+            predio9corregimientoQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio9_corregimiento") {
+        const vereda_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(vereda_id);
+          if (veredapredio9Question) {
+            veredapredio9Question.choices = itemsVillages.value
           }
         loading.hide()
     }
 
     if (options.name === "predio10_municipio") {
-        const municipio_id = options.value;
+      const municipio_id = options.value;
         let loading = uLoading.show({});
         await getTownShipsList(municipio_id);
+          if (predio10corregimientoQuestion) {
+            predio10corregimientoQuestion.choices = itemSTownShips.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "predio10_corregimiento") {
+        const vereda_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(vereda_id);
           if (veredapredio10Question) {
-            veredapredio10Question.choices = itemSTownShips.value
+            veredapredio10Question.choices = itemsVillages.value
           }
         loading.hide()
     }
