@@ -4972,7 +4972,7 @@
         axios.get(`forms/argelia/ficha/validar_documento/?documento=${options.value}`)
           .then((resp: any) => {
             console.log(resp.data.success)
-            if (resp.data.success) {
+            if (resp.data.status === 1) {
               const data = resp.data.data
 
               const match = data.coordenadas.match(/\(([^)]+)\)/);
@@ -5032,7 +5032,11 @@
               survey.showNavigationButtons = true;
               
             } else {
-              uToast.toastError("No se puede continuar con el formulario. El documento no se encuentra en la lista de pre registro");
+              if (resp.data.status === 2) {
+                uToast.toastError("Usuario con ficha diligenciada. No se puede continuar con el formulario.");
+              }else {
+                uToast.toastError("El documento no se encuentra en la lista de pre registro. No se puede continuar con el formulario.");
+              }
               survey.showNavigationButtons = false;
             }
             
