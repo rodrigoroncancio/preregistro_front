@@ -4973,25 +4973,39 @@
         let loader = uLoading.show({});
         axios.get(`forms/argelia/ficha/validar_documento/?documento=${options.value}`)
           .then((resp: any) => {
-            console.log(resp.data.success)
+            console.log('resp.data.status')
+            console.log(resp.data.status)
             if (resp.data.status === 1) {
               const data = resp.data.data
 
-              const match = data.coordenadas.match(/\(([^)]+)\)/);
-              console.log(match)
-              const [longitud, latitud, altitud] = String(match[1]).split(" ")
+              let latitud = "0";
+              let longitud = "0";
+              let altitud = "0";
 
+              // Verificar si existen coordenadas y si tienen el formato esperado
+              if (data.coordenadas) {
+                  const match = data.coordenadas.match(/\(([^)]+)\)/);
 
-              survey.setValue("latitud", latitud)
-              survey.setValue("longitud", longitud)
-              survey.setValue("altura", altitud)
-                
-              survey.setValue("predio1_latitud", latitud)
-              survey.getQuestionByName("altura").readOnly = true;
-              survey.setValue("predio1_longitud", longitud)
-              survey.getQuestionByName("altura").readOnly = true;
-              survey.setValue("predio1_altura", altitud)
-              survey.getQuestionByName("altura").readOnly = true;
+                  if (match && match[1]) {
+                      [longitud, latitud, altitud] = match[1].split(" ");
+                  } else {
+                      console.warn("Las coordenadas no tienen el formato esperado.");
+                  }
+              } else {
+                  console.warn("No hay coordenadas disponibles.");
+              }
+
+              // Asignar valores a SurveyJS, incluso si son cadenas vacías
+              survey.setValue("latitud", latitud);
+              survey.setValue("longitud", longitud);
+              survey.setValue("altura", altitud);
+
+              survey.setValue("predio1_latitud", latitud);
+              survey.setValue("predio1_longitud", longitud);
+              survey.setValue("predio1_altura", altitud);
+
+              
+
 
               if (data.fotodocumentofrente && data.fotodocumentofrente.trim().length > 0) {
                 survey.getQuestionByName("foto_doc_frente").visible = false;
