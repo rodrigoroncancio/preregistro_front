@@ -4915,7 +4915,9 @@
         predio7_arraigo_documento_soporte: Array.isArray(sender.data.predio7_arraigo_documento_soporte) && sender.data.predio7_arraigo_documento_soporte.length > 0 ? sender.data.predio7_arraigo_documento_soporte[0].content : "",
         predio8_arraigo_documento_soporte: Array.isArray(sender.data.predio8_arraigo_documento_soporte) && sender.data.predio8_arraigo_documento_soporte.length > 0 ? sender.data.predio8_arraigo_documento_soporte[0].content : "",
         predio9_arraigo_documento_soporte: Array.isArray(sender.data.predio9_arraigo_documento_soporte) && sender.data.predio9_arraigo_documento_soporte.length > 0 ? sender.data.predio9_arraigo_documento_soporte[0].content : "",
-        predio10_arraigo_documento_soporte: Array.isArray(sender.data.predio10_arraigo_documento_soporte) && sender.data.predio10_arraigo_documento_soporte.length > 0 ? sender.data.predio1_arraigo_documento_soporte[0].content : "",
+        predio10_arraigo_documento_soporte: Array.isArray(sender.data.predio10_arraigo_documento_soporte) && sender.data.predio10_arraigo_documento_soporte.length > 0 ? sender.data.predio10_arraigo_documento_soporte[0].content : "",
+        firma_file: Array.isArray(sender.data.firma_file) && sender.data.firma_file.length > 0 ? sender.data.firma_file[0].content : "",
+        documento_pertenencia_etnica_file: Array.isArray(sender.data.documento_pertenencia_etnica_file) && sender.data.documento_pertenencia_etnica_file.length > 0 ? sender.data.documento_pertenencia_etnica_file[0].content : "",
       };
 
     
