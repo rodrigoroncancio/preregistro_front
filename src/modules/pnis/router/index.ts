@@ -8,6 +8,11 @@ const router = {
       component: () => import( /* webpackChunkName: "PnisUserspnis" */ "@/modules/pnis/pages/fichaacuerdo.vue"),
     },
     {
+      path: "fichaacuerdo2",
+      name: "pnis-fichaacuerdo2",
+      component: () => import( /* webpackChunkName: "PnisUserspnis" */ "@/modules/pnis/pages/fichaacuerdo2.vue"),
+    },
+    {
       path: "argeliapersonas",
       name: "pnis-argeliapersonas",
       component: () => import( /* webpackChunkName: "PnisArgeliapersonas" */ "@/modules/pnis/pages/argeliapersonas.vue"),
