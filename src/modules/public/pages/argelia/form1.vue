@@ -4998,12 +4998,12 @@
                         tipo_identificacion: senderData[`persona${i}_tipo_identificacion`],
                         numero_identificacion: senderData[`persona${i}_num_identificación`],
                         fecha_expedicion_identificacion: senderData[`persona${i}_fecha_expedicion_identificacion`],
-                        parentezco: senderData[`persona${i}_parentezco`],
-                        parentezco_cual: senderData[`persona${i}_parentezco_cual`],
+                        parentesco: senderData[`persona${i}_parentezco`],
+                        parentesco_otro: senderData[`persona${i}_parentezco_cual`],
                         fecha_nacimiento: senderData[`persona${i}_fecha_nacimiento`],
                         sexo: senderData[`persona${i}_sexo`],
                         estado_civil: senderData[`persona${i}_estado_civil`],
-                        atencion_especial: senderData[`persona${i}_atencion_especial`]
+                        grupo_especial: senderData[`persona${i}_atencion_especial`]
                     });
                 }
             }
