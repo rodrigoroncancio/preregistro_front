@@ -253,7 +253,7 @@ const fnReloadTable = () => {
 
 const getItemsValidadosBase = async () => {
   try {
-    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/lista/`);
+    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/1/`);
     itemsValidadosBase.value = response.data;
     console.log("items", itemsValidadosBase.value);
   } catch (error) {
