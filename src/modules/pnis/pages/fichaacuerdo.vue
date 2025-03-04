@@ -84,6 +84,9 @@
         </v-radio-group>
       </v-col>
     </v-row>
+    <v-row v-if="itemsValidation.length == 0">
+      <v-col cols="12">No hay validaciones disponibles</v-col>
+    </v-row>
   </exp-modal-form>
   <exp-modal-form
     :title="formModalValidadosTitulo"
@@ -118,6 +121,9 @@
               </td>
               <td class="py-3 px-4">  
                 {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.name || 'Sin nombre' }}
+              </td>
+              <td class="py-3 px-4">
+                {{ item.status || 'Sin establecer' }}
               </td>
               <td class="py-3 px-4 observation-cell">
                 {{ item.observation || 'Sin observación' }}

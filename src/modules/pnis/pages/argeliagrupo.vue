@@ -141,6 +141,9 @@
               <td class="py-3 px-4">  
                 {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.name || 'Sin nombre' }}
               </td>
+              <td class="py-3 px-4">
+                {{ item.status || 'Sin establecer' }}
+              </td>
               <td class="py-3 px-4 observation-cell">
                 {{ item.observation || 'Sin observación' }}
               </td>
