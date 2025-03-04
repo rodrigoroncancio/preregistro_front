@@ -605,6 +605,12 @@
           "title": "Número Identificación"
         },
         {
+          "type": "text",
+          "name": "persona1_fecha_expedicion_identificacion",
+          "title": "Fecha de expedicion\n",
+          "inputType": "date"
+        },
+        {
           "type": "dropdown",
           "name": "persona1_parentezco",
           "title": "Parentesco",
@@ -706,6 +712,12 @@
           "type": "text",
           "name": "persona2_num_identificación",
           "title": "Número Identificación"
+        },
+        {
+          "type": "text",
+          "name": "persona2_fecha_expedicion_identificacion",
+          "title": "Fecha de expedicion\n",
+          "inputType": "date"
         },
         {
           "type": "dropdown",
@@ -811,6 +823,12 @@
           "title": "Número Identificación"
         },
         {
+          "type": "text",
+          "name": "persona3_fecha_expedicion_identificacion",
+          "title": "Fecha de expedicion\n",
+          "inputType": "date"
+        },
+        {
           "type": "dropdown",
           "name": "persona3_parentezco",
           "title": "Parentesco",
@@ -912,6 +930,12 @@
           "type": "text",
           "name": "persona4_num_identificación",
           "title": "Número Identificación"
+        },
+        {
+          "type": "text",
+          "name": "persona4_fecha_expedicion_identificacion",
+          "title": "Fecha de expedicion\n",
+          "inputType": "date"
         },
         {
           "type": "dropdown",
@@ -1017,6 +1041,12 @@
           "title": "Número Identificación"
         },
         {
+          "type": "text",
+          "name": "persona5_fecha_expedicion_identificacion",
+          "title": "Fecha de expedicion\n",
+          "inputType": "date"
+        },
+        {
           "type": "dropdown",
           "name": "persona5_parentezco",
           "title": "Parentesco",
@@ -1118,6 +1148,12 @@
           "type": "text",
           "name": "persona6_num_identificación",
           "title": "Número Identificación"
+        },
+        {
+          "type": "text",
+          "name": "persona6_fecha_expedicion_identificacion",
+          "title": "Fecha de expedicion\n",
+          "inputType": "date"
         },
         {
           "type": "dropdown",
@@ -1223,6 +1259,12 @@
           "title": "Número Identificación"
         },
         {
+          "type": "text",
+          "name": "persona7_fecha_expedicion_identificacion",
+          "title": "Fecha de expedicion\n",
+          "inputType": "date"
+        },
+        {
           "type": "dropdown",
           "name": "persona7_parentezco",
           "title": "Parentesco",
@@ -1324,6 +1366,12 @@
           "type": "text",
           "name": "persona8_num_identificación",
           "title": "Número Identificación"
+        },
+        {
+          "type": "text",
+          "name": "persona8_fecha_expedicion_identificacion",
+          "title": "Fecha de expedicion\n",
+          "inputType": "date"
         },
         {
           "type": "dropdown",
@@ -1429,6 +1477,12 @@
           "title": "Número Identificación"
         },
         {
+          "type": "text",
+          "name": "persona9_fecha_expedicion_identificacion",
+          "title": "Fecha de expedicion\n",
+          "inputType": "date"
+        },
+        {
           "type": "dropdown",
           "name": "persona9_parentezco",
           "title": "Parentesco",
@@ -1531,6 +1585,12 @@
           "type": "text",
           "name": "persona10_num_identificación",
           "title": "Número Identificación"
+        },
+        {
+          "type": "text",
+          "name": "persona10_fecha_expedicion_identificacion",
+          "title": "Fecha de expedicion\n",
+          "inputType": "date"
         },
         {
           "type": "dropdown",
@@ -4937,6 +4997,7 @@
                         nombre: senderData[`persona${i}_nombre`],
                         tipo_identificacion: senderData[`persona${i}_tipo_identificacion`],
                         num_identificacion: senderData[`persona${i}_num_identificación`],
+                        fecha_expedicion_identificacion: senderData[`persona${i}_fecha_expedicion_identificacion`],
                         parentezco: senderData[`persona${i}_parentezco`],
                         parentezco_cual: senderData[`persona${i}_parentezco_cual`],
                         fecha_nacimiento: senderData[`persona${i}_fecha_nacimiento`],
