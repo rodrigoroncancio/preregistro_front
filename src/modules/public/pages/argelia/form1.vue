@@ -4996,7 +4996,7 @@
                         ficha: ( item as any).id,
                         nombre: senderData[`persona${i}_nombre`],
                         tipo_identificacion: senderData[`persona${i}_tipo_identificacion`],
-                        num_identificacion: senderData[`persona${i}_num_identificación`],
+                        numero_identificacion: senderData[`persona${i}_num_identificación`],
                         fecha_expedicion_identificacion: senderData[`persona${i}_fecha_expedicion_identificacion`],
                         parentezco: senderData[`persona${i}_parentezco`],
                         parentezco_cual: senderData[`persona${i}_parentezco_cual`],
