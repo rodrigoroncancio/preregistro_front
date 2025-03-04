@@ -611,8 +611,20 @@
           "inputType": "date"
         },
         {
+          "type": "file",
+          "name": "persona1_foto_doc_frente",
+          "title": "Foto Doc. Frente",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
+          "type": "file",
+          "name": "persona1_foto_doc_atras",
+          "title": "Foto Doc. Atras",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
           "type": "dropdown",
-          "name": "persona1_parentezco",
+          "name": "persona1_parentesco",
           "title": "Parentesco",
           "choices": [
             "Abuelo",
@@ -628,8 +640,8 @@
         },
         {
           "type": "text",
-          "name": "persona1_parentezco_cual",
-          "title": "Cuál Parentezco"
+          "name": "persona1_parentesco_cual",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
@@ -720,8 +732,20 @@
           "inputType": "date"
         },
         {
+          "type": "file",
+          "name": "persona2_foto_doc_frente",
+          "title": "Foto Doc. Frente",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
+          "type": "file",
+          "name": "persona2_foto_doc_atras",
+          "title": "Foto Doc. Atras",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
           "type": "dropdown",
-          "name": "persona2_parentezco",
+          "name": "persona2_parentesco",
           "title": "Parentesco",
           "choices": [
             "Abuelo",
@@ -737,8 +761,8 @@
         },
         {
           "type": "text",
-          "name": "persona2_parentezco_cual",
-          "title": "Cuál Parentezco"
+          "name": "persona2_parentesco_cual",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
@@ -829,8 +853,20 @@
           "inputType": "date"
         },
         {
+          "type": "file",
+          "name": "persona3_foto_doc_frente",
+          "title": "Foto Doc. Frente",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
+          "type": "file",
+          "name": "persona3_foto_doc_atras",
+          "title": "Foto Doc. Atras",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
           "type": "dropdown",
-          "name": "persona3_parentezco",
+          "name": "persona3_parentesco",
           "title": "Parentesco",
           "choices": [
             "Abuelo",
@@ -846,8 +882,8 @@
         },
         {
           "type": "text",
-          "name": "persona3_parentezco_cual",
-          "title": "Cuál Parentezco"
+          "name": "persona3_parentesco_cual",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
@@ -938,8 +974,20 @@
           "inputType": "date"
         },
         {
+          "type": "file",
+          "name": "persona4_foto_doc_frente",
+          "title": "Foto Doc. Frente",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
+          "type": "file",
+          "name": "persona4_foto_doc_atras",
+          "title": "Foto Doc. Atras",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
           "type": "dropdown",
-          "name": "persona4_parentezco",
+          "name": "persona4_parentesco",
           "title": "Parentesco",
           "choices": [
             "Abuelo",
@@ -955,8 +1003,8 @@
         },
         {
           "type": "text",
-          "name": "persona4_parentezco_cual",
-          "title": "Cuál Parentezco"
+          "name": "persona4_parentesco_cual",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
@@ -1047,8 +1095,20 @@
           "inputType": "date"
         },
         {
+          "type": "file",
+          "name": "persona5_foto_doc_frente",
+          "title": "Foto Doc. Frente",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
+          "type": "file",
+          "name": "persona5_foto_doc_atras",
+          "title": "Foto Doc. Atras",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
           "type": "dropdown",
-          "name": "persona5_parentezco",
+          "name": "persona5_parentesco",
           "title": "Parentesco",
           "choices": [
             "Abuelo",
@@ -1064,8 +1124,8 @@
         },
         {
           "type": "text",
-          "name": "persona5_parentezco_cual",
-          "title": "Cuál Parentezco"
+          "name": "persona5_parentesco_cual",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
@@ -1156,8 +1216,20 @@
           "inputType": "date"
         },
         {
+          "type": "file",
+          "name": "persona6_foto_doc_frente",
+          "title": "Foto Doc. Frente",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
+          "type": "file",
+          "name": "persona6_foto_doc_atras",
+          "title": "Foto Doc. Atras",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
           "type": "dropdown",
-          "name": "persona6_parentezco",
+          "name": "persona6_parentesco",
           "title": "Parentesco",
           "choices": [
             "Abuelo",
@@ -1173,8 +1245,8 @@
         },
         {
           "type": "text",
-          "name": "persona6_parentezco_cual",
-          "title": "Cuál Parentezco"
+          "name": "persona6_parentesco_cual",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
@@ -1265,8 +1337,20 @@
           "inputType": "date"
         },
         {
+          "type": "file",
+          "name": "persona7_foto_doc_frente",
+          "title": "Foto Doc. Frente",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
+          "type": "file",
+          "name": "persona7_foto_doc_atras",
+          "title": "Foto Doc. Atras",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
           "type": "dropdown",
-          "name": "persona7_parentezco",
+          "name": "persona7_parentesco",
           "title": "Parentesco",
           "choices": [
             "Abuelo",
@@ -1282,8 +1366,8 @@
         },
         {
           "type": "text",
-          "name": "persona7_parentezco_cual",
-          "title": "Cuál Parentezco"
+          "name": "persona7_parentesco_cual",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
@@ -1374,8 +1458,20 @@
           "inputType": "date"
         },
         {
+          "type": "file",
+          "name": "persona8_foto_doc_frente",
+          "title": "Foto Doc. Frente",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
+          "type": "file",
+          "name": "persona8_foto_doc_atras",
+          "title": "Foto Doc. Atras",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
           "type": "dropdown",
-          "name": "persona8_parentezco",
+          "name": "persona8_parentesco",
           "title": "Parentesco",
           "choices": [
             "Abuelo",
@@ -1391,8 +1487,8 @@
         },
         {
           "type": "text",
-          "name": "persona8_parentezco_cual",
-          "title": "Cuál Parentezco"
+          "name": "persona8_parentesco_cual",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
@@ -1483,8 +1579,20 @@
           "inputType": "date"
         },
         {
+          "type": "file",
+          "name": "persona9_foto_doc_frente",
+          "title": "Foto Doc. Frente",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
+          "type": "file",
+          "name": "persona9_foto_doc_atras",
+          "title": "Foto Doc. Atras",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
           "type": "dropdown",
-          "name": "persona9_parentezco",
+          "name": "persona9_parentesco",
           "title": "Parentesco",
           "choices": [
             "Abuelo",
@@ -1500,8 +1608,8 @@
         },
         {
           "type": "text",
-          "name": "persona9_parentezco_cual",
-          "title": "Cuál Parentezco"
+          "name": "persona9_parentesco_cual",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
@@ -1593,8 +1701,20 @@
           "inputType": "date"
         },
         {
+          "type": "file",
+          "name": "persona10_foto_doc_frente",
+          "title": "Foto Doc. Frente",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
+          "type": "file",
+          "name": "persona10_foto_doc_atras",
+          "title": "Foto Doc. Atras",
+          "description": "Escriba el número de identificación del representante del núcleo familiar"
+        },
+        {
           "type": "dropdown",
-          "name": "persona10_parentezco",
+          "name": "persona10_parentesco",
           "title": "Parentesco",
           "choices": [
             "Abuelo",
@@ -1610,8 +1730,8 @@
         },
         {
           "type": "text",
-          "name": "persona10_parentezco_cual",
-          "title": "Cuál Parentezco"
+          "name": "persona10_parentesco_cual",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
@@ -4998,8 +5118,10 @@
                         tipo_identificacion: senderData[`persona${i}_tipo_identificacion`],
                         numero_identificacion: senderData[`persona${i}_num_identificación`],
                         fecha_expedicion_identificacion: senderData[`persona${i}_fecha_expedicion_identificacion`],
-                        parentesco: senderData[`persona${i}_parentezco`],
-                        parentesco_otro: senderData[`persona${i}_parentezco_cual`],
+                        parentesco: senderData[`persona${i}_parentesco`],
+                        foto_doc_atras: Array.isArray(senderData[`persona${i}_foto_doc_atras`]) && senderData[`persona${i}_foto_doc_atras`].length > 0 ? senderData[`persona${i}_foto_doc_atras`][0].content : "",
+                        foto_doc_frente: Array.isArray(senderData[`persona${i}_foto_doc_frente`]) && senderData[`persona${i}_foto_doc_frente`].length > 0 ? senderData[`persona${i}_foto_doc_frente`][0].content : "",
+                        parentesco_otro: senderData[`persona${i}_parentesco_cual`],
                         fecha_nacimiento: senderData[`persona${i}_fecha_nacimiento`],
                         sexo: senderData[`persona${i}_sexo`],
                         estado_civil: senderData[`persona${i}_estado_civil`],
