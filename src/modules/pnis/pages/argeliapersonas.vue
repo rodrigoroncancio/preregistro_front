@@ -62,7 +62,7 @@
     :title="$t('modules.pnis.modal_title_validateitems')"
     :width="450"
     v-model="formModalValidate"
-    :btnSaveEnabled="true"
+    :btnSaveEnabled="itemsValidation.length > 0"
     @fnSave="clickSelectForm"
     :btnSaveText="$t('modules.core.select')"
   >
@@ -77,6 +77,9 @@
           />
         </v-radio-group>
       </v-col>
+    </v-row>
+    <v-row v-if="itemsValidation.length == 0">
+      <v-col cols="12">No hay validaciones disponibles</v-col>
     </v-row>
   </exp-modal-form>
 
@@ -96,7 +99,7 @@
   </exp-modal-form>
 
   <exp-modal-form
-    title="Items validados"
+    :title="formModalValidadosTitulo"
     :width="850"
     v-model="formModalValidados"
     :btnSave="false"
@@ -105,31 +108,37 @@
     >
     <v-row>
       <v-col cols="12">
-        
       <v-card>
-
         <v-simple-table class="w-">
           <thead>
             <tr>
-              <th class="text-left">Validación</th>
-              <th class="text-left">Observación</th>
-              <th class="text-left">Evidencia</th>
+              <th class="py-3 px-4" width="10%">Area-Rol</th>
+              <th class="py-3 px-4" width="30%">Validación</th>
+              <th class="py-3 px-4" width="5%">Estado</th>
+              <th class="py-3 px-4" width="30%">Observación</th>
+              <th class="py-3 px-4" width="10%">Validador</th>
+              <th class="py-3 px-4">Evidencia</th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(item, index) in itemsValidados"
+            <tr v-for="(item, index) in itemsValidados"
               :key="index"
               :class="index % 2 === 0 ? 'shadow-md bg-gray-50' : ''"
             >
-              <td class="py-3 px-4" width="30%">  
+              <td class="py-3 px-4">
+                {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.rolname || '-' }}
+              </td>
+              <td class="py-3 px-4">  
                   {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.name || 'Sin nombre' }}
               </td>
-              <td class="py-3 px-4 observation-cell" width="30%">
+              <td class="py-3 px-4">
+                {{ item.status || '-' }}
+              </td>
+              <td class="py-3 px-4 observation-cell">
                 {{ item.observation || 'Sin observación' }}
               </td>
               <td>{{item.user_name}}</td>
-              <td class="py-3 px-4" width="100%">
+              <td class="py-3 px-4">
                 <template v-if="item.attachment">
                   <v-btn @click="downloadDocument(item, 2)" variant="text" color="green" block>
                     Ver evidencia
@@ -141,9 +150,6 @@
           </tbody>
         </v-simple-table>
       </v-card>
-         
-
-
       </v-col>
     </v-row>          
   </exp-modal-form>
@@ -174,31 +180,18 @@ const uUtils = useUtils();
 const validationid = ref(null); // v-model para el radio group
 const identificationnumber = ref(null);
 
-// { id: 4, label: "Personas del núcleo familiar" },
-// { id: 7, label: "Georeferenciación" },
-// { id: 6, label: "Lugar de residencia" },
-
-const options = ref([
-  { id: 2, label: "Completitud de los datos" },
-  { id: 3, label: "Representante núcleo familiar" },
-  { id: 5, label: "Hectárea" },
-  { id: 8, label: "Usufructo" },
-  { id: 9, label: "Acceso a tierras" },
-  { id: 10, label: "Arraigo" },
-  { id: 11, label: "Técnica" }
-]);
-
 const headers: any[] = [
   { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: false },
   { key: 'identificacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
   { key: 'nombres', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
   { key: 'apellidos', title: "Apellidos", width: "auto", align: "start", searchable: true, sortable: false, },
   { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
-  { key: 'number_uncompleted', title: "No Validados", width: "auto", align: "start", sortable: false, },
+  { key: 'number_uncompleted', title: "Alertas", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
 const drawRefresh = ref("");
 const validationKey = ref("");
+const formModalValidadosTitulo = ref("");
 
 const formModal = ref(false);
 const formModalValidate = ref(false);
@@ -207,72 +200,42 @@ const formModalValidados = ref(false);
 const itemsValidation = ref<Array<{ id: number; label: string }>>([]);
 const itemsDocuments = ref([]);
 const itemsValidados = ref([]);
-const itemsValidadosBase = ref([
-    {
-        "id": 2,
-        "name": "Completitud de los datos",
-    },
-    {
-        "id": 3,
-        "name": "Representante núcleo familiar"
-    },
-    {
-        "id": 4,
-        "name": "Personas del núcleo familiar"
-    },
-    {
-        "id": 5,
-        "name": "Hetarea"
-    },
-    {
-        "id": 6,
-        "name": "Lugar de residencia"
-    },
-    {
-        "id": 7,
-        "name": "Georeferenciación"
-    },
-    {
-        "id": 8,
-        "name": "Usufructo"
-    },
-    {
-        "id": 9,
-        "name": "Acceso a tierras"
-    },
-    {
-        "id": 10,
-        "name": "Arraigo"
-    },
-    {
-        "id": 11,
-        "name": "Técnica"
-    }]);
+const itemsValidadosBase = ref([]);
 const getValidationItems = async () => {
-    let loader = uLoading.show({});
-    itemsValidation.value = [];
-    try {
-      const response = await axios.get(
-        `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/2`
-      );
+  let loader = uLoading.show({});
+  itemsValidation.value = [];
+  try {
+    const response = await axios.get(
+      `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/2`
+    );
 
-      console.log(response.data);
+    console.log(response.data);
 
-      // Verifica si response.data tiene la estructura esperada
-      if (response.data.missing_items) {
-        itemsValidation.value = response.data.missing_items.map((item: any) => ({
-          id: item.id,
-          label: item.nombre || item.name || "Sin nombre",
-        }));
-      } else {
-        console.warn("Formato inesperado en la respuesta:", response.data);
-      }
-      loader.hide()
-    } catch (error) {
-      console.error("Error fetching validation items:", error);
-      loader.hide()
+    // Verifica si response.data tiene la estructura esperada
+    if (response.data.missing_items) {
+      itemsValidation.value = response.data.missing_items.map((item: any) => ({
+        id: item.id,
+        label: item.nombre || item.name || "Sin nombre",
+      }));
+    } else {
+      console.warn("Formato inesperado en la respuesta:", response.data);
     }
-  };
+    loader.hide()
+  } catch (error) {
+    console.error("Error fetching validation items:", error);
+    loader.hide()
+  }
+};
+
+const getItemsValidadosBase = async () => {
+  try {
+    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/2/`);
+    itemsValidadosBase.value = response.data;
+    console.log("items", itemsValidadosBase.value);
+  } catch (error) {
+    console.error("Error fetching validation items:", error);
+  }
+};
 
 const getValidationKey = async () => {
   try {
@@ -286,10 +249,11 @@ const getValidationKey = async () => {
 const modalValidados = async (item: any, tipo: string='si') => {
   try {
     let loader = uLoading.show({});
+    formModalValidadosTitulo.value = tipo == 'si' ? 'Items validados' : 'Alertas';
     const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.identificacion}/2/${tipo}`);
     itemsValidados.value = response.data;
     loader.hide();
-    formModalValidados.value = true;
+    formModalValidados.value = true;    
   } catch (error) {
     console.error("Error fetching validation items:", error);
   }
@@ -313,6 +277,7 @@ const downloadDocument = (item: any, tipo: number=1) => {
 
 onMounted(async () => {
   getValidationKey();
+  getItemsValidadosBase();
 });
 
 const fnReloadTable = () => {

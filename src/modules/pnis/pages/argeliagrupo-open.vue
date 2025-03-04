@@ -33,11 +33,8 @@
     }"
   >
   </exp-dynamic-form>
-
-
   <!-- <v-btn @click="clickSave()">Guardar</v-btn> -->
 </template>
-
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from "vue";
@@ -46,6 +43,7 @@ import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength } from "@vuelidate/validators";
 import { useRoute } from 'vue-router';
 import axios from "axios";
+import { useLoading } from "vue-loading-overlay";
 
 const endpoint = "/api/1.0/core";
 const route = useRoute();
@@ -297,27 +295,27 @@ const formData = ref({ ...formDataDefault });
 const passwordData = ref();
 
 const formSchema = computed(() => [
-  { key: "lineaproductiva", type: "text", col: "md-6", title: "Línea Productiva" },
-  { key: "experiencialineaproductiva", type: "text", col: "md-6", title: "Experiencia Línea Productiva" },
-  { key: "experiencialineaproductivaanos", type: "number", col: "md-6", title: "Años de Experiencia Línea Productiva" },
+  { key: "linea_productiva", type: "text", col: "md-6", title: "Línea Productiva" },
+  { key: "experiencia_linea_productiva", type: "text", col: "md-6", title: "Experiencia Línea Productiva" },
+  { key: "experiencia_linea_productiva_agnos", type: "number", col: "md-6", title: "Años de Experiencia Línea Productiva" },
   { key: "fecha", type: "date", col: "md-6", title: "Fecha" },
-  { key: "grupoproductores", type: "text", col: "md-6", title: "Grupo de Productores" },
-  { key: "tipoorganizacion", type: "text", col: "md-6", title: "Tipo de Organización" },
-  { key: "tipoorganizacioncual", type: "text", col: "md-6", title: "Otro Tipo de Organización" },
-  { key: "identificacionorganizacion", type: "text", col: "md-6", title: "Identificación de la Organización" },
+  { key: "grupo_pruductores", type: "text", col: "md-6", title: "Grupo de Productores" },
+  { key: "tipo_organizacion", type: "text", col: "md-6", title: "Tipo de Organización" },
+  { key: "tipo_organizacion_cual", type: "text", col: "md-6", title: "Otro Tipo de Organización" },
+  { key: "identificacion_organizacion", type: "text", col: "md-6", title: "Identificación de la Organización" },
   { key: "representante", type: "text", col: "md-6", title: "Representante" },
-  { key: "cedularepresentante", type: "text", col: "md-6", title: "Cédula del Representante" },
+  { key: "cedula_representante", type: "text", col: "md-6", title: "Cédula del Representante" },
   { key: "telefono", type: "text", col: "md-6", title: "Teléfono" },
   { key: "correo", type: "email", col: "md-6", title: "Correo Electrónico" },
-  { key: "departamentoinfluencia", type: "text", col: "md-6", title: "Departamento de Influencia" },
-  { key: "municipioinfluencia", type: "text", col: "md-6", title: "Municipio de Influencia" },
-  { key: "veredainfluencia", type: "text", col: "md-6", title: "Vereda de Influencia" },
-  { key: "fechacreacion", type: "date", col: "md-6", title: "Fecha de Creación" },
-  { key: "principaleslineasproductivas", type: "text", col: "md-6", title: "Principales Líneas Productivas" },
-  { key: "principaleslineasproductivascual", type: "text", col: "md-6", title: "Otras Líneas Productivas" },
+  { key: "departamento_influencia", type: "text", col: "md-6", title: "Departamento de Influencia" },
+  { key: "municipio_influencia", type: "text", col: "md-6", title: "Municipio de Influencia" },
+  { key: "vereda_influencia", type: "text", col: "md-6", title: "Vereda de Influencia" },
+  { key: "fecha_creacion", type: "date", col: "md-6", title: "Fecha de Creación" },
+  { key: "principales_lineas_productivas", type: "text", col: "md-6", title: "Principales Líneas Productivas" },
+  { key: "principales_lineas_productivas_cual", type: "text", col: "md-6", title: "Otras Líneas Productivas" },
   { key: "departamento", type: "text", col: "md-6", title: "Departamento" },
   { key: "municipio", type: "text", col: "md-6", title: "Municipio" },
-  { key: "numerofamilias_grupo_productores", type: "number", col: "md-6", title: "Número de Familias del Grupo" }
+  { key: "numero_familias_grupo_pruductores", type: "number", col: "md-6", title: "Número de Familias del Grupo" }
 ]);
 
 
@@ -335,18 +333,23 @@ const rules = {
 };
 const validate = useVuelidate(rules, (formData as any));
 
+const uLoading = useLoading();
 onMounted(async () => {
   console.log('route.params.id:', route.params.id);
   tab.value = 0;
   if (surveyId != null) {
-    await uCrud
-      .retrieve(Number(surveyId))
-      .then((item: any) => {
-        if (item.staff_info == null) {
-          item.staff_info = {};
-        }
-        Object.assign(formData.value, { ...item });
-      });
+    // await uCrud
+    //   .retrieve(Number(surveyId))
+    //   .then((item: any) => {
+    //     if (item.staff_info == null) {
+    //       item.staff_info = {};
+    //     }
+    //     Object.assign(formData.value, { ...item });
+    //   });
+    let loader = uLoading.show({});
+    const response = await axios.get(`${endpoint}/argeliagrupos/${surveyId}/`)
+    Object.assign(formData.value, { ...response.data });
+    loader.hide()
   } else {
     Object.assign(formData.value, { id: null, ...formDataDefault });
   }

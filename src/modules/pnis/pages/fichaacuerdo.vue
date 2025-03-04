@@ -86,7 +86,7 @@
     </v-row>
   </exp-modal-form>
   <exp-modal-form
-    title="Items validados"
+    :title="formModalValidadosTitulo"
     :width="850"
     v-model="formModalValidados"
     :btnSave="false"
@@ -94,16 +94,17 @@
     :btnSaveText="$t('modules.core.select')"
     >
     <v-row>
-      <v-col cols="12">
-        
+      <v-col cols="12">        
       <v-card>
-
         <v-simple-table class="w-">
           <thead>
             <tr>
-              <th class="text-left">Validación</th>
-              <th class="text-left">Observación</th>
-              <th class="text-left">Evidencia</th>
+              <th class="py-3 px-4" width="10%">Area-Rol</th>
+              <th class="py-3 px-4" width="30%">Validación</th>
+              <th class="py-3 px-4" width="5%">Estado</th>
+              <th class="py-3 px-4" width="30%">Observación</th>
+              <th class="py-3 px-4" width="10%">Validador</th>
+              <th class="py-3 px-4">Evidencia</th>
             </tr>
           </thead>
           <tbody>
@@ -112,10 +113,13 @@
               :key="index"
               :class="index % 2 === 0 ? 'shadow-md bg-gray-50' : ''"
             >
-              <td class="py-3 px-4" width="30%">  
-                  {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.name || 'Sin nombre' }}
+              <td class="py-3 px-4">
+                {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.rolname || '-' }}
               </td>
-              <td class="py-3 px-4 observation-cell" width="30%">
+              <td class="py-3 px-4">  
+                {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.name || 'Sin nombre' }}
+              </td>
+              <td class="py-3 px-4 observation-cell">
                 {{ item.observation || 'Sin observación' }}
               </td>
               <td>{{item.user_name}}</td>
@@ -131,9 +135,6 @@
           </tbody>
         </v-simple-table>
       </v-card>
-         
-
-
       </v-col>
     </v-row>          
   </exp-modal-form>
@@ -179,22 +180,22 @@
         <DataTable v-if="itemsNucleo.length >0" :options="{ responsive: true, autoWidth: false }" class="display">
           <thead>
             <tr>
-              <th>Identificación</th>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Parentesco</th>
-              <th>Fecha de Nacimiento</th>
-              <th>Especial</th>
+              <th class="py-3 px-4">Identificación</th>
+              <th class="py-3 px-4">Nombre</th>
+              <th class="py-3 px-4">Apellido</th>
+              <th class="py-3 px-4">Parentesco</th>
+              <th class="py-3 px-4">Fecha de Nacimiento</th>
+              <th class="py-3 px-4">Especial</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="persona in itemsNucleo" :key="persona.id">
-              <td>{{ persona.beneficiario_identificationNumber }}</td>
-              <td>{{ persona.beneficiario_nombre }}</td>
-              <td>{{ persona.beneficiario_apellido }}</td>
-              <td>{{ persona.parentesco }}</td>
-              <td>{{ persona.Birthdate }}</td>
-              <td>{{ persona.especial }}</td>
+              <td class="py-3 px-4">{{ persona.beneficiario_identificationNumber }}</td>
+              <td class="py-3 px-4">{{ persona.beneficiario_nombre }}</td>
+              <td class="py-3 px-4">{{ persona.beneficiario_apellido }}</td>
+              <td class="py-3 px-4">{{ persona.parentesco }}</td>
+              <td class="py-3 px-4">{{ persona.Birthdate }}</td>
+              <td class="py-3 px-4">{{ persona.especial }}</td>
             </tr>
           </tbody>
         </DataTable>
@@ -236,61 +237,8 @@ const itemsDocuments = ref([
 const identificationnumber = ref(null);
 const signature = ref(null);
 const itemsValidados = ref([]);
-const itemsValidadosBase = ref([
-    {
-        "id": 2,
-        "name": "Completitud de los datos",
-    },
-    {
-        "id": 3,
-        "name": "Representante núcleo familiar"
-    },
-    {
-        "id": 4,
-        "name": "Personas del núcleo familiar"
-    },
-    {
-        "id": 5,
-        "name": "Hetarea"
-    },
-    {
-        "id": 6,
-        "name": "Lugar de residencia"
-    },
-    {
-        "id": 7,
-        "name": "Georeferenciación"
-    },
-    {
-        "id": 8,
-        "name": "Usufructo"
-    },
-    {
-        "id": 9,
-        "name": "Acceso a tierras"
-    },
-    {
-        "id": 10,
-        "name": "Arraigo"
-    },
-    {
-        "id": 11,
-        "name": "Técnica"
-    }]);
-
-// { id: 4, label: "Personas del núcleo familiar" },
-// { id: 7, label: "Georeferenciación" },
-// { id: 6, label: "Lugar de residencia" },
-
-const options = ref([
-  { id: 2, label: "Completitud de los datos" },
-  { id: 3, label: "Representante núcleo familiar" },
-  { id: 5, label: "Hectárea" },
-  { id: 8, label: "Usufructo" },
-  { id: 9, label: "Acceso a tierras" },
-  { id: 10, label: "Arraigo" },
-  { id: 11, label: "Técnica" }
-]);
+const itemsValidadosBase = ref([]);
+const formModalValidadosTitulo = ref("");
 
 const headers: any[] = [
   { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: true },
@@ -298,7 +246,7 @@ const headers: any[] = [
   { key: 'name', title: "Nombre", width: "auto", align: "start",  searchable: false, sortable: false, },
   { key: 'lastname', title: "Apellidos", width: "auto", align: "start", sortable: false, },
   { key: "number_completed", title: "Validados", width: "auto", align: "start", sortable: false, },
-  { key: "number_uncompleted", title: "No Validados", width: "auto", align: "start", sortable: false, },
+  { key: "number_uncompleted", title: "Alertas", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
 const drawRefresh = ref("");
@@ -378,12 +326,6 @@ const getValidationKey = async () => {
   }
 };
 
-
-
-
-
-
-
 const clickSelectFormDocuments = (item: any) => {
   console.log('clickSelectFormDocuments');
   console.log(validationid.value);
@@ -418,9 +360,19 @@ const downloadDocument = (item: any, tipo: number=1) => {
   document.body.removeChild(enlace);
 }
 
+const getItemsValidadosBase = async () => {
+  try {
+    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/3/`);
+    itemsValidadosBase.value = response.data;
+    console.log("items", itemsValidadosBase.value);
+  } catch (error) {
+    console.error("Error fetching validation items:", error);
+  }
+};
 
 onMounted(async () => {
   getValidationKey();
+  getItemsValidadosBase();
 });
 
 const fnReloadTable = () => {

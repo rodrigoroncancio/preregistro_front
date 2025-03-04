@@ -78,6 +78,9 @@
         </v-radio-group>
       </v-col>
     </v-row>
+    <v-row v-if="itemsValidation.length == 0">
+      <v-col cols="12">No hay validaciones disponibles</v-col>
+    </v-row>
   </exp-modal-form>
 
   <exp-modal-form
@@ -103,7 +106,7 @@
   </exp-modal-form>
 
   <exp-modal-form
-    title="Items validados"
+    :title="formModalValidadosTitulo"
     :width="850"
     v-model="formModalValidados"
     :btnSave="false"
@@ -118,9 +121,12 @@
         <v-simple-table class="w-">
           <thead>
             <tr>
-              <th class="text-left">Validación</th>
-              <th class="text-left">Observación</th>
-              <th class="text-left">Evidencia</th>
+              <th class="py-3 px-4" width="10%">Area-Rol</th>
+              <th class="py-3 px-4" width="30%">Validación</th>
+              <th class="py-3 px-4" width="5%">Estado</th>
+              <th class="py-3 px-4" width="30%">Observación</th>
+              <th class="py-3 px-4" width="10%">Validador</th>
+              <th class="py-3 px-4">Evidencia</th>
             </tr>
           </thead>
           <tbody>
@@ -129,14 +135,17 @@
               :key="index"
               :class="index % 2 === 0 ? 'shadow-md bg-gray-50' : ''"
             >
-              <td class="py-3 px-4" width="30%">  
-                  {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.name || 'Sin nombre' }}
+              <td class="py-3 px-4">
+                {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.rolname || '-' }}
               </td>
-              <td class="py-3 px-4 observation-cell" width="30%">
+              <td class="py-3 px-4">  
+                {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.name || 'Sin nombre' }}
+              </td>
+              <td class="py-3 px-4 observation-cell">
                 {{ item.observation || 'Sin observación' }}
               </td>
               <td>{{item.user_name}}</td>
-              <td class="py-3 px-4" width="100%">
+              <td class="py-3 px-4">
                 <template v-if="item.attachment">
                   <v-btn @click="downloadDocument(item, 2)" variant="text" color="green" block>
                     Ver evidencia
@@ -148,9 +157,6 @@
           </tbody>
         </v-simple-table>
       </v-card>
-         
-
-
       </v-col>
     </v-row>          
   </exp-modal-form>
@@ -182,74 +188,19 @@ const validationid = ref(null); // v-model para el radio group
 const identificationnumber = ref(null);
 const itemsDocuments = ref([]);
 const itemsValidados = ref([]);
-const itemsValidadosBase = ref([
-    {
-        "id": 2,
-        "name": "Completitud de los datos",
-    },
-    {
-        "id": 3,
-        "name": "Representante núcleo familiar"
-    },
-    {
-        "id": 4,
-        "name": "Personas del núcleo familiar"
-    },
-    {
-        "id": 5,
-        "name": "Hetarea"
-    },
-    {
-        "id": 6,
-        "name": "Lugar de residencia"
-    },
-    {
-        "id": 7,
-        "name": "Georeferenciación"
-    },
-    {
-        "id": 8,
-        "name": "Usufructo"
-    },
-    {
-        "id": 9,
-        "name": "Acceso a tierras"
-    },
-    {
-        "id": 10,
-        "name": "Arraigo"
-    },
-    {
-        "id": 11,
-        "name": "Técnica"
-    }]);
-
-
-
-const options = ref([
-  { id: 2, label: "Completitud de los datos" },
-  { id: 3, label: "Representante núcleo familiar" },
-  { id: 4, label: "Personas del núcleo familiar" },
-  { id: 5, label: "Hectárea" },
-  { id: 6, label: "Lugar de residencia" },
-  { id: 7, label: "Georeferenciación" },
-  { id: 8, label: "Usufructo" },
-  { id: 9, label: "Acceso a tierras" },
-  { id: 10, label: "Arraigo" },
-  { id: 11, label: "Técnica" }
-]);
-
-
+const itemsValidadosBase = ref([]);
+const formModalValidadosTitulo = ref("");
 
 const headers: any[] = [
-  { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: false },
-  { key: 'identificacionorganizacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
-  { key: 'cedularepresentante', title: "CC Representante", width: "auto", align: "start",  searchable: true, sortable: false, },
-  { key: 'grupoproductores', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
-  { key: 'departamentoinfluencia', title: "Dep. Influencia", width: "auto", align: "start", sortable: false, },
-  { key: "municipioinfluencia", title: "Mun. Influencia", width: "auto", align: "start", sortable: false, },
+  // { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: false },
+  { key: 'identificacion_organizacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'cedula_representante', title: "CC Representante", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'grupo_pruductores', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'departamento_influencia', title: "Dep. Influencia", width: "auto", align: "start", sortable: false, },
+  { key: "municipio_influencia", title: "Mun. Influencia", width: "auto", align: "start", sortable: false, },
+  { key: "num_personas_registradas", title: "Num. registrados", width: "auto", align: "start", sortable: false, },
   { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
-  { key: 'number_uncompleted', title: "No Validados", width: "auto", align: "start", sortable: false, },
+  { key: 'number_uncompleted', title: "Alertas", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
 const drawRefresh = ref("");
@@ -288,8 +239,9 @@ const getValidationItems = async () => {
     }
   };
 
- onMounted(async () => {
+onMounted(async () => {
   getValidationKey();
+  getItemsValidadosBase();
 });
 
 
@@ -299,19 +251,30 @@ const fnReloadTable = () => {
   drawRefresh.value = uUtils.createUUID();
 }
 
+const getItemsValidadosBase = async () => {
+  try {
+    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/1/`);
+    itemsValidadosBase.value = response.data;
+    console.log("items", itemsValidadosBase.value);
+  } catch (error) {
+    console.error("Error fetching validation items:", error);
+  }
+};
+
 const getValidationKey = async () => {
   try {
     const response = await axios.get(`/api/1.0/core/media/generatekey/`);
     validationKey.value = response.data;
   } catch (error) {
-    console.error("Error fetching validation items:", error);
+    console.error("Error fetching key:", error);
   }
 };
 
 const modalValidados = async (item: any, tipo: string='si') => {
   try {
     let loader = uLoading.show({});
-    const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.cedularepresentante}/1/${tipo}`);
+    formModalValidadosTitulo.value = tipo == 'si' ? 'Items validados' : 'Alertas';
+    const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.cedula_representante}/1/${tipo}`);
     itemsValidados.value = response.data;
     loader.hide();
     formModalValidados.value = true;
@@ -382,7 +345,7 @@ const clickAction = (item: any, action: string) => {
   if (action === 'validate') {
     formModalValidate.value = true;
     console.log(item);
-    identificationnumber.value = item.cedularepresentante;
+    identificationnumber.value = item.cedula_representante;
     getValidationItems();
   }
 };
