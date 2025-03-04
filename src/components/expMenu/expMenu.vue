@@ -68,7 +68,7 @@ const itemsMenu = [
     }]
   },
   {
-    title: "Convocatoria Argelia",
+    title: "modules.pnis.convocatoria_argelia",
     icon: "mdi-solar-panel",
     children: [{
       title: "modules.pnis.preregistroasociado",
