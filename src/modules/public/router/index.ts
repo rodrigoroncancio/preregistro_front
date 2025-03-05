@@ -20,6 +20,11 @@ const router = {
           path: "argelia/fichaacuerdo",
           name: "public-argelia-fichaacuerdo",
           component: () => import( /* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/argelia/form1.vue"),
+        },
+        {
+          path: "argelia/vercupos",
+          name: "public-argelia-vercupos",
+          component: () => import( /* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/argelia/vercupos.vue"),
         }
       ]
     },

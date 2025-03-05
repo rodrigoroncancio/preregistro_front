@@ -76,7 +76,7 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
+    max-width: 2200px;
 }
 
 /* Sección de login */

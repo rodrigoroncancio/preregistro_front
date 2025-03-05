@@ -63,6 +63,21 @@
 
             </v-col>
           </v-row>
+
+          <v-row>
+            <v-col>
+
+              <a 
+                  target="_blank"
+                  href="/argelia/vercupos"
+                  style="color: black; background-color: rgba(255, 255, 255, 0.6); padding: 5px 10px; text-decoration: none; border-radius: 5px;"
+              >
+                  Ver cupos
+              </a>
+
+            </v-col>
+          </v-row>
+          
         </v-col>
       </v-row>
     </v-container>
@@ -83,15 +98,20 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+
 /* Main content */
 .main-content {
-    margin-top: 10px;
+    max-width: 2200px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
+}
+
+.v-container {
+  max-width: 2200px !important;
 }
 
 /* Sección de login */
@@ -142,7 +162,7 @@ color: #106737; /* Cambia de color al pasar el mouse */
 
  
 .v-row {
-    margin-top: 1px !important;
+    margin-top: 3px !important;
 }
 
 .general-argelia {
@@ -216,14 +236,14 @@ color: #106737; /* Cambia de color al pasar el mouse */
 .btn-arge-page.green {
     background: #21C069;
     color: white;
-    font-size: 26px;
+    font-size: 22px;
     padding: 10px;
 }
 
 .btn-arge-page.blue {
     background: #2148C0;
     color: white;
-    font-size: 26px;
+    font-size: 22px;
     padding: 10px;
 }
 
@@ -306,9 +326,7 @@ color: #106737; /* Cambia de color al pasar el mouse */
         font-size: 30px;
     }
 
-    .pdf-container-argelia {
-        width: 75%;
-    }
+
 }
 
 /* Tablets y dispositivos medianos (menos de 1024px) */
@@ -323,9 +341,6 @@ color: #106737; /* Cambia de color al pasar el mouse */
         padding: 15px;
     }
 
-    .ABC {
-        width: 40%;
-    }
 }
 
 /* Móviles (menos de 768px) */
@@ -339,13 +354,6 @@ color: #106737; /* Cambia de color al pasar el mouse */
         padding: 12px;
     }
 
-    .ABC {
-        width: 50%;
-    }
-
-    .pdf {
-        width: 70%;
-    }
 }
 
 /* Móviles pequeños (menos de 480px) */
@@ -359,17 +367,13 @@ color: #106737; /* Cambia de color al pasar el mouse */
         padding: 10px;
     }
 
-    .ABC {
-        width: 80%;
-    }
+
 
     .pdf-container-argelia {
         margin-top: 10px;
     }
 
-    .pdf {
-        width: 80%;
-    }
+
 }
 
 

@@ -18,7 +18,7 @@
                     <span className="title-highlight">Catatumbo</span>
                 </h1>
                 <h2 className="subtitle-asociaciones">Convención, Tibú, Sardinata y El Tarra</h2>
-                <p className="date">Del <strong>13 de febrero</strong> <strong>al 28 de febrero</strong></p>
+                <p className="date">Del <strong>13 de febrero</strong> <strong>al 23 de marzo</strong></p>
             </div>
             <div className="text-information">
                 <p className="subtitle-asociaciones-text">
@@ -154,7 +154,7 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
+    max-width: 2200px;
   }
 
   /* Título Principal */
