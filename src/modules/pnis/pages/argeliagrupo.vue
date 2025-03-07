@@ -114,11 +114,9 @@
     :btnSaveText="$t('modules.core.select')"
     >
     <v-row>
-      <v-col cols="12">
-        
+      <v-col cols="12">        
       <v-card>
-
-        <v-simple-table class="w-">
+        <v-table class="w-">
           <thead>
             <tr>
               <th class="py-3 px-4" width="10%">Area-Rol</th>
@@ -158,12 +156,11 @@
               </td>
             </tr>
           </tbody>
-        </v-simple-table>
+        </v-table>
       </v-card>
       </v-col>
     </v-row>          
   </exp-modal-form>
-
 </template>
 
 <script lang="ts" setup>
@@ -208,12 +205,10 @@ const headers: any[] = [
 ];
 const drawRefresh = ref("");
 const validationKey = ref("");
-
 const formModal = ref(false);
 const formModalValidate = ref(false);
 const formModalDocumentos = ref(false);
 const formModalValidados = ref(false);
-
 const itemsValidation = ref<Array<{ id: number; label: string }>>([]);
 
 const getValidationItems = async () => {
@@ -223,9 +218,6 @@ const getValidationItems = async () => {
       const response = await axios.get(
         `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/1/`
       );
-
-      console.log(response.data);
-
       // Verifica si response.data tiene la estructura esperada
       if (response.data.missing_items) {
         itemsValidation.value = response.data.missing_items.map((item: any) => ({
@@ -245,6 +237,7 @@ const getValidationItems = async () => {
 onMounted(async () => {
   getValidationKey();
   getItemsValidadosBase();
+  console.log(uAuth.ROLES);
 });
 
 
@@ -258,7 +251,6 @@ const getItemsValidadosBase = async () => {
   try {
     const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/1/`);
     itemsValidadosBase.value = response.data;
-    console.log("items", itemsValidadosBase.value);
   } catch (error) {
     console.error("Error fetching validation items:", error);
   }
@@ -296,23 +288,15 @@ const downloadDocument = (item: any, tipo: number=1) => {
   } else {
     enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item.attachment}`;
   }
-  console.log(enlace.href);
   document.body.appendChild(enlace);
   enlace.click();
   document.body.removeChild(enlace);
 }
 
-const isUserAdmin = computed(() => {
-  try {
-    return uAuth.getUserData().role == 1;
-  } catch (error) {
-    return false;
-  }
-  return false;
-});
-
 const menuItems = computed(() => {
-  if (isUserAdmin.value) {
+  if (uAuth.isAudit()) {
+    return ['view']
+  } else if (uAuth.isAdmin()) {    
     return ['view', 'validate']
   } else {
     return ['validate']

@@ -72,6 +72,13 @@ const useUtils = () => {
     });
   }
 
+  const base64Decode = (hash: string): string => {
+    return atob(hash);    
+  }
+
+  const base64Encode = (data: string): string => {
+    return btoa(data);
+  }
 
   return {
     consoleLog,
@@ -84,7 +91,9 @@ const useUtils = () => {
     JsonParse,
     getUrlImg,
     clone,
-    sortList
+    sortList,
+    base64Decode,
+    base64Encode
   };
 };
 
