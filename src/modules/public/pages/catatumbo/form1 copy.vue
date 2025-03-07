@@ -177,6 +177,6 @@
   margin: auto;
   margin-top: 20px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 2200px;
 }
 </style>

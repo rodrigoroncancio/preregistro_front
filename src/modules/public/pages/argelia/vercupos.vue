@@ -5,14 +5,14 @@
         <v-col class="general-argelia">
           <v-row>
             <v-col>
-              <router-link to="/argelia" class="back-section">
+              <router-link to="/argeliainicio" class="back-section">
                 <font-awesome-icon icon="fa-arrow-left" class="login-icon" />
                 <span class="login-text"> Regresar</span>
               </router-link>
               <div className="main-content">
                 <h1 >
-                  <span className="title-primary-argelia">Lista </span>
-                  <span className="title-highlight-argelia">Inscritos</span>
+                  <span className="title-primary-argelia">Cupos </span>
+                  <span className="title-highlight-argelia">Asociaciones</span>
                 </h1>
               </div>
             </v-col>
@@ -20,7 +20,15 @@
           <v-row>
             <v-col>
                 <div class="general mt-[100px]">
-                    <iframe title="Datos_Encuesta" width="1024" height="612" src="https://app.powerbi.com/view?r=eyJrIjoiNjM4Njk0MDctYjFlZC00ODRkLTg0MTAtYTMzNjA5ZjU5MjU5IiwidCI6IjhmZDEwMTNlLTJhMDgtNGM0Ny05M2Q0LTE2ZTkyOWEyY2E2MSIsImMiOjR9" frameborder="0" allowFullScreen="true"></iframe>
+  
+                  <iframe  
+                      title="Argelia" 
+                      className="responsive-iframe"
+                      src="https://app.powerbi.com/view?r=eyJrIjoiNzIwOGUyMjUtN2U2NS00Yzg1LWJhM2ItNzUxM2E4YWUxNWE5IiwidCI6IjhmZDEwMTNlLTJhMDgtNGM0Ny05M2Q0LTE2ZTkyOWEyY2E2MSIsImMiOjR9" 
+                      frameBorder="0" 
+                      allowFullScreen={true}>
+                  </iframe>
+
                 </div>
             </v-col>
           </v-row>

@@ -123,7 +123,7 @@ color: #106737; /* Cambia de color al pasar el mouse */
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 1200px;
+  max-width: 2200px;
 }
 
 /* Título Principal */
