@@ -237,7 +237,6 @@ const getValidationItems = async () => {
 onMounted(async () => {
   getValidationKey();
   getItemsValidadosBase();
-  console.log(uAuth.ROLES);
 });
 
 
