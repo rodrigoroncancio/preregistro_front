@@ -100,11 +100,9 @@
     :btnSaveText="$t('modules.core.select')"
     >
     <v-row>
-      <v-col cols="12">
-        
+      <v-col cols="12">        
       <v-card>
-
-        <v-simple-table class="w-">
+        <v-table class="w-">
           <thead>
             <tr>
               <th class="text-left">Validación</th>
@@ -135,23 +133,17 @@
               </td>
             </tr>
           </tbody>
-        </v-simple-table>
+        </v-table>
       </v-card>
-         
-
-
       </v-col>
     </v-row>          
   </exp-modal-form>
 </template>
 
-
-
 <script lang="ts" setup>
 import { ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-
 import useAuth from "@/modules/auth/composables/useAuth";
 import expDataTable from "@/components/expDataTable";
 import expModalForm from "@/components/expModalForm";
@@ -166,23 +158,8 @@ const { t } = useI18n();
 const router = useRouter();
 const uAuth = useAuth();
 const uUtils = useUtils();
-
 const validationid = ref(null); // v-model para el radio group
 const identificationnumber = ref(null);
-
-// { id: 4, label: "Personas del núcleo familiar" },
-// { id: 7, label: "Georeferenciación" },
-// { id: 6, label: "Lugar de residencia" },
-
-const options = ref([
-  { id: 2, label: "Completitud de los datos" },
-  { id: 3, label: "Representante núcleo familiar" },
-  { id: 5, label: "Hectárea" },
-  { id: 8, label: "Usufructo" },
-  { id: 9, label: "Acceso a tierras" },
-  { id: 10, label: "Arraigo" },
-  { id: 11, label: "Técnica" }
-]);
 
 const headers: any[] = [
   { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: false },
@@ -193,7 +170,6 @@ const headers: any[] = [
 ];
 const drawRefresh = ref("");
 const validationKey = ref("");
-
 const formModal = ref(false);
 const formModalValidate = ref(false);
 const formModalDocumentos = ref(false);
@@ -201,53 +177,23 @@ const formModalValidados = ref(false);
 const itemsValidation = ref<Array<{ id: number; label: string }>>([]);
 const itemsDocuments = ref([]);
 const itemsValidados = ref([]);
-const itemsValidadosBase = ref([
-    {
-        "id": 2,
-        "name": "Completitud de los datos",
-    },
-    {
-        "id": 3,
-        "name": "Representante núcleo familiar"
-    },
-    {
-        "id": 4,
-        "name": "Personas del núcleo familiar"
-    },
-    {
-        "id": 5,
-        "name": "Hetarea"
-    },
-    {
-        "id": 6,
-        "name": "Lugar de residencia"
-    },
-    {
-        "id": 7,
-        "name": "Georeferenciación"
-    },
-    {
-        "id": 8,
-        "name": "Usufructo"
-    },
-    {
-        "id": 9,
-        "name": "Acceso a tierras"
-    },
-    {
-        "id": 10,
-        "name": "Arraigo"
-    },
-    {
-        "id": 11,
-        "name": "Técnica"
-    }]);
+const itemsValidadosBase = ref([]);
+
+const getItemsValidadosBase = async () => {
+  try {
+    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/3/`);
+    itemsValidadosBase.value = response.data;
+  } catch (error) {
+    console.error("Error fetching validation items:", error);
+  }
+};
+
 const getValidationItems = async () => {
     let loader = uLoading.show({});
     itemsValidation.value = [];
     try {
       const response = await axios.get(
-        `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/2`
+        `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/3`
       );
 
       console.log(response.data);
@@ -280,7 +226,7 @@ const getValidationKey = async () => {
 const modalValidados = async (item: any, tipo: string='si') => {
   try {
     let loader = uLoading.show({});
-    const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.identificacion}/2/${tipo}`);
+    const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.identificacion}/3/${tipo}`);
     itemsValidados.value = response.data;
     loader.hide();
     formModalValidados.value = true;
@@ -307,6 +253,7 @@ const downloadDocument = (item: any, tipo: number=1) => {
 
 onMounted(async () => {
   getValidationKey();
+  getItemsValidadosBase();
 });
 
 const fnReloadTable = () => {
@@ -315,18 +262,11 @@ const fnReloadTable = () => {
   drawRefresh.value = uUtils.createUUID();
 }
 
-const isUserAdmin = computed(() => {
-  try {
-    return uAuth.getUserData().role == 1;
-  } catch (error) {
-    return false;
-  }
-  return false;
-});
-
 const menuItems = computed(() => {
-  if (isUserAdmin.value) {
-    return ['view', 'validate', 'documents']
+  if (uAuth.isAudit()) {
+    return ['view', 'documents']
+  } else if (uAuth.isAdmin()) {    
+    return ['view', 'validate','documents']
   } else {
     return ['view', 'validate', 'documents']
   }

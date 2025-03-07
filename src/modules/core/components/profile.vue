@@ -40,6 +40,10 @@ import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength } from "@vuelidate/validators";
 
 const endpoint = "/api/1.0/core";
+interface Item {
+  id: number;
+  label: string;
+}
 
 import useAuth from "@/modules/auth/composables/useAuth";
 import useCrud from "@/composables/useCrud";
@@ -61,15 +65,20 @@ const props = defineProps({
     type: Number,
     default: null,
   },
+  roles: {
+    type: Array as () => Item[],
+    required: true,
+  },
 });
 
-const itemsRole = [
-  { id: true, label: t("modules.auth.admin") },
-  { id: false, label: t("modules.auth.staff") },
-];
+// const itemsRole = []
 const tab = ref(0);
 const formDataDefault = {
-  first_name: "", last_name: "", email: "", phone: "", url_image: "",
+  first_name: "", 
+  last_name: "", 
+  email: "", 
+  phone: "", 
+  url_image: "",
   staff_info: {
     image: "",
     url_image: "",
@@ -81,20 +90,12 @@ const passwordData = ref();
 
 let formSchema = [
   { key: "is_active", type: "switch", col:"md-12", title: t("modules.auth.active"), required: true },
-  { key: "is_superuser", type: "select", col:"md-12", items: itemsRole, title: t("modules.auth.role"), required: true },
+  { key: "roles", type: "multi_select", col:"md-12", items: props.roles, title: t("modules.auth.role"), required: true },
   { key: "first_name", type: "text", col:"md-6", title: t("modules.auth.first_name"), required: true },
   { key: "last_name", type: "text", col:"md-6", title: t("modules.auth.last_name"), required: true },
   { key: "email", type: "email", title: t("commons.common.email"), required: true },
   { key: "phone", type: "text", title: t("commons.common.phone"), required: true },
 ];
-
-const isAdmin = computed(() => {
-  try {
-    return uAuth.getUserData().role == 1;
-  } catch (error) {
-    return false;
-  }
-});
 
 const rules = {
   first_name: { required, minLength: minLength(2) },
@@ -108,7 +109,7 @@ const formSchemaCalculated = computed(() => {
   if ((formData.value as any)?.id != null) {
     _formSchema = _formSchema.filter((item: any) => item.key != 'email');
   }
-  if (isAdmin.value) {
+  if (uAuth.isAdmin()) {
     return _formSchema;
   } else {
     _formSchema = _formSchema.filter((item: any) => item.key != 'is_superuser');
@@ -116,7 +117,10 @@ const formSchemaCalculated = computed(() => {
   }
 });
 
+
+
 onMounted(async () => {
+  // getItemsRoles()
   tab.value = 0;
   if (props.id != null) {
     await uCrud

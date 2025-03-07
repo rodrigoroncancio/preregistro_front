@@ -34,6 +34,7 @@
     v-if="profileModal"
     v-model="profileModal"
     :id="staffId"
+    :roles="itemsRole"
     @onSave="onSaveProfile"
   />
   <passwordForm
@@ -46,10 +47,10 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
-
 import expDataTable from "@/components/expDataTable";
 import profileForm from "@/modules/core/components/profile.vue";
 import passwordForm from "@/modules/core/components/password.vue";
+import axios from "axios";
 
 const endpoint = "/api/1.0/core";
 const { t } = useI18n();
@@ -60,17 +61,29 @@ const headers: any[] = [
   { key: 'last_name', title: t("modules.auth.last_name"), width: "auto", align: "start", sortable: true, },
   { key: 'email', title: t("commons.common.email"), width: "auto", align: "start", sortable: false, },
   { key: 'phone', title: t("commons.common.phone"), width: "auto", align: "start", sortable: false, },
-  { key: 'is_superuser', title: t("modules.auth.role"), width: "auto", align: "start", sortable: false, },
+  { key: 'is_superuser', title: t("modules.auth.admin"), width: "auto", align: "start", sortable: false, },
   { key: 'is_active', title: t("modules.auth.active"), width: "auto", align: "center", type: "check", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
 const drawRefresh = ref("");
 const staffId = ref();
+const itemsRole = ref([]);
 
 const profileModal = ref(false);
 const passwordModal = ref(false);
 
-onMounted(async () => {});
+const getItemsRoles = async () => {
+  try {
+    const response = await axios.get(`/api/1.0/core/user/roles/`);
+    itemsRole.value = response.data;
+  } catch (error) {
+    console.error("Error fetching rols items:", error);
+  }
+};
+
+onMounted(async () => {
+  await getItemsRoles();
+});
 
 const clickNew = () => {
   staffId.value = null;

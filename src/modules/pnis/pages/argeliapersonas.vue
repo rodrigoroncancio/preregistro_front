@@ -109,7 +109,7 @@
     <v-row>
       <v-col cols="12">
       <v-card>
-        <v-simple-table class="w-">
+        <v-table class="w-">
           <thead>
             <tr>
               <th class="py-3 px-4" width="10%">Area-Rol</th>
@@ -148,14 +148,12 @@
               </td>
             </tr>
           </tbody>
-        </v-simple-table>
+        </v-table>
       </v-card>
       </v-col>
     </v-row>          
   </exp-modal-form>
 </template>
-
-
 
 <script lang="ts" setup>
 import { ref, computed, onMounted } from "vue";
@@ -208,9 +206,6 @@ const getValidationItems = async () => {
     const response = await axios.get(
       `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/2`
     );
-
-    console.log(response.data);
-
     // Verifica si response.data tiene la estructura esperada
     if (response.data.missing_items) {
       itemsValidation.value = response.data.missing_items.map((item: any) => ({
@@ -231,7 +226,6 @@ const getItemsValidadosBase = async () => {
   try {
     const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/2/`);
     itemsValidadosBase.value = response.data;
-    console.log("items", itemsValidadosBase.value);
   } catch (error) {
     console.error("Error fetching validation items:", error);
   }
@@ -263,13 +257,11 @@ const downloadDocument = (item: any, tipo: number=1) => {
   const hostServer = import.meta.env.VITE_BASE_MEDIA;
   const idUser = uAuth.getUserData().id;
   const enlace = document.createElement('a');
-  console.log(item.attachment);
   if (tipo == 1) {
     enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item.document}`;
   } else {
     enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item.attachment}`;
   }
-  console.log(enlace.href);
   document.body.appendChild(enlace);
   enlace.click();
   document.body.removeChild(enlace);
@@ -286,18 +278,9 @@ const fnReloadTable = () => {
   drawRefresh.value = uUtils.createUUID();
 }
 
-const isUserAdmin = computed(() => {
-  try {
-    return uAuth.getUserData().role == 1;
-  } catch (error) {
-    return false;
-  }
-  return false;
-});
-
 const menuItems = computed(() => {
-  if (isUserAdmin.value) {
-    return ['view', 'validate', 'documents']
+  if (uAuth.isAudit()) {
+    return ['view', 'documents']
   } else {
     return ['view', 'validate', 'documents']
   }
@@ -333,7 +316,6 @@ const clickAction = (item: any, action: string) => {
   console.log(item, action);
   if (action === 'validate') {
     formModalValidate.value = true;
-    console.log(item);
     identificationnumber.value = item.identificacion;
     getValidationItems();
   }
