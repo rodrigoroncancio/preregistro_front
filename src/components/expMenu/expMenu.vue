@@ -86,6 +86,11 @@ const itemsMenu = [
       url: "/pnis/fichaacuerdo",
     },
     {
+      title: "modules.pnis.fichaacuerdo2",
+      icon: "mdi-human-male-board-poll",
+      url: "/pnis/fichaacuerdo2",
+    },
+    {
       title: "modules.pnis.personasvalidadas",
       icon: "mdi-human-male-board-poll",
       url: "/pnis/personasvalidadas",

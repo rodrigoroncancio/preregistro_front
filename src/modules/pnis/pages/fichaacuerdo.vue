@@ -400,7 +400,7 @@ const isValidForm = computed(() => {
 });
 
 const clickEdit = async (item: any) => {
-  router.push(`/pnis/fichaacuerdo/open/${item.id}`);
+  router.push(`/pnis/fichaacuerdo2/open/${item.id}`);
 };
 
 const clickAction = (item: any, action: string) => {

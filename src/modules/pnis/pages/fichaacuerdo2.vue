@@ -277,7 +277,7 @@ const isValidForm = computed(() => {
 });
 
 const clickView = async (item: any) => {
-  router.push(`/pnis/argeliapersonas/open/${item.id}`);
+  router.push(`/pnis/fichaacuerdo2/open/${item.id}`);
 };
 
 const clickDocuments = (item: any) => {
