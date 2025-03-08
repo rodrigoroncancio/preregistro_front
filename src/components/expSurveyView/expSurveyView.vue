@@ -1,9 +1,3 @@
-<template>
-  <div class="validate-container">
-    <SurveyComponent :model="survey" />
-  </div>
-</template>
-
 <script setup lang="ts">
 import { watch, defineProps, defineEmits } from "vue";
 import "survey-core/defaultV2.min.css";
@@ -19,20 +13,10 @@ const uCrud = useCrud("/api/1.0/core/validationregister");
 const uToast = useToast();
 
 // 📌 Interfaz para surveyData
-interface SurveyData {
-status: string;
-observation: string;
-attachment: any[];
-}
+interface SurveyData extends Record<string, any> {}
 
 // 📌 Interfaz para el JSON del formulario
-interface SurveyJson {
-title: string;
-description: string;
-logoPosition: string;
-widthMode: string;
-pages: any[];
-}
+interface SurveyJson extends Record<string, any> {}
 
 const props = defineProps({
 identificationnumber: { type: String, default: "0000000000" },
@@ -124,11 +108,22 @@ watch(
 
 // 📌 Aplicar la opción de solo lectura
 watch(
-() => props.isReadOnly,
-(newValue) => {
-  survey.mode = newValue ? "display" : "edit";
-},
-{ immediate: true }
+  () => props.isReadOnly,
+  (newValue) => {
+    survey.mode = newValue ? "display" : "edit";
+
+    // 📌 Asegurar que los botones de navegación NO se oculten
+    survey.showNavigationButtons = true;
+    survey.showPrevButton = true;
+    survey.showTitle = true; // Asegurar que el título no desaparezca
+
+    // 📌 Si hay más de una página, asegurar que la barra de navegación se vea
+    if (survey.pages.length > 1) {
+      survey.showPageTitles = true;
+      survey.showProgressBar = "bottom"; // O "top" según prefieras
+    }
+  },
+  { immediate: true }
 );
 
 // 📌 Manejo del guardado
@@ -158,3 +153,9 @@ uCrud
 return false;
 });
 </script>
+
+<template>
+  <div class="validate-container">
+    <SurveyComponent :model="survey" />
+  </div>
+</template>

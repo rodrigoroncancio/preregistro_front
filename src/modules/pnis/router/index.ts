@@ -45,7 +45,7 @@ const router = {
     {
       path: "fichaacuerdo2/open/:id",
       name: "pnis-fichaacuerdo-open",
-      component: () => import( /* webpackChunkName: "PnisFichaacuerdoOpen" */ "@/modules/pnis/pages/fichaacuerdo-open.vue"),
+      component: () => import( /* webpackChunkName: "PnisFichaacuerdoOpen" */ "@/modules/pnis/pages/fichaacuerdo2-open.vue"),
     }, 
     {
       path: "listafichas",

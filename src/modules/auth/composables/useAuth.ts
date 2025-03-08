@@ -1,14 +1,24 @@
 import useAuthStore from "@/modules/auth/stores/auth";
 import useGlobalState from "@/stores/global";
+import useUtils from "@/composables/useUtils";
 import axios from "axios";
 
 const sGlobalState = useGlobalState();
+const uUtils = useUtils();
 const endpoint = "/api/1.0/core"
 
 const useAuth = (authStore: any = null) => {
   if (authStore == undefined) {
     authStore = useAuthStore();
   }
+
+  const ROLES = {
+    ADMIN: 1,
+    AUDITOR: 6,
+    SUPERVISION: 3,
+    SIG: 4,
+    TECNICA: 5,
+  };
 
   const authLogIn = (data: any) => {
     return new Promise((resolve, reject) => {
@@ -80,6 +90,30 @@ const useAuth = (authStore: any = null) => {
     return authStore.getAccessToken ?? "";
   };
 
+  const getUserRole = () => {
+    try {
+      const token = getToken();      
+      const data = token.split(".")[1];
+      const dataDecoded: any = uUtils.base64Decode(data);
+      const objDecoded: any = uUtils.JsonParse(dataDecoded);
+      return objDecoded["roles"];
+    } catch {
+      return [];
+    }    
+  }
+
+  const isAdmin = () => {
+    return getUserRole().includes(ROLES.ADMIN);
+  };
+
+  const isAudit = () => {
+    return getUserRole().includes(ROLES.AUDITOR);
+  };
+
+  const isRol = (rol:number) => {
+    return getUserRole().includes(rol);
+  };
+
   return {
     authLogIn,
     authLogOut,
@@ -87,7 +121,12 @@ const useAuth = (authStore: any = null) => {
     isAuthenticated,
     getUserData,
     getUserId,
-    getToken
+    getUserRole,
+    getToken,
+    isAdmin,
+    isAudit,
+    isRol,
+    ROLES,
   };
 };
 

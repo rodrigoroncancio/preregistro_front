@@ -19,10 +19,8 @@
   import { ref, onMounted } from "vue";
   
   const uLoading = useLoading();
-
   const uCrud = useCrud("forms/catatumbo/preinscripcionnucleosindividuales");
   const uToast = useToast();
-
   const itemsDepartments = ref<Array<{ id: number; label: string }>>([]);
 
   const getDepartmentList = async () => {
@@ -112,38 +110,29 @@
   ]
 }
 
-  const survey = new Model(json);
+const survey = new Model(json);
   
-  survey.onCompleting.add((sender, options) => {
-      options.allowComplete = false;
-      console.log('sender.data')
-      console.log(sender.data)
-
-      const senderData = {
-        ...sender.data,
-        foto_frente: Array.isArray(sender.data.foto_frente) && sender.data.foto_frente.length > 0 ? sender.data.foto_frente[0].content : null,
-        foto_relacion_predio1: Array.isArray(sender.data.foto_relacion_predio1) && sender.data.foto_relacion_predio1.length > 0 ? sender.data.foto_relacion_predio1[0].content : null,
-        foto_relacion_predio2: Array.isArray(sender.data.foto_relacion_predio2) && sender.data.foto_relacion_predio2.length > 0 ? sender.data.foto_relacion_predio2[0].content : null,
-        foto_relacion_predio3: Array.isArray(sender.data.foto_relacion_predio3) && sender.data.foto_relacion_predio3.length > 0 ? sender.data.foto_relacion_predio3[0].content : null,
-        foto_relacion_predio4: Array.isArray(sender.data.foto_relacion_predio4) && sender.data.foto_relacion_predio4.length > 0 ? sender.data.foto_relacion_predio4[0].content : null,
-        foto_relacion_predio5: Array.isArray(sender.data.foto_relacion_predio5) && sender.data.foto_relacion_predio5.length > 0 ? sender.data.foto_relacion_predio5[0].content : null,
-        foto_respaldo: Array.isArray(sender.data.foto_respaldo) && sender.data.foto_respaldo.length > 0 ? sender.data.foto_respaldo[0].content : null
-      };
-      console.log('senderData')
-      console.log(senderData)
-
-      uCrud.create(senderData)
-          .then((item) => {
-              uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
-              sender.clear(true);
-              survey.showNavigationButtons = false;
-          })
-          .catch((error) => {
-              uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
-          });
-
-      return false;
+survey.onCompleting.add((sender, options) => {
+  options.allowComplete = false;
+  const senderData = {
+    ...sender.data,
+    foto_frente: Array.isArray(sender.data.foto_frente) && sender.data.foto_frente.length > 0 ? sender.data.foto_frente[0].content : null,
+    foto_relacion_predio1: Array.isArray(sender.data.foto_relacion_predio1) && sender.data.foto_relacion_predio1.length > 0 ? sender.data.foto_relacion_predio1[0].content : null,
+    foto_relacion_predio2: Array.isArray(sender.data.foto_relacion_predio2) && sender.data.foto_relacion_predio2.length > 0 ? sender.data.foto_relacion_predio2[0].content : null,
+    foto_relacion_predio3: Array.isArray(sender.data.foto_relacion_predio3) && sender.data.foto_relacion_predio3.length > 0 ? sender.data.foto_relacion_predio3[0].content : null,
+    foto_relacion_predio4: Array.isArray(sender.data.foto_relacion_predio4) && sender.data.foto_relacion_predio4.length > 0 ? sender.data.foto_relacion_predio4[0].content : null,
+    foto_relacion_predio5: Array.isArray(sender.data.foto_relacion_predio5) && sender.data.foto_relacion_predio5.length > 0 ? sender.data.foto_relacion_predio5[0].content : null,
+    foto_respaldo: Array.isArray(sender.data.foto_respaldo) && sender.data.foto_respaldo.length > 0 ? sender.data.foto_respaldo[0].content : null
+  };
+  uCrud.create(senderData).then((item) => {
+    uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
+    sender.clear(true);
+    survey.showNavigationButtons = false;
+  }).catch((error) => {
+    uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
   });
+  return false;
+});
 
 
   survey.onValueChanged.add(async (sender, options) => {

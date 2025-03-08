@@ -99,7 +99,7 @@
     <v-row>
       <v-col cols="12">        
       <v-card>
-        <v-simple-table class="w-">
+        <v-table class="w-">
           <thead>
             <tr>
               <th class="py-3 px-4" width="10%">Area-Rol</th>
@@ -139,7 +139,7 @@
               </td>
             </tr>
           </tbody>
-        </v-simple-table>
+        </v-table>
       </v-card>
       </v-col>
     </v-row>          
@@ -183,7 +183,7 @@
     <v-row>
       <v-col cols="12" >
         <div v-if="itemsNucleo.length === 0">No tiene ingresado nucleo familiar</div>
-        <DataTable v-if="itemsNucleo.length >0" :options="{ responsive: true, autoWidth: false }" class="display">
+        <v-table v-if="itemsNucleo.length >0" :options="{ responsive: true, autoWidth: false }" class="display">
           <thead>
             <tr>
               <th class="py-3 px-4">Identificación</th>
@@ -204,7 +204,7 @@
               <td class="py-3 px-4">{{ persona.especial }}</td>
             </tr>
           </tbody>
-        </DataTable>
+        </v-table>
       </v-col>
     </v-row>
   </exp-modal-form>
@@ -354,13 +354,11 @@ const downloadDocument = (item: any, tipo: number=1) => {
   const hostServer = import.meta.env.VITE_BASE_MEDIA;
   const idUser = uAuth.getUserData().id;
   const enlace = document.createElement('a');
-  console.log(item.attachment);
   if (tipo == 1) {
     enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item.document}`;
   } else {
     enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item.attachment}`;
   }
-  console.log(enlace.href);
   document.body.appendChild(enlace);
   enlace.click();
   document.body.removeChild(enlace);
@@ -370,7 +368,6 @@ const getItemsValidadosBase = async () => {
   try {
     const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/3/`);
     itemsValidadosBase.value = response.data;
-    console.log("items", itemsValidadosBase.value);
   } catch (error) {
     console.error("Error fetching validation items:", error);
   }
@@ -388,17 +385,10 @@ const fnReloadTable = () => {
 
 }
 
-const isUserAdmin = computed(() => {
-  try {
-    return uAuth.getUserData().role == 1;
-  } catch (error) {
-    return false;
-  }
-  return false;
-});
-
 const menuItems = computed(() => {
-  if (isUserAdmin.value) {
+  if (uAuth.isAudit()) {
+    return ['view', 'viewanexos']
+  } else if (uAuth.isAdmin()) {    
     return ['view', 'edit', 'validate','viewanexos']
   } else {
     return ['view', 'validate', 'viewanexos']
@@ -416,22 +406,17 @@ const clickEdit = async (item: any) => {
 const clickAction = (item: any, action: string) => {
   if (action === 'validate') {
     formModalValidate.value = true;
-    console.log(item);
     identificationnumber.value = item.identificationnumber || item.identificacionorganizacion;
     getValidationItems();
   }
   if (action === 'viewanexos') {
-    console.log('viewanexos')
-
     identificationnumber.value = item.identificationnumber
     signature.value= item.signature
-    console.log(signature)
     formModalDocumentos.value = true;
   }
 };
 
 const clickView = (item: any) => {
-  console.log(item);
   router.push(`/pnis/fichaacuerdo/open/${item.id}`);
 };
 
@@ -440,8 +425,6 @@ const clickSaveForm = () => {
 }
 
 const clickSelectForm = () => {
-  console.log('clickSelectForm');
-  console.log(validationid.value);
   formModal.value = true;
 }
 </script>
