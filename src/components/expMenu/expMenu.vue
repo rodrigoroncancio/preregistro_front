@@ -95,6 +95,14 @@ const itemsMenu = [
       icon: "mdi-human-male-board-poll",
       url: "/pnis/personasvalidadas",
     }]
+  },{
+    title: "modules.pnis.convocatoria_catatumbo",
+    icon: "mdi-solar-panel",
+    children: [{
+      title: "modules.pnis.preregistrocatatumboindividual",
+      icon: "mdi-human-male-board-poll",
+      url: "/pnis/catatumboindividual",
+    }]
   },
 ];
 
