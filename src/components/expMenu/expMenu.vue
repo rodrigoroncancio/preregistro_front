@@ -102,6 +102,11 @@ const itemsMenu = [
       title: "modules.pnis.preregistrocatatumboindividual",
       icon: "mdi-human-male-board-poll",
       url: "/pnis/catatumboindividual",
+    },
+    {
+      title: "modules.pnis.preregistrocatatumbogrupos",
+      icon: "mdi-human-male-board-poll",
+      url: "/pnis/catatumbogrupos",
     }]
   },
 ];

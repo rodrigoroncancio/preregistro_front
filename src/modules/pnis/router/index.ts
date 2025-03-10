@@ -48,6 +48,16 @@ const router = {
       component: () => import( /* webpackChunkName: "PniscatatumboindividualOpen" */ "@/modules/pnis/pages/catatumboindividual-open.vue"),
     },
     {
+      path: "catatumbogrupos",
+      name: "pnis-catatumbogrupos",
+      component: () => import( /* webpackChunkName: "Pniscatatumbogrupos" */ "@/modules/pnis/pages/catatumbogrupos.vue"),
+    },
+    {
+      path: "catatumbogrupos/open/:id",
+      name: "pnis-catatumbogrupos-open",
+      component: () => import( /* webpackChunkName: "PniscatatumbogruposOpen" */ "@/modules/pnis/pages/catatumbogrupos-open.vue"),
+    },
+    {
       path: "fichaacuerdo/open/:id",
       name: "pnis-fichaacuerdo-open",
       component: () => import( /* webpackChunkName: "PnisFichaacuerdoOpen" */ "@/modules/pnis/pages/fichaacuerdo-open.vue"),
