@@ -225,7 +225,7 @@ const getValidationItems = async () => {
 
 const getItemsValidadosBase = async () => {
   try {
-    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/2/`);
+    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/4/`);
     itemsValidadosBase.value = response.data;
   } catch (error) {
     console.error("Error fetching validation items:", error);
