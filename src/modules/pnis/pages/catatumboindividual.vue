@@ -184,6 +184,7 @@ const headers: any[] = [
   { key: 'identificacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
   { key: 'nombres', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
   { key: 'apellidos', title: "Apellidos", width: "auto", align: "start", searchable: true, sortable: false, },
+  { key: 'fase', title: "fase", width: "auto", align: "start", searchable: false, sortable: false, },
   { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
   { key: 'number_uncompleted', title: "Alertas", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
