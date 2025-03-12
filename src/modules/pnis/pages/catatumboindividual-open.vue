@@ -91,7 +91,8 @@ const surveyJsonBase = ref({
           "choices": [
             "Agropecuaria",
             "No Agropecuaria"
-          ]
+          ],
+          "defaultValue": "Agropecuaria"
         },
         {
           "type": "html",
