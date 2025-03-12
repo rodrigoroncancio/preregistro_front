@@ -1043,18 +1043,18 @@ const getSurveyData = async () => {
  }
 };
 
-const getRegistraduriaData = async (userData: { identificacion: any; reg_agno_resolucion: any; reg_departamento_expedicion: any; reg_estado_cedula: any; reg_fecha_expedicion: any; reg_fecha_nacimiento: any; reg_genero: any; reg_municipio_expedicion: any; reg_numero_cedula: any; reg_numero_resolucion: any; reg_primer_apellido: any; reg_primer_nombre: any; reg_segundo_apellido: any; reg_segundo_nombre: any; }) => {
+const getRegistraduriaData = async (userData: { identificacion: any; reg_agno_resolucion: any; reg_departamento_exp: any; reg_estado_cedula: any; reg_fecha_expedicion: any; reg_fecha_nacimiento: any; reg_genero: any; reg_municipio_exp: any; reg_numero_cedula: any; reg_num_resolucion: any; reg_primer_apellido: any; reg_primer_nombre: any; reg_segundo_apellido: any; reg_segundo_nombre: any; }) => {
   const response = await axios.get(`/api/1.0/core/cedulasrnec/getbyidentification/${userData.identificacion}/`);
   console.log(response.data.primer_nombre)
   userData.reg_agno_resolucion = response.data.agno_resolucion
-  userData.reg_departamento_expedicion = response.data.departamento_expedicion
+  userData.reg_departamento_exp = response.data.departamento_expedicion
   userData.reg_estado_cedula = response.data.estado_cedula
   userData.reg_fecha_expedicion = response.data.fecha_expedicion
   userData.reg_fecha_nacimiento = response.data.fecha_nacimiento
   userData.reg_genero = response.data.genero
-  userData.reg_municipio_expedicion = response.data.municipio_expedicion
+  userData.reg_municipio_exp = response.data.municipio_expedicion
   userData.reg_numero_cedula = response.data.numero_cedula
-  userData.reg_numero_resolucion = response.data.numero_resolucion
+  userData.reg_num_resolucion = response.data.numero_resolucion
   userData.reg_primer_apellido = response.data.primer_apellido
   userData.reg_primer_nombre = response.data.primer_nombre
   userData.reg_segundo_apellido = response.data.segundo_apellido
