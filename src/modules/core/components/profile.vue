@@ -67,7 +67,6 @@ const props = defineProps({
   },
   roles: {
     type: Array as () => Item[],
-    required: true,
   },
 });
 
