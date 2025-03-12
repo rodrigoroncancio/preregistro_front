@@ -44,7 +44,6 @@ const props = defineProps({
 
 const surveyJsonBase = ref({
   "description": "",
-  "widthMode": "responsive",
   "title": "FICHA DE VINCULACIÓN DE NÚCLEOS FAMILIARES A PROCESOS DE SUSTITUCIÓN DE CULTIVOS DE USO ILÍCITO DE LA DIRECCIÓN DE SUSTITUCIÓN DE CULTIVOS DE USO ILÍCITO",
   "logoPosition": "right",
   "pages": [
@@ -100,23 +99,16 @@ const surveyJsonBase = ref({
           "isRequired": true
         },
         {
-          "type": "file",
-          "name": "foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
-        },
-        {
-          "type": "file",
-          "name": "foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
-        },
-        {
           "type": "text",
           "name": "fecha_expedicion",
           "title": "Fecha expedición",
           "isRequired": true,
           "inputType": "date"
+        },
+        {
+          "type": "text",
+          "name": "reg_fecha_expedicion",
+          "title": "Datos Expedición - Registraduría (Depar./ Muni. /Fecha)",
         },
         {
           "type": "text",
@@ -5019,19 +5011,28 @@ const rules = {
   last_name: { required, minLength: minLength(2) },
 };
 
-const surveyData = ref<any[]>([]); // Asegurar que es un Ref con un array
+const surveyData = ref<Record<string, any> | null>(null); // Definir correctamente como objeto o null
+
 const getSurveyData = async () => {
   try {
     modelValue.value=false
     const response = await axios.get(`/api/1.0/core/fichaacuerdofase2/${surveyId}/`);
-    surveyData.value = response.data; // Asignar los datos correctamente
-    console.log( 'surveyData.value ')
-    console.log( surveyData.value )
+    getRegistraduriaData(response.data)
     modelValue.value=true
   } catch (error) {
     console.error("Error fetching validation items:", error);
   }
 };
+
+const getRegistraduriaData = async (userData: { numero_identificacion: any; reg_fecha_expedicion: any;  }) => {
+  const response = await axios.get(`/api/1.0/core/cedulasrnec/getbyidentification/${userData.numero_identificacion}/`);
+  console.log(response.data.primer_nombre)
+  userData.reg_fecha_expedicion = `${response.data.departamento_expedicion} / ${response.data.municipio_expedicion}  / ${response.data.fecha_expedicion}`
+
+  surveyData.value = userData; // Asignar los datos correctamente
+  console.log( 'surveyData.value ')
+  console.log( surveyData.value )
+}
 
 
 onMounted(async () => {
