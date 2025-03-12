@@ -926,8 +926,7 @@ const surveyJsonBase = ref({
         {
           "type": "text",
           "name": "actividad_econo_otro",
-          "title": "Nombre del predio",
-          "description": "Actividad económica otro predio"
+          "title": "Actividad económica otro predio"
         }
       ]
     }
