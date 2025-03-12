@@ -891,12 +891,9 @@ const surveyJsonBase = ref({
           "title": "Departamento"
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "municipio_residencia",
           "title": "Municipio",
-          "choices": [
-            "sin municipio"
-          ]
         },
         {
           "type": "text",
