@@ -6,6 +6,10 @@
           <v-img :src="'/src/assets/img/header-colombia.png'" :width="360" class="mx-auto" />
         </v-col>
       </v-row>
+      <router-link to="/auth" class="login-section">
+        <font-awesome-icon icon="fa-user" class="login-icon" />
+        <span class="login-text">Ingresar</span>
+      </router-link>
       <div class="main-container">
         <v-row>
           <v-col md="6" cols="12" class="text-center div-catatumbo">
@@ -27,6 +31,27 @@
 </template>
 
 <style lang="scss" scoped>
+/* Sección de login */
+.login-section {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: bold;
+      color: #585958;
+      transition: color 0.3s ease;
+      z-index: 99999;
+      position: absolute;
+      right: 20px;
+      top: 20px;
+  }
+  /* Efecto hover en el login */
+  .login-section:hover {
+  color: #106737; /* Cambia de color al pasar el mouse */
+    .login-icon {
+      color: #106737; /* Cambia el color del icono en hover */
+    }
+  }
 .v-main {
   min-height: calc(100vh - 65px);
   flex-grow: 1;

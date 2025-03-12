@@ -10,7 +10,7 @@
         <v-col class="general-argelia">
           <v-row>
             <v-col>
-              <router-link to="/argelia" class="back-section">
+              <router-link to="/argeliainicio" class="back-section">
                 <font-awesome-icon icon="fa-arrow-left" class="login-icon" />
                 <span class="login-text"> Regresar</span>
               </router-link>
@@ -290,6 +290,17 @@ color: #106737; /* Cambia el color del icono en hover */
 
     .pdf-container-argelia {
         width: 75%;
+    }
+}
+
+@media (min-width: 1280px) {
+    .v-container {
+        max-width: 2400px;
+    }
+}
+@media (min-width: 960px) {
+    .v-container {
+        max-width: 1900px;
     }
 }
 

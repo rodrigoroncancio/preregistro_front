@@ -88,11 +88,11 @@ const surveyJsonBase = ref({
           "name": "tipo_linea_productiva",
           "title": "Actividad económica para el tránsito a economías lícitas",
           "description": "Seleccione una opción.",
+          "defaultValue": "Agropecuaria",
           "choices": [
             "Agropecuaria",
             "No Agropecuaria"
-          ],
-          "defaultValue": "Agropecuaria"
+          ]
         },
         {
           "type": "html",
@@ -894,7 +894,7 @@ const surveyJsonBase = ref({
         {
           "type": "text",
           "name": "municipio_residencia",
-          "title": "Municipio",
+          "title": "Municipio"
         },
         {
           "type": "text",
@@ -930,12 +930,87 @@ const surveyJsonBase = ref({
           "title": "Actividad económica otro predio"
         }
       ]
+    },
+    {
+      "name": "page2",
+      "elements": [
+        {
+          "type": "html",
+          "name": "question1",
+          "html": "<h4>Datos de registraduria</h4>\n"
+        },
+        {
+          "type": "text",
+          "name": "reg_numero_cedula",
+          "title": "Número de cedula"
+        },
+        {
+          "type": "text",
+          "name": "reg_primer_nombre",
+          "title": "Primer Nombre"
+        },
+        {
+          "type": "text",
+          "name": "reg_segundo_nombre",
+          "title": "Segundo Nombre"
+        },
+        {
+          "type": "text",
+          "name": "reg_primer_apellido",
+          "title": "Primer apellido"
+        },
+        {
+          "type": "text",
+          "name": "reg_segundo_apellido",
+          "title": "Segundo apellido"
+        },
+        {
+          "type": "text",
+          "name": "reg_departamento_exp",
+          "title": "Departamento de Expedición"
+        },
+        {
+          "type": "text",
+          "name": "reg_municipio_exp",
+          "title": "Municipio de expedición"
+        },
+        {
+          "type": "text",
+          "name": "reg_fecha_expedicion",
+          "title": "Fecha de expedición"
+        },
+        {
+          "type": "text",
+          "name": "reg_estado_cedula",
+          "title": "Estado de la cédula"
+        },
+        {
+          "type": "text",
+          "name": "reg_num_resolucion",
+          "title": "Número de resolución"
+        },
+        {
+          "type": "text",
+          "name": "reg_agno_resolucion",
+          "title": "Año de resolución"
+        },
+        {
+          "type": "text",
+          "name": "reg_genero",
+          "title": "Género"
+        },
+        {
+          "type": "text",
+          "name": "reg_fecha_nacimiento",
+          "title": "Fecha de nacimiento"
+        }
+      ]
     }
   ],
-        "pagePrevText": "Página anterior",
-        "pageNextText": "Página siguiente",
-        "completeText": "Enviar",
-        "showNavigationButtons": false
+  "showNavigationButtons": false,
+  "pagePrevText": "Página anterior",
+  "pageNextText": "Página siguiente",
+  "completeText": "Enviar"
 });
 
 
@@ -954,21 +1029,43 @@ const rules = {
  last_name: { required, minLength: minLength(2) },
 };
 
-const surveyData = ref<any[]>([]); // Asegurar que es un Ref con un array
+const surveyData = ref<Record<string, any> | null>(null); // Definir correctamente como objeto o null
+
 const getSurveyData = async () => {
  try {
    modelValue.value=false
    const response = await axios.get(`/api/1.0/core/catatumboindividual/${surveyId}/`);
-   surveyData.value = response.data; // Asignar los datos correctamente
-   console.log( 'surveyData.value ')
-   console.log( surveyData.value )
+   
+   getRegistraduriaData(response.data)
    modelValue.value=true
  } catch (error) {
    console.error("Error fetching validation items:", error);
  }
 };
 
+const getRegistraduriaData = async (userData: { identificacion: any; reg_agno_resolucion: any; reg_departamento_expedicion: any; reg_estado_cedula: any; reg_fecha_expedicion: any; reg_fecha_nacimiento: any; reg_genero: any; reg_municipio_expedicion: any; reg_numero_cedula: any; reg_numero_resolucion: any; reg_primer_apellido: any; reg_primer_nombre: any; reg_segundo_apellido: any; reg_segundo_nombre: any; }) => {
+  const response = await axios.get(`/api/1.0/core/cedulasrnec/getbyidentification/${userData.identificacion}/`);
+  console.log(response.data.primer_nombre)
+  userData.reg_agno_resolucion = response.data.agno_resolucion
+  userData.reg_departamento_expedicion = response.data.departamento_expedicion
+  userData.reg_estado_cedula = response.data.estado_cedula
+  userData.reg_fecha_expedicion = response.data.fecha_expedicion
+  userData.reg_fecha_nacimiento = response.data.fecha_nacimiento
+  userData.reg_genero = response.data.genero
+  userData.reg_municipio_expedicion = response.data.municipio_expedicion
+  userData.reg_numero_cedula = response.data.numero_cedula
+  userData.reg_numero_resolucion = response.data.numero_resolucion
+  userData.reg_primer_apellido = response.data.primer_apellido
+  userData.reg_primer_nombre = response.data.primer_nombre
+  userData.reg_segundo_apellido = response.data.segundo_apellido
+  userData.reg_segundo_nombre = response.data.segundo_nombre
+  surveyData.value = userData; // Asignar los datos correctamente
+  console.log( 'surveyData.value ')
+  console.log( surveyData.value )
+}
 
+
+// const response = await axios.get(`/api/1.0/core/municipalities/by-department/${departmentId}/`);
 onMounted(async () => {
  getSurveyData()
 });
