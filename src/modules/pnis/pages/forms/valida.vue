@@ -106,8 +106,10 @@ watch(
 
 // 📌 Manejar el guardado de datos
 survey.onCompleting.add((sender, options) => {
+
   options.allowComplete = false; // Evitar que cierre el formulario automáticamente
 
+  
   const senderData = {
     ...sender.data,
     document_number: props.identificationnumber,
@@ -115,6 +117,12 @@ survey.onCompleting.add((sender, options) => {
     validationitems: props.validationitem,
     attachment: Array.isArray(sender.data.attachment) && sender.data.attachment.length > 0 ? sender.data.attachment[0].content : "",
   };
+
+  if (props.validationitem == 0) {
+    Object.assign(uCrud, useCrud("/api/1.0/core/validationfinalregister"));
+  } else {
+    senderData.validationitems = props.validationitem;
+  }
 
   uCrud
     .create(senderData)
@@ -129,6 +137,7 @@ survey.onCompleting.add((sender, options) => {
     });
 
   return false;
+  
 });
 </script>
 
