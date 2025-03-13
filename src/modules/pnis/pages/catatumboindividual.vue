@@ -191,6 +191,7 @@ const uUtils = useUtils();
 
 const validationid = ref(null); // v-model para el radio group
 const identificationnumber = ref(null);
+const rolsActual = ref([]);
 
 const headers: any[] = [
   // { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: false },
@@ -286,6 +287,10 @@ const downloadDocument = (item: any, tipo: number=1) => {
 onMounted(async () => {
   getValidationKey();
   getItemsValidadosBase();
+  const role = uAuth.getUserRole();
+  console.log('role')
+  console.log(role)
+  rolsActual.value = role
 });
 
 const fnReloadTable = () => {
@@ -295,10 +300,14 @@ const fnReloadTable = () => {
 }
 
 const menuItems = computed(() => {
-  if (uAuth.isAudit()) {
-    return ['view', 'documents']
+  if (uAuth.isAdmin()) {
+    return ['view', 'validate', 'validate_super', 'documents'];
+  } else if (rolsActual.value.includes(1) || rolsActual.value.includes(3)) {
+    return ['view', 'validate_super', 'documents'];
+  } else if (uAuth.isAudit()) {
+    return ['view', 'documents'];
   } else {
-    return ['view', 'validate', 'validate_super', 'documents']
+    return ['view'];
   }
 });
 
