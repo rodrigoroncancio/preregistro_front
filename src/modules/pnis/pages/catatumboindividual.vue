@@ -303,7 +303,7 @@ const menuItems = computed(() => {
   if (uAuth.isAdmin()) {
     return ['view', 'validate', 'validate_super', 'documents'];
   } else if (rolsActual.value.includes(1) || rolsActual.value.includes(3)) {
-    return ['view', 'validate_super', 'documents'];
+    return ['view', 'validate', 'validate_super', 'documents'];
   } else if (uAuth.isAudit()) {
     return ['view', 'documents'];
   } else {
