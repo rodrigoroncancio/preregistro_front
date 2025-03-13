@@ -11,8 +11,13 @@
           :headers="headers"
           :extraMenuItems="[{
             title: $t('modules.core.validate'),
-            icon: 'mdi-check',
+            icon: 'mdi-check-all',
             action: 'validate'
+          },
+          {
+            title: 'Valida Superv.',
+            icon: 'mdi-check-circle',
+            action: 'validate_super'
           }]"
           :menuItems="menuItems"
           :labelNew="'modules.core.new_userspnis'"
@@ -33,6 +38,14 @@
           </template>
           <template v-slot:item.number_uncompleted="{item}">
             <v-btn @click="modalValidados(item, 'no')"  variant="flat" color="red" block>{{ item.number_uncompleted }}</v-btn>
+          </template>
+          <template v-slot:item.validado_final="{ item }">
+            <v-icon 
+              :color="item.validado_final === 'si' ? 'green' : 'red'" 
+              size="32"
+            >
+              {{ item.validado_final === 'si' ? 'mdi-check-circle' : 'mdi-close-circle' }}
+            </v-icon>
           </template>
         </exp-data-table>
       </v-card-text>
@@ -187,6 +200,7 @@ const headers: any[] = [
   { key: 'fase', title: "fase", width: "auto", align: "start", searchable: false, sortable: false, },
   { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
   { key: 'number_uncompleted', title: "Alertas", width: "auto", align: "start", sortable: false, },
+  { key: 'validado_final', title: "Superv.", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
 const drawRefresh = ref("");
@@ -284,7 +298,7 @@ const menuItems = computed(() => {
   if (uAuth.isAudit()) {
     return ['view', 'documents']
   } else {
-    return ['view', 'validate', 'documents']
+    return ['view', 'validate', 'validate_super', 'documents']
   }
 });
 
@@ -321,6 +335,10 @@ const clickAction = (item: any, action: string) => {
     identificationnumber.value = item.identificacion;
     getValidationItems();
   }
+  if (action === 'validate_super') {
+    identificationnumber.value = item.identificacion;
+    clickSelectSuperForm();
+  }
 };
 
 const clickSaveForm = () => {
@@ -337,6 +355,12 @@ const clickSelectFormDocuments = (item: any) => {
   console.log('clickSelectFormDocuments');
   console.log(validationid.value);
   console.log(item);
+}
+
+const clickSelectSuperForm = () => {
+  console.log('clickSelectSuperForm');
+  validationid.value = 0;
+  formModal.value = true;
 }
 </script>
 
