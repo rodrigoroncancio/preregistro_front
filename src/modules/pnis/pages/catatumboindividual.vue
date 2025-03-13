@@ -132,6 +132,7 @@
               <th class="py-3 px-4" width="30%">Observación</th>
               <th class="py-3 px-4" width="10%">Validador</th>
               <th class="py-3 px-4">Evidencia</th>
+              <th class="py-3 px-4">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -160,6 +161,7 @@
                 </template>
                 <template v-else> <v-btn variant="text" color="red" block disabled>Sin Evidencia</v-btn></template>
               </td>
+              <td><v-icon color="red" size="32" @click="confirmDelete(item.id)">mdi-delete</v-icon></td>
             </tr>
           </tbody>
         </v-table>
@@ -181,6 +183,7 @@ import frmValida from "./forms/valida.vue";
 import useUtils from "@/composables/useUtils";
 import axios from "axios";
 import { useLoading } from "vue-loading-overlay";
+import Swal from "sweetalert2";
 
 const uLoading = useLoading();
 const endpoint = "/api/1.0/core";
@@ -216,6 +219,37 @@ const itemsValidation = ref<Array<{ id: number; label: string }>>([]);
 const itemsDocuments = ref([]);
 const itemsValidados = ref([]);
 const itemsValidadosBase = ref([]);
+
+const deleteItem = async (itemid: any) => {
+  console.log('itemid')
+  console.log(itemid)
+  await axios.delete(`/api/1.0/core/validationregister/${itemid}/delete/`);
+  Swal.fire("Eliminado", "El registro ha sido eliminado", "success");
+  formModalValidados.value = false;  
+  fnReloadTable()
+}
+
+const confirmDelete = (itemid: any) => {
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "No podrás revertir esta acción. Se guardar los datos del Usuario quien Eliminó y fecha de elimincación",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+    customClass: {
+      popup: "swal2-custom-zindex",
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteItem(itemid);
+      Swal.fire("¡Eliminado!", "El ítem ha sido eliminado.", "success");
+    }
+  });
+};
+
 const getValidationItems = async () => {
   let loader = uLoading.show({});
   itemsValidation.value = [];
@@ -404,4 +438,23 @@ const clickSelectSuperForm = () => {
 .button-documents:hover {
     background: linear-gradient(135deg, #4CAF50, rgb(59, 192, 103));
 }
+
+/* Asegura que el SweetAlert2 esté por encima del modal */
+.swal2-custom-zindex {
+  z-index: 20000 !important;
+}
+
+/* Reducir z-index del modal de Vuetify */
+.v-overlay.v-overlay--active {
+  z-index: 1050 !important;
+}
+
+/* Asegurar que SweetAlert2 siempre esté encima */
+.swal2-container {
+  z-index: 1100 !important;
+}
+.swal2-container {
+  z-index: 9999 !important;
+}
+
 </style>

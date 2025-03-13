@@ -26,6 +26,7 @@
         "roboto-fontface": "*",
         "survey-core": "^1.12.24",
         "survey-vue3-ui": "^1.12.24",
+        "sweetalert2": "^11.17.2",
         "vee-validate": "^4.13.1",
         "vue": "^3.4.31",
         "vue-advanced-cropper": "^2.8.9",
@@ -694,6 +695,8 @@
     "survey-core": ["survey-core@1.12.24", "", {}, "sha512-wctjd+Hv4fjrP2QDT/nlXfHq3KT7iDuxAClfflM3ztRM72FFJcvprNuZSkiHg0ow1Th59/zblqTnnz4qiCqXjg=="],
 
     "survey-vue3-ui": ["survey-vue3-ui@1.12.24", "", { "peerDependencies": { "survey-core": "1.12.24", "vue": "^3.2.41" } }, "sha512-KQl6H+2vp6IS0jbFbPceWUzL0Rm1y1mOjfzoIjHGreiKXzpuZvzkrIJ3tt244adtjxMtSUoQClbtt8ZrbLiunw=="],
+
+    "sweetalert2": ["sweetalert2@11.17.2", "", {}, "sha512-HKxDr1IyV3Lxr3W6sb61qm/p2epFIEdr5EKwteRFHnIg6f8nHFl2kX++DBVz16Mac+fFiU3hMpjq1L6yE2Ge5w=="],
 
     "tiny-case": ["tiny-case@1.0.3", "", {}, "sha512-Eet/eeMhkO6TX8mnUteS9zgPbUMQa4I6Kkp5ORiBD5476/m+PIRiumP5tmh5ioJpH7k51Kehawy2UDfsnxxY8Q=="],
 
