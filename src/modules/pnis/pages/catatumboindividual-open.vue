@@ -1049,28 +1049,68 @@ const getSurveyData = async () => {
  }
 };
 
-const getRegistraduriaData = async (userData: { identificacion: any; reg_agno_resolucion: any; reg_edad: any; reg_departamento_exp: any; reg_estado_cedula: any; reg_fecha_expedicion: any; reg_fecha_nacimiento: any; reg_genero: any; reg_municipio_exp: any; reg_numero_cedula: any; reg_num_resolucion: any; reg_primer_apellido: any; reg_primer_nombre: any; reg_segundo_apellido: any; reg_segundo_nombre: any; }) => {
-  const response = await axios.get(`/api/1.0/core/cedulasrnec/getbyidentification/${userData.identificacion}/`);
-  console.log(response.data.primer_nombre)
-  userData.reg_agno_resolucion = response.data.agno_resolucion
-  userData.reg_departamento_exp = response.data.departamento_expedicion
-  userData.reg_estado_cedula = response.data.estado_cedula
-  userData.reg_fecha_expedicion = response.data.fecha_expedicion
-  userData.reg_fecha_nacimiento = response.data.fecha_nacimiento
-  userData.reg_genero = response.data.genero
-  userData.reg_municipio_exp = response.data.municipio_expedicion
-  userData.reg_numero_cedula = response.data.numero_cedula
-  userData.reg_num_resolucion = response.data.numero_resolucion
-  userData.reg_primer_apellido = response.data.primer_apellido
-  userData.reg_primer_nombre = response.data.primer_nombre
-  userData.reg_segundo_apellido = response.data.segundo_apellido
-  userData.reg_segundo_nombre = response.data.segundo_nombre
+const getRegistraduriaData = async (userData: { 
+  identificacion: any; 
+  reg_agno_resolucion: any; 
+  reg_edad: any; 
+  reg_departamento_exp: any; 
+  reg_estado_cedula: any; 
+  reg_fecha_expedicion: any; 
+  reg_fecha_nacimiento: any; 
+  reg_genero: any; 
+  reg_municipio_exp: any; 
+  reg_numero_cedula: any; 
+  reg_num_resolucion: any; 
+  reg_primer_apellido: any; 
+  reg_primer_nombre: any; 
+  reg_segundo_apellido: any; 
+  reg_segundo_nombre: any; 
+}) => {
+  try {
+    const response = await axios.get(`/api/1.0/core/cedulasrnec/getbyidentification/${userData.identificacion}/`);
 
-  userData.reg_edad = calcularEdad(response.data.fecha_nacimiento);
-  surveyData.value = userData; // Asignar los datos correctamente
-  console.log( 'surveyData.value ')
-  console.log( surveyData.value )
-}
+    // Si la respuesta es válida, asignamos los valores
+    userData.reg_agno_resolucion = response.data.agno_resolucion || '';
+    userData.reg_departamento_exp = response.data.departamento_expedicion || '';
+    userData.reg_estado_cedula = response.data.estado_cedula || '';
+    userData.reg_fecha_expedicion = response.data.fecha_expedicion || '';
+    userData.reg_fecha_nacimiento = response.data.fecha_nacimiento || '';
+    userData.reg_genero = response.data.genero || '';
+    userData.reg_municipio_exp = response.data.municipio_expedicion || '';
+    userData.reg_numero_cedula = response.data.numero_cedula || '';
+    userData.reg_num_resolucion = response.data.numero_resolucion || '';
+    userData.reg_primer_apellido = response.data.primer_apellido || '';
+    userData.reg_primer_nombre = response.data.primer_nombre || '';
+    userData.reg_segundo_apellido = response.data.segundo_apellido || '';
+    userData.reg_segundo_nombre = response.data.segundo_nombre || '';
+
+    userData.reg_edad = response.data.fecha_nacimiento ? calcularEdad(response.data.fecha_nacimiento) : '';
+
+  } catch (error) {
+    console.error('Error en la solicitud:', error);
+
+    // Llenar con valores vacíos si ocurre un error
+    userData.reg_agno_resolucion = '';
+    userData.reg_departamento_exp = '';
+    userData.reg_estado_cedula = '';
+    userData.reg_fecha_expedicion = '';
+    userData.reg_fecha_nacimiento = '';
+    userData.reg_genero = '';
+    userData.reg_municipio_exp = '';
+    userData.reg_numero_cedula = '';
+    userData.reg_num_resolucion = '';
+    userData.reg_primer_apellido = '';
+    userData.reg_primer_nombre = '';
+    userData.reg_segundo_apellido = '';
+    userData.reg_segundo_nombre = '';
+    userData.reg_edad = '';
+  }
+
+  // Asignar los datos correctamente
+  surveyData.value = userData;
+  console.log('surveyData.value', surveyData.value);
+};
+
 
 const calcularEdad = (fechaNacimiento: string): string => {
   // Convertir "26/04/2018" a un formato compatible (YYYY-MM-DD)
