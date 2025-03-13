@@ -232,7 +232,7 @@ const deleteItem = async (itemid: any) => {
 const confirmDelete = (itemid: any) => {
   Swal.fire({
     title: "¿Estás seguro?",
-    text: "No podrás revertir esta acción. Se guardar los datos del Usuario quien Eliminó y fecha de elimincación",
+    text: "No podrás revertir esta acción. Se guardará los Datos del Usuario quien Eliminó y fecha de elimincación",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#d33",
