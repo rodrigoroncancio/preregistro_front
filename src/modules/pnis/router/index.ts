@@ -18,6 +18,11 @@ const router = {
       component: () => import( /* webpackChunkName: "PnisUserspnis" */ "@/modules/pnis/pages/fichaacuerdo2.vue"),
     },
     {
+      path: "catatumboficha",
+      name: "pnis-catatumboficha",
+      component: () => import( /* webpackChunkName: "PnisUserspnis" */ "@/modules/pnis/pages/catatumboficha.vue"),
+    },
+    {
       path: "argeliapersonas",
       name: "pnis-argeliapersonas",
       component: () => import( /* webpackChunkName: "PnisArgeliapersonas" */ "@/modules/pnis/pages/argeliapersonas.vue"),
