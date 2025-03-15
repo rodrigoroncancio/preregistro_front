@@ -111,6 +111,11 @@
       "elements": [
         {
           "type": "html",
+          "name": "alertasvalidacion",
+          "html": ""
+        },
+        {
+          "type": "html",
           "name": "question1",
           "html": "<h3>1. DATOS GENERALES DEL NÚCLEO FAMILIAR</h3>"
         },
@@ -123,7 +128,8 @@
           "type": "text",
           "name": "tipo_identificacion",
           "title": "Tipo de identificación",
-          "isRequired": true
+          "isRequired": true,
+          "visibleIf": "{mostrar_campos} = true"
         },
         {
           "type": "text",
@@ -137,51 +143,57 @@
           "name": "numero_identificacion",
           "title": "Número de identificación",
           "description": "Escriba el número de identificación del representante del núcleo familiar",
-          "isRequired": true
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
           "name": "nombre",
           "title": "Nombres y apellidos",
-          "isRequired": true
+          "isRequired": true,
+          "visibleIf": "{mostrar_campos} = true"
         },
         {
           "type": "file",
           "name": "foto_doc_frente",
           "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_documentos} = false"
         },
         {
           "type": "file",
           "name": "foto_doc_atras",
           "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_documentos} = false"
         },
         {
           "type": "text",
           "name": "fecha_expedicion",
           "title": "Fecha expedición",
           "isRequired": true,
+          "visibleIf": "{mostrar_campos} = true"
         },
         {
           "type": "text",
           "name": "fecha_nacimiento",
           "title": "Fecha nacimiento",
           "isRequired": true,
+          "visibleIf": "{mostrar_campos} = true"
         },
         {
           "type": "text",
           "name": "numero_contacto",
           "title": "Número de contacto",
           "isRequired": true,
-          "inputType": "tel"
+          "inputType": "tel",
+          "visibleIf": "{mostrar_campos} = true"
         },
         {
           "type": "text",
           "name": "email",
           "title": "Correo electrónico",
           "description": "Indicar el correo electrónico donde será notificado",
-          "inputType": "email"
+          "inputType": "email",
+          "visibleIf": "{mostrar_campos} = true"
         },
         {
           "type": "dropdown",
@@ -191,7 +203,8 @@
           "choices": [
             "Masculino",
             "Femenino"
-          ]
+          ],
+          "visibleIf": "{mostrar_campos} = true"
         },
         {
           "type": "dropdown",
@@ -201,7 +214,8 @@
           "choices": [
             "Si",
             "No"
-          ]
+          ],
+          "visibleIf": "{mostrar_campos} = true"
         },
         {
           "type": "dropdown",
@@ -217,7 +231,8 @@
             "Separado(a)",
             "Viudo(a)",
             "Unión libre"
-          ]
+          ],
+          "visibleIf": "{mostrar_campos} = true"
         },
         {
           "type": "dropdown",
@@ -231,13 +246,15 @@
             "Informalidad",
             "Desempleado",
             "No aplica por edad"
-          ]
+          ],
+          "visibleIf": "{mostrar_campos} = true"
         },
         {
           "type": "text",
           "name": "escolaridad",
           "title": "Nivel de escolaridad",
           "isRequired": true,
+          "visibleIf": "{mostrar_campos} = true"
         },
         {
           "type": "text",
@@ -254,7 +271,8 @@
             "Contributivo",
             "Subsidiado",
             "PPNA"
-          ]
+          ],
+          "visibleIf": "{mostrar_campos} = true"
         }
       ]
     },
@@ -560,12 +578,14 @@
         {
           "type": "text",
           "name": "persona1_nombre",
-          "title": "Nombre Completo"
+          "title": "Nombre Completo",
+          "isRequired": true,
         },
         {
           "type": "dropdown",
           "name": "persona1_tipo_identificacion",
           "title": "Tipo de Identificación\n",
+          "isRequired": true,
           "choices": [
             "Cédula de ciudadanía",
             "Pasaporte",
@@ -576,30 +596,35 @@
         {
           "type": "text",
           "name": "persona1_num_identificación",
-          "title": "Número Identificación"
+          "title": "Número Identificación",
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
           "name": "persona1_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona1} = true"
         },
         {
           "type": "file",
           "name": "persona1_foto_doc_frente",
           "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona1} = true"
         },
         {
           "type": "file",
           "name": "persona1_foto_doc_atras",
           "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona1} = true"
         },
         {
           "type": "dropdown",
           "name": "persona1_parentesco",
           "title": "Parentesco",
+          "isRequired": true,
           "choices": [
             "Abuelo",
             "Abuela",
@@ -610,32 +635,39 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ]
+          ],
+          "visibleIf": "{mostrar_persona1} = true"
         },
         {
           "type": "text",
           "name": "persona1_parentesco_cual",
-          "title": "Cuál Parentesco"
+          "title": "Cuál Parentesco",
+          "visibleIf": "{mostrar_persona1} = true"
         },
         {
           "type": "text",
           "name": "persona1_fecha_nacimiento",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date"
+          "isRequired": true,
+          "inputType": "date",
+          "visibleIf": "{mostrar_persona1} = true"
         },
         {
           "type": "dropdown",
           "name": "persona1_sexo",
           "title": "Sexo",
+          "isRequired": true,
           "choices": [
             "Masculino",
             "Femenino"
-          ]
+          ],
+          "visibleIf": "{mostrar_persona1} = true"
         },
         {
           "type": "dropdown",
           "name": "question21",
           "title": "Estado Civil\n",
+          "isRequired": true,
           "choices": [
             "Soltero(a)",
             "Casado (a)",
@@ -643,12 +675,14 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ]
+          ],
+          "visibleIf": "{mostrar_persona1} = true"
         },
         {
           "type": "dropdown",
           "name": "question22",
           "title": "Grupo de atención especial\n",
+          "isRequired": true,
           "choices": [
             "Desplazados",
             "Retornado",
@@ -660,7 +694,8 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ]
+          ],
+          "visibleIf": "{mostrar_persona1} = true"
         }
       ]
     },
@@ -681,7 +716,8 @@
         {
           "type": "text",
           "name": "persona2_nombre",
-          "title": "Nombre Completo"
+          "title": "Nombre Completo",
+          "isRequired": true,
         },
         {
           "type": "dropdown",
@@ -692,30 +728,34 @@
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
         },
         {
           "type": "text",
           "name": "persona2_num_identificación",
-          "title": "Número Identificación"
+          "title": "Número Identificación",
+          "isRequired": true,
         },
         {
           "type": "text",
           "name": "persona2_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona2} = true"
         },
         {
           "type": "file",
           "name": "persona2_foto_doc_frente",
           "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona2} = true"
         },
         {
           "type": "file",
           "name": "persona2_foto_doc_atras",
           "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona2} = true"
         },
         {
           "type": "dropdown",
@@ -731,18 +771,23 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona2} = true"
         },
         {
           "type": "text",
           "name": "persona2_parentesco_cual",
-          "title": "Cuál Parentesco"
+          "title": "Cuál Parentesco",
+          "visibleIf": "{mostrar_persona2} = true"
         },
         {
           "type": "text",
           "name": "persona2_fecha_nacimiento",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date"
+          "inputType": "date",
+          "visibleIf": "{mostrar_persona2} = true",
+          "isRequired": true,
         },
         {
           "type": "dropdown",
@@ -751,7 +796,9 @@
           "choices": [
             "Masculino",
             "Femenino"
-          ]
+          ],
+          "visibleIf": "{mostrar_persona2} = true",
+          "isRequired": true,
         },
         {
           "type": "dropdown",
@@ -764,7 +811,9 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ]
+          ],
+          "visibleIf": "{mostrar_persona2} = true",
+          "isRequired": true,
         },
         {
           "type": "dropdown",
@@ -781,7 +830,9 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ]
+          ],
+          "visibleIf": "{mostrar_persona2} = true",
+          "isRequired": true,
         }
       ]
     },
@@ -802,7 +853,8 @@
         {
           "type": "text",
           "name": "persona3_nombre",
-          "title": "Nombre Completo"
+          "title": "Nombre Completo",
+          "isRequired": true
         },
         {
           "type": "dropdown",
@@ -813,7 +865,8 @@
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ]
+          ],
+          "isRequired": true
         },
         {
           "type": "text",
@@ -824,24 +877,28 @@
           "type": "text",
           "name": "persona3_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona3} = true"
         },
         {
           "type": "file",
           "name": "persona3_foto_doc_frente",
           "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona3} = true"
         },
         {
           "type": "file",
           "name": "persona3_foto_doc_atras",
           "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona3} = true"
         },
         {
           "type": "dropdown",
           "name": "persona3_parentesco",
           "title": "Parentesco",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona3} = true",
           "choices": [
             "Abuelo",
             "Abuela",
@@ -863,7 +920,9 @@
           "type": "text",
           "name": "persona3_fecha_nacimiento",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona3} = true"
         },
         {
           "type": "dropdown",
@@ -872,7 +931,9 @@
           "choices": [
             "Masculino",
             "Femenino"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona3} = true"
         },
         {
           "type": "dropdown",
@@ -885,7 +946,9 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona3} = true"
         },
         {
           "type": "dropdown",
@@ -902,7 +965,9 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona3} = true"
         }
       ]
     },
@@ -923,7 +988,8 @@
         {
           "type": "text",
           "name": "persona4_nombre",
-          "title": "Nombre Completo"
+          "title": "Nombre Completo",
+          "isRequired": true
         },
         {
           "type": "dropdown",
@@ -934,35 +1000,41 @@
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ]
+          ],
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona4_num_identificación",
-          "title": "Número Identificación"
+          "title": "Número Identificación",
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona4_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona4} = true"
         },
         {
           "type": "file",
           "name": "persona4_foto_doc_frente",
           "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona4} = true"
         },
         {
           "type": "file",
           "name": "persona4_foto_doc_atras",
           "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona4} = true"
         },
         {
           "type": "dropdown",
           "name": "persona4_parentesco",
           "title": "Parentesco",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona4} = true",
           "choices": [
             "Abuelo",
             "Abuela",
@@ -984,7 +1056,9 @@
           "type": "text",
           "name": "persona4_fecha_nacimiento",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona4} = true"
         },
         {
           "type": "dropdown",
@@ -993,7 +1067,9 @@
           "choices": [
             "Masculino",
             "Femenino"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona4} = true"
         },
         {
           "type": "dropdown",
@@ -1006,7 +1082,9 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona4} = true"
         },
         {
           "type": "dropdown",
@@ -1023,7 +1101,9 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona4} = true"
         }
       ]
     },
@@ -1055,30 +1135,34 @@
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ]
+          ],
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona5_num_identificación",
-          "title": "Número Identificación"
+          "title": "Número Identificación",
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona5_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona5} = true"
         },
         {
           "type": "file",
           "name": "persona5_foto_doc_frente",
           "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona5} = true"
         },
         {
           "type": "file",
           "name": "persona5_foto_doc_atras",
           "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona5} = true"
         },
         {
           "type": "dropdown",
@@ -1094,18 +1178,23 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona5} = true"
         },
         {
           "type": "text",
           "name": "persona5_parentesco_cual",
-          "title": "Cuál Parentesco"
+          "title": "Cuál Parentesco",
+          "visibleIf": "{mostrar_persona5} = true"
         },
         {
           "type": "text",
           "name": "persona5_fecha_nacimiento",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona5} = true"
         },
         {
           "type": "dropdown",
@@ -1114,7 +1203,9 @@
           "choices": [
             "Masculino",
             "Femenino"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona5} = true"
         },
         {
           "type": "dropdown",
@@ -1127,7 +1218,9 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona5} = true"
         },
         {
           "type": "dropdown",
@@ -1144,7 +1237,9 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona5} = true"
         }
       ]
     },
@@ -1165,7 +1260,8 @@
         {
           "type": "text",
           "name": "persona6_nombre",
-          "title": "Nombre Completo"
+          "title": "Nombre Completo",
+          "isRequired": true
         },
         {
           "type": "dropdown",
@@ -1176,35 +1272,41 @@
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ]
+          ],
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona6_num_identificación",
-          "title": "Número Identificación"
+          "title": "Número Identificación",
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona6_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona6} = true",
         },
         {
           "type": "file",
           "name": "persona6_foto_doc_frente",
           "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona6} = true"
         },
         {
           "type": "file",
           "name": "persona6_foto_doc_atras",
           "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona6} = true"
         },
         {
           "type": "dropdown",
           "name": "persona6_parentesco",
           "title": "Parentesco",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona6} = true",
           "choices": [
             "Abuelo",
             "Abuela",
@@ -1220,13 +1322,16 @@
         {
           "type": "text",
           "name": "persona6_parentesco_cual",
-          "title": "Cuál Parentesco"
+          "title": "Cuál Parentesco",
+          "visibleIf": "{mostrar_persona6} = true",
         },
         {
           "type": "text",
           "name": "persona6_fecha_nacimiento",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona6} = true"
         },
         {
           "type": "dropdown",
@@ -1248,7 +1353,9 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona6} = true"
         },
         {
           "type": "dropdown",
@@ -1265,7 +1372,9 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona6} = true"
         }
       ]
     },
@@ -1286,7 +1395,8 @@
         {
           "type": "text",
           "name": "persona7_nombre",
-          "title": "Nombre Completo"
+          "title": "Nombre Completo",
+          "isRequired": true
         },
         {
           "type": "dropdown",
@@ -1297,30 +1407,34 @@
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ]
+          ],
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona7_num_identificación",
-          "title": "Número Identificación"
+          "title": "Número Identificación",
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona7_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona7} = true"
         },
         {
           "type": "file",
           "name": "persona7_foto_doc_frente",
           "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona7} = true"
         },
         {
           "type": "file",
           "name": "persona7_foto_doc_atras",
           "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona7} = true"
         },
         {
           "type": "dropdown",
@@ -1336,18 +1450,24 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona7} = true"
         },
         {
           "type": "text",
           "name": "persona7_parentesco_cual",
-          "title": "Cuál Parentesco"
+          "title": "Cuál Parentesco",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona7} = true"
         },
         {
           "type": "text",
           "name": "persona7_fecha_nacimiento",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona7} = true"
         },
         {
           "type": "dropdown",
@@ -1356,7 +1476,9 @@
           "choices": [
             "Masculino",
             "Femenino"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona7} = true"
         },
         {
           "type": "dropdown",
@@ -1369,7 +1491,9 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona7} = true"
         },
         {
           "type": "dropdown",
@@ -1386,7 +1510,9 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona7} = true"
         }
       ]
     },
@@ -1407,7 +1533,8 @@
         {
           "type": "text",
           "name": "persona8_nombre",
-          "title": "Nombre Completo"
+          "title": "Nombre Completo",
+          "isRequired": true
         },
         {
           "type": "dropdown",
@@ -1418,30 +1545,34 @@
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ]
+          ],
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona8_num_identificación",
-          "title": "Número Identificación"
+          "title": "Número Identificación",
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona8_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona8} = true"
         },
         {
           "type": "file",
           "name": "persona8_foto_doc_frente",
           "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona8} = true"
         },
         {
           "type": "file",
           "name": "persona8_foto_doc_atras",
           "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona8} = true"
         },
         {
           "type": "dropdown",
@@ -1457,18 +1588,24 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona8} = true"
         },
         {
           "type": "text",
           "name": "persona8_parentesco_cual",
-          "title": "Cuál Parentesco"
+          "title": "Cuál Parentesco",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona8} = true"
         },
         {
           "type": "text",
           "name": "persona8_fecha_nacimiento",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona8} = true"
         },
         {
           "type": "dropdown",
@@ -1477,7 +1614,9 @@
           "choices": [
             "Masculino",
             "Femenino"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona8} = true"
         },
         {
           "type": "dropdown",
@@ -1490,7 +1629,9 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona8} = true"
         },
         {
           "type": "dropdown",
@@ -1507,7 +1648,9 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona8} = true"
         }
       ]
     },
@@ -1528,7 +1671,8 @@
         {
           "type": "text",
           "name": "persona9_nombre",
-          "title": "Nombre Completo"
+          "title": "Nombre Completo",
+          "isRequired": true
         },
         {
           "type": "dropdown",
@@ -1539,30 +1683,34 @@
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ]
+          ],
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona9_num_identificación",
-          "title": "Número Identificación"
+          "title": "Número Identificación",
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona9_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona9} = true"
         },
         {
           "type": "file",
           "name": "persona9_foto_doc_frente",
           "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona9} = true"
         },
         {
           "type": "file",
           "name": "persona9_foto_doc_atras",
           "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona9} = true"
         },
         {
           "type": "dropdown",
@@ -1578,18 +1726,24 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona9} = true"
         },
         {
           "type": "text",
           "name": "persona9_parentesco_cual",
-          "title": "Cuál Parentesco"
+          "title": "Cuál Parentesco",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona9} = true"
         },
         {
           "type": "text",
           "name": "persona9_fecha_nacimiento",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona9} = true"
         },
         {
           "type": "dropdown",
@@ -1598,7 +1752,9 @@
           "choices": [
             "Masculino",
             "Femenino"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona9} = true"
         },
         {
           "type": "dropdown",
@@ -1611,7 +1767,9 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona9} = true"
         },
         {
           "type": "dropdown",
@@ -1628,7 +1786,9 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona9} = true"
         }
       ]
     },
@@ -1650,7 +1810,8 @@
         {
           "type": "text",
           "name": "persona10_nombre",
-          "title": "Nombre Completo"
+          "title": "Nombre Completo",
+          "isRequired": true
         },
         {
           "type": "dropdown",
@@ -1661,30 +1822,34 @@
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ]
+          ],
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona10_num_identificación",
-          "title": "Número Identificación"
+          "title": "Número Identificación",
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona10_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona10} = true"
         },
         {
           "type": "file",
           "name": "persona10_foto_doc_frente",
           "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona10} = true"
         },
         {
           "type": "file",
           "name": "persona10_foto_doc_atras",
           "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
+          "visibleIf": "{mostrar_persona10} = true"
         },
         {
           "type": "dropdown",
@@ -1700,18 +1865,24 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona10} = true"
         },
         {
           "type": "text",
           "name": "persona10_parentesco_cual",
-          "title": "Cuál Parentesco"
+          "title": "Cuál Parentesco",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona10} = true"
         },
         {
           "type": "text",
           "name": "persona10_fecha_nacimiento",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date"
+          "inputType": "date",
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona10} = true"
         },
         {
           "type": "dropdown",
@@ -1720,7 +1891,9 @@
           "choices": [
             "Masculino",
             "Femenino"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona10} = true"
         },
         {
           "type": "dropdown",
@@ -1733,7 +1906,9 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona10} = true"
         },
         {
           "type": "dropdown",
@@ -1750,7 +1925,9 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ]
+          ],
+          "isRequired": true,
+          "visibleIf": "{mostrar_persona10} = true"
         }
       ]
     },
@@ -5020,7 +5197,7 @@
     "pagePrevText": "Página anterior",
     "pageNextText": "Página siguiente",
     "completeText": "Enviar",
-    "showNavigationButtons": true
+    "showNavigationButtons": false
 }
 
     
@@ -5109,104 +5286,185 @@
 
   survey.onValueChanged.add(async (sender, options) => {
 
+    const match = options.name.match(/^persona(\d+)_num_identificación$/);
+  
+    if (match) {
+      const personaIndex = match[1]; // Extrae el número de persona (1-10)
 
+      if (!options.value) return;
+
+      try {
+        let loader = uLoading.show({});
+        const response = await axios.get(`forms/catatumbo/ficha/validar_nucleo/?documento=${options.value}`);
+        console.log(response);
+
+        const status = response.data.status;
+        const mostrarKey = `mostrar_persona${personaIndex}`; // Genera la clave correcta
+
+        if (status > 1) {
+          survey.setVariable(mostrarKey, false);
+          survey.setValue(options.name, ""); // Borra el número de identificación
+
+          let mensajeError = "";
+          switch (status) {
+            case 2:
+              mensajeError = "Usuario con ficha de acuerdo diligenciada. No se puede ingresar como núcleo familiar.";
+              break;
+            case 3:
+              mensajeError = "Usuario se encuentra entre los validados para firma de ficha de acuerdo Catatumbo. No se puede ingresar como núcleo familiar.";
+              break;
+            case 4:
+              mensajeError = "El usuario ha sido titular en el proyecto PNIS. No se puede ingresar como núcleo familiar.";
+              break;
+          }
+
+          if (mensajeError) uToast.toastError(mensajeError);
+        } else {
+          survey.setVariable(mostrarKey, true);
+        }
+
+        loader.hide();
+      } catch (error) {
+        console.error("Error al consultar el endpoint:", error);
+      }
+    }
     if (options.name === "numero_identificacion") {
       if (options.value === null || options.value === "")
         return;
 
       try {
         let loader = uLoading.show({});
-        axios.get(`forms/catatumbo/ficha/validar_documento/?documento=${options.value}`)
-          .then((resp: any) => {
-            console.log('resp.data.status')
-            console.log(resp.data.status)
-            if (resp.data.status === 1) {
-              const data = resp.data.data
+        
+        axios.get(`api/1.0/core/validationregister/filterbydocumentnumber/${options.value}/4/no`)
+        .then((resp: any) => {
+          let alertQuestion = survey.getQuestionByName("alertasvalidacion");
 
-              let latitud = "0";
-              let longitud = "0";
-              let altitud = "0";
+          if (alertQuestion) {
+            // Construir lista de observaciones en color rojo
+            let observationsList = resp.data.map((item: { observation: any; }) => `<li style="color: red;">${item.observation}</li>`).join("");
 
-              // Verificar si existen coordenadas y si tienen el formato esperado
-              if (data.coordenadas) {
-                  const match = data.coordenadas.match(/\(([^)]+)\)/);
-
-                  if (match && match[1]) {
-                      [longitud, latitud, altitud] = match[1].split(" ");
-                  } else {
-                      console.warn("Las coordenadas no tienen el formato esperado.");
-                  }
-              } else {
-                  console.warn("No hay coordenadas disponibles.");
-              }
-
-              // Asignar valores a SurveyJS, incluso si son cadenas vacías
-              survey.setValue("latitud", latitud);
-              survey.setValue("longitud", longitud);
-              survey.setValue("altura", altitud);
-
-              survey.setValue("predio1_latitud", latitud);
-              survey.setValue("predio1_longitud", longitud);
-              survey.setValue("predio1_altura", altitud);
-
+            // Asignar HTML con la lista
+            alertQuestion.html = `<center><ul>${observationsList}</ul></center>`;
+            alertQuestion.updateElement(); // Refrescar la vista
+          }
+        })
+        .catch(error => {
+          console.error("Error en la petición:", error);
+        });
+        if (options.value < 2000000000){
+          axios.get(`forms/catatumbo/ficha/validar_documento/?documento=${options.value}`)
+            .then((resp: any) => {
+              console.log('resp.data.status')
+              console.log(resp.data.status)
               
+              if (resp.data.status === 1) {
+                const data = resp.data.data
 
+                let latitud = "0";
+                let longitud = "0";
+                let altitud = "0";
 
-              if (data.fotodocumentofrente && data.fotodocumentofrente.trim().length > 0) {
-                survey.getQuestionByName("foto_doc_frente").visible = false;
-              }
-              if (data.fotodocumentorespaldo && data.fotodocumentorespaldo.trim().length > 0) {
-                survey.getQuestionByName("foto_doc_atras").visible = false;
-              }
+                // Verificar si existen coordenadas y si tienen el formato esperado
+                if (data.coordenadas) {
+                    const match = data.coordenadas.match(/\(([^)]+)\)/);
 
-
-              const fields = [
-                { "origin":['nombres', 'apellidos'], target:'nombre' },
-                { "origin":['nombres', 'apellidos'], target:'nombre' },
-                { "origin": ["fecha_nacimiento"], "target": "fecha_nacimiento" },
-                { "origin": ["submission_date"], "target": "fecha_expedicion" },
-                { "origin": ["sexo"], "target": "sexo" },
-                { "origin": ["correo"], "target": "email" },
-                { "origin": ["tipo_documento"], "target": "tipo_identificacion" },
-                { "origin": ["orientacion"], "target": "identidad_genero" },
-                { "origin": ["educacion"], "target": "escolaridad" },
-                { "origin": ["telefono"], "target": "numero_contacto" },
-                { "origin": ["area_predio"], "target": "predio1_area" },
-                { "origin": ["area_coca"], "target": "predio1_area_coca" },
-                { "origin": ["predio_residencia"], "target": "predio_nombre" },
-                { "origin": ["area_predio"], "target": "predio_area" },
-                
-              ]
-
-              
-
-              fields.forEach(field => {
-                let dataOrigin = field.origin.map(key => (data as any)[key]).filter(Boolean).join(" ");
-                if (survey.getQuestionByName(field.target)) {
-                  survey.setValue(field.target, dataOrigin);
-                  survey.getQuestionByName(field.target).readOnly = true;
+                    if (match && match[1]) {
+                        [longitud, latitud, altitud] = match[1].split(" ");
+                    } else {
+                        console.warn("Las coordenadas no tienen el formato esperado.");
+                    }
                 } else {
-                  console.warn(`El campo '${field.target}' no existe en la encuesta.`);
+                    console.warn("No hay coordenadas disponibles.");
                 }
-              });
 
-              
-              survey.showNavigationButtons = true;
-              
-            } else {
-              if (resp.data.status === 2) {
-                uToast.toastError("Usuario con ficha diligenciada. No se puede continuar con el formulario.");
-              }  else if (resp.data.status === 3) {
-                uToast.toastError("El documento no se encuentra en la lista de pre registro. No se puede continuar con el formulario.");
+                // Asignar valores a SurveyJS, incluso si son cadenas vacías
+                survey.setValue("latitud", latitud);
+                survey.setValue("longitud", longitud);
+                survey.setValue("altura", altitud);
+
+                survey.setValue("predio1_latitud", latitud);
+                survey.setValue("predio1_longitud", longitud);
+                survey.setValue("predio1_altura", altitud);
+
+                
+
+
+                if (data.foto_documento_frente && data.foto_documento_frente.trim().length > 0) {
+                  survey.getQuestionByName("foto_doc_frente").visible = false;
+                } else {
+                  survey.setVariable("mostrar_documentos", true);
+                }
+                if (data.foto_documento_respaldo && data.foto_documento_respaldo.trim().length > 0) {
+                  survey.getQuestionByName("foto_doc_atras").visible = false;
+                } else {
+                  survey.setVariable("mostrar_documentos", true);
+                }
+
+
+                const fields = [
+                  { "origin":['nombres', 'apellidos'], target:'nombre' },
+                  { "origin":['nombres', 'apellidos'], target:'nombre' },
+                  { "origin": ["fecha_nacimiento"], "target": "fecha_nacimiento" },
+                  { "origin": ["submission_date"], "target": "fecha_expedicion" },
+                  { "origin": ["sexo"], "target": "sexo" },
+                  { "origin": ["correo"], "target": "email" },
+                  { "origin": ["tipo_documento"], "target": "tipo_identificacion" },
+                  { "origin": ["orientacion"], "target": "identidad_genero" },
+                  { "origin": ["educacion"], "target": "escolaridad" },
+                  { "origin": ["telefono"], "target": "numero_contacto" },
+                  { "origin": ["area_predio"], "target": "predio1_area" },
+                  { "origin": ["area_coca"], "target": "predio1_area_coca" },
+                  { "origin": ["predio_residencia"], "target": "predio_nombre" },
+                  { "origin": ["area_predio"], "target": "predio_area" },
+                  
+                ]
+
+                
+
+                fields.forEach(field => {
+                  let dataOrigin = field.origin.map(key => (data as any)[key]).filter(Boolean).join(" ");
+                  if (survey.getQuestionByName(field.target)) {
+                    survey.setValue(field.target, dataOrigin);
+                    survey.getQuestionByName(field.target).readOnly = true;
+                  } else {
+                    console.warn(`El campo '${field.target}' no existe en la encuesta.`);
+                  }
+                });
+
+                
+                survey.showNavigationButtons = true;
+                survey.setVariable("mostrar_campos", true);
+                
               } else {
-                uToast.toastError("El usuario no se encuentra Validado. No se puede continuar con el formulario.");
+                if (resp.data.status === 2) {
+                  uToast.toastError("Usuario con ficha diligenciada. No se puede continuar con el formulario.");
+                }  else if (resp.data.status === 3) {
+                  uToast.toastError("El documento no se encuentra en la lista de pre registro. No se puede continuar con el formulario.");
+                } else if (resp.data.status === 4) {
+                  uToast.toastError("El usuario no se encuentra Validado. No se puede continuar con el formulario.");
+                } else {
+                  uToast.toastError("El usuario ha sido titular en el proyecto PNIS");
+                }
+                survey.showNavigationButtons = false;
+                survey.setVariable("mostrar_campos", false);
+                
               }
-              survey.showNavigationButtons = false;
-            }
-            
-          })
+              axios.get(`api/1.0/core/cedulasrnec/getbyidentification/${options.value}`)
+              .then((resp: any) => {
+                console.log(resp)
+                survey.setValue("fecha_nacimiento", resp.data.fecha_expedicion); 
+                survey.setValue("fecha_expedicion", resp.data.fecha_nacimiento);   
+              })
+              .catch((err: any) => { console.log(err) })
+              
+            })
           .catch((err: any) => { console.log(err) })
           .finally(() => { loader.hide() });
+        } else {
+          survey.setVariable("mostrar_campos", false);
+          uToast.toastError("Digite un número de cedula valido");
+          loader.hide()
+        }  
       } catch (error) {
         console.error("Error al consultar el endpoint:", error);
       }
