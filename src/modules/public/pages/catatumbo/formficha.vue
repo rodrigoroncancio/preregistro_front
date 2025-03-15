@@ -736,6 +736,7 @@
           "name": "persona2_num_identificación",
           "title": "Número Identificación",
           "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
@@ -871,7 +872,9 @@
         {
           "type": "text",
           "name": "persona3_num_identificación",
-          "title": "Número Identificación"
+          "title": "Número Identificación",
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
@@ -1007,7 +1010,8 @@
           "type": "text",
           "name": "persona4_num_identificación",
           "title": "Número Identificación",
-          "isRequired": true
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
@@ -1142,7 +1146,8 @@
           "type": "text",
           "name": "persona5_num_identificación",
           "title": "Número Identificación",
-          "isRequired": true
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
@@ -1279,7 +1284,8 @@
           "type": "text",
           "name": "persona6_num_identificación",
           "title": "Número Identificación",
-          "isRequired": true
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
@@ -1414,7 +1420,8 @@
           "type": "text",
           "name": "persona7_num_identificación",
           "title": "Número Identificación",
-          "isRequired": true
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
@@ -1552,7 +1559,8 @@
           "type": "text",
           "name": "persona8_num_identificación",
           "title": "Número Identificación",
-          "isRequired": true
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
@@ -1690,7 +1698,8 @@
           "type": "text",
           "name": "persona9_num_identificación",
           "title": "Número Identificación",
-          "isRequired": true
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
@@ -1829,7 +1838,8 @@
           "type": "text",
           "name": "persona10_num_identificación",
           "title": "Número Identificación",
-          "isRequired": true
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
@@ -5295,34 +5305,40 @@
 
       try {
         let loader = uLoading.show({});
-        const response = await axios.get(`forms/catatumbo/ficha/validar_nucleo/?documento=${options.value}`);
-        console.log(response);
+        if (parseInt(options.value) < 2000000000) {
+          const response = await axios.get(`forms/catatumbo/ficha/validar_nucleo/?documento=${options.value}`);
+          console.log(response);
 
-        const status = response.data.status;
-        const mostrarKey = `mostrar_persona${personaIndex}`; // Genera la clave correcta
+          const status = response.data.status;
+          const mostrarKey = `mostrar_persona${personaIndex}`; // Genera la clave correcta
 
-        if (status > 1) {
-          survey.setVariable(mostrarKey, false);
-          survey.setValue(options.name, ""); // Borra el número de identificación
+          if (status > 1) {
+            survey.setVariable(mostrarKey, false);
+            survey.setValue(options.name, ""); // Borra el número de identificación
 
-          let mensajeError = "";
-          switch (status) {
-            case 2:
-              mensajeError = "Usuario con ficha de acuerdo diligenciada. No se puede ingresar como núcleo familiar.";
-              break;
-            case 3:
-              mensajeError = "Usuario se encuentra entre los validados para firma de ficha de acuerdo Catatumbo. No se puede ingresar como núcleo familiar.";
-              break;
-            case 4:
-              mensajeError = "El usuario ha sido titular en el proyecto PNIS. No se puede ingresar como núcleo familiar.";
-              break;
+            let mensajeError = "";
+            switch (status) {
+              case 2:
+                mensajeError = "Usuario con ficha de acuerdo diligenciada. No se puede ingresar como núcleo familiar.";
+                break;
+              case 3:
+                mensajeError = "Usuario se encuentra entre los validados para firma de ficha de acuerdo Catatumbo. No se puede ingresar como núcleo familiar.";
+                break;
+              case 4:
+                mensajeError = "El usuario ha sido titular en el proyecto PNIS. No se puede ingresar como núcleo familiar.";
+                break;
+            }
+
+            if (mensajeError) uToast.toastError(mensajeError);
+          } else {
+            survey.setVariable(mostrarKey, true);
           }
-
-          if (mensajeError) uToast.toastError(mensajeError);
         } else {
-          survey.setVariable(mostrarKey, true);
+          const mostrarKey = `mostrar_persona${personaIndex}`;
+          survey.setVariable(mostrarKey, false)
+          survey.setValue(options.name, "");
+          uToast.toastError("Digite un número de cedula valido");
         }
-
         loader.hide();
       } catch (error) {
         console.error("Error al consultar el endpoint:", error);
