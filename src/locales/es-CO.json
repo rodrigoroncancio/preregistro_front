@@ -226,7 +226,10 @@
       "argeliagrupo": "Lista Pre-registros Asociados",
       "modal_title_documents": "Documentos",
       "personasvalidadas": "Personas validadas",
-      "personasvalidadas_title": "Usuarios inscritos validados"
+      "personasvalidadas_title": "Usuarios inscritos validados",
+      "fichas_acuerdos": "Fichas de Acuerdos",
+      "ficha_catatumbo": "Form Catatumbo",
+      "ficha_argelia": "Form Argelia"
     }
   }
 }
