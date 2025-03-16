@@ -31,22 +31,56 @@ const value = computed({
 const userData = uAuth.getUserData()
 const itemsMenuFiltered = computed({
   get() {
-    let _itemsFiltered: any = []
+    console.log('userData:', userData);
+    
+    let _itemsFiltered: any = [];
+    
     itemsMenu.forEach(item => {
+      console.log("Evaluando item:", item);
+
       if ('roles' in item) {
-        if ((item.roles as Array<number>).includes(userData.role)) {
-          _itemsFiltered.push(item)
+        // Extraer los IDs de los roles del usuario
+        const userRoles = userData.roles.map((r: { id: any; }) => r.id); 
+        
+        // Verificar si al menos uno de los roles del usuario está en item.roles
+        const hasRole = item.roles.some(role => userRoles.includes(role));
+
+        if (hasRole) {
+          _itemsFiltered.push(item);
         }
       } else {
-        _itemsFiltered.push(item)
+        _itemsFiltered.push(item);
       }
     });
+
     return _itemsFiltered;
   },
   set(value) {
     return value;
   }
 });
+// const itemsMenuFiltered = computed({
+//   get() {
+//     console.log('userData')
+//     console.log(userData)
+//     console.log(userData.role)
+//     let _itemsFiltered: any = []
+//     itemsMenu.forEach(item => {
+//       console.log(item)
+//       if ('roles' in item) {
+//         if ((item.roles as Array<number>).includes(userData.role)) {
+//           _itemsFiltered.push(item)
+//         }
+//       } else {
+//         _itemsFiltered.push(item)
+//       }
+//     });
+//     return _itemsFiltered;
+//   },
+//   set(value) {
+//     return value;
+//   }
+// });
 
 const IS_ADMIN = 1;
 const IS_STAFF = 2;
@@ -70,6 +104,7 @@ const itemsMenu = [
   {
     title: "modules.pnis.convocatoria_argelia",
     icon: "mdi-solar-panel",
+    roles: [1,2,3,4,5,6],
     children: [{
       title: "modules.pnis.preregistroasociado",
       icon: "mdi-human-male-board-poll",
@@ -95,9 +130,11 @@ const itemsMenu = [
       icon: "mdi-human-male-board-poll",
       url: "/pnis/personasvalidadas",
     }]
-  },{
+  },
+  {
     title: "modules.pnis.convocatoria_catatumbo",
     icon: "mdi-solar-panel",
+    roles: [1,2,3,4,5,6],
     children: [{
       title: "modules.pnis.preregistrocatatumboindividual",
       icon: "mdi-human-male-board-poll",
@@ -109,6 +146,22 @@ const itemsMenu = [
       url: "/pnis/catatumbogrupos",
     }]
   },
+  {
+    title: "modules.pnis.fichas_acuerdos",
+    icon: "mdi-solar-panel",
+    roles: [1,7],
+    children: [{
+      title: "modules.pnis.ficha_catatumbo",
+      icon: "mdi-human-male-board-poll",
+      url: "/catatumbo/fichaacuerdo",
+    },
+    {
+      title: "modules.pnis.ficha_argelia",
+      icon: "mdi-human-male-board-poll",
+      url: "/pnis/catatumbogrupos",
+    }]
+  },
+  
 ];
 
 const emit = defineEmits(["update:modelValue"]);

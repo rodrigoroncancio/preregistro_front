@@ -126,10 +126,17 @@
         },
         {
           "type": "text",
+          "name": "nombre",
+          "visibleIf": "{mostrar_campos} = true",
+          "title": "Nombres y apellidos",
+          "isRequired": true
+        },
+        {
+          "type": "text",
           "name": "tipo_identificacion",
+          "visibleIf": "{mostrar_campos} = true",
           "title": "Tipo de identificación",
-          "isRequired": true,
-          "visibleIf": "{mostrar_campos} = true"
+          "isRequired": true
         },
         {
           "type": "text",
@@ -147,79 +154,76 @@
           "maxLength": 10
         },
         {
-          "type": "text",
-          "name": "nombre",
-          "title": "Nombres y apellidos",
-          "isRequired": true,
-          "visibleIf": "{mostrar_campos} = true"
-        },
-        {
           "type": "file",
           "name": "foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "visibleIf": "{mostrar_documentos} = false"
+          "visibleIf": "{mostrar_documentos} = false",
+          "title": "Foto Doc. Frente"
         },
         {
           "type": "file",
           "name": "foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "visibleIf": "{mostrar_documentos} = false"
+          "visibleIf": "{mostrar_documentos} = false",
+          "title": "Foto Doc. Atras"
         },
         {
           "type": "text",
           "name": "fecha_expedicion",
+          "visibleIf": "{mostrar_campos} = true",
           "title": "Fecha expedición",
-          "isRequired": true,
-          "visibleIf": "{mostrar_campos} = true"
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "fecha_nacimiento",
+          "visibleIf": "{mostrar_campos} = true",
           "title": "Fecha nacimiento",
-          "isRequired": true,
-          "visibleIf": "{mostrar_campos} = true"
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "numero_contacto",
+          "visibleIf": "{mostrar_campos} = true",
           "title": "Número de contacto",
+          "description": "Indicar el número de celular.",
           "isRequired": true,
-          "inputType": "tel",
-          "visibleIf": "{mostrar_campos} = true"
+          "inputType": "tel"
         },
         {
           "type": "text",
           "name": "email",
+          "visibleIf": "{mostrar_campos} = true",
           "title": "Correo electrónico",
           "description": "Indicar el correo electrónico donde será notificado",
-          "inputType": "email",
-          "visibleIf": "{mostrar_campos} = true"
+          "inputType": "email"
         },
         {
           "type": "dropdown",
           "name": "sexo",
+          "visibleIf": "{mostrar_campos} = true",
           "title": "Sexo",
+          "description": "Indique si la persona\nrepresentante del núcleo familiar es masculino o femenino.",
           "isRequired": true,
           "choices": [
             "Masculino",
             "Femenino"
-          ],
-          "visibleIf": "{mostrar_campos} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "identidad_genero",
+          "visibleIf": "{mostrar_campos} = true",
           "title": "Tiene identidad de Género y/o Orientación sexual diversa (OSIGD)?\n",
+          "description": "Seleccione SI en caso afirmativo, o NO en caso negativo.\n",
           "isRequired": true,
           "choices": [
             "Si",
             "No"
-          ],
-          "visibleIf": "{mostrar_campos} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "estado_civil",
+          "visibleIf": "{mostrar_campos} = true",
           "title": "Estado civil",
           "isRequired": true,
           "choices": [
@@ -231,13 +235,14 @@
             "Separado(a)",
             "Viudo(a)",
             "Unión libre"
-          ],
-          "visibleIf": "{mostrar_campos} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "ocupacion",
+          "visibleIf": "{mostrar_campos} = true",
           "title": "Ocupación",
+          "description": "Indique cuál es la ocupación",
           "isRequired": true,
           "choices": [
             "Independiente",
@@ -246,15 +251,14 @@
             "Informalidad",
             "Desempleado",
             "No aplica por edad"
-          ],
-          "visibleIf": "{mostrar_campos} = true"
+          ]
         },
         {
           "type": "text",
           "name": "escolaridad",
+          "visibleIf": "{mostrar_campos} = true",
           "title": "Nivel de escolaridad",
-          "isRequired": true,
-          "visibleIf": "{mostrar_campos} = true"
+          "isRequired": true
         },
         {
           "type": "text",
@@ -265,14 +269,14 @@
         {
           "type": "dropdown",
           "name": "tipo_salud",
+          "visibleIf": "{mostrar_campos} = true",
           "title": "Tipo de afiliación a salud\n",
           "isRequired": true,
           "choices": [
             "Contributivo",
             "Subsidiado",
             "PPNA"
-          ],
-          "visibleIf": "{mostrar_campos} = true"
+          ]
         }
       ]
     },
@@ -336,14 +340,15 @@
               "value": "Junta de Acción Comuna",
               "text": "Junta de Acción Comunal"
             },
-            "No Sabe"
+            "No Sabe",
+            "Ninguno"
           ]
         },
         {
           "type": "text",
           "name": "nombre_territorio_etnico",
           "visibleIf": "{comunidad_etnica} <> 'Ninguno'",
-          "title": "¿Cuál es el nombre completo del territorio colectivo (consejo comunitario o zona de reserva campesina o junta de acción comunal) a la que pertenece su núcleo familiar?"
+          "title": "¿Cuál es el nombre completo del territorio colectivo ( (consejo comunitario, resguardo) o zona de reserva campesina o junta de acción comunal a la que pertenece su núcleo familiar?"
         },
         {
           "type": "text",
@@ -477,6 +482,7 @@
           "type": "dropdown",
           "name": "tipo_relacion",
           "title": "Tipo de relación con el predio\n",
+          "description": "Indiquesi el tipo de relación del núcleo familiar con el predio es:",
           "choices": [
             "Propietario",
             "Ocupante",
@@ -491,23 +497,11 @@
           "name": "tipo_documento_acredita",
           "title": "Tipo de documento que acredita la relación con el predio\n",
           "choices": [
-            {
-              "value": "Propietario",
-              "text": "Escritura"
-            },
-            {
-              "value": "Ocupante",
-              "text": "Sana posesión"
-            },
-            {
-              "value": "Poseedor",
-              "text": "Certificado de tradición y libertad"
-            },
-            "Arrendatario",
-            {
-              "value": "Tenedor (prestada, cuidandero en posada)",
-              "text": "Documento o compraventa"
-            }
+            "Escritura",
+            " Carta venta",
+            "Certificado Sana posesión",
+            "Certificado de tradición y libertad",
+            "Documento compraventa"
           ]
         },
         {
@@ -519,6 +513,7 @@
           "type": "dropdown",
           "name": "proopietario_tipo_identificacion",
           "title": "Tipo de identificación propietario",
+          "description": "Indique el tipo de identificación del propietario del predio",
           "isRequired": true,
           "choices": [
             "Cédula de ciudadanía",
@@ -530,7 +525,8 @@
         {
           "type": "text",
           "name": "propietario_numero_identificacion",
-          "title": "Número identificación propietario"
+          "title": "Número identificación propietario",
+          "description": "Indique  número de identificación del propietario del predio"
         },
         {
           "type": "dropdown",
@@ -546,6 +542,7 @@
           "type": "dropdown",
           "name": "num_dependientes",
           "title": "¿Cuántas personas dependen económicamente del titular y/o habitan en el mismo lugar? ",
+          "description": "Indique el número de personas que componen el núcleo familiar, este puede estar compuesto por cónyuge o compañero(a) permanente, padre – madre, suegro, hermano(a), cuñado(a), hijo(a), sobrino(a), yerno, nuera, nieto, abuelo(a) u otro.",
           "choices": [
             "1",
             "2",
@@ -568,7 +565,7 @@
         {
           "type": "html",
           "name": "question3",
-          "html": "\n<p><strong>1.1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
+          "html": "\n<p><strong>1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
         },
         {
           "type": "html",
@@ -579,7 +576,7 @@
           "type": "text",
           "name": "persona1_nombre",
           "title": "Nombre Completo",
-          "isRequired": true,
+          "isRequired": true
         },
         {
           "type": "dropdown",
@@ -603,26 +600,27 @@
         {
           "type": "text",
           "name": "persona1_fecha_expedicion_identificacion",
+          "visibleIf": "{mostrar_persona1} = true",
           "title": "Fecha de expedicion\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona1} = true"
+          "inputType": "date"
         },
         {
           "type": "file",
           "name": "persona1_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "visibleIf": "{mostrar_persona1} = true"
+          "visibleIf": "{mostrar_persona1} = true",
+          "title": "Foto Doc. Frente"
         },
         {
           "type": "file",
           "name": "persona1_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "visibleIf": "{mostrar_persona1} = true"
+          "visibleIf": "{mostrar_persona1} = true",
+          "title": "Foto Doc. Atras"
         },
         {
           "type": "dropdown",
           "name": "persona1_parentesco",
+          "visibleIf": "{mostrar_persona1} = true",
           "title": "Parentesco",
           "isRequired": true,
           "choices": [
@@ -635,37 +633,37 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ],
-          "visibleIf": "{mostrar_persona1} = true"
+          ]
         },
         {
           "type": "text",
           "name": "persona1_parentesco_cual",
-          "title": "Cuál Parentesco",
-          "visibleIf": "{mostrar_persona1} = true"
+          "visibleIf": "{mostrar_persona1} = true",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
           "name": "persona1_fecha_nacimiento",
+          "visibleIf": "{mostrar_persona1} = true",
           "title": "Fecha de Nacimiento\n",
           "isRequired": true,
-          "inputType": "date",
-          "visibleIf": "{mostrar_persona1} = true"
+          "inputType": "date"
         },
         {
           "type": "dropdown",
           "name": "persona1_sexo",
+          "visibleIf": "{mostrar_persona1} = true",
           "title": "Sexo",
           "isRequired": true,
           "choices": [
             "Masculino",
             "Femenino"
-          ],
-          "visibleIf": "{mostrar_persona1} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "question21",
+          "visibleIf": "{mostrar_persona1} = true",
           "title": "Estado Civil\n",
           "isRequired": true,
           "choices": [
@@ -675,12 +673,12 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ],
-          "visibleIf": "{mostrar_persona1} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "question22",
+          "visibleIf": "{mostrar_persona1} = true",
           "title": "Grupo de atención especial\n",
           "isRequired": true,
           "choices": [
@@ -694,8 +692,7 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ],
-          "visibleIf": "{mostrar_persona1} = true"
+          ]
         }
       ]
     },
@@ -706,7 +703,7 @@
         {
           "type": "html",
           "name": "persona2_question3",
-          "html": "\n<p><strong>1.1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
+          "html": "\n<p><strong>1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
         },
         {
           "type": "html",
@@ -717,19 +714,19 @@
           "type": "text",
           "name": "persona2_nombre",
           "title": "Nombre Completo",
-          "isRequired": true,
+          "isRequired": true
         },
         {
           "type": "dropdown",
           "name": "persona2_tipo_identificacion",
           "title": "Tipo de Identificación\n",
+          "isRequired": true,
           "choices": [
             "Cédula de ciudadanía",
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ],
-          "isRequired": true,
+          ]
         },
         {
           "type": "text",
@@ -741,27 +738,29 @@
         {
           "type": "text",
           "name": "persona2_fecha_expedicion_identificacion",
+          "visibleIf": "{mostrar_persona2} = true",
           "title": "Fecha de expedicion\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona2} = true"
+          "inputType": "date"
         },
         {
           "type": "file",
           "name": "persona2_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "visibleIf": "{mostrar_persona2} = true"
+          "visibleIf": "{mostrar_persona2} = true",
+          "title": "Foto Doc. Frente"
         },
         {
           "type": "file",
           "name": "persona2_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "visibleIf": "{mostrar_persona2} = true"
+          "visibleIf": "{mostrar_persona2} = true",
+          "title": "Foto Doc. Atras"
         },
         {
           "type": "dropdown",
           "name": "persona2_parentesco",
+          "visibleIf": "{mostrar_persona2} = true",
           "title": "Parentesco",
+          "isRequired": true,
           "choices": [
             "Abuelo",
             "Abuela",
@@ -772,39 +771,39 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona2} = true"
+          ]
         },
         {
           "type": "text",
           "name": "persona2_parentesco_cual",
-          "title": "Cuál Parentesco",
-          "visibleIf": "{mostrar_persona2} = true"
+          "visibleIf": "{mostrar_persona2} = true",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
           "name": "persona2_fecha_nacimiento",
-          "title": "Fecha de Nacimiento\n",
-          "inputType": "date",
           "visibleIf": "{mostrar_persona2} = true",
+          "title": "Fecha de Nacimiento\n",
           "isRequired": true,
+          "inputType": "date"
         },
         {
           "type": "dropdown",
           "name": "persona2_sexo",
+          "visibleIf": "{mostrar_persona2} = true",
           "title": "Sexo",
+          "isRequired": true,
           "choices": [
             "Masculino",
             "Femenino"
-          ],
-          "visibleIf": "{mostrar_persona2} = true",
-          "isRequired": true,
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona2_estado_civil",
+          "visibleIf": "{mostrar_persona2} = true",
           "title": "Estado Civil\n",
+          "isRequired": true,
           "choices": [
             "Soltero(a)",
             "Casado (a)",
@@ -812,14 +811,14 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ],
-          "visibleIf": "{mostrar_persona2} = true",
-          "isRequired": true,
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona2_atencion_especial",
+          "visibleIf": "{mostrar_persona2} = true",
           "title": "Grupo de atención especial\n",
+          "isRequired": true,
           "choices": [
             "Desplazados",
             "Retornado",
@@ -831,9 +830,7 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ],
-          "visibleIf": "{mostrar_persona2} = true",
-          "isRequired": true,
+          ]
         }
       ]
     },
@@ -844,7 +841,7 @@
         {
           "type": "html",
           "name": "persona3_question3",
-          "html": "\n<p><strong>1.1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
+          "html": "\n<p><strong>1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
         },
         {
           "type": "html",
@@ -861,13 +858,13 @@
           "type": "dropdown",
           "name": "persona3_tipo_identificacion",
           "title": "Tipo de Identificación\n",
+          "isRequired": true,
           "choices": [
             "Cédula de ciudadanía",
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ],
-          "isRequired": true
+          ]
         },
         {
           "type": "text",
@@ -879,29 +876,29 @@
         {
           "type": "text",
           "name": "persona3_fecha_expedicion_identificacion",
+          "visibleIf": "{mostrar_persona3} = true",
           "title": "Fecha de expedicion\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona3} = true"
+          "inputType": "date"
         },
         {
           "type": "file",
           "name": "persona3_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "visibleIf": "{mostrar_persona3} = true"
+          "visibleIf": "{mostrar_persona3} = true",
+          "title": "Foto Doc. Frente"
         },
         {
           "type": "file",
           "name": "persona3_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "visibleIf": "{mostrar_persona3} = true"
+          "visibleIf": "{mostrar_persona3} = true",
+          "title": "Foto Doc. Atras"
         },
         {
           "type": "dropdown",
           "name": "persona3_parentesco",
+          "visibleIf": "{mostrar_persona3} = true",
           "title": "Parentesco",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona3} = true",
           "choices": [
             "Abuelo",
             "Abuela",
@@ -922,26 +919,28 @@
         {
           "type": "text",
           "name": "persona3_fecha_nacimiento",
+          "visibleIf": "{mostrar_persona3} = true",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona3} = true"
+          "inputType": "date"
         },
         {
           "type": "dropdown",
           "name": "persona3_sexo",
+          "visibleIf": "{mostrar_persona3} = true",
           "title": "Sexo",
+          "isRequired": true,
           "choices": [
             "Masculino",
             "Femenino"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona3} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona3_estado_civil",
+          "visibleIf": "{mostrar_persona3} = true",
           "title": "Estado Civil\n",
+          "isRequired": true,
           "choices": [
             "Soltero(a)",
             "Casado (a)",
@@ -949,14 +948,14 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona3} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona3_atencion_especial",
+          "visibleIf": "{mostrar_persona3} = true",
           "title": "Grupo de atención especial\n",
+          "isRequired": true,
           "choices": [
             "Desplazados",
             "Retornado",
@@ -968,9 +967,7 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona3} = true"
+          ]
         }
       ]
     },
@@ -981,7 +978,7 @@
         {
           "type": "html",
           "name": "persona4_question3",
-          "html": "\n<p><strong>1.1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
+          "html": "\n<p><strong>1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
         },
         {
           "type": "html",
@@ -998,13 +995,13 @@
           "type": "dropdown",
           "name": "persona4_tipo_identificacion",
           "title": "Tipo de Identificación\n",
+          "isRequired": true,
           "choices": [
             "Cédula de ciudadanía",
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ],
-          "isRequired": true
+          ]
         },
         {
           "type": "text",
@@ -1016,29 +1013,29 @@
         {
           "type": "text",
           "name": "persona4_fecha_expedicion_identificacion",
+          "visibleIf": "{mostrar_persona4} = true",
           "title": "Fecha de expedicion\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona4} = true"
+          "inputType": "date"
         },
         {
           "type": "file",
           "name": "persona4_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "visibleIf": "{mostrar_persona4} = true"
+          "visibleIf": "{mostrar_persona4} = true",
+          "title": "Foto Doc. Frente"
         },
         {
           "type": "file",
           "name": "persona4_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "visibleIf": "{mostrar_persona4} = true"
+          "visibleIf": "{mostrar_persona4} = true",
+          "title": "Foto Doc. Atras"
         },
         {
           "type": "dropdown",
           "name": "persona4_parentesco",
+          "visibleIf": "{mostrar_persona4} = true",
           "title": "Parentesco",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona4} = true",
           "choices": [
             "Abuelo",
             "Abuela",
@@ -1059,26 +1056,28 @@
         {
           "type": "text",
           "name": "persona4_fecha_nacimiento",
+          "visibleIf": "{mostrar_persona4} = true",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona4} = true"
+          "inputType": "date"
         },
         {
           "type": "dropdown",
           "name": "persona4_sexo",
+          "visibleIf": "{mostrar_persona4} = true",
           "title": "Sexo",
+          "isRequired": true,
           "choices": [
             "Masculino",
             "Femenino"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona4} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona4_estado_civil",
+          "visibleIf": "{mostrar_persona4} = true",
           "title": "Estado Civil\n",
+          "isRequired": true,
           "choices": [
             "Soltero(a)",
             "Casado (a)",
@@ -1086,14 +1085,14 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona4} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona4_atencion_especial",
+          "visibleIf": "{mostrar_persona4} = true",
           "title": "Grupo de atención especial\n",
+          "isRequired": true,
           "choices": [
             "Desplazados",
             "Retornado",
@@ -1105,9 +1104,7 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona4} = true"
+          ]
         }
       ]
     },
@@ -1134,13 +1131,13 @@
           "type": "dropdown",
           "name": "persona5_tipo_identificacion",
           "title": "Tipo de Identificación\n",
+          "isRequired": true,
           "choices": [
             "Cédula de ciudadanía",
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ],
-          "isRequired": true
+          ]
         },
         {
           "type": "text",
@@ -1152,27 +1149,29 @@
         {
           "type": "text",
           "name": "persona5_fecha_expedicion_identificacion",
+          "visibleIf": "{mostrar_persona5} = true",
           "title": "Fecha de expedicion\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona5} = true"
+          "inputType": "date"
         },
         {
           "type": "file",
           "name": "persona5_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "visibleIf": "{mostrar_persona5} = true"
+          "visibleIf": "{mostrar_persona5} = true",
+          "title": "Foto Doc. Frente"
         },
         {
           "type": "file",
           "name": "persona5_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "visibleIf": "{mostrar_persona5} = true"
+          "visibleIf": "{mostrar_persona5} = true",
+          "title": "Foto Doc. Atras"
         },
         {
           "type": "dropdown",
           "name": "persona5_parentesco",
+          "visibleIf": "{mostrar_persona5} = true",
           "title": "Parentesco",
+          "isRequired": true,
           "choices": [
             "Abuelo",
             "Abuela",
@@ -1183,39 +1182,39 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona5} = true"
+          ]
         },
         {
           "type": "text",
           "name": "persona5_parentesco_cual",
-          "title": "Cuál Parentesco",
-          "visibleIf": "{mostrar_persona5} = true"
+          "visibleIf": "{mostrar_persona5} = true",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
           "name": "persona5_fecha_nacimiento",
+          "visibleIf": "{mostrar_persona5} = true",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona5} = true"
+          "inputType": "date"
         },
         {
           "type": "dropdown",
           "name": "persona5_sexo",
+          "visibleIf": "{mostrar_persona5} = true",
           "title": "Sexo",
+          "isRequired": true,
           "choices": [
             "Masculino",
             "Femenino"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona5} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona5_estado_civil",
+          "visibleIf": "{mostrar_persona5} = true",
           "title": "Estado Civil\n",
+          "isRequired": true,
           "choices": [
             "Soltero(a)",
             "Casado (a)",
@@ -1223,14 +1222,14 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona5} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona5_atencion_especial",
+          "visibleIf": "{mostrar_persona5} = true",
           "title": "Grupo de atención especial\n",
+          "isRequired": true,
           "choices": [
             "Desplazados",
             "Retornado",
@@ -1242,9 +1241,7 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona5} = true"
+          ]
         }
       ]
     },
@@ -1272,13 +1269,13 @@
           "type": "dropdown",
           "name": "persona6_tipo_identificacion",
           "title": "Tipo de Identificación\n",
+          "isRequired": true,
           "choices": [
             "Cédula de ciudadanía",
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ],
-          "isRequired": true
+          ]
         },
         {
           "type": "text",
@@ -1290,29 +1287,29 @@
         {
           "type": "text",
           "name": "persona6_fecha_expedicion_identificacion",
-          "title": "Fecha de expedicion\n",
-          "inputType": "date",
-          "isRequired": true,
           "visibleIf": "{mostrar_persona6} = true",
+          "title": "Fecha de expedicion\n",
+          "isRequired": true,
+          "inputType": "date"
         },
         {
           "type": "file",
           "name": "persona6_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "visibleIf": "{mostrar_persona6} = true"
+          "visibleIf": "{mostrar_persona6} = true",
+          "title": "Foto Doc. Frente"
         },
         {
           "type": "file",
           "name": "persona6_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "visibleIf": "{mostrar_persona6} = true"
+          "visibleIf": "{mostrar_persona6} = true",
+          "title": "Foto Doc. Atras"
         },
         {
           "type": "dropdown",
           "name": "persona6_parentesco",
+          "visibleIf": "{mostrar_persona6} = true",
           "title": "Parentesco",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona6} = true",
           "choices": [
             "Abuelo",
             "Abuela",
@@ -1328,16 +1325,16 @@
         {
           "type": "text",
           "name": "persona6_parentesco_cual",
-          "title": "Cuál Parentesco",
           "visibleIf": "{mostrar_persona6} = true",
+          "title": "Cuál Parentesco"
         },
         {
           "type": "text",
           "name": "persona6_fecha_nacimiento",
+          "visibleIf": "{mostrar_persona6} = true",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona6} = true"
+          "inputType": "date"
         },
         {
           "type": "dropdown",
@@ -1351,7 +1348,9 @@
         {
           "type": "dropdown",
           "name": "persona6_estado_civil",
+          "visibleIf": "{mostrar_persona6} = true",
           "title": "Estado Civil\n",
+          "isRequired": true,
           "choices": [
             "Soltero(a)",
             "Casado (a)",
@@ -1359,14 +1358,14 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona6} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona6_atencion_especial",
+          "visibleIf": "{mostrar_persona6} = true",
           "title": "Grupo de atención especial\n",
+          "isRequired": true,
           "choices": [
             "Desplazados",
             "Retornado",
@@ -1378,9 +1377,7 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona6} = true"
+          ]
         }
       ]
     },
@@ -1391,7 +1388,7 @@
         {
           "type": "html",
           "name": "persona7_question3",
-          "html": "\n<p><strong>1.1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
+          "html": "\n<p><strong>1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
         },
         {
           "type": "html",
@@ -1408,13 +1405,13 @@
           "type": "dropdown",
           "name": "persona7_tipo_identificacion",
           "title": "Tipo de Identificación\n",
+          "isRequired": true,
           "choices": [
             "Cédula de ciudadanía",
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ],
-          "isRequired": true
+          ]
         },
         {
           "type": "text",
@@ -1426,27 +1423,29 @@
         {
           "type": "text",
           "name": "persona7_fecha_expedicion_identificacion",
+          "visibleIf": "{mostrar_persona7} = true",
           "title": "Fecha de expedicion\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona7} = true"
+          "inputType": "date"
         },
         {
           "type": "file",
           "name": "persona7_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "visibleIf": "{mostrar_persona7} = true"
+          "visibleIf": "{mostrar_persona7} = true",
+          "title": "Foto Doc. Frente"
         },
         {
           "type": "file",
           "name": "persona7_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "visibleIf": "{mostrar_persona7} = true"
+          "visibleIf": "{mostrar_persona7} = true",
+          "title": "Foto Doc. Atras"
         },
         {
           "type": "dropdown",
           "name": "persona7_parentesco",
+          "visibleIf": "{mostrar_persona7} = true",
           "title": "Parentesco",
+          "isRequired": true,
           "choices": [
             "Abuelo",
             "Abuela",
@@ -1457,40 +1456,40 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona7} = true"
+          ]
         },
         {
           "type": "text",
           "name": "persona7_parentesco_cual",
+          "visibleIf": "{mostrar_persona7} = true",
           "title": "Cuál Parentesco",
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona7} = true"
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona7_fecha_nacimiento",
+          "visibleIf": "{mostrar_persona7} = true",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona7} = true"
+          "inputType": "date"
         },
         {
           "type": "dropdown",
           "name": "persona7_sexo",
+          "visibleIf": "{mostrar_persona7} = true",
           "title": "Sexo",
+          "isRequired": true,
           "choices": [
             "Masculino",
             "Femenino"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona7} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona7_estado_civil",
+          "visibleIf": "{mostrar_persona7} = true",
           "title": "Estado Civil\n",
+          "isRequired": true,
           "choices": [
             "Soltero(a)",
             "Casado (a)",
@@ -1498,14 +1497,14 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona7} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona7_atencion_especial",
+          "visibleIf": "{mostrar_persona7} = true",
           "title": "Grupo de atención especial\n",
+          "isRequired": true,
           "choices": [
             "Desplazados",
             "Retornado",
@@ -1517,9 +1516,7 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona7} = true"
+          ]
         }
       ]
     },
@@ -1530,7 +1527,7 @@
         {
           "type": "html",
           "name": "persona8_question3",
-          "html": "\n<p><strong>1.1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
+          "html": "\n<p><strong>1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
         },
         {
           "type": "html",
@@ -1547,13 +1544,13 @@
           "type": "dropdown",
           "name": "persona8_tipo_identificacion",
           "title": "Tipo de Identificación\n",
+          "isRequired": true,
           "choices": [
             "Cédula de ciudadanía",
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ],
-          "isRequired": true
+          ]
         },
         {
           "type": "text",
@@ -1565,27 +1562,29 @@
         {
           "type": "text",
           "name": "persona8_fecha_expedicion_identificacion",
+          "visibleIf": "{mostrar_persona8} = true",
           "title": "Fecha de expedicion\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona8} = true"
+          "inputType": "date"
         },
         {
           "type": "file",
           "name": "persona8_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "visibleIf": "{mostrar_persona8} = true"
+          "visibleIf": "{mostrar_persona8} = true",
+          "title": "Foto Doc. Frente"
         },
         {
           "type": "file",
           "name": "persona8_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "visibleIf": "{mostrar_persona8} = true"
+          "visibleIf": "{mostrar_persona8} = true",
+          "title": "Foto Doc. Atras"
         },
         {
           "type": "dropdown",
           "name": "persona8_parentesco",
+          "visibleIf": "{mostrar_persona8} = true",
           "title": "Parentesco",
+          "isRequired": true,
           "choices": [
             "Abuelo",
             "Abuela",
@@ -1596,40 +1595,40 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona8} = true"
+          ]
         },
         {
           "type": "text",
           "name": "persona8_parentesco_cual",
+          "visibleIf": "{mostrar_persona8} = true",
           "title": "Cuál Parentesco",
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona8} = true"
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona8_fecha_nacimiento",
+          "visibleIf": "{mostrar_persona8} = true",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona8} = true"
+          "inputType": "date"
         },
         {
           "type": "dropdown",
           "name": "persona8_sexo",
+          "visibleIf": "{mostrar_persona8} = true",
           "title": "Sexo",
+          "isRequired": true,
           "choices": [
             "Masculino",
             "Femenino"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona8} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona8_estado_civil",
+          "visibleIf": "{mostrar_persona8} = true",
           "title": "Estado Civil\n",
+          "isRequired": true,
           "choices": [
             "Soltero(a)",
             "Casado (a)",
@@ -1637,14 +1636,14 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona8} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona8_atencion_especial",
+          "visibleIf": "{mostrar_persona8} = true",
           "title": "Grupo de atención especial\n",
+          "isRequired": true,
           "choices": [
             "Desplazados",
             "Retornado",
@@ -1656,9 +1655,7 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona8} = true"
+          ]
         }
       ]
     },
@@ -1669,7 +1666,7 @@
         {
           "type": "html",
           "name": "persona9_question3",
-          "html": "\n<p><strong>1.1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
+          "html": "\n<p><strong>1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
         },
         {
           "type": "html",
@@ -1686,13 +1683,13 @@
           "type": "dropdown",
           "name": "persona9_tipo_identificacion",
           "title": "Tipo de Identificación\n",
+          "isRequired": true,
           "choices": [
             "Cédula de ciudadanía",
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ],
-          "isRequired": true
+          ]
         },
         {
           "type": "text",
@@ -1704,27 +1701,29 @@
         {
           "type": "text",
           "name": "persona9_fecha_expedicion_identificacion",
+          "visibleIf": "{mostrar_persona9} = true",
           "title": "Fecha de expedicion\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona9} = true"
+          "inputType": "date"
         },
         {
           "type": "file",
           "name": "persona9_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "visibleIf": "{mostrar_persona9} = true"
+          "visibleIf": "{mostrar_persona9} = true",
+          "title": "Foto Doc. Frente"
         },
         {
           "type": "file",
           "name": "persona9_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "visibleIf": "{mostrar_persona9} = true"
+          "visibleIf": "{mostrar_persona9} = true",
+          "title": "Foto Doc. Atras"
         },
         {
           "type": "dropdown",
           "name": "persona9_parentesco",
+          "visibleIf": "{mostrar_persona9} = true",
           "title": "Parentesco",
+          "isRequired": true,
           "choices": [
             "Abuelo",
             "Abuela",
@@ -1735,40 +1734,40 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona9} = true"
+          ]
         },
         {
           "type": "text",
           "name": "persona9_parentesco_cual",
+          "visibleIf": "{mostrar_persona9} = true",
           "title": "Cuál Parentesco",
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona9} = true"
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona9_fecha_nacimiento",
+          "visibleIf": "{mostrar_persona9} = true",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona9} = true"
+          "inputType": "date"
         },
         {
           "type": "dropdown",
           "name": "persona9_sexo",
+          "visibleIf": "{mostrar_persona9} = true",
           "title": "Sexo",
+          "isRequired": true,
           "choices": [
             "Masculino",
             "Femenino"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona9} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona9_estado_civil",
+          "visibleIf": "{mostrar_persona9} = true",
           "title": "Estado Civil\n",
+          "isRequired": true,
           "choices": [
             "Soltero(a)",
             "Casado (a)",
@@ -1776,14 +1775,14 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona9} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona9_atencion_especial",
+          "visibleIf": "{mostrar_persona9} = true",
           "title": "Grupo de atención especial\n",
+          "isRequired": true,
           "choices": [
             "Desplazados",
             "Retornado",
@@ -1795,9 +1794,7 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona9} = true"
+          ]
         }
       ]
     },
@@ -1808,7 +1805,7 @@
         {
           "type": "html",
           "name": "persona10_question3",
-          "html": "\n<p><strong>1.1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
+          "html": "\n<p><strong>1.2 Personas que componen el núcleo familiar \n</strong> (personas que dependan económica y convivan con usted, esta información es sujeta de verificación con SISBEN o cualquier otra herramienta equivalente)</p>"
         },
         {
           "type": "html",
@@ -1826,13 +1823,13 @@
           "type": "dropdown",
           "name": "persona10_tipo_identificacion",
           "title": "Tipo de Identificación\n",
+          "isRequired": true,
           "choices": [
             "Cédula de ciudadanía",
             "Pasaporte",
             "Permiso especial de permanencia",
             "Otro"
-          ],
-          "isRequired": true
+          ]
         },
         {
           "type": "text",
@@ -1844,27 +1841,29 @@
         {
           "type": "text",
           "name": "persona10_fecha_expedicion_identificacion",
+          "visibleIf": "{mostrar_persona10} = true",
           "title": "Fecha de expedicion\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona10} = true"
+          "inputType": "date"
         },
         {
           "type": "file",
           "name": "persona10_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "visibleIf": "{mostrar_persona10} = true"
+          "visibleIf": "{mostrar_persona10} = true",
+          "title": "Foto Doc. Frente"
         },
         {
           "type": "file",
           "name": "persona10_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "visibleIf": "{mostrar_persona10} = true"
+          "visibleIf": "{mostrar_persona10} = true",
+          "title": "Foto Doc. Atras"
         },
         {
           "type": "dropdown",
           "name": "persona10_parentesco",
+          "visibleIf": "{mostrar_persona10} = true",
           "title": "Parentesco",
+          "isRequired": true,
           "choices": [
             "Abuelo",
             "Abuela",
@@ -1875,40 +1874,40 @@
             "Esposo(a)",
             "Compañero(a) permanente",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona10} = true"
+          ]
         },
         {
           "type": "text",
           "name": "persona10_parentesco_cual",
+          "visibleIf": "{mostrar_persona10} = true",
           "title": "Cuál Parentesco",
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona10} = true"
+          "isRequired": true
         },
         {
           "type": "text",
           "name": "persona10_fecha_nacimiento",
+          "visibleIf": "{mostrar_persona10} = true",
           "title": "Fecha de Nacimiento\n",
-          "inputType": "date",
           "isRequired": true,
-          "visibleIf": "{mostrar_persona10} = true"
+          "inputType": "date"
         },
         {
           "type": "dropdown",
           "name": "persona10_sexo",
+          "visibleIf": "{mostrar_persona10} = true",
           "title": "Sexo",
+          "isRequired": true,
           "choices": [
             "Masculino",
             "Femenino"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona10} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona10_estado_civil",
+          "visibleIf": "{mostrar_persona10} = true",
           "title": "Estado Civil\n",
+          "isRequired": true,
           "choices": [
             "Soltero(a)",
             "Casado (a)",
@@ -1916,14 +1915,14 @@
             "Viudo(a)",
             "Unión libre",
             "Otro"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona10} = true"
+          ]
         },
         {
           "type": "dropdown",
           "name": "persona10_atencion_especial",
+          "visibleIf": "{mostrar_persona10} = true",
           "title": "Grupo de atención especial\n",
+          "isRequired": true,
           "choices": [
             "Desplazados",
             "Retornado",
@@ -1935,9 +1934,7 @@
             "Palenquero",
             "Raizal",
             "Campesinado"
-          ],
-          "isRequired": true,
-          "visibleIf": "{mostrar_persona10} = true"
+          ]
         }
       ]
     },
@@ -1947,7 +1944,7 @@
         {
           "type": "comment",
           "name": "question9",
-          "title": "1.1. 3. Caracterización productiva del núcleo familiar",
+          "title": "1. 3. Caracterización productiva del núcleo familiar",
           "description": "Indique cuáles son las actividades económicas que desarrolla el núcleo familiar"
         }
       ]
@@ -1958,7 +1955,41 @@
         {
           "type": "html",
           "name": "question8",
-          "html": "<span style=\"font-weight: 999;\">1.2. Predio Objetivo de intervención </span>\n<p><strong>1.2.1. Ubicación del predio\n</strong>( Indique las características que permitan georeferenciar e individualizar plenamente el predio objeto de intervención, en el cual usted cuenta con los cultivos de uso ilícito) </p>"
+          "html": "<span style=\"font-weight: 999;\">2. Predio Objetivo de intervención </span>\n<p><strong>2.1.</strong> Ubicación del predio con cultivos de uso ilícito.  Indique las características que permitan georreferenciar e individualizar plenamente el predio objeto de intervención, en el cual usted cuenta con los cultivos de uso ilícito</p>"
+        },
+        {
+          "type": "radiogroup",
+          "name": "desplazado_nuevo_predio",
+          "title": "Si se encuentra en condición de desplazamiento forzado tiene un nuevo predio para proyecto productivo ",
+          "isRequired": true,
+          "choices": [
+            "Si",
+            "No"
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "desplazado_departamento",
+          "visibleIf": "{desplazado_nuevo_predio} = 'Si'",
+          "title": "Departamento",
+          "choices": [
+            {
+              "value": "Si",
+              "text": "Sin departamento"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "desplazado_municipio",
+          "visibleIf": "{desplazado_nuevo_predio} = 'Si'",
+          "title": "Municipio",
+          "choices": [
+            {
+              "value": "Si",
+              "text": "Sin municipio"
+            }
+          ]
         },
         {
           "type": "dropdown",
@@ -5090,12 +5121,12 @@
         {
           "type": "html",
           "name": "question10",
-          "html": "<span style=\"font-weight: 999;\">1.3.  Economía de sustitución de cultivos de uso ilícito</span>"
+          "html": "<span style=\"font-weight: 999;\">3.  Economía de sustitución de cultivos de uso ilícito</span>"
         },
         {
           "type": "text",
           "name": "linea_productiva",
-          "title": "Línea productiva de intervención\n",
+          "title": "Línea productiva de intervención\n"
         },
         {
           "type": "dropdown",
@@ -5137,8 +5168,11 @@
           "name": "tipo_figura_organizativa",
           "title": "Tipo de figura organizativa",
           "choices": [
-            "Tipo 1",
-            "Tipo 2"
+            "Organización",
+            "Asociación",
+            "JAC",
+            "Cooperativa",
+            "Grupo étnico"
           ]
         },
         {
@@ -5164,6 +5198,7 @@
         {
           "type": "file",
           "name": "documento_pertenencia_etnica_file",
+          "visibleIf": "{documento_pertenencia_etnica_anexa} = 'si'",
           "title": "Documento pertenencia"
         }
       ]
@@ -5171,6 +5206,46 @@
     {
       "name": "page17",
       "elements": [
+        {
+          "type": "html",
+          "name": "question4",
+          "html": "<h4>1. TÉRMINOS Y CONDICIONES PARA PROCESOSDE SUSTITUCIÓN DE CULTIVOS DE USO ILÍCITO</h4>"
+        },
+        {
+          "type": "html",
+          "name": "question12",
+          "html": "<p><strong>2.1. Compromisos del núcleo familiar participante del proceso de sustitución</strong></p>\n<p>Yo en nombre propio y en nombre y representación de las personas incluidas en este formulario como parte de minúcleo familiar\ndeclaro que: </p>\n\n<p>\n<ul>\n<li> - Pertenecemos al mismo núcleo familiar. </li>\n<li> - Entendemos que salvo entre los miembros del grupo familiar aquí preinscritos, las prerrogativas y obligaciones surgidas del proceso de\nsustitución no son transmisibles a ningún título.</li>\n<li> - No nos inscribiremos, además de la presente, ni individual ni colectivamente, en este u otro programa o proceso de sustitución mientras que\nhagamos parte de este núcleo familiar.\n</li><li>  - No tenemos vínculo bajo ninguna calidad (titular-beneficiario- proveedor) con elPrograma Nacional Integral de Sustitución de Cultivos de Uso\nIlícito (PNIS), u otros programas o procesos de sustitución de cultivos de uso ilícito a la fecha de suscripción del presente documento.\n</li><li> - Contamos con arraigo en el municipio de ____ acreditado por autoridad competente u organismo de acción comunal, o quienes hagan sus veces.\n</li><li>  - Ninguna persona del núcleo familiar aquí inscrito está condenadapor delitos de narcotráfico o conexos (Capítulo II, Título XIII, Libro Segundo\ndel Código Penal colombiano).\n</li><li>  - Ninguna persona del núcleo familiar, aquí inscrito, es funcionario público, contratista del Estado o maneja recursos públicos a ningún título.</li>\n<li> - La implementación del proceso de sustitución de cultivos de uso ilícito conlleva la eliminación de raíz de la totalidad del área sembrada de cultivos de uso ilícito, que corresponde a__[este campo es una pregunta de control y debe sumar lo mismo que la pregunta sobre cuántas hectáreas tiene en cada uno de los predios objeto de intervención]__ hectáreas cultivos de uso ilícito con corte a la fecha de suscripción del presente documento. \n</li>\n<li> - El predio en el que realizaremos la implementación del proceso de sustitución de cultivos de uso ilícito no pertenece a la categoría de bien\nfiscal o de uso de una entidad pública. </li>\n</ul>\n</p>\n<br>\n<p><strong>Nos comprometemos a:</strong></p>\n<br>\n<ul>\n<li>\n- Arrancar de raíz la totalidad del área sembrada de los cultivos de uso ilícito en el predio objeto de sustitución de cultivos de uso ilícito y/o intervención, en el periodo que determine la DSCI y adelantar el consecuente establecimiento y/o fortalecimiento de la línea productiva, forestal y/o de la biodiversidad de sustitución de economías.\n</li>\n<li>\n- No resembrar cultivos de uso ilícito en el predio objeto de intervención o sembrar en otros predios.\n</li>\n<li>\n- No propiciar, participaro promocionar en ningún grado en la comisión de conductas asociadas a economías ilícitas o conexas, a partir de la\nsuscripción de este documento.\n</li>\n<li>\n-Acreditar sumariamente la propiedad, posesión u ocupación de buena fe exenta de culpa del predio objeto de sustitución de cultivos de uso ilícito y/o intervención en los 30 días siguientes a la suscripción del presente documento. \n</li>\n<li>\n- Implementar la(s) alternativa(s) productiva(s) ambientalmente sostenibles y lícita(s) en el predio objeto de sustitución de cultivos de uso ilícito a la fecha de suscripción del presente documento y conservarlo durante al menos 5 años posteriores al inicio de actividades de implementación. \n</li>\n<li>\n- Permitir, cuando sea debidamente requerido, el ingreso al predio y facilitar la caracterización predial, las validaciones y monitoreo de presencia de cultivos de uso ilícito en el predio objeto de sustitución de cultivos de uso ilícito y/o intervención de acuerdo con el Sistema Integrado de Monitoreo de Cultivos de Uso Ilícito y demás mecanismos de verificación que el Estado en cabeza de la DSCI pueda definir. \n</li>\n<li>\n- Participar activamente y realizar las actividades que se requieran para acceder a las alternativas de sustitución de ingresos y de economías\nen el/los predio (s) indicadas por el equipo de Asistencia Técnica Integral, para el adecuado desarrollo de la línea productiva, forestal y/o de la\nbiodiversidad seleccionada.\n</li>\n<li>\n - Hacer uso adecuado de los bienes y servicios entregados durante la intervención y orientados a la implementación de la(s) alt ernativa(s)\nproductiva(s). Lo anterior incluye no donar, no vender y/o permutar las cualquiera de las herramientas, recursos, insumos, infraestructuras y\ndemás bienes y servicios entregados en el marco del proceso de sustitución, así como no utilizarlos para fines ilícitos.\n</li>\n<li>\n- Suministrar información veraz en cada etapa del proceso de tránsito a las economías licitas, respecto a aquellos aspectos que puedan afectar\nel cumplimiento de los compromisos señaladosy/o derivados del Acuerdo de Sustitución del municipio de __[este campo debe ser automático\nsegún lo que se diligencie en la parte superior en relación con el municipio] __.\n</li>\n<li>\n- Incluir en cualquier negocio jurídico que pretenda tramitar o transmitir el uso, goce o disposición del predio objeto de intervención, una\ncláusula que obligue al adquirente, tenedor, usufructuario u ocupante, que, ante la presencia de cultivos de uso ilícito, procederá la\nerradicación forzosa en cabeza del Estado colombiano.\n</li>\n</ul>"
+        }
+      ]
+    },
+    {
+      "name": "page21",
+      "elements": [
+        {
+          "type": "html",
+          "name": "question16",
+          "html": "<p><strong>2.2 Compromisos de la Dirección de Sustitución de Cultivos de Uso Ilícito\n</strong></p>\n<BR>\n<ul>\n<li>\n- Garantizar los medios necesarios para el cumplimiento de los compromisos asumidos para el proceso de tránsito a economías lícitas en el\nmarco de esta ficha individual y el Acuerdo de Sustitución de Cultivos de Uso Ilícito.\n</li>\n<li>\n-Verificar la información suministrada por el núcleo familiar en el proceso de inscripción para validar el cumplimiento de los requisitos y\ncriterios de acceso al proceso de sustitución de cultivos de uso ilícito.\n</li>\n<li>\n-Informar de manera clara y oportuna a cada núcleo familiar sobre cualquier aspecto relevante del proceso de sustitución de cultivos de uso\nilícito\n</li>\n<li>\n-Identificar y establecer la línea base de cultivos de uso ilícito en los municipios focalizados, núcleos veredales ponderados y las veredas a\nintervenir y el/los predio(s) a intervenir\n</li>\n<li>\n-Realizar el monitoreo para la verificación de la eliminación total del área sembrada de los cultivos de uso ilícito referidos por el núcleo familiar\nfirmante como compromiso de erradicación voluntaria e inicio de la implementación del proceso de sustitución.\n</li>\n<li>\n-Implementar medidas diferenciales para promover la participación y agenciamiento de las mujeres y la población juvenil durante su tránsito\ny permanencia en las economías lícitas.\n</li>\n</ul>"
+        },
+        {
+          "type": "html",
+          "name": "question13",
+          "html": "<p><strong>2.2.1. Compromisos frente a los procesos de sustitución \n</strong></p>\n<br>\n<p>\nLa Dirección de Sustitución de Cultivos de Uso Ilícito (DSCI), de la Agencia de Renovación del Territorio (ART) propone como componentes del proceso de sustitución de cultivos de uso ilícito para la intervención en el marco de la Convocatoria RenHacemos Catatumbo, para los municipios de Convención, Tibú, El Tarra y Sardinata de Norte de Santander.  \n</p>\n<br>\n<p>\n<strong>\n\n(i) Pago por la eliminación de cultivos de uso ilícito\n</strong>\n<br>\n<br>\nDurante el periodo permitido para la implementación de las medidas de conmoción interior declarado para la Región del Catatumbo, se otorgará una transferencia mensual por valor de un millón doscientos ochenta mil pesos ($1.280.000), los pagos estarán condicionados a:  \n</p>\n<br>\n<ul>\n<li>\n- La suscripción del compromiso de desvinculación del circuito económico basado en cultivos de uso ilícito y transitar a una economía lícita; además de la caracterización del lote de cultivos de uso ilícito. \n</li>\n<li>\n- Eliminación del cultivo de uso lícito de raíz de acuerdo con los plazos y condiciones que para ese efecto determine la DSCI,  \n</li>\n<li>\n- Una vez finalizado el periodo de implementación de las medidas de conmoción, los núcleos familiares continuarán un componente de transferencias a través de la estrategia Renhacemos Catatumbo por concepto de mano de obra y alistamiento del proyecto productivo . para lo cual se le otorgará una transferencia mensual por valor de un millón doscientos ochenta mil pesos ($1.280.000) hasta completar doce meses. \n</li>\n<li>\n- En caso de encontrarse en áreas de especial interés ambiental se aplicarán incentivos en forma de pago por servicios ambientales para las familias que se comprometan con la transformación ecológica y productiva para la sustitución de cultivos de uso ilícito basados en la implementación de sistemas agroforestales y otros, incluyendo los orientados a seguridad alimentaria y alternativas productivas sostenibles, que generen cadenas de valor sostenibles como alternativas de ingreso lícitos en el corto y mediano plazo. \n</li>\n</ul>\n<br>\n<p>\n<strong>(ii) inicio o fortalecimiento de una economía licita, para lo cual el Estado, a través de las entidades competentes, hará la entrega de activos productivos, maquinaria y asistencia técnica necesaria. </strong>\n</p>\n\n<br>\n<ul>\n<li>\n- <strong>Adquisición de activos productivos (bienes y/o insumos) </strong>\n<br>\nA partir de la caracterización del predio, se iniciará con el acompañamiento técnico para la toma de muestras del suelo, la formulación del plan de inversión que contempla la implementación de las actividades necesarias para la recuperación del suelo, la entrega del material vegetal/animal y los insumos productivos necesarios y se lleva a cabo el establecimiento y/o fortalecimiento de la alternativa productiva sostenible. En caso de encontrarse en áreas de especial interés ambiental se promoverá la implementación de sistemas agroforestales y otros, incluyendo los orientados a seguridad alimentaria y alternativas productivas sostenibles.  \n</li>\n<li>\n - <strong>Afianzamiento de la cadena de valor </strong>\n<br>\nDurante 12 meses, en aras de afianzar la economía lícita los núcleos familiares se fortalecerán las alternativas productivas sostenibles que generen ingresos legales y se realizarán las actividades propias de las cadenas de valor de las líneas productivas seleccionadas. Para ello, se implementará un componente de asistencia técnica para fortalecer las capacidades productivas de los núcleos familiares en todos los eslabones de la cadena de valor, particularmente, en aspectos relacionados con la formalización, el mejoramiento de capacidades empresariales en desarrollo de la economía popular, el fortalecimiento de la asociatividad, los encadenamientos comerciales y el modelo de negocio asociativo para la transformación ecológica y productiva de los productores o grupo de productores.\n</li>\n<li>\n- <strong>Empresas agroindustriales y negocios verdes </strong>\n<br>\n\nDurante 12 meses se llevará a cabo la implementación de  procesos de producción primaria para generar cadenas de negocios verdes y procesos de transformación agroindustrial de materia prima y la diversificación de los productos, a través de modelos de negocio asociativo para la transformación y comercialización, el cual podrá operar bajo la modalidad de alianza público-popular o público-privado-popular en los municipios de El Tarra, Convención, Tibú y Sardinata del departamento de Norte de Santander .\n</li>\n<li>\n- <strong>Formalización de tierras y derechos territoriales </strong> <br>\n\nCon el fin de contribuir a la estabilización social, económica y productiva de los núcleos familiares sujetos de procesos de sustitución de cultivos de uso ilícito, la Agencia Nacional de Tierras priorizará los procesos de formalización de la propiedad privada, la adjudicación de bienes baldíos de la Nación y la regularización de la ocupación campesina en áreas inadjudicables, siempre y cuando estas no correspondan a la categoría de territorios colectivos o estén incluidas en procesos de ampliación de los mismos Cuando la adjudicación o el reconocimiento de derechos, en cualquier modalidad, recaiga sobre áreas con presencia de cultivos de uso ilícito, los beneficiarios estarán obligados a sustituirlos como requisito para conservar el derecho otorgado. Esta condición quedará formalizada en el acuerdo de sustitución correspondiente y su incumplimiento dará como resultado la caducidad del derecho reconocido.   \n</li>\n</ul>\n<br>\n<p>\n\n\n<br>\n<p>En el caso que los núcleos familiares se encuentren asentados en áreas de la Reserva de Ley 2 de 1959, se adelantarán los procesos relacionados con\nlos derechos territoriales de que trata el Decreto 1147 de 2024.</p>"
+        },
+        {
+          "type": "html",
+          "name": "question17",
+          "html": "<h5>\n2. CAUSALES DE SUSPENSIÓN Y DE EXCLUSIÓN DEL PROCESO DE SUSTITUCIÓN \n</h5>\n<br>\n\n<strong>\n3.2. Causales de suspensión  \n</strong>\n<ul>\n<li>\n1. Entregar información insuficiente, incompleta o inconsistente, sin perjuicio de los plazos que para la subsanación entrega el artículo 17 de la Ley 1437 de 2011 (1 mes). \n</li>\n<li>\n2. Muerte del representante del núcleo familiar, hasta tanto se defina el miembro del núcleo familiar que lo reemplazará. \n</li>\n<li>\n3. No asistir a las actividades o atender las recomendaciones de la Asistencia Técnica, sin perjuicio de las causales de caso fortuito o fuerza mayor que deberán ser acreditados por el núcleo familiar beneficiario. \n</li>\n<li>\n4. No atender las visitas planificadas por la Asistencia Técnica Integral, sin perjuicio de la demostración de causales de caso fortuito o fuerza mayor. \n</li>\n<li>\n5. No cumplir con las metas de calidad y de productividad del sistema productivo establecidas por la DSCI, sin perjuicio de las explicaciones de las razones, las acciones correctivas o de subsanación que el núcleo familiar pueda implementar, para lo cual se entregará 1 mes. \n<li>\n</ul>\n<br>\n<br>\n<strong>\n3.1.  Causales de exclusión \n</strong>\n<ul>\n<li>\n1. No arrancar de raíz la totalidad de los cultivos de uso ilícito en el predio objeto de intervención, en los lapsos establecidos en esta ficha. \n</li>\n<li>\n2. Resembrar cultivos de uso ilícito en el predio objeto de intervención o sembrarlos en otros predios. \n</li>\n\n<li>\n3. No adelantar con la diligencia debida, las actividades necesarias para la manutención del sistema productivo dentro de los 5 años siguientes a su implementación. . \n</li>\n\n<li>\n4. Que alguno de los miembros del núcleo familiar inscrito sea condenado por la comisión de conductas punibles relacionadas a economías ilícitas (Capítulo II, Título XIII, Libro Segundo del Código Penal colombiano). \n</li>\n\n<li>\n5. No acreditar sumariamente la propiedad, posesión u ocupación de buena fe exenta de culpa del predio objeto de intervención en los 30 días siguientes a la suscripción del presente documento. \n</li>\n<li>\n6. No permitir el ingreso al predio objeto de la intervención u obstaculizar el desarrollo de la caracterización predial.  \n</li>\n<li>\n7. No brindar las condiciones para el desarrollo de las actividades necesarias para el proceso de sustitución de cultivos de uso ilícito. \n</li>\n<li>\n8. Obstaculizar monitoreo de presencia de cultivos de uso ilícito en el predio objeto de intervención de acuerdo con el Sistema Integrado de Monitoreo de Cultivos de Uso Ilícito y demás mecanismos de verificación que el Estado en cabeza de la DSCI pueda definir. \n</li>\n<li>\n9. No desarrollar las actividades asociadas al proceso de sustitución para lograr ejecutar la sustitución de ingresos. \n</li>\n<li>\n10. No cumplir las recomendaciones brindadas por la Asistencia Técnica Integral. \n</li>\n<li>\n11. Donar, vender y/o permutar las herramientas, recursos e insumos entregados o utilizarlos para fines distintos a los del proyecto productivo de sustitución. \n</li>\n<li>\n12. Suministrar información falsa en cualquier etapa del proceso de tránsito a las economías licitas, especialmente respecto a aquellos aspectos que puedan afectar el cumplimiento de los compromisos señalados y/o derivados del Acuerdo de Sustitución del municipio de __[este campo debe ser automático según lo que se diligencie en la parte superior en relación con el municipio] __. \n</li>\n<li>\n13. Obstaculizar el cumplimiento del Acuerdo de Sustitución de Cultivos de Uso Ilícito y la consecuente implementación del Plan Operativo para el Tránsito a Economías Lícitas en el municipio de __[este campo debe ser automático según lo que se diligencie en la parte superior en relación con el municipio] __, en la vereda de __[este campo debe ser automático según lo que se diligencie en la parte superior en relación con las veredas donde se ubican los predios objeto de intervención, separado por comas] __.  \n</li>\n<li>\n14. No subsanar las situaciones que dieron lugar a la suspensión del proceso de sustitución en término establecido para tal efecto \n</li>\n\n<li>\n15. Obstaculizar los procesos de asociatividad o de comercialización para la línea productiva previstos en el Plan Operativo de Sustitución. \n</li>\n<li>\n16. Que alguno de los miembros del núcleo familiar sea elegido o como funcionario público. \n</li>\n<li>\n17. Que alguno de los miembros del núcleo familiar sea contratista del Estado o maneje recursos públicos a cualquier título. \n</li>\n</ul>\n"
+        }
+      ]
+    },
+    {
+      "name": "page20",
+      "elements": [
+        {
+          "type": "html",
+          "name": "question18",
+          "html": " \n\nEl presente acuerdo de sustitución está condicionado a la verificación por parte de la DSCI, de la presencia del cultivo de Coca, Amapola o Marihuana en el predio comprometido a sustituir, ya sea al momento de la firma del presente acuerdo (__[programar para que se incluya automáticamente mes y año de la firma] __) o al inicio del proceso de participación en el proyecto de sustitución de la economía ilícita, a través de los registros históricos oficiales del SIIMA (2023). El proceso de verificación tendrá una duración de treinta (30) días hábiles desde el momento de la firma de la ficha de acuerdo. "
+        },
         {
           "type": "dropdown",
           "name": "tipo_firma",
@@ -5344,6 +5419,39 @@
         console.error("Error al consultar el endpoint:", error);
       }
     }
+    if (options.name === "latitud") {
+      if (options.value === null || options.value === "")
+        return;
+      if (options.value < 6.839111 || options.value > 9.316977) {
+        survey.setValue(options.name, "");
+        uToast.toastError("La latitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");  
+      }    
+    }
+    if (options.name === "longitud") {
+      if (options.value === null || options.value === "")
+        return;
+      if (options.value < -73.644220 || options.value > -72.025764) {
+        survey.setValue(options.name, "");
+        uToast.toastError("La Longitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");  
+      }    
+    }
+
+    if (options.name.startsWith("predio") && options.name.endsWith("_latitud")) {
+      if (options.value === null || options.value === "") return;
+      if (options.value < 6.839111 || options.value > 9.316977) {
+        survey.setValue(options.name, "");
+        uToast.toastError("La latitud ingresada está fuera de la ubicación establecida. Confirme los datos e ingréselos de nuevo");
+      }
+    }
+
+    if (options.name.startsWith("predio") && options.name.endsWith("_longitud")) {
+      if (options.value === null || options.value === "") return;
+      if (options.value < -73.644220 || options.value > -72.025764) {
+        survey.setValue(options.name, "");
+        uToast.toastError("La longitud ingresada está fuera de la ubicación establecida. Confirme los datos e ingréselos de nuevo");
+      }
+    }
+
     if (options.name === "numero_identificacion") {
       if (options.value === null || options.value === "")
         return;
@@ -5357,7 +5465,7 @@
 
           if (alertQuestion) {
             // Construir lista de observaciones en color rojo
-            let observationsList = resp.data.map((item: { observation: any; }) => `<li style="color: red;">${item.observation}</li>`).join("");
+            let observationsList = resp.data.map((item: { observation: any; validationitems_name:any;}) => `<li style="color: red;">${item.validationitems_name} - NO - ${item.observation}</li>`).join("");
 
             // Asignar HTML con la lista
             alertQuestion.html = `<center><ul>${observationsList}</ul></center>`;
@@ -5497,10 +5605,14 @@
     const predio8departamentoQuestion = survey.getQuestionByName("predio8_departamento");
     const predio9departamentoQuestion = survey.getQuestionByName("predio9_departamento");
     const predio10departamentoQuestion = survey.getQuestionByName("predio10_departamento");
+    const desplazadodepartamentoQuestion = survey.getQuestionByName("desplazado_departamento");
 
     
     if (departamentoQuestion) {
       departamentoQuestion.choices = itemsDepartments.value;
+    }
+    if (desplazadodepartamentoQuestion) {
+      desplazadodepartamentoQuestion.choices = itemsDepartments.value;
     }
     if (predio1departamentoQuestion) {
       predio1departamentoQuestion.choices = itemsDepartments.value;
@@ -5543,6 +5655,7 @@
     const predio8municipioQuestion = survey.getQuestionByName("predio8_municipio");
     const predio9municipioQuestion = survey.getQuestionByName("predio9_municipio");
     const predio10municipioQuestion = survey.getQuestionByName("predio10_municipio");
+    const desplazadomunicipioQuestion = survey.getQuestionByName("desplazado_municipio");
 
     
     const municipioNucleoQuestion = survey.getQuestionByName("municipio_nucleo_familiar");
@@ -5805,6 +5918,16 @@
         await getMunicipalityList(departamento_id);
           if (municipioQuestion) {
               municipioQuestion.choices = itemsMunicipalities.value
+          }
+        loading.hide()
+    }
+
+    if (options.name === "desplazado_departamento") {
+        const departamento_id = options.value;
+        let loading = uLoading.show({});
+        await getMunicipalityList(departamento_id);
+          if (desplazadomunicipioQuestion) {
+              desplazadomunicipioQuestion.choices = itemsMunicipalities.value
           }
         loading.hide()
     }
