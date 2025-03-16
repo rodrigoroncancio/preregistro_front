@@ -5626,8 +5626,8 @@
               axios.get(`api/1.0/core/cedulasrnec/getbyidentification/${options.value}`)
               .then((resp: any) => {
                 console.log(resp)
-                survey.setValue("fecha_nacimiento", resp.data.fecha_expedicion); 
-                survey.setValue("fecha_expedicion", resp.data.fecha_nacimiento);   
+                survey.setValue("fecha_nacimiento", resp.data.fecha_nacimiento); 
+                survey.setValue("fecha_expedicion", resp.data.fecha_expedicion);   
               })
               .catch((err: any) => { console.log(err) })
               
