@@ -438,6 +438,12 @@
         },
         {
           "type": "text",
+          "name": "vereda_otra",
+          "title": "Otra vereda",
+          "description": "si no se encuentra en el listado de veredas",
+        },
+        {
+          "type": "text",
           "name": "predio_nombre",
           "title": "Nombre del predio",
           "description": "Indique el nombre del predio donde vive el grupo familiar"
@@ -2059,6 +2065,12 @@
         },
         {
           "type": "text",
+          "name": "predio1_vereda_otra",
+          "title": "Otra vereda",
+          "description": "si no se encuentra en el listado de veredas",
+        },
+        {
+          "type": "text",
           "name": "predio1_nombre",
           "title": "Nombre del predio",
           "description": "Nombre de la finca que postula\n"
@@ -2362,6 +2374,12 @@
               "text": "Otro"
             }
           ]
+        },
+        {
+          "type": "text",
+          "name": "predio2_vereda_otra",
+          "title": "Otra vereda",
+          "description": "si no se encuentra en el listado de veredas",
         },
         {
           "type": "text",
@@ -2671,6 +2689,12 @@
         },
         {
           "type": "text",
+          "name": "predio3_vereda_otra",
+          "title": "Otra vereda",
+          "description": "si no se encuentra en el listado de veredas",
+        },
+        {
+          "type": "text",
           "name": "predio3_nombre",
           "title": "Nombre del predio",
           "description": "Nombre de la finca que postula\n"
@@ -2974,6 +2998,12 @@
               "text": "Otro"
             }
           ]
+        },
+        {
+          "type": "text",
+          "name": "predio4_vereda_otra",
+          "title": "Otra vereda",
+          "description": "si no se encuentra en el listado de veredas",
         },
         {
           "type": "text",
@@ -3283,6 +3313,12 @@
         },
         {
           "type": "text",
+          "name": "predio5_vereda_otra",
+          "title": "Otra vereda",
+          "description": "si no se encuentra en el listado de veredas",
+        },
+        {
+          "type": "text",
           "name": "predio5_nombre",
           "title": "Nombre del predio",
           "description": "Nombre de la finca que postula\n"
@@ -3589,6 +3625,12 @@
         },
         {
           "type": "text",
+          "name": "predio6_vereda_otra",
+          "title": "Otra vereda",
+          "description": "si no se encuentra en el listado de veredas",
+        },
+        {
+          "type": "text",
           "name": "predio6_nombre",
           "title": "Nombre del predio",
           "description": "Nombre de la finca que postula\n"
@@ -3892,6 +3934,12 @@
               "text": "Otro"
             }
           ]
+        },
+        {
+          "type": "text",
+          "name": "predio7_vereda_otra",
+          "title": "Otra vereda",
+          "description": "si no se encuentra en el listado de veredas",
         },
         {
           "type": "text",
@@ -5501,6 +5549,12 @@
         const veredaArraigoQuestion = survey.getQuestionByName("vereda");
         const veredaNombre = veredaArraigoQuestion.choices.find((m: { value: any; }) => m.value === veredaId)?.text || "";
         sender.setVariable("vereda_arraigo", veredaNombre);
+    }
+    if (options.name === "vereda_otra") {
+      if (options.value === null || options.value === "")
+        return;
+        sender.setVariable("vereda_arraigo", options.value);
+        
     }
     if (options.name === "numero_identificacion") {
       if (options.value === null || options.value === "")
