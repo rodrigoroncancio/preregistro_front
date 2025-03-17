@@ -245,6 +245,7 @@
           "description": "Indique cuál es la ocupación",
           "isRequired": true,
           "choices": [
+            "Ama de casa",
             "Independiente",
             "Jubilado/pensionado",
             "Estudiante",
