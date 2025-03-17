@@ -31,12 +31,10 @@ const value = computed({
 const userData = uAuth.getUserData()
 const itemsMenuFiltered = computed({
   get() {
-    console.log('userData:', userData);
     
     let _itemsFiltered: any = [];
     
     itemsMenu.forEach(item => {
-      console.log("Evaluando item:", item);
 
       if ('roles' in item) {
         // Extraer los IDs de los roles del usuario

@@ -8,7 +8,9 @@
           :endpoint="`${endpoint}/catatumbofichaacuerdo`"
           :drawRefresh="drawRefresh"
           :headers="headers"
-          :extraMenuItems="[{}]"
+          :extraMenuItems="[
+            { title: 'Ficha', action: 'ficha', icon: 'mdi-text-box-search-outline' },
+          ]"
           :menuItems="menuItems"
           :labelNew="'modules.core.new_userspnis'"
           @onClickView="clickView"
@@ -266,9 +268,9 @@ const menuItems = computed(() => {
   if (uAuth.isAudit()) {
     return ['view', 'documents']
   } else if (uAuth.isAdmin()) {    
-    return ['view', 'validate','documents']
+    return ['view', 'validate','documents', 'ficha']
   } else {
-    return ['view', 'validate', 'documents']
+    return ['view', 'validate', 'documents', 'ficha']
   }
 });
 
@@ -277,7 +279,7 @@ const isValidForm = computed(() => {
 });
 
 const clickView = async (item: any) => {
-  router.push(`/pnis/fichaacuerdo2/open/${item.id}`);
+  router.push(`/pnis/catatumboficha/open/${item.id}`);
 };
 
 const clickDocuments = (item: any) => {
@@ -317,6 +319,9 @@ const clickAction = (item: any, action: string) => {
     console.log(item);
     identificationnumber.value = item.identificacion;
     getValidationItems();
+  }
+  if (action === 'ficha') {
+    router.push(`/catatumbo/docfirmado/${item.id}`);
   }
 };
 
