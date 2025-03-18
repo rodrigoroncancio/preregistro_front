@@ -14,11 +14,11 @@
 
       <!-- Tarjetas de Secciones convertidas en Botones -->
       <div class="section-cards">
-        <button class="section-card" @click="navigateTo('/argeliainicio')">
+        <button class="section-card" @click="navigateTo('https://preregistro.direccionsustitucion-pnis.gov.co/?pagina=inicioargelia')">
           <p class="section-title">Convocatoria Argelia</p>
           <img src="/src/assets/img/colombia1.png" alt="Territorial" class="card-icon" />
         </button>
-        <button class="section-card" @click="navigateTo('/catatumboinicio')">
+        <button class="section-card" @click="navigateTo('https://preregistro.direccionsustitucion-pnis.gov.co/?pagina=catatumbo')">
           <p class="section-title">Convocatoria Catatumbo</p>
           <img src="/src/assets/img/colombia1.png" alt="Técnico" class="card-icon" />
         </button>
