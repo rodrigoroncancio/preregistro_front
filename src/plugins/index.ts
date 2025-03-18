@@ -20,9 +20,27 @@ axios.interceptors.request.use((config) => {
   }
   return config
 })
-axios.interceptors.response.use((resp) => {
-  return resp
-})
+
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.status == 401) {
+      const auth = useAuth();
+      auth.authLogOut();
+    }
+    // Aquí puedes manejar el error como quieras
+    // if (error.response) {
+    //   console.log('Respuesta del servidor:', error.response);
+    // } else if (error.request) {
+    //   console.log('No hubo respuesta del servidor:', error.request);
+    // } else {
+    //   console.log('Error en la configuración de la solicitud:', error.message);
+    // }
+    return Promise.reject(error); // Asegura que el error se propague
+  }
+);
 
 export function registerPlugins(app: App) {
   loadFonts();
