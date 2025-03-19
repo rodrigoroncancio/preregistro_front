@@ -5,10 +5,21 @@
       <v-card-text class="pa-0">
         <exp-data-table
           uuid="table-ficha_acuerdo2"
-          :endpoint="`${endpoint}/catatumbofichaacuerdo`"
+          :showHeader="false"
+          :endpoint="`${endpoint}/catatumbofichaacuerdo/filterbysurvey/9`"
           :drawRefresh="drawRefresh"
           :headers="headers"
           :extraMenuItems="[
+            {
+              title: $t('modules.core.validate'),
+              icon: 'mdi-check-all',
+              action: 'validate'
+            },
+            {
+              title: 'Nucleo familiar',
+              icon: 'mdi-account-group',
+              action: 'nucleo'
+            },
             { title: 'Ficha', action: 'ficha', icon: 'mdi-text-box-search-outline' },
           ]"
           :menuItems="menuItems"
@@ -49,7 +60,7 @@
         <frm-valida 
           :identificationnumber="identificationnumber"
           :validationitem="validationid"
-          :fomularioid="2"
+          :fomularioid="9"
           @onClickSave="fnReloadTable"
         />
       </v-col>
@@ -140,6 +151,42 @@
       </v-col>
     </v-row>          
   </exp-modal-form>
+  <exp-modal-form
+    title="Nucleo familiar"
+    :width="800"
+    v-model="forModalNucleo"
+    :btnSave="false"
+  >
+    <v-row>
+      <v-col cols="12" >
+        <div v-if="itemsNucleo.length === 0">No tiene ingresado nucleo familiar</div>
+        <v-table v-if="itemsNucleo.length >0" :options="{ responsive: true, autoWidth: false }" class="display">
+          <thead>
+            <tr>
+              <th class="py-3 px-4">Identificación</th>
+              <th class="py-3 px-4">Nombre</th>
+              <th class="py-3 px-4">Parentesco</th>
+              <th class="py-3 px-4">Fecha de Nacimiento</th>
+              <th class="py-3 px-4">sexo</th>
+              <th class="py-3 px-4">estado civil</th>
+              <th class="py-3 px-4">Especial</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="persona in itemsNucleo" :key="persona.id">
+              <td class="py-3 px-4">{{ persona.tipo_identificacion }}</td>
+              <td class="py-3 px-4">{{ persona.nombre }}</td>
+              <td class="py-3 px-4">{{ persona.parentesco }}</td>
+              <td class="py-3 px-4">{{ persona.fecha_nacimiento }}</td>
+              <td class="py-3 px-4">{{ persona.sexo }}</td>
+              <td class="py-3 px-4">{{ persona.estado_civil }}</td>
+              <td class="py-3 px-4">{{ persona.grupo_especial }}</td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-col>
+    </v-row>
+  </exp-modal-form>
 </template>
 
 <script lang="ts" setup>
@@ -154,6 +201,7 @@ import useUtils from "@/composables/useUtils";
 import axios from "axios";
 import { useLoading } from "vue-loading-overlay";
 
+const itemsNucleo = ref([]);
 const uLoading = useLoading();
 const endpoint = "/api/1.0/core";
 const { t } = useI18n();
@@ -168,6 +216,8 @@ const headers: any[] = [
   { key: 'numero_identificacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
   { key: 'nombre', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
   { key: 'linea_productiva', title: "Linea productiva", width: "auto", align: "start", searchable: true, sortable: false, },
+  { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
+  { key: 'number_uncompleted', title: "Alertas", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
 const drawRefresh = ref("");
@@ -176,6 +226,7 @@ const formModal = ref(false);
 const formModalValidate = ref(false);
 const formModalDocumentos = ref(false);
 const formModalValidados = ref(false);
+const forModalNucleo = ref(false);
 const itemsValidation = ref<Array<{ id: number; label: string }>>([]);
 const itemsDocuments = ref([]);
 const itemsValidados = ref([]);
@@ -183,7 +234,7 @@ const itemsValidadosBase = ref([]);
 
 const getItemsValidadosBase = async () => {
   try {
-    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/3/`);
+    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/9/`);
     itemsValidadosBase.value = response.data;
   } catch (error) {
     console.error("Error fetching validation items:", error);
@@ -195,7 +246,7 @@ const getValidationItems = async () => {
     itemsValidation.value = [];
     try {
       const response = await axios.get(
-        `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/3`
+        `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/9`
       );
 
       console.log(response.data);
@@ -228,7 +279,7 @@ const getValidationKey = async () => {
 const modalValidados = async (item: any, tipo: string='si') => {
   try {
     let loader = uLoading.show({});
-    const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.identificacion}/3/${tipo}`);
+    const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.numero_identificacion}/9/${tipo}`);
     itemsValidados.value = response.data;
     loader.hide();
     formModalValidados.value = true;
@@ -268,9 +319,9 @@ const menuItems = computed(() => {
   if (uAuth.isAudit()) {
     return ['view', 'documents']
   } else if (uAuth.isAdmin()) {    
-    return ['view', 'validate','documents', 'ficha']
+    return ['view', 'validate','documents', 'nucleo', 'ficha']
   } else {
-    return ['view', 'validate', 'documents', 'ficha']
+    return ['view', 'validate', 'documents', 'nucleo',  'ficha']
   }
 });
 
@@ -317,11 +368,14 @@ const clickAction = (item: any, action: string) => {
   if (action === 'validate') {
     formModalValidate.value = true;
     console.log(item);
-    identificationnumber.value = item.identificacion;
+    identificationnumber.value = item.numero_identificacion;
     getValidationItems();
   }
   if (action === 'ficha') {
     router.push(`/catatumbo/docfirmado/${item.id}`);
+  }
+  if (action === 'nucleo') {
+    getNucleoFamiliar(item.id)
   }
 };
 
@@ -340,6 +394,25 @@ const clickSelectFormDocuments = (item: any) => {
   console.log(validationid.value);
   console.log(item);
 }
+
+const getNucleoFamiliar = async (fichaid: any) => {
+    let loader = uLoading.show({});
+    itemsNucleo.value = []; 
+    try {
+      const response = await axios.get(
+        `/api/1.0/core/catatumbofichaacuerdo/getnucleo/${fichaid}/`
+      );
+      itemsNucleo.value = response.data.results
+      console.log('response.data.results');
+      console.log(response.data.results);
+      forModalNucleo.value = true
+    
+      loader.hide()
+    } catch (error) {
+      console.error("Error fetching validation items:", error);
+      loader.hide()
+    }
+  };
 </script>
 
 <style lang="scss">

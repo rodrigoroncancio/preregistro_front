@@ -103,7 +103,6 @@ const surveyJsonBase = ref({
           "name": "fecha_expedicion",
           "title": "Fecha expedición",
           "isRequired": true,
-          "inputType": "date"
         },
         {
           "type": "text",
@@ -114,8 +113,7 @@ const surveyJsonBase = ref({
           "type": "text",
           "name": "fecha_nacimiento",
           "title": "Fecha nacimiento",
-          "isRequired": true,
-          "inputType": "date"
+          "isRequired": true
         },
         {
           "type": "text",
@@ -264,22 +262,10 @@ const surveyJsonBase = ref({
           "title": "¿A qué pueblo indígena pertenece su núcleo familiar?"
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "organizacion_etnica",
           "visibleIf": "{comunidad_etnica} <> 'Ninguno'",
           "title": "La organización étnica a la cual pertenece su núcleo familiar corresponde a:",
-          "choices": [
-            "Comunidad indígena sin territorio formalmente constituido",
-            "Asociación de comunidad negra sin territorio formalmente titulado",
-            "Consejo Comunitario formalmente titulado",
-            "Resguardo",
-            "Zona de Reserva Campesina",
-            {
-              "value": "Junta de Acción Comuna",
-              "text": "Junta de Acción Comunal"
-            },
-            "No Sabe"
-          ]
         },
         {
           "type": "text",
@@ -340,38 +326,24 @@ const surveyJsonBase = ref({
           "html": "<h4>Lugar donde vive el núcleo familiar\n</h4>"
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "departamento",
-          "title": "Departamento",
-          "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3"
-          ]
+          "title": "Departamento"
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "municipio",
-          "title": "Municipio",
-          "choices": [
-            "sin municipio"
-          ]
+          "title": "Municipio"
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "corregimiento",
-          "title": "corregimiento",
-          "choices": [
-            "sin vereda"
-          ]
+          "title": "corregimiento"
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "vereda",
-          "title": "vereda",
-          "choices": [
-            "sin vereda"
-          ]
+          "title": "vereda"
         },
         {
           "type": "text",
@@ -429,33 +401,9 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "tipo_documento_acredita",
           "title": "Tipo de documento que acredita la relación con el predio\n",
-          "choices": [
-            {
-              "value": "Propietario",
-              "text": "Escritura"
-            },
-            {
-              "value": "Ocupante",
-              "text": "Sana posesión"
-            },
-            {
-              "value": "Poseedor",
-              "text": "Certificado de tradición y libertad"
-            },
-            "Arrendatario",
-            {
-              "value": "Tenedor (prestada, cuidandero en posada)",
-              "text": "Documento o compraventa"
-            }
-          ]
-        },
-        {
-          "type": "file",
-          "name": "tipo_documento_file",
-          "title": "Cargar documento poseción"
         },
         {
           "type": "dropdown",
@@ -505,7 +453,7 @@ const surveyJsonBase = ref({
     },
     {
       "name": "page18",
-      "visibleIf": "{num_dependientes} >= '1'",
+      "visibleIf": "{num_dependientes1} >= '1'",
       "elements": [
         {
           "type": "html",
@@ -543,18 +491,6 @@ const surveyJsonBase = ref({
           "name": "persona1_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
           "inputType": "date"
-        },
-        {
-          "type": "file",
-          "name": "persona1_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
-        },
-        {
-          "type": "file",
-          "name": "persona1_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
         },
         {
           "type": "dropdown",
@@ -626,7 +562,7 @@ const surveyJsonBase = ref({
     },
     {
       "name": "page_persona2",
-      "visibleIf": "{num_dependientes} >= '2'",
+      "visibleIf": "{num_dependientes1} >= '2'",
       "elements": [
         {
           "type": "html",
@@ -664,18 +600,6 @@ const surveyJsonBase = ref({
           "name": "persona2_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
           "inputType": "date"
-        },
-        {
-          "type": "file",
-          "name": "persona2_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
-        },
-        {
-          "type": "file",
-          "name": "persona2_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
         },
         {
           "type": "dropdown",
@@ -747,7 +671,7 @@ const surveyJsonBase = ref({
     },
     {
       "name": "page_persona3",
-      "visibleIf": "{num_dependientes} >= '3'",
+      "visibleIf": "{num_dependientes1} >= '3'",
       "elements": [
         {
           "type": "html",
@@ -785,18 +709,6 @@ const surveyJsonBase = ref({
           "name": "persona3_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
           "inputType": "date"
-        },
-        {
-          "type": "file",
-          "name": "persona3_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
-        },
-        {
-          "type": "file",
-          "name": "persona3_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
         },
         {
           "type": "dropdown",
@@ -868,7 +780,7 @@ const surveyJsonBase = ref({
     },
     {
       "name": "page_persona4",
-      "visibleIf": "{num_dependientes} >= '4'",
+      "visibleIf": "{num_dependientes1} >= '4'",
       "elements": [
         {
           "type": "html",
@@ -906,18 +818,6 @@ const surveyJsonBase = ref({
           "name": "persona4_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
           "inputType": "date"
-        },
-        {
-          "type": "file",
-          "name": "persona4_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
-        },
-        {
-          "type": "file",
-          "name": "persona4_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
         },
         {
           "type": "dropdown",
@@ -989,7 +889,7 @@ const surveyJsonBase = ref({
     },
     {
       "name": "page_persona5",
-      "visibleIf": "{num_dependientes} >= '5'",
+      "visibleIf": "{num_dependientes1} >= '5'",
       "elements": [
         {
           "type": "html",
@@ -1027,12 +927,6 @@ const surveyJsonBase = ref({
           "name": "persona5_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
           "inputType": "date"
-        },
-        {
-          "type": "file",
-          "name": "persona5_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
         },
         {
           "type": "file",
@@ -1110,7 +1004,7 @@ const surveyJsonBase = ref({
     },
     {
       "name": "page_persona6",
-      "visibleIf": "{num_dependientes} >= '6'",
+      "visibleIf": "{num_dependientes1} >= '6'",
       "elements": [
         {
           "type": "html",
@@ -1148,18 +1042,6 @@ const surveyJsonBase = ref({
           "name": "persona6_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
           "inputType": "date"
-        },
-        {
-          "type": "file",
-          "name": "persona6_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
-        },
-        {
-          "type": "file",
-          "name": "persona6_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
         },
         {
           "type": "dropdown",
@@ -1231,7 +1113,7 @@ const surveyJsonBase = ref({
     },
     {
       "name": "page_persona7",
-      "visibleIf": "{num_dependientes} >= '7'",
+      "visibleIf": "{num_dependientes1} >= '7'",
       "elements": [
         {
           "type": "html",
@@ -1269,18 +1151,6 @@ const surveyJsonBase = ref({
           "name": "persona7_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
           "inputType": "date"
-        },
-        {
-          "type": "file",
-          "name": "persona7_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
-        },
-        {
-          "type": "file",
-          "name": "persona7_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
         },
         {
           "type": "dropdown",
@@ -1352,7 +1222,7 @@ const surveyJsonBase = ref({
     },
     {
       "name": "page_persona8",
-      "visibleIf": "{num_dependientes} >= '8'",
+      "visibleIf": "{num_dependientes1} >= '8'",
       "elements": [
         {
           "type": "html",
@@ -1390,18 +1260,6 @@ const surveyJsonBase = ref({
           "name": "persona8_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
           "inputType": "date"
-        },
-        {
-          "type": "file",
-          "name": "persona8_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
-        },
-        {
-          "type": "file",
-          "name": "persona8_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
         },
         {
           "type": "dropdown",
@@ -1473,7 +1331,7 @@ const surveyJsonBase = ref({
     },
     {
       "name": "page_persona9",
-      "visibleIf": "{num_dependientes} >= '9'",
+      "visibleIf": "{num_dependientes1} >= '9'",
       "elements": [
         {
           "type": "html",
@@ -1511,18 +1369,6 @@ const surveyJsonBase = ref({
           "name": "persona9_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
           "inputType": "date"
-        },
-        {
-          "type": "file",
-          "name": "persona9_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
-        },
-        {
-          "type": "file",
-          "name": "persona9_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
         },
         {
           "type": "dropdown",
@@ -1594,7 +1440,7 @@ const surveyJsonBase = ref({
     },
     {
       "name": "page_persona10",
-      "visibleIf": "{num_dependientes} >= '10'",
+      "visibleIf": "{num_dependientes1} >= '10'",
       "elements": [
         {
           "type": "html",
@@ -1604,7 +1450,7 @@ const surveyJsonBase = ref({
         {
           "type": "html",
           "name": "persona10_question7",
-          "visibleIf": "{num_dependientes} >= '10'",
+          "visibleIf": "{num_dependientes1} >= '10'",
           "html": "<p><strong>Persona No 10\n</strong> </p>"
         },
         {
@@ -1633,18 +1479,6 @@ const surveyJsonBase = ref({
           "name": "persona10_fecha_expedicion_identificacion",
           "title": "Fecha de expedicion\n",
           "inputType": "date"
-        },
-        {
-          "type": "file",
-          "name": "persona10_foto_doc_frente",
-          "title": "Foto Doc. Frente",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
-        },
-        {
-          "type": "file",
-          "name": "persona10_foto_doc_atras",
-          "title": "Foto Doc. Atras",
-          "description": "Escriba el número de identificación del representante del núcleo familiar"
         },
         {
           "type": "dropdown",
@@ -1762,42 +1596,19 @@ const surveyJsonBase = ref({
           "html": "<h4>Identificación Predio 1</h4>\n"
         },
         {
-          "type": "dropdown",
-          "name": "predio1_departamento",
-          "title": "Departamento",
-          "choices": [
-            {
-              "value": "787",
-              "text": "departamento1"
-            }
-          ]
-        },
-        {
-          "type": "dropdown",
+          "type": "text",
           "name": "predio1_municipio",
-          "title": "Municipio",
-          "choices": [
-            {
-              "value": "787",
-              "text": "sin municipio"
-            }
-          ]
+          "title": "Municipio"
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "predio1_corregimiento",
-          "title": "corregimiento",
-          "choices": [
-            "sin corregimiento"
-          ]
+          "title": "corregimiento"
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "predio1_vereda",
-          "title": "Vereda",
-          "choices": [
-            "sin vereda"
-          ]
+          "title": "Vereda"
         },
         {
           "type": "text",
@@ -1887,11 +1698,6 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "file",
-          "name": "predio1_documento_arraigo",
-          "title": "Documento de arraigo"
-        },
-        {
           "type": "dropdown",
           "name": "predio1_relacion_predio",
           "title": "Tipo de relación con el predio\n",
@@ -1939,12 +1745,6 @@ const surveyJsonBase = ref({
               "text": "No"
             }
           ]
-        },
-        {
-          "type": "file",
-          "name": "predio1_arraigo_documento_soporte",
-          "visibleIf": "{predio1_arraigo_documento_anexo} = 'si'",
-          "title": "Documento Relacion"
         },
         {
           "type": "html",
@@ -2065,17 +1865,6 @@ const surveyJsonBase = ref({
         },
         {
           "type": "dropdown",
-          "name": "predio2_departamento",
-          "title": "Departamento",
-          "choices": [
-            {
-              "value": "787",
-              "text": "departamento1"
-            }
-          ]
-        },
-        {
-          "type": "dropdown",
           "name": "predio2_municipio",
           "title": "Municipio",
           "choices": [
@@ -2193,11 +1982,6 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "file",
-          "name": "predio2_documento_arraigo",
-          "title": "Documento de arraigo"
-        },
-        {
           "type": "dropdown",
           "name": "predio2_relacion_predio",
           "title": "Tipo de relación con el predio\n",
@@ -2245,12 +2029,6 @@ const surveyJsonBase = ref({
               "text": "No"
             }
           ]
-        },
-        {
-          "type": "file",
-          "name": "predio2_arraigo_documento_soporte",
-          "visibleIf": "{predio1_arraigo_documento_anexo} = 'si'",
-          "title": "Documento Relacion"
         },
         {
           "type": "html",
@@ -2499,11 +2277,6 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "file",
-          "name": "predio3_documento_arraigo",
-          "title": "Documento de arraigo"
-        },
-        {
           "type": "dropdown",
           "name": "predio3_relacion_predio",
           "title": "Tipo de relación con el predio\n",
@@ -2551,12 +2324,6 @@ const surveyJsonBase = ref({
               "text": "No"
             }
           ]
-        },
-        {
-          "type": "file",
-          "name": "predio3_arraigo_documento_soporte",
-          "visibleIf": "{predio3_arraigo_documento_anexo} = 'si'",
-          "title": "Documento Relacion"
         },
         {
           "type": "html",
@@ -2805,11 +2572,6 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "file",
-          "name": "predio4_documento_arraigo",
-          "title": "Documento de arraigo"
-        },
-        {
           "type": "dropdown",
           "name": "predio4_relacion_predio",
           "title": "Tipo de relación con el predio\n",
@@ -2857,12 +2619,6 @@ const surveyJsonBase = ref({
               "text": "No"
             }
           ]
-        },
-        {
-          "type": "file",
-          "name": "predio4_arraigo_documento_soporte",
-          "visibleIf": "{predio4_arraigo_documento_anexo} = 'si'",
-          "title": "Documento Relacion"
         },
         {
           "type": "html",
@@ -3111,11 +2867,6 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "file",
-          "name": "predio5_documento_arraigo",
-          "title": "Documento de arraigo"
-        },
-        {
           "type": "dropdown",
           "name": "predio5_relacion_predio",
           "title": "Tipo de relación con el predio\n",
@@ -3163,12 +2914,6 @@ const surveyJsonBase = ref({
               "text": "No"
             }
           ]
-        },
-        {
-          "type": "file",
-          "name": "predio5_arraigo_documento_soporte",
-          "visibleIf": "{predio5_arraigo_documento_anexo} = 'si'",
-          "title": "Documento Relacion"
         },
         {
           "type": "html",
@@ -3417,11 +3162,6 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "file",
-          "name": "predio6_documento_arraigo",
-          "title": "Documento de arraigo"
-        },
-        {
           "type": "dropdown",
           "name": "predio6_relacion_predio",
           "title": "Tipo de relación con el predio\n",
@@ -3469,12 +3209,6 @@ const surveyJsonBase = ref({
               "text": "No"
             }
           ]
-        },
-        {
-          "type": "file",
-          "name": "predio6_arraigo_documento_soporte",
-          "visibleIf": "{predio6_arraigo_documento_anexo} = 'si'",
-          "title": "Documento Relacion"
         },
         {
           "type": "html",
@@ -3723,11 +3457,6 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "file",
-          "name": "predio7_documento_arraigo",
-          "title": "Documento de arraigo"
-        },
-        {
           "type": "dropdown",
           "name": "predio7_relacion_predio",
           "title": "Tipo de relación con el predio\n",
@@ -3775,12 +3504,6 @@ const surveyJsonBase = ref({
               "text": "No"
             }
           ]
-        },
-        {
-          "type": "file",
-          "name": "predio7_arraigo_documento_soporte",
-          "visibleIf": "{predio7_arraigo_documento_anexo} = 'si'",
-          "title": "Documento Relacion"
         },
         {
           "type": "html",
@@ -4029,11 +3752,6 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "file",
-          "name": "predio8_documento_arraigo",
-          "title": "Documento de arraigo"
-        },
-        {
           "type": "dropdown",
           "name": "predio8_relacion_predio",
           "title": "Tipo de relación con el predio\n",
@@ -4081,12 +3799,6 @@ const surveyJsonBase = ref({
               "text": "No"
             }
           ]
-        },
-        {
-          "type": "file",
-          "name": "predio8_arraigo_documento_soporte",
-          "visibleIf": "{predio8_arraigo_documento_anexo} = 'si'",
-          "title": "Documento Relacion"
         },
         {
           "type": "html",
@@ -4335,11 +4047,6 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "file",
-          "name": "predio9_documento_arraigo",
-          "title": "Documento de arraigo"
-        },
-        {
           "type": "dropdown",
           "name": "predio9_relacion_predio",
           "title": "Tipo de relación con el predio\n",
@@ -4387,12 +4094,6 @@ const surveyJsonBase = ref({
               "text": "No"
             }
           ]
-        },
-        {
-          "type": "file",
-          "name": "predio9_arraigo_documento_soporte",
-          "visibleIf": "{predio9_arraigo_documento_anexo} = 'si'",
-          "title": "Documento Relacion"
         },
         {
           "type": "html",
@@ -4641,11 +4342,6 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "file",
-          "name": "predio10_documento_arraigo",
-          "title": "Documento de arraigo"
-        },
-        {
           "type": "dropdown",
           "name": "predio10_relacion_predio",
           "title": "Tipo de relación con el predio\n",
@@ -4693,12 +4389,6 @@ const surveyJsonBase = ref({
               "text": "No"
             }
           ]
-        },
-        {
-          "type": "file",
-          "name": "predio10_arraigo_documento_soporte",
-          "visibleIf": "{predio10_arraigo_documento_anexo} = 'si'",
-          "title": "Documento Relacion"
         },
         {
           "type": "html",
@@ -4866,21 +4556,9 @@ const surveyJsonBase = ref({
           "html": "<span style=\"font-weight: 999;\">1.3.  Economía de sustitución de cultivos de uso ilícito</span>"
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "linea_productiva",
-          "title": "Línea productiva de intervención\n",
-          "choices": [
-            {
-              "value": "Cafe",
-              "text": "Café"
-            },
-            "Cacao",
-            "Aji",
-            {
-              "value": "Caña_Panelera",
-              "text": "Caña Panelera"
-            }
-          ]
+          "title": "Línea productiva de intervención\n"
         },
         {
           "type": "dropdown",
@@ -4918,13 +4596,9 @@ const surveyJsonBase = ref({
           "html": "<span style=\"font-weight: 999;\">Nombre e identificación de la organización/ asociación/ JAC /cooperativa/ grupo étnico a la que pertenece\n</span>"
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "tipo_figura_organizativa",
-          "title": "Tipo de figura organizativa",
-          "choices": [
-            "Tipo 1",
-            "Tipo 2"
-          ]
+          "title": "Tipo de figura organizativa"
         },
         {
           "type": "text",
@@ -4932,59 +4606,9 @@ const surveyJsonBase = ref({
           "title": "Número identificación tributario"
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "documento_pertenencia_etnica_anexa",
-          "title": "Anexa documento de soporte (obligatorio en casos de pertenencia étnica)",
-          "choices": [
-            {
-              "value": "si",
-              "text": "Si"
-            },
-            {
-              "value": "no",
-              "text": "No"
-            }
-          ]
-        },
-        {
-          "type": "file",
-          "name": "documento_pertenencia_etnica_file",
-          "title": "Documento pertenencia"
-        }
-      ]
-    },
-    {
-      "name": "page17",
-      "elements": [
-        {
-          "type": "dropdown",
-          "name": "tipo_firma",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": "firmatactil",
-              "text": "Firma Tactil"
-            },
-            {
-              "value": "cargarfirma",
-              "text": "Cargar firma"
-            }
-          ]
-        },
-        {
-          "type": "signaturepad",
-          "name": "firma",
-          "visibleIf": "{tipo_firma} = 'firmatactil'",
-          "title": "Firma de aceptación",
-          "signatureWidth": 500,
-          "signatureHeight": 400,
-          "placeholder": "Firmar aqui"
-        },
-        {
-          "type": "file",
-          "name": "firma_file",
-          "visibleIf": "{tipo_firma} = 'cargarfirma'",
-          "title": "Cargar Firma de aceptación"
+          "title": "Anexa documento de soporte (obligatorio en casos de pertenencia étnica)"
         }
       ]
     }
@@ -5015,12 +4639,78 @@ const surveyData = ref<Record<string, any> | null>(null); // Definir correctamen
 
 const getSurveyData = async () => {
   try {
-    modelValue.value=false
+    modelValue.value = false;
     const response = await axios.get(`/api/1.0/core/catatumbofichaacuerdo/${surveyId}/`);
-    getRegistraduriaData(response.data)
-    modelValue.value=true
+    // Llama a la función para procesar la data
+    await getRegistraduriaData(response.data);
+    modelValue.value = true; // Cambia el valor después de completar la carga
   } catch (error) {
-    console.error("Error fetching validation items:", error);
+    console.error("Error fetching survey data:", error);
+  }
+};
+
+
+const getDepartamento = async (departamenotid: undefined, nombrecampo: string) => {
+  try {
+    modelValue.value = false;
+    // Verifica que surveyData.value y departamento están definidos
+    if (surveyData.value && surveyData.value.departamento) {
+      const response = await axios.get(`/api/1.0/core/departments/${departamenotid}/`);
+      console.log(response.data); // Procesa la respuesta del departamento
+      surveyData.value[nombrecampo] = response.data.name
+    } else {
+      console.error("Error: 'departamento' no está disponible en surveyData.");
+    }
+  } catch (error) {
+    console.error("Error fetching department data:", error);
+  } finally {
+    modelValue.value = true; // Restablece el valor después de la ejecución
+  }
+};
+
+const getMunicipio = async (municipioId: undefined, nombrecampo: string) => {
+  try {
+    modelValue.value = false;
+
+    const response = await axios.get(`/api/1.0/core/municipalities/${municipioId}/`);
+    console.log(response.data); // Procesa la respuesta del municipio
+    surveyData.value[nombrecampo] = response.data.name
+
+  } catch (error) {
+    console.error("Error fetching department data:", error);
+  } finally {
+    modelValue.value = true; // Restablece el valor después de la ejecución
+  }
+};
+
+const getCorregimiento = async (corregimientoId: undefined, nombrecampo: string) => {
+  try {
+    modelValue.value = false;
+    // Verifica que surveyData.value y departamento están definidos
+
+    const response = await axios.get(`/api/1.0/core/townships/${corregimientoId}/`);
+    console.log(response.data); // Procesa la respuesta del corregimiento
+    surveyData.value[nombrecampo] = response.data.name
+
+  } catch (error) {
+    console.error("Error fetching corregimiento data:", error);
+  } finally {
+    modelValue.value = true; // Restablece el valor después de la ejecución
+  }
+};
+
+const getVereda = async (veredaId: undefined, nombrecampo: string) => {
+  try {
+    modelValue.value = false;
+    // Verifica que surveyData.value y departamento están definidos
+    const response = await axios.get(`/api/1.0/core/villages/${veredaId}/`);
+    console.log(response.data); // Procesa la respuesta del corregimiento
+    surveyData.value[nombrecampo] = response.data.name
+
+  } catch (error) {
+    console.error("Error fetching department data:", error);
+  } finally {
+    modelValue.value = true; // Restablece el valor después de la ejecución
   }
 };
 
@@ -5032,11 +4722,60 @@ const getRegistraduriaData = async (userData: { numero_identificacion: any; reg_
   surveyData.value = userData; // Asignar los datos correctamente
   console.log( 'surveyData.value ')
   console.log( surveyData.value )
+  
 }
 
 
+
 onMounted(async () => {
-  getSurveyData()
+  try {
+    await getSurveyData(); // Espera a que se resuelva getSurveyData
+    // Verifica si surveyData está correctamente asignado antes de llamar a getDepartamento
+    if (surveyData.value && surveyData.value.departamento) {
+      await getDepartamento(surveyData.value.departamento, 'departamento'); // Luego, llama a getDepartamento si departamento está disponible
+    } else {
+      console.error("No se encontró 'departamento' en surveyData.");
+    }
+
+    if (surveyData.value && surveyData.value.municipio) {
+      await getMunicipio(surveyData.value.municipio, 'municipio'); // Luego, llama a getDepartamento si departamento está disponible
+    } else {
+      console.error("No se encontró 'departamento' en surveyData.");
+    }
+
+    if (surveyData.value && surveyData.value.predio1_municipio) {
+      await getMunicipio(surveyData.value.predio1_municipio, 'predio1_municipio'); // Luego, llama a getDepartamento si departamento está disponible
+    } else {
+      console.error("No se encontró 'departamento' en surveyData.");
+    }
+
+    if (surveyData.value && surveyData.value.corregimiento) {
+      await getCorregimiento(surveyData.value.corregimiento, 'corregimiento'); // Luego, llama a getDepartamento si departamento está disponible
+    } else {
+      console.error("No se encontró 'corregimiento' en surveyData.");
+    }
+
+    if (surveyData.value && surveyData.value.predio1_corregimiento) {
+      await getCorregimiento(surveyData.value.predio1_corregimiento, 'predio1_corregimiento'); // Luego, llama a getDepartamento si departamento está disponible
+    } else {
+      console.error("No se encontró 'predio1_corregimiento' en surveyData.");
+    }
+
+    if (surveyData.value && surveyData.value.vereda) {
+      await getVereda(surveyData.value.vereda, 'vereda'); // Luego, llama a getDepartamento si departamento está disponible
+    } else {
+      console.error("No se encontró 'vereda' en surveyData.");
+    }
+
+    if (surveyData.value && surveyData.value.predio1_vereda) {
+      await getVereda(surveyData.value.predio1_vereda, 'predio1_vereda'); // Luego, llama a getDepartamento si departamento está disponible
+    } else {
+      console.error("No se encontró 'predio1_vereda' en surveyData.");
+    }
+    
+  } catch (error) {
+    console.error("Error al montar los datos:", error);
+  }
 });
 
 
