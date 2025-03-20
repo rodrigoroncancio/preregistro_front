@@ -232,8 +232,8 @@ const itemsCivilStatus = [
 
 const itemsMotherHeadOfHousehold = [
   { id: "", label: "Seleccione..." },
-  { id: "1", label: "Sí" },
-  { id: "0", label: "No" }
+  { id: true, label: "Sí" },
+  { id: false, label: "No" }
 ];
 
 const itemsOccupation = [
@@ -283,6 +283,18 @@ const itemsYesNo = [
   { id: "", label: "Seleccione..." },
   { id: 1, label: "Sí" },
   { id: 0, label: "No" }
+];
+
+const  itemsYesNoStr = [
+  { id: "", label: "Seleccione..." },
+  { id: "1", label: "Sí" },
+  { id: "0", label: "No" }
+];
+
+const itemsYesNo2 = [
+  { id: "", label: "Seleccione..." },
+  { id: true, label: "Sí" },
+  { id: false, label: "No" }
 ];
 
 const itemsAcquisitionHome = [
@@ -343,7 +355,7 @@ const formSchema = computed(() => [
   { key: "gender", type: "select", col:"md-6", items: itemsGenero, title: "Sexo", required: true },
   { key: "sexualorientation", type: "select", col:"md-6", items: itemsSexualOrientation, title: "Tiene Identidad de Género y/o Orientación sexual diversa (OSIGD)?", required: true },
   { key: "civilstatusid", type: "select", col:"md-6", items: itemsCivilStatus, title: "Estado civil", required: true },
-  { key: "headofhousehold", type: "select", col:"md-6", items: itemsYesNo, title: "Jefatura de hogar", required: true },
+  { key: "headofhousehold", type: "select", col:"md-6", items: itemsYesNo2, title: "Jefatura de hogar", required: true },
   { key: "motherheadoffamily", type: "select", col:"md-6", items: itemsMotherHeadOfHousehold, title: "Madre cabeza de Familia", required: true },
   { key: "occupationid", type: "select", col:"md-6", items: itemsOccupation, title: "Ocupación", required: true },
   { key: "educationid", type: "select", col:"md-6", items: itemsEducation, title: "Nivel de escolaridad", required: true },
@@ -355,7 +367,7 @@ const formSchema = computed(() => [
   { key: "monthlyincome", type: "text", col:"md-6", title: "Valor de ingresos mensuales", required: true },
   { key: "monthlyexpenses", type: "text", col:"md-6", title: "Valor de gastos mensuales", required: true },
   { key: "", type: "header2", col:"md-12", title: "Residencia nucleo familiar", required: true },
-  { key: "departmentid", type: "select", col:"md-6", items: itemsDepartments.value, title: "Departamento", required: true },
+  { key: "department", type: "select", col:"md-6", items: itemsDepartments.value, title: "Departamento", required: true },
   { key: "municipalityid", type: "select", col:"md-6",items: itemsMunicipalities.value, title: "Municipio", required: true },
   { key: "townshipid", type: "select", col:"md-6", items: itemsTownships.value, title: "Corregimiento", required: true },
   { key: "villageid", type: "select", col:"md-6", items: itemsVillages.value, title: "Vereda", required: true },
@@ -363,7 +375,7 @@ const formSchema = computed(() => [
   { key: "areahome", type: "text", col:"md-6", title: "Área total (Hectareas)", required: true },
   { key: "landcoordinates2", type: "text", col:"md-6", title: "Coordenadas de residencia", required: true },
   { key: "permanence", type: "text", col:"md-6", title: "Permanencia (Años)", required: true },
-  { key: "acquisitionhomeid", type: "select", col:"md-6", items: itemsAcquisitionHome, title: "Tipo de relación con el predio", required: true },
+  { key: "acquisitionhomeidentificationtypeid", type: "select", col:"md-6", items: itemsAcquisitionHome, title: "Tipo de relación con el predio", required: true },
   { key: "documentacquisitionhome", type: "select", col:"md-6", items: itemsDocumentAcquisitionHome, title: "Tipo de documento que acredita la relación con el predio", required: true },
   { key: "last_name", type: "text", col:"md-6", title: "Documento de soporte", required: true },
   { key: "acquisitionhomeidentificationnumber", type: "text", col:"md-6", title: "Número de identificación del propietario del predio.", required: true },
@@ -391,16 +403,16 @@ const formSchema = computed(() => [
   { key: "acquisitionfarmidentificationnumber", type: "text", col:"md-6", title: "Número de identificación del propietario del predio", required: true },
   { key: "residentsonland", type: "text", col:"md-6", title: "Cuantas personas habitan en el predio", required: true },
   { key: "", type: "header2", col:"md-12", title: "1.2.2. Caracterización productiva del predio", required: true },
-  { key: "legalactivitiesid", type: "select", col:"md-6", items: itemsYesNo, title: "Existen actividades productivas lícitas en el predio", required: true },
+  { key: "legalactivitiesid", type: "select", col:"md-6", items: itemsYesNo2, title: "Existen actividades productivas lícitas en el predio", required: true },
   { key: "legalactivitiesid", type: "select", col:"md-6", items: itemsLegalActivities, title: "¿Cuáles son las actividades productivas del predio?", required: true },
   { key: "familyexclusiveusage", type: "select", col:"md-12", items: itemsYesNo, title: "¿Su núcleo familiar es el único que usufructúa el predio?", required: true },
   { key: "familyotherlands", type: "select", col:"md-6", items: itemsYesNo, title: "Su núcleo familiar usufructúa otro predio distinto a dónde vive o al que es objeto de intervención", required: true },
   { key: "economicactivity", type: "select", col:"md-6", items: itemsLegalActivities, title: "¿Cuáles son las actividades productivas del predio?", required: true },
   { key: "strengthening", type: "header2", col:"md-12", title: "1.3. Economía de sustitución de cultivos de uso ilícito", required: true },
-  { key: "establishment", type: "select", col:"md-6", items: itemsYesNo, title: "Establecimiento", required: true },
-  { key: "strengthening", type: "select", col:"md-6", items: itemsYesNo, title: "Fortalecimiento", required: true },
+  { key: "establishment", type: "select", col:"md-6", items: itemsYesNoStr, title: "Establecimiento", required: true },
+  { key: "strengthening", type: "select", col:"md-6", items: itemsYesNoStr, title: "Fortalecimiento", required: true },
   { key: "last_name", type: "header2", col:"md-12", title: "Línea productiva (Café)", required: true },
-  { key: "experienceproductionline", type: "select", col:"md-6", items: itemsYesNo, title: "¿Tiene experiencia en esta línea productiva?", required: true },
+  { key: "experienceproductionline", type: "select", col:"md-6", items: itemsYesNo2, title: "¿Tiene experiencia en esta línea productiva?", required: true },
   { key: "yearsexperienceproductionline", type: "text", col:"md-6", title: "Hace cuántos años?", required: true },
   { key: "linkedtoanyassociationproductionline", type: "select", col:"md-6", items: itemsYesNo, title: "¿Está vinculado a alguna asociación de productores?", required: true },
   { key: "associationname", type: "text", col:"md-6", title: "¿Cuál?", required: true },
