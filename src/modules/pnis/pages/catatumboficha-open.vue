@@ -17,9 +17,12 @@ import { required, email, minLength } from "@vuelidate/validators";
 import { useRoute } from 'vue-router';
 import axios from "axios";
 
+import { useLoading } from "vue-loading-overlay";
+
 const endpoint = "/api/1.0/core";
 const route = useRoute();
 const surveyId = route.params.id;
+const uLoading = useLoading();
 
 import useAuth from "@/modules/auth/composables/useAuth";
 import useCrud from "@/composables/useCrud";
@@ -47,6 +50,86 @@ const surveyJsonBase = ref({
   "title": "FICHA DE VINCULACIÓN DE NÚCLEOS FAMILIARES A PROCESOS DE SUSTITUCIÓN DE CULTIVOS DE USO ILÍCITO DE LA DIRECCIÓN DE SUSTITUCIÓN DE CULTIVOS DE USO ILÍCITO",
   "logoPosition": "right",
   "pages": [
+  {
+      "name": "pageregistraduria",
+      "elements": [
+        {
+          "type": "html",
+          "name": "question1",
+          "html": "<h4>Datos de registraduria</h4>\n"
+        },
+        {
+          "type": "text",
+          "name": "reg_numero_cedula",
+          "title": "Número de cedula"
+        },
+        {
+          "type": "text",
+          "name": "reg_primer_nombre",
+          "title": "Primer Nombre"
+        },
+        {
+          "type": "text",
+          "name": "reg_segundo_nombre",
+          "title": "Segundo Nombre"
+        },
+        {
+          "type": "text",
+          "name": "reg_primer_apellido",
+          "title": "Primer apellido"
+        },
+        {
+          "type": "text",
+          "name": "reg_segundo_apellido",
+          "title": "Segundo apellido"
+        },
+        {
+          "type": "text",
+          "name": "reg_departamento_exp",
+          "title": "Departamento de Expedición"
+        },
+        {
+          "type": "text",
+          "name": "reg_municipio_exp",
+          "title": "Municipio de expedición"
+        },
+        {
+          "type": "text",
+          "name": "reg_fecha_expedicion",
+          "title": "Fecha de expedición"
+        },
+        {
+          "type": "text",
+          "name": "reg_estado_cedula",
+          "title": "Estado de la cédula"
+        },
+        {
+          "type": "text",
+          "name": "reg_num_resolucion",
+          "title": "Número de resolución"
+        },
+        {
+          "type": "text",
+          "name": "reg_agno_resolucion",
+          "title": "Año de resolución"
+        },
+        {
+          "type": "text",
+          "name": "reg_genero",
+          "title": "Género"
+        },
+        {
+          "type": "text",
+          "name": "reg_fecha_nacimiento",
+          "title": "Fecha de nacimiento"
+        },
+        {
+          "type": "text",
+          "name": "reg_edad",
+          "title": "Edad"
+        }
+      ]
+    },
     {
       "name": "page1",
       "elements": [
@@ -4722,21 +4805,102 @@ const getVereda = async (veredaId: undefined, nombrecampo: string) => {
   }
 };
 
-const getRegistraduriaData = async (userData: { numero_identificacion: any; reg_fecha_expedicion: any;  }) => {
-  const response = await axios.get(`/api/1.0/core/cedulasrnec/getbyidentification/${userData.numero_identificacion}/`);
-  console.log(response.data.primer_nombre)
-  userData.reg_fecha_expedicion = `${response.data.departamento_expedicion} / ${response.data.municipio_expedicion}  / ${response.data.fecha_expedicion}`
+const getRegistraduriaData = async (userData: { 
+  numero_identificacion: any; 
+  reg_agno_resolucion: any; 
+  reg_edad: any; 
+  reg_departamento_exp: any; 
+  reg_estado_cedula: any; 
+  reg_fecha_expedicion: any; 
+  reg_fecha_nacimiento: any; 
+  reg_genero: any; 
+  reg_municipio_exp: any; 
+  reg_numero_cedula: any; 
+  reg_num_resolucion: any; 
+  reg_primer_apellido: any; 
+  reg_primer_nombre: any; 
+  reg_segundo_apellido: any; 
+  reg_segundo_nombre: any; 
+}) => {
+  try {
+    const response = await axios.get(`/api/1.0/core/cedulasrnec/getbyidentification/${userData.numero_identificacion}/`);
 
-  surveyData.value = userData; // Asignar los datos correctamente
-  console.log( 'surveyData.value ')
-  console.log( surveyData.value )
-  
-}
+    // Si la respuesta es válida, asignamos los valores
+    userData.reg_agno_resolucion = response.data.agno_resolucion || '';
+    userData.reg_departamento_exp = response.data.departamento_expedicion || '';
+    userData.reg_estado_cedula = response.data.estado_cedula || '';
+    userData.reg_fecha_expedicion = response.data.fecha_expedicion || '';
+    userData.reg_fecha_nacimiento = response.data.fecha_nacimiento || '';
+    userData.reg_genero = response.data.genero || '';
+    userData.reg_municipio_exp = response.data.municipio_expedicion || '';
+    userData.reg_numero_cedula = response.data.numero_cedula || '';
+    userData.reg_num_resolucion = response.data.numero_resolucion || '';
+    userData.reg_primer_apellido = response.data.primer_apellido || '';
+    userData.reg_primer_nombre = response.data.primer_nombre || '';
+    userData.reg_segundo_apellido = response.data.segundo_apellido || '';
+    userData.reg_segundo_nombre = response.data.segundo_nombre || '';
+
+    userData.reg_edad = response.data.fecha_nacimiento ? calcularEdad(response.data.fecha_nacimiento) : '';
+
+  } catch (error) {
+    console.error('Error en la solicitud:', error);
+
+    // Llenar con valores vacíos si ocurre un error
+    userData.reg_agno_resolucion = '';
+    userData.reg_departamento_exp = '';
+    userData.reg_estado_cedula = '';
+    userData.reg_fecha_expedicion = '';
+    userData.reg_fecha_nacimiento = '';
+    userData.reg_genero = '';
+    userData.reg_municipio_exp = '';
+    userData.reg_numero_cedula = '';
+    userData.reg_num_resolucion = '';
+    userData.reg_primer_apellido = '';
+    userData.reg_primer_nombre = '';
+    userData.reg_segundo_apellido = '';
+    userData.reg_segundo_nombre = '';
+    userData.reg_edad = '';
+  }
+
+  // Asignar los datos correctamente
+  surveyData.value = userData;
+  console.log('surveyData.value', surveyData.value);
+};
 
 
+const calcularEdad = (fechaNacimiento: string): string => {
+  // Convertir "26/04/2018" a un formato compatible (YYYY-MM-DD)
+  const [dia, mes, año] = fechaNacimiento.split("/").map(Number);
+  const fechaNac = new Date(año, mes - 1, dia);
+  const fechaActual = new Date();
+
+  let edadAnios = fechaActual.getFullYear() - fechaNac.getFullYear();
+  let edadMeses = fechaActual.getMonth() - fechaNac.getMonth();
+  let edadDias = fechaActual.getDate() - fechaNac.getDate();
+
+  // Ajustar si el mes es negativo
+  if (edadMeses < 0) {
+    edadAnios--;
+    edadMeses += 12;
+  }
+
+  // Ajustar si los días son negativos
+  if (edadDias < 0) {
+    edadMeses--;
+    const ultimoDiaMesAnterior = new Date(
+      fechaActual.getFullYear(),
+      fechaActual.getMonth(),
+      0
+    ).getDate();
+    edadDias += ultimoDiaMesAnterior;
+  }
+
+  return `${edadAnios} años, ${edadMeses} meses y ${edadDias} días`;
+};
 
 onMounted(async () => {
   try {
+    let loader = uLoading.show({});
     await getSurveyData(); // Espera a que se resuelva getSurveyData
     // Verifica si surveyData está correctamente asignado antes de llamar a getDepartamento
     if (surveyData.value && surveyData.value.departamento) {
@@ -4780,6 +4944,7 @@ onMounted(async () => {
     } else {
       console.error("No se encontró 'predio1_vereda' en surveyData.");
     }
+    loader.hide()
     
   } catch (error) {
     console.error("Error al montar los datos:", error);

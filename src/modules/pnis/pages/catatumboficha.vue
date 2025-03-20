@@ -214,7 +214,7 @@
               </td>
               <td class="py-3 px-4">
                 <template v-if="persona.foto_doc_atras">
-                  <v-btn @click="downloadDocument(persona.foto_doc_atras, 3)" color="green" block>
+                  <v-btn @click="downloadDocument(persona, 3, persona.foto_doc_atras)" color="green" block>
                     <v-icon>mdi-file-download</v-icon> Ver
                   </v-btn>
                 </template>
