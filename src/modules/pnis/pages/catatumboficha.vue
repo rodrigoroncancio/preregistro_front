@@ -420,7 +420,7 @@ const clickDocuments = (item: any) => {
   const ltsDocuments = [
     { field: 'foto_doc_frente', label: 'Foto de frente' },
     { field: 'foto_doc_atras', label: 'Foto de respaldo' },
-    { field: 'tipo_documento_file', label: 'Documento de posecion' },
+    { field: 'tipo_documento_file', label: 'Documento de posesión' },
     { field: 'predio1_documento_arraigo', label: 'Documento de posecion Predio 1' },
     { field: 'predio2_documento_arraigo', label: 'Documento de posecion Predio 2' },
     { field: 'predio3_documento_arraigo', label: 'Documento de posecion Predio 3' },
