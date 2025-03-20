@@ -106,7 +106,7 @@
 
   <exp-modal-form
     title="Items validados"
-    :width="850"
+    :width="950"
     v-model="formModalValidados"
     :btnSave="false"
     @fnSave="clickSelectFormDocuments"
@@ -121,6 +121,7 @@
               <th class="text-left">Validación</th>
               <th class="text-left">Observación</th>
               <th class="text-left">Evidencia</th>
+              <th class="py-3 px-4">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -130,19 +131,37 @@
               :class="index % 2 === 0 ? 'shadow-md bg-gray-50' : ''"
             >
               <td class="py-3 px-4" width="30%">  
-                  {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.name || 'Sin nombre' }}
+                {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.name || 'Sin nombre' }}
               </td>
               <td class="py-3 px-4 observation-cell" width="30%">
                 {{ item.observation || 'Sin observación' }}
               </td>
-              <td>{{item.user_name}}</td>
+              <td>{{ item.user_name }}</td>
               <td class="py-3 px-4" width="100%">
                 <template v-if="item.attachment">
                   <v-btn @click="downloadDocument(item, 2)" variant="text" color="green" block>
                     Ver evidencia
                   </v-btn>
                 </template>
-                <template v-else> <v-btn variant="text" color="red" block disabled>Sin Evidencia</v-btn></template>
+                <template v-else> 
+                  <v-btn variant="text" color="red" block disabled>Sin Evidencia</v-btn>
+                </template>
+              </td>
+              <td>
+                <v-icon 
+                  v-if="item.id !== null" 
+                  color="red" 
+                  size="32" 
+                  @click="confirmDelete(item.id)">
+                  mdi-delete
+                </v-icon>
+                <v-icon 
+                  v-else 
+                  color="gray" 
+                  size="32" 
+                  disabled>
+                  mdi-delete
+                </v-icon>
               </td>
             </tr>
           </tbody>
@@ -153,7 +172,7 @@
   </exp-modal-form>
   <exp-modal-form
     title="Nucleo familiar"
-    :width="800"
+    width="80%"
     v-model="forModalNucleo"
     :btnSave="false"
   >
@@ -170,17 +189,39 @@
               <th class="py-3 px-4">sexo</th>
               <th class="py-3 px-4">estado civil</th>
               <th class="py-3 px-4">Especial</th>
+              <th class="py-3 px-4">Doc Frente</th>
+              <th class="py-3 px-4">Doc Atras</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="persona in itemsNucleo" :key="persona.id">
-              <td class="py-3 px-4">{{ persona.tipo_identificacion }}</td>
+              <td class="py-3 px-4">{{ persona.numero_identificacion }}</td>
               <td class="py-3 px-4">{{ persona.nombre }}</td>
               <td class="py-3 px-4">{{ persona.parentesco }}</td>
               <td class="py-3 px-4">{{ persona.fecha_nacimiento }}</td>
               <td class="py-3 px-4">{{ persona.sexo }}</td>
               <td class="py-3 px-4">{{ persona.estado_civil }}</td>
               <td class="py-3 px-4">{{ persona.grupo_especial }}</td>
+              <td class="py-3 px-4">
+                <template v-if="persona.foto_doc_frente">
+                  <v-btn @click="downloadDocument(persona.foto_doc_frente, 3)" color="green" block>
+                    <v-icon>mdi-file-download</v-icon> Ver
+                  </v-btn>
+                </template>
+                <template v-else>
+                  <span class="text-gray-500">No disponible</span>
+                </template>
+              </td>
+              <td class="py-3 px-4">
+                <template v-if="persona.foto_doc_atras">
+                  <v-btn @click="downloadDocument(persona.foto_doc_atras, 3)" color="green" block>
+                    <v-icon>mdi-file-download</v-icon> Ver
+                  </v-btn>
+                </template>
+                <template v-else>
+                  <span class="text-gray-500">No disponible</span>
+                </template>
+              </td>
             </tr>
           </tbody>
         </v-table>
@@ -200,6 +241,7 @@ import frmValida from "./forms/valida.vue";
 import useUtils from "@/composables/useUtils";
 import axios from "axios";
 import { useLoading } from "vue-loading-overlay";
+import Swal from "sweetalert2";
 
 const itemsNucleo = ref([]);
 const uLoading = useLoading();
@@ -239,6 +281,37 @@ const getItemsValidadosBase = async () => {
   } catch (error) {
     console.error("Error fetching validation items:", error);
   }
+};
+
+const deleteItem = async (itemid: any) => {
+  console.log('itemid')
+  console.log(itemid)
+  await axios.delete(`/api/1.0/core/validationregister/${itemid}/delete/`);
+  Swal.fire("Eliminado", "El registro ha sido eliminado", "success");
+  formModalValidados.value = false;  
+  fnReloadTable()
+}
+
+
+const confirmDelete = (itemid: any) => {
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "No podrás revertir esta acción. Se guardará los Datos del Usuario quien Eliminó y fecha de elimincación",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+    customClass: {
+      popup: "swal2-custom-zindex",
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteItem(itemid);
+      Swal.fire("¡Eliminado!", "El ítem ha sido eliminado.", "success");
+    }
+  });
 };
 
 const getValidationItems = async () => {
@@ -295,8 +368,12 @@ const downloadDocument = (item: any, tipo: number=1) => {
   console.log(item.attachment);
   if (tipo == 1) {
     enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item.document}`;
-  } else {
+  } 
+  if (tipo == 2){
     enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item.attachment}`;
+  }
+  else {
+    enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item}`;
   }
   console.log(enlace.href);
   document.body.appendChild(enlace);

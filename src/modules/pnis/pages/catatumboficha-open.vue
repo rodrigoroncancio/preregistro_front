@@ -347,6 +347,11 @@ const surveyJsonBase = ref({
         },
         {
           "type": "text",
+          "name": "vereda_otra",
+          "title": "Otra Vereda"
+        },
+        {
+          "type": "text",
           "name": "predio_nombre",
           "title": "Nombre del predio",
           "description": "Indique el nombre del predio donde vive el grupo familiar"
@@ -1612,6 +1617,11 @@ const surveyJsonBase = ref({
         },
         {
           "type": "text",
+          "name": "predio1_vereda_otra",
+          "title": "Otra Vereda"
+        },
+        {
+          "type": "text",
           "name": "predio1_nombre",
           "title": "Nombre del predio",
           "description": "Nombre de la finca que postula\n"
@@ -1883,16 +1893,14 @@ const surveyJsonBase = ref({
           ]
         },
         {
-          "type": "dropdown",
+          "type": "text",
           "name": "predio2_vereda",
-          "title": "Vereda",
-          "choices": [
-            "sin vereda",
-            {
-              "value": "otro",
-              "text": "Otro"
-            }
-          ]
+          "title": "Vereda"
+        },
+        {
+          "type": "text",
+          "name": "predio2_vereda_otra",
+          "title": "Otra Vereda"
         },
         {
           "type": "text",
