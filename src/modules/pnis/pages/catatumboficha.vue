@@ -204,7 +204,7 @@
               <td class="py-3 px-4">{{ persona.grupo_especial }}</td>
               <td class="py-3 px-4">
                 <template v-if="persona.foto_doc_frente">
-                  <v-btn @click="downloadDocument(persona.foto_doc_frente, 3)" color="green" block>
+                  <v-btn @click="downloadDocument(persona, 3, persona.foto_doc_frente)" color="green" block>
                     <v-icon>mdi-file-download</v-icon> Ver
                   </v-btn>
                 </template>
@@ -260,6 +260,7 @@ const headers: any[] = [
   { key: 'linea_productiva', title: "Linea productiva", width: "auto", align: "start", searchable: true, sortable: false, },
   { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
   { key: 'number_uncompleted', title: "Alertas", width: "auto", align: "start", sortable: false, },
+  { key: 'fecha_creacion', title: "Fecha Creación", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
 const drawRefresh = ref("");
@@ -361,19 +362,23 @@ const modalValidados = async (item: any, tipo: string='si') => {
   }
 }
 
-const downloadDocument = (item: any, tipo: number=1) => {
+const downloadDocument = (item: any, tipo: number=1, ruta3: string='') => {
   const hostServer = import.meta.env.VITE_BASE_MEDIA;
   const idUser = uAuth.getUserData().id;
   const enlace = document.createElement('a');
-  console.log(item.attachment);
-  if (tipo == 1) {
-    enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item.document}`;
-  } 
-  if (tipo == 2){
-    enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item.attachment}`;
-  }
-  else {
-    enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item}`;
+  console.log('item');
+  console.log(item.document , tipo);
+  
+  switch (tipo) {
+    case 1:
+      enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item.document}`;
+      break;
+    case 2:
+      enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${item.attachment}`;
+      break;
+    case 3:
+      enlace.href = `${hostServer}/api/1.0/core/media/${validationKey.value}/${idUser}/?ruta=${ruta3}`;
+      break;
   }
   console.log(enlace.href);
   document.body.appendChild(enlace);
