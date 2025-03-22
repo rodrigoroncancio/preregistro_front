@@ -54,6 +54,7 @@ import ImageModule from "docxtemplater-image-module-free";
 import { saveAs } from "file-saver";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
+import useAuth from "@/modules/auth/composables/useAuth";
 
 interface DataDocument {
   nombre: string;
@@ -125,6 +126,7 @@ interface DataDocument {
   persona5_edad: string;
   persona6_edad: string;
   persona7_edad: string;
+  firma2:string;
 
   [key: string]: string | number; // <-- Esto permite acceder con una clave dinámica
 }
@@ -132,6 +134,9 @@ const route = useRoute();
 const surveyId = route.params.id;
 const dataDocument = ref<DataDocument | null>(null);
 const itemsNucleo = ref([]);
+const validationKey = ref("");
+const firmafile64 = ref("");
+const uAuth = useAuth();
 
 // Función para cargar el archivo de la plantilla
 async function loadFile(url: string): Promise<ArrayBuffer> {
@@ -195,39 +200,44 @@ function base64Parser(tagValue:string) {
     return bytes.buffer;
 }
 
+const sanitizeData = (data: DataDocument | null) => {
+  if (!data) return {};
+  return Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [key, value ?? ""])
+  );
+};
+
 const generateWord = async () => {
   try {
- 
     const content = await loadFile(window.location.origin + "/ficha_argelia.docx");
 
-      const imageOptions = {
-      getImage(tag:string) {
-          return base64Parser(tag);
+    const imageOptions = {
+      getImage(tag: string) {
+        return base64Parser(tag);
       },
-      getSize(tag:string) {
-          return [250, 100];
+      getSize(tag: string) {
+        return [250, 100];
       },
-  };
-    
+    };
+
     const zip = new PizZip(content);
 
+    const doc = new Docxtemplater(zip, {
+      modules: [new ImageModule(imageOptions)],
+      paragraphLoop: true,
+      linebreaks: true,
+    });
 
-    const doc = new Docxtemplater(zip, {  modules: [new ImageModule(imageOptions)], paragraphLoop: true, linebreaks: true });
+    // Limpiar los valores nulos
+    const cleanData = sanitizeData(dataDocument.value);
 
-
-
-
-    doc.setData(dataDocument.value); // Pasa toda la información de dataDocument
-
-
+    doc.setData(cleanData);
 
     doc.render();
-
 
     const output = doc.getZip().generate({ type: "blob" });
     saveAs(output, "Documento_Generado.docx");
 
-    console.log("Documento descargado");
   } catch (error) {
     console.error("Error al generar el documento:", error);
   }
@@ -282,7 +292,6 @@ const getSurveyData = async () => {
     const response = await axios.get(`/api/1.0/core/fichaacuerdofase2/${surveyId}/`);
     loader.hide()
     dataDocument.value = response.data;
-    console.log("Datos de la encuesta cargados:", dataDocument.value);
   } catch (error) {
     console.error("Error fetching survey data:", error);
   }
@@ -293,7 +302,6 @@ const getDepartamento = async (departamentoId: number | undefined, nombrecampo: 
 
   try {
     const response = await axios.get(`/api/1.0/core/departments/${departamentoId}/`);
-    console.log(response.data);
     dataDocument.value![nombrecampo] = response.data.name;
   } catch (error) {
     console.error("Error fetching department data:", error);
@@ -305,7 +313,6 @@ const getMunicipio = async (municipioId: number | undefined, nombrecampo: string
 
   try {
     const response = await axios.get(`/api/1.0/core/municipalities/${municipioId}/`);
-    console.log(response.data);
     dataDocument.value![nombrecampo] = response.data.name;
   } catch (error) {
     console.error("Error fetching municipality data:", error);
@@ -317,7 +324,6 @@ const getCorregimiento = async (corregimientoId: number | undefined, nombrecampo
 
   try {
     const response = await axios.get(`/api/1.0/core/townships/${corregimientoId}/`);
-    console.log(response.data);
     dataDocument.value![nombrecampo] = response.data.name;
   } catch (error) {
     console.error("Error fetching corregimiento data:", error);
@@ -329,7 +335,6 @@ const getVereda = async (corregimientoId: number | undefined, nombrecampo: strin
 
   try {
     const response = await axios.get(`/api/1.0/core/villages/${corregimientoId}/`);
-    console.log(response.data);
     dataDocument.value![nombrecampo] = response.data.name;
   } catch (error) {
     console.error("Error fetching corregimiento data:", error);
@@ -342,32 +347,91 @@ const getNucleoFamiliar = async () => {
     try {
         const response = await axios.get(`/api/1.0/core/fichaacuerdo2/getnucleo/${surveyId}/`);
         itemsNucleo.value = response.data.results;
-        console.log('response.data.results:', response.data.results);
 
         if (!dataDocument.value) {
             dataDocument.value = {} as DataDocument; // Inicializar si es null
         }
 
-        response.data.results.forEach((persona: { nombre: string; tipo_identificacion: string; numero_identificacion: string; fecha_nacimiento: string; parentesco: string; sexo: string; estado_civil: string; grupo_especial: string; }, index: number) => {
-            if (index < 6) { // Solo hasta persona6_
-                dataDocument.value[`persona${index + 1}_nombre`] = persona.nombre || "";
-                dataDocument.value[`persona${index + 1}_tipo_identificacion`] = persona.tipo_identificacion || "";
-                dataDocument.value[`persona${index + 1}_numero_identificacion`] = persona.numero_identificacion || "";
-                dataDocument.value[`persona${index + 1}_fecha_nacimiento`] = persona.fecha_nacimiento || "";
-                dataDocument.value[`persona${index + 1}_parentesco`] = persona.parentesco || "";
-                dataDocument.value[`persona${index + 1}_sexo`] = persona.sexo || "";
-                dataDocument.value[`persona${index + 1}_estado_civil`] = persona.estado_civil || "";
-                dataDocument.value[`persona${index + 1}_grupo_especial`] = persona.grupo_especial || "";
-                dataDocument.value[`persona${index + 1}edad`] = calcularEdad(persona.fecha_nacimiento) || "";
-            }
-        });
+        const propiedades = [
+          "nombre",
+          "tipo_identificacion",
+          "numero_identificacion",
+          "fecha_nacimiento",
+          "parentesco",
+          "sexo",
+          "estado_civil",
+          "grupo_especial",
+          "edad",
+        ];
 
-        console.log("dataDocument actualizado:", dataDocument.value);
+        for (let i = 1; i <= 6; i++) {
+          propiedades.forEach((prop) => {
+            dataDocument.value[`persona${i}_${prop}`] = "";
+          });
+        }
+
+        response.data.results.forEach(
+          (
+            persona: {
+              nombre: string | null;
+              tipo_identificacion: string | null;
+              numero_identificacion: string | null;
+              fecha_nacimiento: string | null;
+              parentesco: string | null;
+              sexo: string | null;
+              estado_civil: string | null;
+              grupo_especial: string | null;
+            },
+            index: number
+          ) => {
+            if (index < 6) {
+              dataDocument.value[`persona${index + 1}_nombre`] = persona.nombre ?? "";
+              dataDocument.value[`persona${index + 1}_tipo_identificacion`] = persona.tipo_identificacion ?? "";
+              dataDocument.value[`persona${index + 1}_numero_identificacion`] = persona.numero_identificacion ?? "";
+              dataDocument.value[`persona${index + 1}_fecha_nacimiento`] = persona.fecha_nacimiento ?? "";
+              dataDocument.value[`persona${index + 1}_parentesco`] = persona.parentesco ?? "";
+              dataDocument.value[`persona${index + 1}_sexo`] = persona.sexo ?? "";
+              dataDocument.value[`persona${index + 1}_estado_civil`] = persona.estado_civil ?? "";
+              dataDocument.value[`persona${index + 1}_grupo_especial`] = persona.grupo_especial ?? "";
+              // dataDocument.value[`persona${index + 1}_edad`] = persona.fecha_nacimiento ? calcularEdad(persona.fecha_nacimiento) : "";
+            }
+          }
+        );
         loader.hide();
     } catch (error) {
         console.error("Error fetching validation items:", error);
         loader.hide();
     }
+};
+
+const getFirmaFile = async () => {
+  try {
+    const hostServer = import.meta.env.VITE_BASE_MEDIA;
+    const idUser = uAuth.getUserData().id;
+    const rutaFirma = dataDocument.value?.firma_file || ""; // Evita `null` o `undefined`
+
+    if (!rutaFirma) {
+      console.warn("No hay firma_file disponible.");
+      firmafile64.value = ""; // Asigna un valor vacío si no hay firma
+      return;
+    }
+
+    const response = await axios.get(`${hostServer}/api/1.0/core/mediabase64/${validationKey.value}/${idUser}/?ruta=${rutaFirma}`);
+    firmafile64.value = 'data:image/png;base64,' + response.data.base64; // Extrae `data` correctamente
+
+  } catch (error) {
+    console.error("Error al obtener el archivo de firma:", error);
+    firmafile64.value = ""; // Fallback en caso de error
+  }
+};
+
+const getValidationKey = async () => {
+  try {
+    const response = await axios.get(`/api/1.0/core/media/generatekey/`);
+    validationKey.value = response.data;
+  } catch (error) {
+    console.error("Error fetching key:", error);
+  }
 };
 
 const calcularEdad = (fechaNacimiento: string): string => {
@@ -402,8 +466,11 @@ const calcularEdad = (fechaNacimiento: string): string => {
 
 // Ejecutar la carga de datos antes de intentar generar el Word
 onMounted(async () => {
+  await getValidationKey();
   await getDepartmentList();
   await getSurveyData();
+  await getFirmaFile();
+  dataDocument.value.firma2 = firmafile64.value 
   await getNucleoFamiliar();
   
 
