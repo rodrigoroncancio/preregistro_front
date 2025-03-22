@@ -30,27 +30,27 @@
             <div className="buttons-container-asociaciones">
               <div className="button-group">
                 <p className="step green">Paso 1</p>
-                <router-link :to="'/catatumbo/form2'" class="btnCatAsoc green">
+                <a href='https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/xWxTv0FddatZVoe12IMXDEj0qP78OBb?st=!mqBGwgIUx$UN2GQdtkG0CH0fuS8CvmriLczoie7kvVJMLgJ6IEswwHxZm00dZZ6' class="btnCatAsoc green">
                   Preinscripción grupo de productores, asociación o JAC
-                </router-link>
+                </a>
                 <p className="btnCatAsoc description green">
                   Genera el código para los núcleos familiares
                 </p>
               </div>
               <div className="button-group">
                 <p className="step red">Paso 2</p>
-                <router-link :to="'/catatumbo/form3'" class="btnCatAsoc red">
+                <a href='https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/80DR7sXgD3a2dV7WKWvwdouV1I5uqn0?st=MHbrbE2N0MT$B7AgO6OKihInjoujJk8mrlep97e9C4uqwWJMGi9DMIZ9khTDxhzg' class="btnCatAsoc red">
                   Preinscripción núcleos familiares
-                </router-link>
+                </a>
                 <p className="btnCatAsoc description red">
                   Familias con código provisto por la asociación, grupo de productores o JAC
                 </p>
               </div>
               <div className="button-group">
                 <p className="step red">&nbsp;</p>
-                <router-link :to="'/catatumbo/form4'" class="btnCatAsoc red2">
+                <a href='https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/MaFqYs3DATRosxbec3CX4wuxWBe6Nvr?st=Pzxfmg7j81qW7vB5D$BJgaczM5KDZjmScIgUvL379YQlYwZVc!gTgOHoVY3uanGR' class="btnCatAsoc red2">
                   Preinscripción núcleos familiares que han sido víctimas de desplazamiento forzado
-                </router-link>
+                </a>
                 <p className="btnCatAsoc description red">
                   Familias con código provisto por la asociación, grupo de productores o JAC
                 </p>
