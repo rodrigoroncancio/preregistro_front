@@ -22,9 +22,9 @@
         </div>
         <div className="buttons-container">
           <div className="button-group">
-            <router-link :to="'/catatumbo/form1'" class="btnCat red">
+            <a target="blank" href="https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/gxOFWKMp6s50fkgz96Ra3exIX7namha?st=xlVPjurNGeNCd6fVJftfHUBbAcgoADDGYlA9dYefk69OJ9rk6!oz3QGXGFoH3atL" class="btnCat red">
               Preregistro de núcleos familiares
-            </router-link>
+            </a>
             <p className="btnCat description red">Para quienes no hacen parte de una asociación</p>
             <button className="btnCat grey">ABC de la convocatoria</button>
           </div>
@@ -38,7 +38,7 @@
           <div className="button-group">
               <a className="btnCat red"
                   target="_blank"
-                  href="/catatumbo/form5"
+                  href="https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/ScZ9D8KhyfMlrMpAohyxPqeUAWGGSyC?st=02FzOAJCo6zTYlaoOIdSGbobqMfnBvccipGw2m1C9o2SZKRdUWJR9ajHU9KK6jHe"
                   rel="noreferrer"
               >
                   Familias PNIS que renegociaron y recolectores
