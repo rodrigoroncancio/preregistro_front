@@ -70,11 +70,68 @@ interface DataDocument {
   vereda_nombre: string;
   predio1_vereda: number;
   predio1_vereda_nombre: string;
+  persona1_nombre: string;
+  persona1_tipo_identificacion: string;
+  persona1_numero_identificacion: string;
+  persona1_fecha_nacimiento: string;
+  persona1_parentesco: string;
+  persona1_sexo: string;
+  persona1_estado_civil: string;
+  persona1_grupo_especial: string;
+  persona2_nombre: string;
+  persona2_tipo_identificacion: string;
+  persona2_numero_identificacion: string;
+  persona2_fecha_nacimiento: string;
+  persona2_parentesco: string;
+  persona2_sexo: string;
+  persona2_estado_civil: string;
+  persona2_grupo_especial: string;
+  persona3_nombre: string;
+  persona3_tipo_identificacion: string;
+  persona3_numero_identificacion: string;
+  persona3_fecha_nacimiento: string;
+  persona3_parentesco: string;
+  persona3_sexo: string;
+  persona3_estado_civil: string;
+  persona3_grupo_especial: string;
+  persona4_nombre: string;
+  persona4_tipo_identificacion: string;
+  persona4_numero_identificacion: string;
+  persona4_fecha_nacimiento: string;
+  persona4_parentesco: string;
+  persona4_sexo: string;
+  persona4_estado_civil: string;
+  persona4_grupo_especial: string;
+  persona5_nombre: string;
+  persona5_tipo_identificacion: string;
+  persona5_numero_identificacion: string;
+  persona5_fecha_nacimiento: string;
+  persona5_parentesco: string;
+  persona5_sexo: string;
+  persona5_estado_civil: string;
+  persona5_grupo_especial: string;
+  persona6_nombre: string;
+  persona6_tipo_identificacion: string;
+  persona6_numero_identificacion: string;
+  persona6_fecha_nacimiento: string;
+  persona6_parentesco: string;
+  persona6_sexo: string;
+  persona6_estado_civil: string;
+  persona6_grupo_especial: string;
+  persona1_edad: string;
+  persona2_edad: string;
+  persona3_edad: string;
+  persona4_edad: string;
+  persona5_edad: string;
+  persona6_edad: string;
+  persona7_edad: string;
+
   [key: string]: string | number; // <-- Esto permite acceder con una clave dinámica
 }
 const route = useRoute();
 const surveyId = route.params.id;
 const dataDocument = ref<DataDocument | null>(null);
+const itemsNucleo = ref([]);
 
 // Función para cargar el archivo de la plantilla
 async function loadFile(url: string): Promise<ArrayBuffer> {
@@ -279,10 +336,75 @@ const getVereda = async (corregimientoId: number | undefined, nombrecampo: strin
   }
 };
 
+const getNucleoFamiliar = async () => {
+    let loader = uLoading.show({});
+    itemsNucleo.value = []; 
+    try {
+        const response = await axios.get(`/api/1.0/core/fichaacuerdo2/getnucleo/${surveyId}/`);
+        itemsNucleo.value = response.data.results;
+        console.log('response.data.results:', response.data.results);
+
+        if (!dataDocument.value) {
+            dataDocument.value = {} as DataDocument; // Inicializar si es null
+        }
+
+        response.data.results.forEach((persona: { nombre: string; tipo_identificacion: string; numero_identificacion: string; fecha_nacimiento: string; parentesco: string; sexo: string; estado_civil: string; grupo_especial: string; }, index: number) => {
+            if (index < 6) { // Solo hasta persona6_
+                dataDocument.value[`persona${index + 1}_nombre`] = persona.nombre || "";
+                dataDocument.value[`persona${index + 1}_tipo_identificacion`] = persona.tipo_identificacion || "";
+                dataDocument.value[`persona${index + 1}_numero_identificacion`] = persona.numero_identificacion || "";
+                dataDocument.value[`persona${index + 1}_fecha_nacimiento`] = persona.fecha_nacimiento || "";
+                dataDocument.value[`persona${index + 1}_parentesco`] = persona.parentesco || "";
+                dataDocument.value[`persona${index + 1}_sexo`] = persona.sexo || "";
+                dataDocument.value[`persona${index + 1}_estado_civil`] = persona.estado_civil || "";
+                dataDocument.value[`persona${index + 1}_grupo_especial`] = persona.grupo_especial || "";
+                dataDocument.value[`persona${index + 1}edad`] = calcularEdad(persona.fecha_nacimiento) || "";
+            }
+        });
+
+        console.log("dataDocument actualizado:", dataDocument.value);
+        loader.hide();
+    } catch (error) {
+        console.error("Error fetching validation items:", error);
+        loader.hide();
+    }
+};
+
+const calcularEdad = (fechaNacimiento: string): string => {
+  // Convertir "26/04/2018" a un formato compatible (YYYY-MM-DD)
+  const [dia, mes, año] = fechaNacimiento.split("/").map(Number);
+  const fechaNac = new Date(año, mes - 1, dia);
+  const fechaActual = new Date();
+
+  let edadAnios = fechaActual.getFullYear() - fechaNac.getFullYear();
+  let edadMeses = fechaActual.getMonth() - fechaNac.getMonth();
+  let edadDias = fechaActual.getDate() - fechaNac.getDate();
+
+  // Ajustar si el mes es negativo
+  if (edadMeses < 0) {
+    edadAnios--;
+    edadMeses += 12;
+  }
+
+  // Ajustar si los días son negativos
+  if (edadDias < 0) {
+    edadMeses--;
+    const ultimoDiaMesAnterior = new Date(
+      fechaActual.getFullYear(),
+      fechaActual.getMonth(),
+      0
+    ).getDate();
+    edadDias += ultimoDiaMesAnterior;
+  }
+
+  return `${edadAnios} años`;
+};
+
 // Ejecutar la carga de datos antes de intentar generar el Word
 onMounted(async () => {
   await getDepartmentList();
   await getSurveyData();
+  await getNucleoFamiliar();
   
 
   // if (dataDocument.value && dataDocument.value.predio1_departamento) {
@@ -302,8 +424,8 @@ onMounted(async () => {
       console.error("No se encontró 'vereda' en dataDocument.");
     }
 
-  if (dataDocument.value && dataDocument.value.predio1_vereda_nombre) {
-    await getVereda(dataDocument.value.predio1_vereda, 'predio1_vereda'); // Luego, llama a getDepartamento si departamento está disponible
+  if (dataDocument.value && dataDocument.value.predio1_vereda) {
+    await getVereda(dataDocument.value.predio1_vereda, 'predio1_vereda_nombre'); // Luego, llama a getDepartamento si departamento está disponible
   } else {
     console.error("No se encontró 'predio1_vereda' en dataDocument.");
   }
