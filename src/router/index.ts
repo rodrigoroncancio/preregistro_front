@@ -58,6 +58,11 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: "", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-catatumbo-inicio",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/catatumbo/inicio.vue"),
+          },
+          {
+            path: "", // Ruta raíz relativa al path padre ("/catatumbo")
             name: "public-catatumbo-index",
             component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/catatumbo/index.vue"),
           },
