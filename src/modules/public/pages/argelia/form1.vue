@@ -428,7 +428,7 @@
           "name": "corregimiento",
           "title": "corregimiento",
           "choices": [
-            "sin vereda"
+            "sin corregimiento"
           ]
         },
         {
@@ -438,6 +438,11 @@
           "choices": [
             "sin vereda"
           ]
+        },
+        {
+          "type": "text",
+          "name": "vereda_otra",
+          "title": "Otra vereda"
         },
         {
           "type": "text",
@@ -1867,6 +1872,11 @@
         },
         {
           "type": "text",
+          "name": "predio1_vereda_otra",
+          "title": "Otra vereda"
+        },
+        {
+          "type": "text",
           "name": "predio1_nombre",
           "title": "Nombre del predio",
           "description": "Nombre de la finca que postula\n"
@@ -2170,6 +2180,11 @@
               "text": "Otro"
             }
           ]
+        },
+        {
+          "type": "text",
+          "name": "predio2_vereda_otra",
+          "title": "Otra vereda"
         },
         {
           "type": "text",
@@ -2479,6 +2494,11 @@
         },
         {
           "type": "text",
+          "name": "predio3_vereda_otra",
+          "title": "Otra vereda"
+        },
+        {
+          "type": "text",
           "name": "predio3_nombre",
           "title": "Nombre del predio",
           "description": "Nombre de la finca que postula\n"
@@ -2785,6 +2805,11 @@
         },
         {
           "type": "text",
+          "name": "predio4_vereda_otra",
+          "title": "Otra vereda"
+        },
+        {
+          "type": "text",
           "name": "predio4_nombre",
           "title": "Nombre del predio",
           "description": "Nombre de la finca que postula\n"
@@ -3088,6 +3113,11 @@
               "text": "Otro"
             }
           ]
+        },
+        {
+          "type": "text",
+          "name": "predio5_vereda_otra",
+          "title": "Otra vereda"
         },
         {
           "type": "text",
