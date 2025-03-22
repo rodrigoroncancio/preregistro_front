@@ -40,6 +40,11 @@ const routes: RouteRecordRaw[] = [
             component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/argelia/form1.vue"),
           },
           {
+            path: "docfirmado/:id", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+            name: "public-doc-argelia-firmado",
+            component: () => import(/* webpackChunkName: "docfirmado" */ "@/modules/public/pages/argelia/docfirmado.vue"),
+          },
+          {
             path: "vercupos",
             name: "public-argelia-vercupos",
             component: () => import( /* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/argelia/vercupos.vue"),
