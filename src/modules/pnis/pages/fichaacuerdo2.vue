@@ -8,7 +8,7 @@
           :endpoint="`${endpoint}/fichaacuerdofase2`"
           :drawRefresh="drawRefresh"
           :headers="headers"
-          :extraMenuItems="[{}]"
+          :extraMenuItems="[{ title: 'Ficha', action: 'ficha', icon: 'mdi-text-box-search-outline' }]"
           :menuItems="menuItems"
           :labelNew="'modules.core.new_userspnis'"
           @onClickView="clickView"
@@ -266,9 +266,9 @@ const menuItems = computed(() => {
   if (uAuth.isAudit()) {
     return ['view', 'documents']
   } else if (uAuth.isAdmin()) {    
-    return ['view', 'validate','documents']
+    return ['view', 'validate','documents', 'ficha']
   } else {
-    return ['view', 'validate', 'documents']
+    return ['view', 'validate', 'documents', 'ficha']
   }
 });
 
@@ -317,6 +317,9 @@ const clickAction = (item: any, action: string) => {
     console.log(item);
     identificationnumber.value = item.identificacion;
     getValidationItems();
+  }
+  if (action === 'ficha') {
+    router.push(`/argelia/docfirmado/${item.id}`);
   }
 };
 
