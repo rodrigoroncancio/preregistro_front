@@ -50,14 +50,27 @@ import axios from "axios";
 import { useLoading } from "vue-loading-overlay";
 import { ref, onMounted } from "vue";
 import { useRoute } from 'vue-router';
+import ImageModule from "docxtemplater-image-module-free";
 import { saveAs } from "file-saver";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 
 interface DataDocument {
   nombre: string;
-  numero_identificacion:string;
-  // Agrega aquí más propiedades si las necesitas
+  numero_identificacion: string;
+  departamento: number;
+  departamento_nombre: string;
+  predio1_departamento: number;
+  predio1_departamento_nombre: string;
+  municipio: number;
+  municipio_nombre: string;
+  predio1_municipio: number;
+  predio1_municipio_nombre: string;
+  vereda: number;
+  vereda_nombre: string;
+  predio1_vereda: number;
+  predio1_vereda_nombre: string;
+  [key: string]: string | number; // <-- Esto permite acceder con una clave dinámica
 }
 const route = useRoute();
 const surveyId = route.params.id;
@@ -75,26 +88,84 @@ async function loadFile(url: string): Promise<ArrayBuffer> {
   }
 }
 
+// Función para convertir Base64 a ArrayBuffer
+function base64ToArrayBuffer(base64: string): ArrayBuffer {
+  const base64Data = base64.split(",")[1]; // Extrae la parte de la imagen
+  const binaryString = atob(base64Data);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
+const base64Regex =
+    /^(?:data:)?image\/(png|jpg|jpeg|svg|svg\+xml);base64,/;
+
+const validBase64 =
+    /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+
+function base64Parser(tagValue:string) {
+    if (
+        typeof tagValue !== "string" ||
+        !base64Regex.test(tagValue)
+    ) {
+        return false;
+    }
+
+    const stringBase64 = tagValue.replace(base64Regex, "");
+
+    if (!validBase64.test(stringBase64)) {
+        throw new Error(
+            "Error parsing base64 data, your data contains invalid characters"
+        );
+    }
+
+    // For nodejs, return a Buffer
+    if (typeof Buffer !== "undefined" && Buffer.from) {
+        return Buffer.from(stringBase64, "base64");
+    }
+
+    // For browsers, return a string (of binary content) :
+    const binaryString = window.atob(stringBase64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        const ascii = binaryString.charCodeAt(i);
+        bytes[i] = ascii;
+    }
+    return bytes.buffer;
+}
 
 const generateWord = async () => {
   try {
-    console.log("Intentando cargar la plantilla...");
+ 
     const content = await loadFile(window.location.origin + "/ficha_argelia.docx");
-    console.log("Archivo cargado correctamente");
 
+      const imageOptions = {
+      getImage(tag:string) {
+          return base64Parser(tag);
+      },
+      getSize(tag:string) {
+          return [250, 100];
+      },
+  };
+    
     const zip = new PizZip(content);
-    console.log("Archivo PizZip cargado");
 
-    const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
 
-    console.log("Datos obtenidos:", dataDocument.value);
+    const doc = new Docxtemplater(zip, {  modules: [new ImageModule(imageOptions)], paragraphLoop: true, linebreaks: true });
+
+
+
 
     doc.setData(dataDocument.value); // Pasa toda la información de dataDocument
 
-    console.log("Datos inyectados en la plantilla");
+
 
     doc.render();
-    console.log("Documento generado correctamente");
+
 
     const output = doc.getZip().generate({ type: "blob" });
     saveAs(output, "Documento_Generado.docx");
@@ -160,11 +231,85 @@ const getSurveyData = async () => {
   }
 };
 
+const getDepartamento = async (departamentoId: number | undefined, nombrecampo: string) => {
+  if (!departamentoId || !dataDocument.value) return; // Validación para evitar errores
+
+  try {
+    const response = await axios.get(`/api/1.0/core/departments/${departamentoId}/`);
+    console.log(response.data);
+    dataDocument.value![nombrecampo] = response.data.name;
+  } catch (error) {
+    console.error("Error fetching department data:", error);
+  }
+};
+
+const getMunicipio = async (municipioId: number | undefined, nombrecampo: string) => {
+  if (!municipioId || !dataDocument.value) return;
+
+  try {
+    const response = await axios.get(`/api/1.0/core/municipalities/${municipioId}/`);
+    console.log(response.data);
+    dataDocument.value![nombrecampo] = response.data.name;
+  } catch (error) {
+    console.error("Error fetching municipality data:", error);
+  }
+};
+
+const getCorregimiento = async (corregimientoId: number | undefined, nombrecampo: string) => {
+  if (!corregimientoId || !dataDocument.value) return;
+
+  try {
+    const response = await axios.get(`/api/1.0/core/townships/${corregimientoId}/`);
+    console.log(response.data);
+    dataDocument.value![nombrecampo] = response.data.name;
+  } catch (error) {
+    console.error("Error fetching corregimiento data:", error);
+  }
+};
+
+const getVereda = async (corregimientoId: number | undefined, nombrecampo: string) => {
+  if (!corregimientoId || !dataDocument.value) return;
+
+  try {
+    const response = await axios.get(`/api/1.0/core/villages/${corregimientoId}/`);
+    console.log(response.data);
+    dataDocument.value![nombrecampo] = response.data.name;
+  } catch (error) {
+    console.error("Error fetching corregimiento data:", error);
+  }
+};
+
 // Ejecutar la carga de datos antes de intentar generar el Word
 onMounted(async () => {
   await getDepartmentList();
   await getSurveyData();
+  
+
+  // if (dataDocument.value && dataDocument.value.predio1_departamento) {
+  //   await getDepartamento(dataDocument.value.predio1_departamento, 'predio1_departamento'); // Luego, llama a getDepartamento si departamento está disponible
+  // } else {
+  //   console.error("No se encontró 'departamento' en DataDocument.");
+  // }
+  // if (dataDocument.value && dataDocument.value.predio1_municipio) {
+  //   await getMunicipio(dataDocument.value.predio1_municipio, 'predio1_municipio'); // Luego, llama a getmunicipio si municipio está disponible
+  // } else {
+  //   console.error("No se encontró 'predio1_municipio' en DataDocument.");
+  // }
+
+  if (dataDocument.value && dataDocument.value.vereda_nombre) {
+      await getVereda(dataDocument.value.vereda, 'vereda'); // Luego, llama a getDepartamento si departamento está disponible
+    } else {
+      console.error("No se encontró 'vereda' en dataDocument.");
+    }
+
+  if (dataDocument.value && dataDocument.value.predio1_vereda_nombre) {
+    await getVereda(dataDocument.value.predio1_vereda, 'predio1_vereda'); // Luego, llama a getDepartamento si departamento está disponible
+  } else {
+    console.error("No se encontró 'predio1_vereda' en dataDocument.");
+  }
+  
   await generateWord();
+
 
 });
 
