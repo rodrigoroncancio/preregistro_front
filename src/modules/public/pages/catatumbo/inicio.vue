@@ -58,6 +58,17 @@
           </div>
       </v-col>
     </v-row>
+    <<v-row justify="center">
+      <v-col cols="auto">
+        <a 
+          target="_blank"
+          href="/catatumbo/vercupos"
+          style="color: black; background-color: rgba(255, 255, 255, 0.6); padding: 5px 10px; text-decoration: none; border-radius: 5px; display: inline-block; text-align: center;"
+        >
+          Ver cupos
+        </a>
+      </v-col>
+    </v-row>
   </v-container>
 </v-main>
 </template>
@@ -78,6 +89,12 @@ background-size: contain;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+@media (min-width: 1280px) {
+    .v-container {
+        max-width: 2200px;
+    }
 }
 
 /* General */
@@ -367,6 +384,11 @@ color: #106737; /* Cambia de color al pasar el mouse */
       width: 90%;
       font-size: 18px;
   }
+}
+@media (min-width: 1280px) {
+    .v-container {
+        max-width: 2200px;
+    }
 }
 
 </style>
