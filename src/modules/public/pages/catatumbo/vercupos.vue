@@ -58,6 +58,12 @@
     box-sizing: border-box;
 }
 
+@media (min-width: 1280px) {
+    .v-container {
+        max-width: 2200px;
+    }
+}
+
 .v-main {
   padding-top: 15px !important;
 }
