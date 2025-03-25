@@ -21,7 +21,7 @@
           <v-col md="6" cols="12" class="text-center div-argelia">
             <h2>Convocatoria abierta</h2>
             <h1>Argelia</h1>
-            <h3>Del <strong>3 al 30</strong> de marzo</h3>
+            <h3>Del <strong>3 de marzo al 30</strong> de marzo</h3>
             <v-btn color="#0d6efd" to="/argeliainicio">INSCRÍBETE AQUÍ</v-btn>
           </v-col>
         </v-row>
