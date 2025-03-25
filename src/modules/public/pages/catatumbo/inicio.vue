@@ -18,7 +18,7 @@
             <span className="title-highlight">Catatumbo</span>
           </h1>
           <h2 className="subtitle">Convención, Tibú, Sardinata y El Tarra</h2>
-          <p className="date">Del <strong>13 de febrero</strong> <strong>al 27 de febrero</strong></p>
+          <p className="date">Del <strong>13 de febrero</strong> <strong>al 23 de marzo</strong></p>
         </div>
         <div className="buttons-container">
           <div className="button-group">
@@ -50,7 +50,7 @@
         <div className="pdf-container-catatumbo">
             <a className="pdf-catatumbo"
                 target="blank"
-                href="https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/13022025_ConvocatoriaFinal_v11.pdf"
+                href="https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/13022025_ConvocatoriaFinal_v13%2027.2.25.pdf"
                 rel="noreferrer"
             >
                 Ver términos de referencia de la convocatoria

@@ -64,7 +64,7 @@
             <div className="pdf-container-asociaciones-catatumbo">
               <a className="pdf-asociaciones-catatumbo"
                 target="blank"
-                href="https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/13022025_ConvocatoriaFinal_v11.pdf" >
+                href="https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/13022025_ConvocatoriaFinal_v13%2027.2.25.pdf" >
                 Ver términos de referencia de la convocatoria
               </a>
             </div>
