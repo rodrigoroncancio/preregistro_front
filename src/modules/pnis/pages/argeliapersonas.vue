@@ -12,6 +12,11 @@
             title: $t('modules.core.validate'),
             icon: 'mdi-check',
             action: 'validate'
+          },
+          {
+            title: 'Valida Superv.',
+            icon: 'mdi-check-circle',
+            action: 'validate_super'
           }]"
           :menuItems="menuItems"
           :labelNew="'modules.core.new_userspnis'"
@@ -32,6 +37,14 @@
           </template>
           <template v-slot:item.number_uncompleted="{item}">
             <v-btn @click="modalValidados(item, 'no')"  variant="flat" color="red" block>{{ item.number_uncompleted }}</v-btn>
+          </template>
+          <template v-slot:item.validado_final="{ item }">
+            <v-icon 
+              :color="item.validado_final === 'si' ? 'green' : 'red'" 
+              size="32"
+            >
+              {{ item.validado_final === 'si' ? 'mdi-check-circle' : 'mdi-close-circle' }}
+            </v-icon>
           </template>
         </exp-data-table>
       </v-card-text>
@@ -174,6 +187,8 @@ const { t } = useI18n();
 const router = useRouter();
 const uAuth = useAuth();
 const uUtils = useUtils();
+const rolsActual = ref([]);
+
 
 const validationid = ref(null); // v-model para el radio group
 const identificationnumber = ref(null);
@@ -185,6 +200,7 @@ const headers: any[] = [
   { key: 'apellidos', title: "Apellidos", width: "auto", align: "start", searchable: true, sortable: false, },
   { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
   { key: 'number_uncompleted', title: "Alertas", width: "auto", align: "start", sortable: false, },
+  { key: 'validado_final', title: "Superv.", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
 const drawRefresh = ref("");
@@ -270,6 +286,8 @@ const downloadDocument = (item: any, tipo: number=1) => {
 onMounted(async () => {
   getValidationKey();
   getItemsValidadosBase();
+  const role = uAuth.getUserRole();
+  rolsActual.value = role
 });
 
 const fnReloadTable = () => {
@@ -279,10 +297,14 @@ const fnReloadTable = () => {
 }
 
 const menuItems = computed(() => {
-  if (uAuth.isAudit()) {
-    return ['view', 'documents']
+  if (uAuth.isAdmin()) {
+    return ['view', 'validate', 'validate_super', 'documents'];
+  } else if (rolsActual.value.includes(1) || rolsActual.value.includes(3)) {
+    return ['view', 'validate', 'validate_super', 'documents'];
+  } else if (uAuth.isAudit()) {
+    return ['view', 'documents'];
   } else {
-    return ['view', 'validate', 'documents']
+    return ['view'];
   }
 });
 
@@ -319,17 +341,27 @@ const clickAction = (item: any, action: string) => {
     identificationnumber.value = item.identificacion;
     getValidationItems();
   }
+  if (action === 'validate_super') {
+    identificationnumber.value = item.identificacion;
+    clickSelectSuperForm();
+  }
+};
+
+const clickSelectSuperForm = () => {
+  console.log('clickSelectSuperForm');
+  validationid.value = 0;
+  formModal.value = true;
 };
 
 const clickSaveForm = () => {
   console.log('clickSaveForm');
-}
+};
 
 const clickSelectForm = () => {
   console.log('clickSelectForm');
   console.log(validationid.value);
   formModal.value = true;
-}
+};
 
 const clickSelectFormDocuments = (item: any) => {
   console.log('clickSelectFormDocuments');

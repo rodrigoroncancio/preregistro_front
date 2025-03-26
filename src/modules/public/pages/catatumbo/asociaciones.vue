@@ -17,8 +17,9 @@
                     <span className="title-primary">Convocatoria abierta </span>
                     <span className="title-highlight">Catatumbo</span>
                 </h1>
-                <h2 className="subtitle-asociaciones">Convención, Tibú, Sardinata y El Tarra</h2>
-                <p className="date">Del <strong>13 de febrero</strong> <strong>al 23 de marzo</strong></p>
+                <!-- <h2 className="subtitle-asociaciones">Convención, Tibú, Sardinata y El Tarra</h2> -->
+                <h2 className="subtitle-asociaciones">Teorama</h2>
+                <p className="date">Del <strong>24 de marzo</strong> <strong>al 31 de marzo</strong></p>
             </div>
             <div className="text-information">
                 <p className="subtitle-asociaciones-text">

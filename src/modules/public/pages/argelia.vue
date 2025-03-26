@@ -23,7 +23,7 @@
                   <span className="title-primary-argelia">Convocatoria abierta </span>
                   <span className="title-highlight-argelia">Argelia</span>
                 </h1>
-                <p className="date-argelia-page">Del <strong>5 de febrero</strong> <strong>al 25 de febrero</strong></p>
+                <p className="date-argelia-page">Del <strong>3 de marzo</strong> <strong>al 30 de marzo</strong></p>
               </div>
             </v-col>
           </v-row>
