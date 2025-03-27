@@ -19,7 +19,7 @@
           </h1>
           <!-- <h2 className="subtitle">Convención, Tibú, Sardinata y El Tarra</h2> -->
           <h2 className="subtitle">Teorama</h2>
-          <p className="date">Del <strong>24 de marzo</strong> <strong>al 31 de marzo</strong></p>
+          <p className="date">Del <strong>24 de marzo</strong> <strong>al 28 de marzo</strong></p>
         </div>
         <div className="buttons-container">
           <div className="button-group">

@@ -19,7 +19,7 @@
                 </h1>
                 <!-- <h2 className="subtitle-asociaciones">Convención, Tibú, Sardinata y El Tarra</h2> -->
                 <h2 className="subtitle-asociaciones">Teorama</h2>
-                <p className="date">Del <strong>24 de marzo</strong> <strong>al 31 de marzo</strong></p>
+                <p className="date">Del <strong>24 de marzo</strong> <strong>al 28 de marzo</strong></p>
             </div>
             <div className="text-information">
                 <p className="subtitle-asociaciones-text">
