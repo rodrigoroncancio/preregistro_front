@@ -205,6 +205,15 @@
       "question": "Pregunta",
       "answer": "Respuesta"
     },
+    "public": {
+      "consultaestado": {
+        "titulo": "Consultar estado",
+        "numdocumento": "Número de documento",
+        "fechanacimiento": "Fecha de nacimiento",
+        "consultar": "Consultar",
+        "cerrar": "Cerrar"
+      }
+    },
     "pnis": {
       "pnis": "PNIS",
       "convocatoria": "Convocatoria",

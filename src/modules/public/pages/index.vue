@@ -24,11 +24,41 @@
             <h3>Del <strong>3 de marzo al 30</strong> de marzo</h3>
             <v-btn color="#0d6efd" to="/argeliainicio">INSCRÍBETE AQUÍ</v-btn>
           </v-col>
+          
+        </v-row>
+        <v-row>
+          <v-col md="12" cols="12" class="text-center div-argelia">
+            <a 
+              @click="openConsultaForm"
+              style="color: black; background-color: rgba(255, 255, 255, 0.8); padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-flex; align-items: center; height: 60px; justify-content: center;"
+            >
+              <v-icon left>mdi-magnify</v-icon> <!-- Icono de lupa -->
+              Consultar estado por documento
+            </a>
+          </v-col>
         </v-row>
       </div>
     </v-container>
   </v-main>
+
+  <consultaForm
+    v-if="consultaModal"
+    v-model="consultaModal"
+    @onFind="onFindDocument"
+  />
 </template>
+<script lang="ts" setup>
+  import { ref, onMounted } from "vue";
+  import consultaForm from "@/modules/public/pages/components/consultar.vue";
+
+  const consultaModal = ref(false);
+  const onFindDocument = (uuid: string) => {
+    consultaModal.value = false;
+  }
+  const openConsultaForm = () => {
+    consultaModal.value = true;
+  }
+</script>
 
 <style lang="scss" scoped>
 /* Sección de login */
