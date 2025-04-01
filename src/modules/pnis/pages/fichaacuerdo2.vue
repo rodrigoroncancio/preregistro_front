@@ -5,10 +5,20 @@
       <v-card-text class="pa-0">
         <exp-data-table
           uuid="table-ficha_acuerdo2"
-          :endpoint="`${endpoint}/fichaacuerdofase2`"
+          :showHeader="false"
+          :endpoint="`${endpoint}/fichaacuerdo2/filterbysurvey/10`"
           :drawRefresh="drawRefresh"
           :headers="headers"
-          :extraMenuItems="[{ title: 'Ficha', action: 'ficha', icon: 'mdi-text-box-search-outline' }]"
+          :extraMenuItems="[
+            {
+            title: $t('modules.core.validate'),
+            icon: 'mdi-check',
+            action: 'validate'
+            },
+            { title: 'Ficha', 
+              action: 'ficha', 
+              icon: 'mdi-text-box-search-outline' }
+            ]"
           :menuItems="menuItems"
           :labelNew="'modules.core.new_userspnis'"
           @onClickView="clickView"
@@ -47,7 +57,7 @@
         <frm-valida 
           :identificationnumber="identificationnumber"
           :validationitem="validationid"
-          :fomularioid="2"
+          :fomularioid="10"
           @onClickSave="fnReloadTable"
         />
       </v-col>
@@ -108,6 +118,7 @@
               <th class="text-left">Validación</th>
               <th class="text-left">Observación</th>
               <th class="text-left">Evidencia</th>
+              <th class="py-3 px-4">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -131,6 +142,22 @@
                 </template>
                 <template v-else> <v-btn variant="text" color="red" block disabled>Sin Evidencia</v-btn></template>
               </td>
+              <td>
+                <v-icon 
+                  v-if="item.id !== null" 
+                  color="red" 
+                  size="32" 
+                  @click="confirmDelete(item.id)">
+                  mdi-delete
+                </v-icon>
+                <v-icon 
+                  v-else 
+                  color="gray" 
+                  size="32" 
+                  disabled>
+                  mdi-delete
+                </v-icon>
+              </td>
             </tr>
           </tbody>
         </v-table>
@@ -151,6 +178,7 @@ import frmValida from "./forms/valida.vue";
 import useUtils from "@/composables/useUtils";
 import axios from "axios";
 import { useLoading } from "vue-loading-overlay";
+import Swal from "sweetalert2";
 
 const uLoading = useLoading();
 const endpoint = "/api/1.0/core";
@@ -166,6 +194,8 @@ const headers: any[] = [
   { key: 'numero_identificacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
   { key: 'nombre', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
   { key: 'linea_productiva', title: "Linea productiva", width: "auto", align: "start", searchable: true, sortable: false, },
+  { key: "number_completed", title: "Validados", width: "auto", align: "start", sortable: false, },
+  { key: "number_uncompleted", title: "Alertas", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
 const drawRefresh = ref("");
@@ -181,11 +211,42 @@ const itemsValidadosBase = ref([]);
 
 const getItemsValidadosBase = async () => {
   try {
-    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/3/`);
+    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/10/`);
     itemsValidadosBase.value = response.data;
   } catch (error) {
     console.error("Error fetching validation items:", error);
   }
+};
+
+const deleteItem = async (itemid: any) => {
+  console.log('itemid')
+  console.log(itemid)
+  await axios.delete(`/api/1.0/core/validationregister/${itemid}/delete/`);
+  Swal.fire("Eliminado", "El registro ha sido eliminado", "success");
+  formModalValidados.value = false;  
+  fnReloadTable()
+}
+
+const confirmDelete = (itemid: any) => {
+  formModalValidados.value=false
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "No podrás revertir esta acción. Se guardará los Datos del Usuario quien Eliminó y fecha de elimincación",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+    customClass: {
+      popup: "swal2-custom-zindex",
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteItem(itemid);
+      Swal.fire("¡Eliminado!", "El ítem ha sido eliminado.", "success");
+    }
+  });
 };
 
 const getValidationItems = async () => {
@@ -193,7 +254,7 @@ const getValidationItems = async () => {
     itemsValidation.value = [];
     try {
       const response = await axios.get(
-        `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/3`
+        `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/10`
       );
 
       console.log(response.data);
@@ -226,7 +287,7 @@ const getValidationKey = async () => {
 const modalValidados = async (item: any, tipo: string='si') => {
   try {
     let loader = uLoading.show({});
-    const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.identificacion}/3/${tipo}`);
+    const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.numero_identificacion}/10/${tipo}`);
     itemsValidados.value = response.data;
     loader.hide();
     formModalValidados.value = true;
@@ -315,7 +376,7 @@ const clickAction = (item: any, action: string) => {
   if (action === 'validate') {
     formModalValidate.value = true;
     console.log(item);
-    identificationnumber.value = item.identificacion;
+    identificationnumber.value = item.numero_identificacion;
     getValidationItems();
   }
   if (action === 'ficha') {
