@@ -136,28 +136,29 @@ const itemsMenu = [
     children: [{
       title: "modules.pnis.preregistrocatatumboindividual",
       icon: "mdi-human-male-board-poll",
-      children: [
-        {
-          title: "modules.pnis.preregcataindividual_propietarios",
-          icon: "mdi-human-male-board-poll",
-          url: "/pnis/catatumboindividual/5",
-        },
-        {
-          title: "modules.pnis.preregcataindividual_desplazados",
-          icon: "mdi-human-male-board-poll",
-          url: "/pnis/catatumboindividual/desplazados/2",
-        },
-        {
-          title: "modules.pnis.preregcataindividual_extranjeros",
-          icon: "mdi-human-male-board-poll",
-          url: "/pnis/catatumboindividual/extranjeros/6",
-        },
-        {
-          title: "modules.pnis.preregcataindividual_nopropietarios",
-          icon: "mdi-human-male-board-poll",
-          url: "/pnis/catatumboindividual/arrendatarios/4",
-        }
-      ] 
+      url: "/pnis/catatumboindividual/0"
+      // children: [
+      //   {
+      //     title: "modules.pnis.preregcataindividual_propietarios",
+      //     icon: "mdi-human-male-board-poll",
+      //     url: "/pnis/catatumboindividual/5",
+      //   },
+      //   {
+      //     title: "modules.pnis.preregcataindividual_desplazados",
+      //     icon: "mdi-human-male-board-poll",
+      //     url: "/pnis/catatumboindividual/desplazados/2",
+      //   },
+      //   {
+      //     title: "modules.pnis.preregcataindividual_extranjeros",
+      //     icon: "mdi-human-male-board-poll",
+      //     url: "/pnis/catatumboindividual/extranjeros/6",
+      //   },
+      //   {
+      //     title: "modules.pnis.preregcataindividual_nopropietarios",
+      //     icon: "mdi-human-male-board-poll",
+      //     url: "/pnis/catatumboindividual/arrendatarios/4",
+      //   }
+      // ] 
     },
     {
       title: "modules.pnis.preregistrocatatumbogrupos",
