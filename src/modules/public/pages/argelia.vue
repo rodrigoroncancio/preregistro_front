@@ -23,7 +23,7 @@
                   <span className="title-primary-argelia">Convocatoria abierta </span>
                   <span className="title-highlight-argelia">Argelia</span>
                 </h1>
-                <p className="date-argelia-page">Del <strong>3 de marzo</strong> <strong>al 30 de marzo</strong></p>
+                <p className="date-argelia-page">Del <strong>1 de abril</strong> <strong>al 13 de abril</strong></p>
               </div>
             </v-col>
           </v-row>
@@ -56,7 +56,7 @@
 
               <a className="pdf"
                 target="blank"
-                href="https://stpnis.blob.core.windows.net/testdsci/preregistroArgelia/05022025_Preinscripci%C3%B3n_proyectos_Argelia_terminosconvocatoria_FINAL-territorial%20(1).pdf"
+                href="https://stpnis.blob.core.windows.net/testdsci/preregistroArgelia/10032025_Inscripcion_Argelia_TdR_CONVOCATORIA1_Fase1_v7.pdf"
               >
                 Ver términos de referencia de la convocatoria
               </a>

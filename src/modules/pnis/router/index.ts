@@ -43,9 +43,34 @@ const router = {
       component: () => import( /* webpackChunkName: "PnisargeliagrupoOpen" */ "@/modules/pnis/pages/argeliagrupo-open.vue"),
     },
     {
-      path: "catatumboindividual",
+      path: "catatumboindividual/:id",
       name: "pnis-catatumboindividual",
       component: () => import( /* webpackChunkName: "Pniscatatumboindividual" */ "@/modules/pnis/pages/catatumboindividual.vue"),
+    },
+    {
+      path: "catatumboindividual/:id",
+      name: "pnis-catatumboindividual",
+      component: () => import( /* webpackChunkName: "Pniscatatumboindividual" */ "@/modules/pnis/pages/catatumboindividual.vue"),
+    },
+    {
+      path: "catatumboindividual/:id",
+      name: "pnis-catatumboindividual",
+      component: () => import( /* webpackChunkName: "Pniscatatumboindividual" */ "@/modules/pnis/pages/catatumboindividual.vue"),
+    },
+    {
+      path: "catatumboindividual/arrendatarios/:id",
+      name: "pnis-catatumboindividual-arrendatarios",
+      component: () => import( /* webpackChunkName: "Pniscatatumboindividual" */ "@/modules/pnis/pages/catatumboindividual-arrendatarios.vue"),
+    },
+    {
+      path: "catatumboindividual/desplazados/:id",
+      name: "pnis-catatumboindividual-desplazados",
+      component: () => import( /* webpackChunkName: "Pniscatatumboindividual" */ "@/modules/pnis/pages/catatumboindividual-desplazados.vue"),
+    },
+    {
+      path: "catatumboindividual/extranjeros/:id",
+      name: "pnis-catatumboindividual-extranjeros",
+      component: () => import( /* webpackChunkName: "Pniscatatumboindividual" */ "@/modules/pnis/pages/catatumboindividual-extranjeros.vue"),
     },
     {
       path: "catatumboindividual/open/:id",
