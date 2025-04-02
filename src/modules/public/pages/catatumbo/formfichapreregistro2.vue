@@ -934,42 +934,42 @@
     // personasNUcleo.value = personas
 
 
-    uCrud.create(senderData)
-        .then((item) => {
+    // uCrud.create(senderData)
+    //     .then((item) => {
             
-            console.log(item)
-            const personas= []// Define personas como un objeto con claves dinámicas
+    //         console.log(item)
+    //         const personas= []// Define personas como un objeto con claves dinámicas
 
-            for (let i = 1; i <= 10; i++) {
-                if (senderData[`persona${i}_nombre`]) { // Verifica si existen datos
-                    personas.push({
-                        ficha: ( item as any).id,
-                        nombre: senderData[`persona${i}_nombre`],
-                        tipo_identificacion: senderData[`persona${i}_tipo_identificacion`],
-                        numero_identificacion: senderData[`persona${i}_num_identificación`],
-                        fecha_expedicion_identificacion: senderData[`persona${i}_fecha_expedicion_identificacion`],
-                        parentesco: senderData[`persona${i}_parentesco`],
-                        foto_doc_atras: Array.isArray(senderData[`persona${i}_foto_doc_atras`]) && senderData[`persona${i}_foto_doc_atras`].length > 0 ? senderData[`persona${i}_foto_doc_atras`][0].content : "",
-                        foto_doc_frente: Array.isArray(senderData[`persona${i}_foto_doc_frente`]) && senderData[`persona${i}_foto_doc_frente`].length > 0 ? senderData[`persona${i}_foto_doc_frente`][0].content : "",
-                        parentesco_otro: senderData[`persona${i}_parentesco_cual`],
-                        fecha_nacimiento: senderData[`persona${i}_fecha_nacimiento`],
-                        sexo: senderData[`persona${i}_sexo`],
-                        estado_civil: senderData[`persona${i}_estado_civil`],
-                        grupo_especial: senderData[`persona${i}_atencion_especial`]
-                    });
-                }
-            }
-            personasNUcleo.value = personas;
-            console.log(personas)
-            enviarNucleoFamiliar();
+    //         for (let i = 1; i <= 10; i++) {
+    //             if (senderData[`persona${i}_nombre`]) { // Verifica si existen datos
+    //                 personas.push({
+    //                     ficha: ( item as any).id,
+    //                     nombre: senderData[`persona${i}_nombre`],
+    //                     tipo_identificacion: senderData[`persona${i}_tipo_identificacion`],
+    //                     numero_identificacion: senderData[`persona${i}_num_identificación`],
+    //                     fecha_expedicion_identificacion: senderData[`persona${i}_fecha_expedicion_identificacion`],
+    //                     parentesco: senderData[`persona${i}_parentesco`],
+    //                     foto_doc_atras: Array.isArray(senderData[`persona${i}_foto_doc_atras`]) && senderData[`persona${i}_foto_doc_atras`].length > 0 ? senderData[`persona${i}_foto_doc_atras`][0].content : "",
+    //                     foto_doc_frente: Array.isArray(senderData[`persona${i}_foto_doc_frente`]) && senderData[`persona${i}_foto_doc_frente`].length > 0 ? senderData[`persona${i}_foto_doc_frente`][0].content : "",
+    //                     parentesco_otro: senderData[`persona${i}_parentesco_cual`],
+    //                     fecha_nacimiento: senderData[`persona${i}_fecha_nacimiento`],
+    //                     sexo: senderData[`persona${i}_sexo`],
+    //                     estado_civil: senderData[`persona${i}_estado_civil`],
+    //                     grupo_especial: senderData[`persona${i}_atencion_especial`]
+    //                 });
+    //             }
+    //         }
+    //         personasNUcleo.value = personas;
+    //         console.log(personas)
+    //         enviarNucleoFamiliar();
 
-            uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
-            sender.clear(true);
-            survey.showNavigationButtons = false;
-        })
-        .catch((error) => {
-              uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
-        });
+    //         uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
+    //         sender.clear(true);
+    //         survey.showNavigationButtons = false;
+    //     })
+    //     .catch((error) => {
+    //           uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
+    //     });
 
       return false;
   });
