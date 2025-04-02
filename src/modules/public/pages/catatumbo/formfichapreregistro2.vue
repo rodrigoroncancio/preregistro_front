@@ -1028,6 +1028,26 @@
         console.error("Error al consultar el endpoint:", error);
       }
     }
+
+    if (options.name === "tiene_coca" || options.name === "tipo_exclusion") {
+      const tipoexclusion = sender.getValue("tipo_exclusion");
+      const tienecoca = sender.getValue("tiene_coca");
+
+      if (options.name === "tiene_coca" && !tienecoca) {
+        uToast.toastError('Para poder seguir debe tener un cultivo de coca');
+      }
+
+      if (options.name === "tipo_exclusion" && tipoexclusion !== '11') {
+        uToast.toastError('Para poder seguir debe tener no debe contar con ninguna de las condiciones');
+      }
+
+      if (tienecoca && tipoexclusion === '11') {
+        survey.showNavigationButtons = true;
+      } else {
+        survey.showNavigationButtons = false;
+      }
+    }  
+
     if (options.name === "latitud") {
       if (options.value === null || options.value === "")
         return;
