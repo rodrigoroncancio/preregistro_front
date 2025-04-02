@@ -25,7 +25,10 @@
   
   const uLoading = useLoading();
 
-  const uCrud = useCrud("forms/catatumbo/fichaacuerdo");
+  const uCrud = useCrud("api/2.0/nucleo/persona");
+  const uCrud2 = useCrud("forms/catatumbo/fichaacuerdo");
+  const uCrud3 = useCrud("forms/catatumbo/fichaacuerdo");
+
   const uToast = useToast();
 
   const itemsDepartments = ref<Array<{ id: number; label: string }>>([]);
@@ -281,14 +284,14 @@
         },
         {
           "type": "dropdown",
-          "name": "desplazado_departamento",
+          "name": "desplazadoss_departamento",
           "visibleIf": "{desplazado_2025} = true",
           "title": "Departamento",
           "isRequired": true,
           "choices": [
             {
               "value": "Item 1",
-              "text": "Sin departamento"
+              "text": "Norte de santander"
             }
           ]
         },
@@ -407,7 +410,7 @@
         },
         {
           "type": "text",
-          "name": "titular_Numero_documento",
+          "name": "titular_numero_documento",
           "title": "2.4 Número de documento",
           "isRequired": true
         },
@@ -478,14 +481,14 @@
         },
         {
           "type": "boolean",
-          "name": "question31",
+          "name": "titular_cabeza_familia",
           "visibleIf": "{titular_sexo} = 15",
           "title": "¿Es madre cabeza de familia? ",
           "isRequired": true
         },
         {
           "type": "dropdown",
-          "name": "titular_pertenece_comunidad_etnica",
+          "name": "tipo_comunidad_etnica",
           "title": "2.14 ¿Usted se identifica como miembro de una comunidad étnica o de alguna de las poblaciones que se describen a continuación? ",
           "choices": [
             {
@@ -520,14 +523,14 @@
         },
         {
           "type": "text",
-          "name": "question34",
-          "visibleIf": "({titular_pertenece_comunidad_etnica} != '27') and ({titular_pertenece_comunidad_etnica} != '28')",
+          "name": "tipo_comunidad_etnica_nombre",
+          "visibleIf": "({tipo_comunidad_etnica} != '27') and ({tipo_comunidad_etnica} != '28')",
           "title": "¿A qué resguardo indígena o Consejo Comunitario de Comunidades negras pertenece Ud.?",
           "description": "No dejar en blanco. Si no se dispone del dato, escribir NA *"
         },
         {
           "type": "text",
-          "name": "question35",
+          "name": "num_nucleo",
           "title": "3. ¿Cuántas personas en total, incluido usted, conforman su núcleo familiar? ",
           "isRequired": true,
           "inputType": "number"
@@ -720,7 +723,7 @@
               "text": "En el mismo predio donde está la coca"
             },
             {
-              "value": "2",
+              "value": "0",
               "text": "En otro sitio"
             }
           ]
@@ -899,77 +902,140 @@
       console.log('sender.data')
       console.log(sender.data)
 
-      const senderData = {
-        ...sender.data,
-        actividades_otro_predio: sender.data.actividades_otro_predio.length ? sender.data.actividades_otro_predio.join(", ") : "",
-        grupo_especial: sender.data.grupo_especial.length ? sender.data.grupo_especial.join(", ") : "",
-        foto_doc_frente: Array.isArray(sender.data.foto_doc_frente) && sender.data.foto_doc_frente.length > 0 ? sender.data.foto_doc_frente[0].content : "",
-        foto_doc_atras: Array.isArray(sender.data.foto_doc_atras) && sender.data.foto_doc_atras.length > 0 ? sender.data.foto_doc_atras[0].content : "",
-        tipo_documento_file: Array.isArray(sender.data.tipo_documento_file) && sender.data.tipo_documento_file.length > 0 ? sender.data.tipo_documento_file[0].content : "",
-        predio1_documento_arraigo: Array.isArray(sender.data.predio1_documento_arraigo) && sender.data.predio1_documento_arraigo.length > 0 ? sender.data.predio1_documento_arraigo[0].content : "",
-        predio2_documento_arraigo: Array.isArray(sender.data.predio2_documento_arraigo) && sender.data.predio2_documento_arraigo.length > 0 ? sender.data.predio2_documento_arraigo[0].content : "",
-        predio3_documento_arraigo: Array.isArray(sender.data.predio3_documento_arraigo) && sender.data.predio3_documento_arraigo.length > 0 ? sender.data.predio3_documento_arraigo[0].content : "",
-        predio4_documento_arraigo: Array.isArray(sender.data.predio4_documento_arraigo) && sender.data.predio4_documento_arraigo.length > 0 ? sender.data.predio4_documento_arraigo[0].content : "",
-        predio5_documento_arraigo: Array.isArray(sender.data.predio5_documento_arraigo) && sender.data.predio5_documento_arraigo.length > 0 ? sender.data.predio5_documento_arraigo[0].content : "",
-        predio6_documento_arraigo: Array.isArray(sender.data.predio6_documento_arraigo) && sender.data.predio6_documento_arraigo.length > 0 ? sender.data.predio6_documento_arraigo[0].content : "",
-        predio7_documento_arraigo: Array.isArray(sender.data.predio7_documento_arraigo) && sender.data.predio7_documento_arraigo.length > 0 ? sender.data.predio7_documento_arraigo[0].content : "",
-        predio8_documento_arraigo: Array.isArray(sender.data.predio8_documento_arraigo) && sender.data.predio8_documento_arraigo.length > 0 ? sender.data.predio8_documento_arraigo[0].content : "",
-        predio9_documento_arraigo: Array.isArray(sender.data.predio9_documento_arraigo) && sender.data.predio9_documento_arraigo.length > 0 ? sender.data.predio9_documento_arraigo[0].content : "",
-        predio10_documento_arraigo: Array.isArray(sender.data.predio10_documento_arraigo) && sender.data.predio10_documento_arraigo.length > 0 ? sender.data.predio10_documento_arraigo[0].content : "",
-        predio1_arraigo_documento_soporte: Array.isArray(sender.data.predio1_arraigo_documento_soporte) && sender.data.predio1_arraigo_documento_soporte.length > 0 ? sender.data.predio1_arraigo_documento_soporte[0].content : "",
-        predio2_arraigo_documento_soporte: Array.isArray(sender.data.predio2_arraigo_documento_soporte) && sender.data.predio2_arraigo_documento_soporte.length > 0 ? sender.data.predio2_arraigo_documento_soporte[0].content : "",
-        predio3_arraigo_documento_soporte: Array.isArray(sender.data.predio3_arraigo_documento_soporte) && sender.data.predio3_arraigo_documento_soporte.length > 0 ? sender.data.predio3_arraigo_documento_soporte[0].content : "",
-        predio4_arraigo_documento_soporte: Array.isArray(sender.data.predio4_arraigo_documento_soporte) && sender.data.predio4_arraigo_documento_soporte.length > 0 ? sender.data.predio4_arraigo_documento_soporte[0].content : "",
-        predio5_arraigo_documento_soporte: Array.isArray(sender.data.predio5_arraigo_documento_soporte) && sender.data.predio5_arraigo_documento_soporte.length > 0 ? sender.data.predio5_arraigo_documento_soporte[0].content : "",
-        predio6_arraigo_documento_soporte: Array.isArray(sender.data.predio6_arraigo_documento_soporte) && sender.data.predio6_arraigo_documento_soporte.length > 0 ? sender.data.predio6_arraigo_documento_soporte[0].content : "",
-        predio7_arraigo_documento_soporte: Array.isArray(sender.data.predio7_arraigo_documento_soporte) && sender.data.predio7_arraigo_documento_soporte.length > 0 ? sender.data.predio7_arraigo_documento_soporte[0].content : "",
-        predio8_arraigo_documento_soporte: Array.isArray(sender.data.predio8_arraigo_documento_soporte) && sender.data.predio8_arraigo_documento_soporte.length > 0 ? sender.data.predio8_arraigo_documento_soporte[0].content : "",
-        predio9_arraigo_documento_soporte: Array.isArray(sender.data.predio9_arraigo_documento_soporte) && sender.data.predio9_arraigo_documento_soporte.length > 0 ? sender.data.predio9_arraigo_documento_soporte[0].content : "",
-        predio10_arraigo_documento_soporte: Array.isArray(sender.data.predio10_arraigo_documento_soporte) && sender.data.predio10_arraigo_documento_soporte.length > 0 ? sender.data.predio10_arraigo_documento_soporte[0].content : "",
-        firma_file: Array.isArray(sender.data.firma_file) && sender.data.firma_file.length > 0 ? sender.data.firma_file[0].content : "",
-        documento_pertenencia_etnica_file: Array.isArray(sender.data.documento_pertenencia_etnica_file) && sender.data.documento_pertenencia_etnica_file.length > 0 ? sender.data.documento_pertenencia_etnica_file[0].content : "",
-      };
+      // const senderData = {
+      //   ...sender.data,
+      //   actividades_otro_predio: sender.data.actividades_otro_predio.length ? sender.data.actividades_otro_predio.join(", ") : "",
+      //   grupo_especial: sender.data.grupo_especial.length ? sender.data.grupo_especial.join(", ") : "",
+      //   foto_doc_frente: Array.isArray(sender.data.foto_doc_frente) && sender.data.foto_doc_frente.length > 0 ? sender.data.foto_doc_frente[0].content : "",
+      //   foto_doc_atras: Array.isArray(sender.data.foto_doc_atras) && sender.data.foto_doc_atras.length > 0 ? sender.data.foto_doc_atras[0].content : "",
+      //   tipo_documento_file: Array.isArray(sender.data.tipo_documento_file) && sender.data.tipo_documento_file.length > 0 ? sender.data.tipo_documento_file[0].content : "",
+      //   predio1_documento_arraigo: Array.isArray(sender.data.predio1_documento_arraigo) && sender.data.predio1_documento_arraigo.length > 0 ? sender.data.predio1_documento_arraigo[0].content : "",
+      //   predio2_documento_arraigo: Array.isArray(sender.data.predio2_documento_arraigo) && sender.data.predio2_documento_arraigo.length > 0 ? sender.data.predio2_documento_arraigo[0].content : "",
+      //   predio3_documento_arraigo: Array.isArray(sender.data.predio3_documento_arraigo) && sender.data.predio3_documento_arraigo.length > 0 ? sender.data.predio3_documento_arraigo[0].content : "",
+      //   predio4_documento_arraigo: Array.isArray(sender.data.predio4_documento_arraigo) && sender.data.predio4_documento_arraigo.length > 0 ? sender.data.predio4_documento_arraigo[0].content : "",
+      //   predio5_documento_arraigo: Array.isArray(sender.data.predio5_documento_arraigo) && sender.data.predio5_documento_arraigo.length > 0 ? sender.data.predio5_documento_arraigo[0].content : "",
+      //   predio6_documento_arraigo: Array.isArray(sender.data.predio6_documento_arraigo) && sender.data.predio6_documento_arraigo.length > 0 ? sender.data.predio6_documento_arraigo[0].content : "",
+      //   predio7_documento_arraigo: Array.isArray(sender.data.predio7_documento_arraigo) && sender.data.predio7_documento_arraigo.length > 0 ? sender.data.predio7_documento_arraigo[0].content : "",
+      //   predio8_documento_arraigo: Array.isArray(sender.data.predio8_documento_arraigo) && sender.data.predio8_documento_arraigo.length > 0 ? sender.data.predio8_documento_arraigo[0].content : "",
+      //   predio9_documento_arraigo: Array.isArray(sender.data.predio9_documento_arraigo) && sender.data.predio9_documento_arraigo.length > 0 ? sender.data.predio9_documento_arraigo[0].content : "",
+      //   predio10_documento_arraigo: Array.isArray(sender.data.predio10_documento_arraigo) && sender.data.predio10_documento_arraigo.length > 0 ? sender.data.predio10_documento_arraigo[0].content : "",
+      //   predio1_arraigo_documento_soporte: Array.isArray(sender.data.predio1_arraigo_documento_soporte) && sender.data.predio1_arraigo_documento_soporte.length > 0 ? sender.data.predio1_arraigo_documento_soporte[0].content : "",
+      //   predio2_arraigo_documento_soporte: Array.isArray(sender.data.predio2_arraigo_documento_soporte) && sender.data.predio2_arraigo_documento_soporte.length > 0 ? sender.data.predio2_arraigo_documento_soporte[0].content : "",
+      //   predio3_arraigo_documento_soporte: Array.isArray(sender.data.predio3_arraigo_documento_soporte) && sender.data.predio3_arraigo_documento_soporte.length > 0 ? sender.data.predio3_arraigo_documento_soporte[0].content : "",
+      //   predio4_arraigo_documento_soporte: Array.isArray(sender.data.predio4_arraigo_documento_soporte) && sender.data.predio4_arraigo_documento_soporte.length > 0 ? sender.data.predio4_arraigo_documento_soporte[0].content : "",
+      //   predio5_arraigo_documento_soporte: Array.isArray(sender.data.predio5_arraigo_documento_soporte) && sender.data.predio5_arraigo_documento_soporte.length > 0 ? sender.data.predio5_arraigo_documento_soporte[0].content : "",
+      //   predio6_arraigo_documento_soporte: Array.isArray(sender.data.predio6_arraigo_documento_soporte) && sender.data.predio6_arraigo_documento_soporte.length > 0 ? sender.data.predio6_arraigo_documento_soporte[0].content : "",
+      //   predio7_arraigo_documento_soporte: Array.isArray(sender.data.predio7_arraigo_documento_soporte) && sender.data.predio7_arraigo_documento_soporte.length > 0 ? sender.data.predio7_arraigo_documento_soporte[0].content : "",
+      //   predio8_arraigo_documento_soporte: Array.isArray(sender.data.predio8_arraigo_documento_soporte) && sender.data.predio8_arraigo_documento_soporte.length > 0 ? sender.data.predio8_arraigo_documento_soporte[0].content : "",
+      //   predio9_arraigo_documento_soporte: Array.isArray(sender.data.predio9_arraigo_documento_soporte) && sender.data.predio9_arraigo_documento_soporte.length > 0 ? sender.data.predio9_arraigo_documento_soporte[0].content : "",
+      //   predio10_arraigo_documento_soporte: Array.isArray(sender.data.predio10_arraigo_documento_soporte) && sender.data.predio10_arraigo_documento_soporte.length > 0 ? sender.data.predio10_arraigo_documento_soporte[0].content : "",
+      //   firma_file: Array.isArray(sender.data.firma_file) && sender.data.firma_file.length > 0 ? sender.data.firma_file[0].content : "",
+      //   documento_pertenencia_etnica_file: Array.isArray(sender.data.documento_pertenencia_etnica_file) && sender.data.documento_pertenencia_etnica_file.length > 0 ? sender.data.documento_pertenencia_etnica_file[0].content : "",
+      // };
 
-    
+      const personaData = {
+        tipo_identificacion_id: sender.data.titular_tipo_identificacion,
+        numero_documento: sender.data.titular_numero_documento,
+        nombre: sender.data.titular_nombres,
+        apellido: sender.data.titular_apellidos,
+        fecha_expedicion: sender.data.titular_fecha_expedicion,
+        fecha_nacimiento: sender.data.titular_fecha_nacimiento,
+        sexo_id: sender.data.titular_sexo,
+        email: sender.data.titular_email,
+        telefono_celular: sender.data.titular_celular,
+        whatsapp: sender.data.titular_whatsapp,
+        tipo_comunidad_etnica_id: sender.data.tipo_comunidad_etnica,
+        nombre_comunidad: sender.data.tipo_comunidad_etnica_nombre,
+        pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0, 
+        desplazado_2025: sender.data.desplazado_2025,
+        cabeza_flia: sender.data.titular_cabeza_familia,
+        num_nucleo: sender.data.num_nucleo
+    };
+    console.log('personaData')
+    console.log(personaData)
+
+    const formularioPersonaData = {
+        formulario_id: 1,
+        persona_id: sender.data.Persona_Id,
+        tiene_coca: sender.data.Tiene_Coca,
+        acepta_terminos: sender.data.Acepta_Terminos,
+        acepta_tratamiento_datos: sender.data.Acepta_Tratamiento_Datos,
+    };
+
+    const personaAdjuntoData1 = {
+        persona_id: sender.data.Persona_Id,
+        tipo_documento_id: 13,
+        ruta: Array.isArray(sender.data.titular_foto_cara) && sender.data.titular_foto_cara.length > 0 ? sender.data.titular_foto_cara[0].content : "",
+        origen: sender.data.Origen,
+        fcrea: sender.data.FCrea
+    };
+
+    const personaAdjuntoData2 = {
+        persona_id: sender.data.Persona_Id,
+        tipo_documento_id: 14,
+        ruta: Array.isArray(sender.data.titular_foto_contracara) && sender.data.titular_foto_contracara.length > 0 ? sender.data.titular_foto_contracara[0].content : "",
+        origen: sender.data.Origen,
+        fcrea: sender.data.FCrea
+    };
     // personasNUcleo.value = personas
 
+    const predioLoteData = {
+        persona_id: sender.data.Persona_Id,
+        ubicacion_id: sender.data.Ubicacion_Id,
+        cabecera: sender.data.viveLugar === "1" ? 1 : 0,
+        centro_poblado: sender.data.viveLugar === "2" ? 1 : 0,
+        corregimiento: sender.data.viveLugar === "3" ? 1 : 0,
+        vereda: sender.data.viveLugar === "4" ? 1 : 0,
+        direccion: sender.data.vive_direccion,
+        residencia: 0,
+        lotecoca:1,
+        area_total_hectareas: sender.data.predio_coca_area_total,
+        area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
+        proyecto_productivo: parseInt(sender.data.predio_coca_ubicacion),
+        tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
+        documento_relacion_predio: Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0 ? sender.data.predio_coca_tipo_documento[0].content : "",
+        origen: 'preregistro_catatumbo'
+    };
+    console.log('personaData')
+    console.log(personaData)
 
-    // uCrud.create(senderData)
-    //     .then((item) => {
+
+    uCrud.create(personaData)
+        .then((item) => {
             
-    //         console.log(item)
-    //         const personas= []// Define personas como un objeto con claves dinámicas
+            console.log(item)
+            // const personas= []// Define personas como un objeto con claves dinámicas
 
-    //         for (let i = 1; i <= 10; i++) {
-    //             if (senderData[`persona${i}_nombre`]) { // Verifica si existen datos
-    //                 personas.push({
-    //                     ficha: ( item as any).id,
-    //                     nombre: senderData[`persona${i}_nombre`],
-    //                     tipo_identificacion: senderData[`persona${i}_tipo_identificacion`],
-    //                     numero_identificacion: senderData[`persona${i}_num_identificación`],
-    //                     fecha_expedicion_identificacion: senderData[`persona${i}_fecha_expedicion_identificacion`],
-    //                     parentesco: senderData[`persona${i}_parentesco`],
-    //                     foto_doc_atras: Array.isArray(senderData[`persona${i}_foto_doc_atras`]) && senderData[`persona${i}_foto_doc_atras`].length > 0 ? senderData[`persona${i}_foto_doc_atras`][0].content : "",
-    //                     foto_doc_frente: Array.isArray(senderData[`persona${i}_foto_doc_frente`]) && senderData[`persona${i}_foto_doc_frente`].length > 0 ? senderData[`persona${i}_foto_doc_frente`][0].content : "",
-    //                     parentesco_otro: senderData[`persona${i}_parentesco_cual`],
-    //                     fecha_nacimiento: senderData[`persona${i}_fecha_nacimiento`],
-    //                     sexo: senderData[`persona${i}_sexo`],
-    //                     estado_civil: senderData[`persona${i}_estado_civil`],
-    //                     grupo_especial: senderData[`persona${i}_atencion_especial`]
-    //                 });
-    //             }
-    //         }
-    //         personasNUcleo.value = personas;
-    //         console.log(personas)
-    //         enviarNucleoFamiliar();
+            // for (let i = 1; i <= 10; i++) {
+            //     if (senderData[`persona${i}_nombre`]) { // Verifica si existen datos
+            //         personas.push({
+            //             ficha: ( item as any).id,
+            //             nombre: senderData[`persona${i}_nombre`],
+            //             tipo_identificacion: senderData[`persona${i}_tipo_identificacion`],
+            //             numero_identificacion: senderData[`persona${i}_num_identificación`],
+            //             fecha_expedicion_identificacion: senderData[`persona${i}_fecha_expedicion_identificacion`],
+            //             parentesco: senderData[`persona${i}_parentesco`],
+            //             foto_doc_atras: Array.isArray(senderData[`persona${i}_foto_doc_atras`]) && senderData[`persona${i}_foto_doc_atras`].length > 0 ? senderData[`persona${i}_foto_doc_atras`][0].content : "",
+            //             foto_doc_frente: Array.isArray(senderData[`persona${i}_foto_doc_frente`]) && senderData[`persona${i}_foto_doc_frente`].length > 0 ? senderData[`persona${i}_foto_doc_frente`][0].content : "",
+            //             parentesco_otro: senderData[`persona${i}_parentesco_cual`],
+            //             fecha_nacimiento: senderData[`persona${i}_fecha_nacimiento`],
+            //             sexo: senderData[`persona${i}_sexo`],
+            //             estado_civil: senderData[`persona${i}_estado_civil`],
+            //             grupo_especial: senderData[`persona${i}_atencion_especial`]
+            //         });
+            //     }
+            // }
+            // personasNUcleo.value = personas;
+            // console.log(personas)
+            // enviarNucleoFamiliar();
 
-    //         uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
-    //         sender.clear(true);
-    //         survey.showNavigationButtons = false;
-    //     })
-    //     .catch((error) => {
-    //           uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
-    //     });
+            // uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
+            // sender.clear(true);
+            // survey.showNavigationButtons = false;
+        })
+        .catch((error) => {
+              uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
+        });
 
       return false;
   });
@@ -1038,7 +1104,7 @@
       }
 
       if (options.name === "tipo_exclusion" && tipoexclusion !== '11') {
-        uToast.toastError('Para poder seguir debe tener no debe contar con ninguna de las condiciones');
+        uToast.toastError('Para poder seguir, no debe contar con ninguna de las condiciones anteriores');
       }
 
       if (tienecoca && tipoexclusion === '11') {
