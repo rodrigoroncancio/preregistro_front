@@ -63,7 +63,7 @@
 };
 
   onMounted(async () => {
-    getDepartmentList();
+
   });
 
   const json ={
@@ -204,7 +204,7 @@
         {
           "type": "text",
           "name": "vive_lugar_nombre",
-          "visibleIf": "{vive_lugar} <> 4 and {vive_lugar} notempty",
+          "visibleIf": "{vive_lugar} < 3 and {vive_lugar} notempty",
           "title": "Nombre del lugar"
         },
         {
@@ -216,7 +216,7 @@
         {
           "type": "dropdown",
           "name": "vive_vereda",
-          "visibleIf": "{vive_lugar} = 4",
+          "visibleIf": "{vive_lugar} > 2",
           "title": "Corregimiento",
           "isRequired": true,
           "choices": [
@@ -308,7 +308,7 @@
         {
           "type": "text",
           "name": "desplazado_lugar_nombre",
-          "visibleIf": "{deplazado_lugar} != '4' and {desplazado_2025} = true",
+          "visibleIf": "{deplazado_lugar} < 3 and {desplazado_2025} = true",
           "title": "Nombre"
         },
         {
@@ -320,7 +320,7 @@
         {
           "type": "dropdown",
           "name": "desplazado_vereda",
-          "visibleIf": "{deplazado_lugar} = 4  and {desplazado_2025} = true",
+          "visibleIf": "{deplazado_lugar} > 2 and {desplazado_2025} = true",
           "title": "Corregimiento",
           "choices": [
             {
@@ -333,7 +333,7 @@
           "type": "text",
           "name": "desplazado_otra_vereda",
           "visibleIf": "{deplazado_lugar} = 4  and {desplazado_2025} = true",
-          "title": "Otra vereda"
+          "title": "Corregimiento"
         }
       ]
     },
@@ -450,8 +450,8 @@
         {
           "type": "dropdown",
           "name": "tipo_comunidad_etnica",
-          "isRequired": true,
           "title": "2.14 ¿Usted se identifica como miembro de una comunidad étnica o de alguna de las poblaciones que se describen a continuación? ",
+          "isRequired": true,
           "choices": [
             {
               "value": "17",
@@ -561,6 +561,7 @@
         {
           "type": "dropdown",
           "name": "predio_coca_departamento",
+          "visibleIf": "{predio_coca_vive} = false",
           "title": "7.1. Departamento",
           "choices": [
             {
@@ -572,6 +573,7 @@
         {
           "type": "dropdown",
           "name": "predio_coca_municipio",
+          "visibleIf": "{predio_coca_vive} = false",
           "title": "7.2 Municipio",
           "choices": [
             {
@@ -595,6 +597,7 @@
         {
           "type": "radiogroup",
           "name": "predio_coca_lugar",
+          "visibleIf": "{predio_coca_vive} = false",
           "title": "7.3 . LUGAR",
           "choices": [
             {
@@ -618,19 +621,19 @@
         {
           "type": "text",
           "name": "predio_coca_lugar_nombre",
-          "visibleIf": "{predio_coca_lugar} <> 4",
+          "visibleIf": "{predio_coca_lugar} <3 and {predio_coca_vive} = false",
           "title": "Nombre"
         },
         {
           "type": "text",
           "name": "predio_coca_lugar_direccion",
-          "visibleIf": "{predio_coca_lugar} <> 4",
+          "visibleIf": "{predio_coca_lugar} <3 and {predio_coca_vive} = false",
           "title": "Dirección"
         },
         {
           "type": "dropdown",
           "name": "predio_coca_vereda",
-          "visibleIf": "{predio_coca_lugar} = 4",
+          "visibleIf": "{predio_coca_lugar} > 2 and {predio_coca_vive} = false",
           "title": "Corregimiento",
           "choices": [
             {
@@ -642,6 +645,7 @@
         {
           "type": "text",
           "name": "predio_coca_vereda_otra",
+          "visibleIf": "{predio_coca_lugar} = 4 and {predio_coca_vive} = false",
           "title": "Nombre vereda",
           "description": "Si la vereda no aparece en la lista, se digita el nombre de la vereda"
         }
@@ -795,9 +799,9 @@
       "elements": [
         {
           "type": "radiogroup",
-          "isRequired": true,
           "name": "linea_productiva",
           "title": "10. Seleccione una de las siguientes líneas productivas lícitas. ",
+          "isRequired": true,
           "choices": [
             {
               "value": "34",
@@ -955,19 +959,54 @@
 
     const predioLoteViveData = {
         persona_id: 0,
-        ubicacion_id: sender.data.vive_vereda,
+        ubicacion_id: sender.data.vive_vereda !== null ? sender.data.vive_vereda : sender.data.vive_municipio,
         cabecera: sender.data.viveLugar === "1" ? 1 : 0,
         centro_poblado: sender.data.viveLugar === "2" ? 1 : 0,
         corregimiento: sender.data.viveLugar === "3" ? 1 : 0,
         vereda: sender.data.viveLugar === "4" ? 1 : 0,
         direccion: sender.data.vive_direccion,
         residencia: 1,
-        lotecoca:0,
+        lotecoca:sender.data.predio_coca_vive? 1 : 0,
         area_total_hectareas: sender.data.predio_coca_area_total,
         area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
         proyecto_productivo: 0,
         tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
+        documento_relacion_predio: Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0 ? sender.data.predio_coca_tipo_documento[0].content : "",
+        origen: 'preregistro_catatumbo'
+    };
+
+    const predioLoteDesplazadoData = {
+        persona_id: 0,
+        ubicacion_id: sender.data.desplazado_vereda !== null ? sender.data.desplazado_vereda : sender.data.desplazado_municipio,
+        cabecera: sender.data.deplazado_lugar === "1" ? 1 : 0,
+        centro_poblado: sender.data.deplazado_lugar === "2" ? 1 : 0,
+        corregimiento: sender.data.deplazado_lugar === "3" ? 1 : 0,
+        vereda: sender.data.deplazado_lugar === "4" ? 1 : 0,
+        direccion: sender.data.desplazado_lugar_direccion,
+        residencia: 0,
+        lotecoca:0,
+        area_total_hectareas: 0,
+        area_cultivo_hectareas: 0,
+        proyecto_productivo: 0,
         documento_relacion_predio: "",
+        origen: 'preregistro_catatumbo'
+    };
+
+    const predioLoteCocaData = {
+        persona_id: 0,
+        ubicacion_id: sender.data.predio_coca_vereda !== null ? sender.data.predio_coca_vereda : sender.data.predio_coca_municipio,
+        cabecera: sender.data.predio_coca_lugar === "1" ? 1 : 0,
+        centro_poblado: sender.data.predio_coca_lugar === "2" ? 1 : 0,
+        corregimiento: sender.data.predio_coca_lugar === "3" ? 1 : 0,
+        vereda: sender.data.predio_coca_lugar === "4" ? 1 : 0,
+        direccion: sender.data.predio_coca_lugar_direccion,
+        residencia: 0,
+        lotecoca:1,
+        area_total_hectareas: sender.data.predio_coca_area_total,
+        area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
+        proyecto_productivo: 0,
+        tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
+        documento_relacion_predio: Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0 ? sender.data.predio_coca_tipo_documento[0].content : "",
         origen: 'preregistro_catatumbo'
     };
 
@@ -1005,6 +1044,22 @@
             uCrud4.create(predioLoteViveData).then((item6:any) => {
               console.log(item6)
             })
+
+            if (sender.data.desplazado_2025) {
+              predioLoteDesplazadoData.persona_id = item.id
+              uCrud4.create(predioLoteDesplazadoData).then((item6:any) => {
+                console.log(item6)
+              })
+
+            }
+
+            if (sender.data.predio_coca_vive) {
+              predioLoteCocaData.persona_id = item.id
+              uCrud4.create(predioLoteCocaData).then((item6:any) => {
+                console.log(item6)
+              })
+            }
+
 
             personaLineaProductivaData.persona_id = item.id
             uCrud5.create(personaLineaProductivaData).then((item5:any) => {
