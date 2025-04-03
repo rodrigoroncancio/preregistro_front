@@ -1324,12 +1324,20 @@
       }
     }
 
-    // if (options.name === "titular_numero_documento") {
-    //   if (options.value === null || options.value === "")
-    //     return;
-    //     axios.get(`api/2.0/nucleo/forms/catatumbo/ficha/validar_documento/?documento=${options.value}`)
-    //     .then((resp: any) => {})   
-    // }
+    if (options.name === "titular_numero_documento") {
+      if (options.value === null || options.value === "")
+        return;
+        axios.get(`/api/2.0/nucleo/forms/catatumbo/validar_documento/?documento=${options.value}`)
+        .then((resp: any) => {
+          console.log(resp)
+          if (resp.data) {
+              survey.setValue(options.name, "");
+             uToast.toastError("Número de cedula ya registrado en la convocatoria");
+          }
+
+        })   
+        // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
+    }
 
     if (options.name === "tiene_coca" || options.name === "tipo_exclusion") {
       const tipoexclusion = sender.getValue("tipo_exclusion");
