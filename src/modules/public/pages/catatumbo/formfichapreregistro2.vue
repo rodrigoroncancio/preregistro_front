@@ -47,6 +47,25 @@
     }
   };
 
+  const resizeBase64Img = (base64:string, callback:any) => {
+    const img = new Image();
+    img.src = base64;
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      // Reducción al 50%
+      canvas.width = img.width / 3;
+      canvas.height = img.height / 3;
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // Convertir a Base64 nuevamente
+      const resizedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+      callback(resizedBase64);
+    };
+  };
+
   const personasNUcleo = ref({})
   const enviarNucleoFamiliar = async () => {
   try {
@@ -664,22 +683,27 @@
         {
           "type": "text",
           "name": "predio_coca_latitud",
-          "title": "Latitud (x.y °)"
+          "title": "Latitud (x.y °)",
+          "isRequired": true,
         },
         {
           "type": "text",
           "name": "predio_coca_longitud",
-          "title": "Longitud (x.y °) "
+          "title": "Longitud (x.y °) ",
+          "isRequired": true,
         },
         {
           "type": "text",
           "name": "predio_coca_altitud",
-          "title": "Altitud (m) "
+          "title": "Altitud (m) ",
+          "isRequired": true,
         },
         {
           "type": "text",
           "name": "predio_coca_precision",
-          "title": "Precisión (m)"
+          "title": "Precisión (m)",
+          "isRequired": true,
+          "maxLength": 2
         },
         {
           "type": "radiogroup",
@@ -945,19 +969,31 @@
     const personaAdjuntoData1 = {
         persona_id: 0,
         tipo_documento_id: 13,
-        ruta: Array.isArray(sender.data.titular_foto_cara) && sender.data.titular_foto_cara.length > 0 ? sender.data.titular_foto_cara[0].content : "",
+        ruta: "",
         origen: 'preregistro_catatumbo',
         fcrea: new Date().toISOString(),
     };
 
+    if (Array.isArray(sender.data.titular_foto_cara) && sender.data.titular_foto_cara.length > 0) {
+      resizeBase64Img(sender.data.titular_foto_cara[0].content, (resizedImage:any) => {
+        personaAdjuntoData1.ruta = resizedImage;
+        console.log('transformado')
+      });
+    }
+
     const personaAdjuntoData2 = {
         persona_id: 0,
         tipo_documento_id: 14,
-        ruta: Array.isArray(sender.data.titular_foto_contracara) && sender.data.titular_foto_contracara.length > 0 ? sender.data.titular_foto_contracara[0].content : "",
+        ruta: "",
         origen: 'preregistro_catatumbo',
         fcrea: new Date().toISOString(),
     };
-    // personasNUcleo.value = personas
+    if (Array.isArray(sender.data.titular_foto_contracara) && sender.data.titular_foto_contracara.length > 0) {
+      resizeBase64Img(sender.data.titular_foto_contracara[0].content, (resizedImage:any) => {
+        personaAdjuntoData2.ruta = resizedImage;
+        console.log('transformado')
+      });
+    }
 
     const predioLoteViveData = {
         persona_id: 0,
@@ -973,9 +1009,17 @@
         area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
         proyecto_productivo: 0,
         tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-        documento_relacion_predio: Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0 ? sender.data.predio_coca_tipo_documento[0].content : "",
+        documento_relacion_predio: "",
         origen: 'preregistro_catatumbo'
     };
+
+    // Si hay un documento en Base64, lo redimensionamos
+    if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
+      resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
+        predioLoteViveData.documento_relacion_predio = resizedImage;
+        console.log('transformado')
+      });
+    }
 
     const coordenadaLoteCocaData = {
         predio_id: 0,
@@ -1018,9 +1062,16 @@
         area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
         proyecto_productivo: 0,
         tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-        documento_relacion_predio: Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0 ? sender.data.predio_coca_tipo_documento[0].content : "",
+        documento_relacion_predio: "",
         origen: 'preregistro_catatumbo'
     };
+
+    if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
+      resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
+        predioLoteCocaData.documento_relacion_predio = resizedImage;
+        console.log('transformado')
+      });
+    }
 
     console.log('predioLoteCocaData')
     console.log(predioLoteCocaData)
@@ -1039,9 +1090,16 @@
         area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
         proyecto_productivo: 0,
         tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-        documento_relacion_predio: Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0 ? sender.data.predio_coca_tipo_documento[0].content : "",
+        documento_relacion_predio: "",
         origen: 'preregistro_catatumbo'
     };
+
+    if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
+      resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
+        predioLoteCocaOtroData.documento_relacion_predio = resizedImage;
+        console.log('transformado')
+      });
+    }
 
     const personaLineaProductivaData = {
         persona_id: sender.data.Persona_Id,
