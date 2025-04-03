@@ -1217,9 +1217,9 @@
       const tipoexclusion = sender.getValue("tipo_exclusion");
       const tienecoca = sender.getValue("tiene_coca");
 
-      // if (options.name === "tiene_coca" && !tienecoca) {
-      //   uToast.toastError('En este momento usted no puede continuar con el preregistro al programa RenHacemos Catatumbo, de acuerdo con los criterios de la resolución 0071 de 2025');
-      // }
+      if (options.name === "tipo_exclusion" && !tienecoca) {
+        uToast.toastError('En este momento usted no puede continuar con el preregistro al programa RenHacemos Catatumbo, de acuerdo con los criterios de la resolución 0071 de 2025');
+      }
 
       if (options.name === "tipo_exclusion" && tipoexclusion !== '11') {
         uToast.toastError('En este momento usted no puede continuar con el preregistro al programa RenHacemos Catatumbo, de acuerdo con los criterios de la resolución 0071 de 2025');
