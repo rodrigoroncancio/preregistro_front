@@ -26,59 +26,20 @@
   const uLoading = useLoading();
 
   const uCrud = useCrud("api/2.0/nucleo/persona");
-  const uCrud2 = useCrud("forms/catatumbo/fichaacuerdo");
-  const uCrud3 = useCrud("forms/catatumbo/fichaacuerdo");
+  const uCrud2 = useCrud("api/2.0/nucleo/formpersona");
+  const uCrud3 = useCrud("api/2.0/nucleo/personaadjunto");
+  const uCrud4 = useCrud("api/2.0/nucleo/predio");
+  const uCrud5 = useCrud("api/2.0/nucleo/personalinea");
 
   const uToast = useToast();
 
-  const itemsDepartments = ref<Array<{ id: number; label: string }>>([]);
-
-  const getDepartmentList = async () => {
-    try {
-      const response = await axios.get("/api/1.0/core/departments");
-      itemsDepartments.value = response.data.map((dept: any) => ({
-        value: dept.id,
-        text: dept.nombre || dept.name || "Sin nombre" // Asegurar compatibilidad
-      }));
-
-    } catch (error) {
-      console.error("Error fetching department list:", error);
-    }
-  };
-
-  const itemsMunicipalities = ref<Array<{ id: number; label: string }>>([]);
-  const getMunicipalityList = async (departmentId: number) => {
-    try {
-      const response = await axios.get(`/api/1.0/core/municipalities/by-department/${departmentId}/`);
-      itemsMunicipalities.value = response.data.map((dept: any) => ({
-        value: dept.id,
-        text: dept.nombre || dept.name || "Sin nombre" // Asegurar compatibilidad
-      }));
-    } catch (error) {
-      console.error("Error fetching municipality list:", error);
-    }
-  };
-
-  const itemSTownShips = ref<Array<{ id: number; label: string }>>([]);
-  const getTownShipsList = async (municipalityId: number) => {
-    try {
-      const response = await axios.get(`/api/1.0/core/townships/by-municipality/${municipalityId}/`);
-      itemSTownShips.value = response.data.map((dept: any) => ({
-        value: dept.id,
-        text: dept.nombre || dept.name || "Sin nombre" // Asegurar compatibilidad
-      }));
-    } catch (error) {
-      console.error("Error fetching municipality list:", error);
-    }
-  };
-
   const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
-  const getVillageList = async (townshipId: number) => {
+  const getVillageList = async (ubicacionId: number) => {
     try {
-      const response = await axios.get(`/api/1.0/core/villages/by-township/${townshipId}/`);
+      const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
       itemsVillages.value = response.data.map((dept: any) => ({
         value: dept.id,
-        text: dept.name // Asegurar compatibilidad
+        text: dept.nombre // Asegurar compatibilidad
       }));
     } catch (error) {
       console.error("Error fetching village list:", error);
@@ -187,7 +148,7 @@
           "isRequired": true,
           "choices": [
             {
-              "value": "Item 1N",
+              "value": 28,
               "text": "Norte de santander"
             }
           ]
@@ -199,19 +160,19 @@
           "isRequired": true,
           "choices": [
             {
-              "value": "Item 1",
+              "value": 282,
               "text": "Convención"
             },
             {
-              "value": "Item 2",
+              "value": 367,
               "text": "El tarra"
             },
             {
-              "value": "Item 3",
+              "value": 962,
               "text": "Sardinata"
             },
             {
-              "value": "Item 4",
+              "value": 1046,
               "text": "Tibú"
             }
           ]
@@ -256,12 +217,12 @@
           "type": "dropdown",
           "name": "vive_vereda",
           "visibleIf": "{vive_lugar} = 4",
-          "title": "Vereda",
+          "title": "Corregimiento",
           "isRequired": true,
           "choices": [
             {
               "value": "Item 1",
-              "text": "Sin vereda"
+              "text": "Sin corregimiento"
             }
           ]
         },
@@ -269,7 +230,7 @@
           "type": "text",
           "name": "vive_vereda_otra",
           "visibleIf": "{vive_lugar} = 4",
-          "title": "Otra vereda",
+          "title": "Nombre vereda",
           "description": "Si la vereda no aparece en la lista, se digita el nombre de la vereda"
         }
       ]
@@ -290,7 +251,7 @@
           "isRequired": true,
           "choices": [
             {
-              "value": "Item 1",
+              "value": 28,
               "text": "Norte de santander"
             }
           ]
@@ -303,19 +264,19 @@
           "isRequired": true,
           "choices": [
             {
-              "value": "1",
+              "value": 282,
               "text": "Convención"
             },
             {
-              "value": "2",
-              "text": "El Tarra"
+              "value": 367,
+              "text": "El tarra"
             },
             {
-              "value": "3",
+              "value": 962,
               "text": "Sardinata"
             },
             {
-              "value": "4",
+              "value": 1046,
               "text": "Tibú"
             }
           ]
@@ -360,11 +321,11 @@
           "type": "dropdown",
           "name": "desplazado_vereda",
           "visibleIf": "{deplazado_lugar} = 4  and {desplazado_2025} = true",
-          "title": "Vereda",
+          "title": "Corregimiento",
           "choices": [
             {
               "value": "Item 1",
-              "text": "Sin vereda"
+              "text": "Sin corregimiento"
             }
           ]
         },
@@ -489,6 +450,7 @@
         {
           "type": "dropdown",
           "name": "tipo_comunidad_etnica",
+          "isRequired": true,
           "title": "2.14 ¿Usted se identifica como miembro de una comunidad étnica o de alguna de las poblaciones que se describen a continuación? ",
           "choices": [
             {
@@ -602,7 +564,7 @@
           "title": "7.1. Departamento",
           "choices": [
             {
-              "value": "Item 1",
+              "value": 28,
               "text": "Norte de santader"
             }
           ]
@@ -613,19 +575,19 @@
           "title": "7.2 Municipio",
           "choices": [
             {
-              "value": "Item 1",
+              "value": 282,
               "text": "Convención"
             },
             {
-              "value": "Item 2",
+              "value": 367,
               "text": "El tarra"
             },
             {
-              "value": "Item 3",
+              "value": 962,
               "text": "Sardinata"
             },
             {
-              "value": "Item 4",
+              "value": 1046,
               "text": "Tibú"
             }
           ]
@@ -669,18 +631,18 @@
           "type": "dropdown",
           "name": "predio_coca_vereda",
           "visibleIf": "{predio_coca_lugar} = 4",
-          "title": "Vereda",
+          "title": "Corregimiento",
           "choices": [
             {
               "value": "Item 1",
-              "text": "Sin vereda"
+              "text": "Sin corregimiento"
             }
           ]
         },
         {
           "type": "text",
           "name": "predio_coca_vereda_otra",
-          "title": "Otra vereda",
+          "title": "Nombre vereda",
           "description": "Si la vereda no aparece en la lista, se digita el nombre de la vereda"
         }
       ]
@@ -742,7 +704,7 @@
           "title": "9.1. Departamento",
           "choices": [
             {
-              "value": "Item 1",
+              "value": 28,
               "text": "Norte de santander"
             }
           ]
@@ -754,19 +716,19 @@
           "title": "9.2. Municipio",
           "choices": [
             {
-              "value": "Item 1",
+              "value": 282,
               "text": "Convención"
             },
             {
-              "value": "Item 2",
+              "value": 367,
               "text": "El tarra"
             },
             {
-              "value": "Item 3",
+              "value": 962,
               "text": "Sardinata"
             },
             {
-              "value": "Item 4",
+              "value": 1046,
               "text": "Tibú"
             }
           ]
@@ -811,11 +773,11 @@
           "type": "dropdown",
           "name": "predio_coca_otro_vereda",
           "visibleIf": "{predio_coca_otro_lugar} = 4",
-          "title": "Vereda",
+          "title": "Corregimiento",
           "choices": [
             {
               "value": "Item 1",
-              "text": "Sin vereda"
+              "text": "Sin Corregimiento"
             }
           ]
         },
@@ -823,7 +785,7 @@
           "type": "text",
           "name": "predio_coca_otro_vereda_otra",
           "visibleIf": "{predio_coca_otro_lugar} = 4",
-          "title": "Otra vereda",
+          "title": "Nombre vereda",
           "description": "Si la vereda no aparece en la lista, se digita el nombre de la vereda"
         }
       ]
@@ -833,6 +795,7 @@
       "elements": [
         {
           "type": "radiogroup",
+          "isRequired": true,
           "name": "linea_productiva",
           "title": "10. Seleccione una de las siguientes líneas productivas lícitas. ",
           "choices": [
@@ -949,61 +912,104 @@
         pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0, 
         desplazado_2025: sender.data.desplazado_2025,
         cabeza_flia: sender.data.titular_cabeza_familia,
-        num_nucleo: sender.data.num_nucleo
+        num_nucleo: sender.data.num_nucleo,
+        bloqueado:0,
+        vinculado_asociacion:0,
+        estado_id: 1,
+        fase:1,
+        discapacidad:0,
+        fcrea: new Date().toISOString(),
+        fecha_estado: new Date().toISOString() 
     };
     console.log('personaData')
     console.log(personaData)
 
     const formularioPersonaData = {
         formulario_id: 1,
-        persona_id: sender.data.Persona_Id,
-        tiene_coca: sender.data.Tiene_Coca,
-        acepta_terminos: sender.data.Acepta_Terminos,
-        acepta_tratamiento_datos: sender.data.Acepta_Tratamiento_Datos,
+        tiene_coca: sender.data.tiene_coca?1:0,
+        persona_id: 0,
+        acepta_terminos: 1,
+        acepta_tratamiento_datos: 1,
+        fcrea: new Date().toISOString(),
+        fecha_aceptacion: new Date().toISOString() 
     };
-
+    // persona_id
+    console.log('sender.data.titular_foto_cara')
+    console.log(sender.data.titular_foto_cara)
     const personaAdjuntoData1 = {
-        persona_id: sender.data.Persona_Id,
+        persona_id: 0,
         tipo_documento_id: 13,
         ruta: Array.isArray(sender.data.titular_foto_cara) && sender.data.titular_foto_cara.length > 0 ? sender.data.titular_foto_cara[0].content : "",
-        origen: sender.data.Origen,
-        fcrea: sender.data.FCrea
+        origen: 'preregistro_catatumbo',
+        fcrea: new Date().toISOString(),
     };
 
     const personaAdjuntoData2 = {
-        persona_id: sender.data.Persona_Id,
+        persona_id: 0,
         tipo_documento_id: 14,
         ruta: Array.isArray(sender.data.titular_foto_contracara) && sender.data.titular_foto_contracara.length > 0 ? sender.data.titular_foto_contracara[0].content : "",
-        origen: sender.data.Origen,
-        fcrea: sender.data.FCrea
+        origen: 'preregistro_catatumbo',
+        fcrea: new Date().toISOString(),
     };
     // personasNUcleo.value = personas
 
-    const predioLoteData = {
-        persona_id: sender.data.Persona_Id,
-        ubicacion_id: sender.data.Ubicacion_Id,
+    const predioLoteViveData = {
+        persona_id: 0,
+        ubicacion_id: sender.data.vive_vereda,
         cabecera: sender.data.viveLugar === "1" ? 1 : 0,
         centro_poblado: sender.data.viveLugar === "2" ? 1 : 0,
         corregimiento: sender.data.viveLugar === "3" ? 1 : 0,
         vereda: sender.data.viveLugar === "4" ? 1 : 0,
         direccion: sender.data.vive_direccion,
-        residencia: 0,
-        lotecoca:1,
+        residencia: 1,
+        lotecoca:0,
         area_total_hectareas: sender.data.predio_coca_area_total,
         area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
-        proyecto_productivo: parseInt(sender.data.predio_coca_ubicacion),
+        proyecto_productivo: 0,
         tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-        documento_relacion_predio: Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0 ? sender.data.predio_coca_tipo_documento[0].content : "",
+        documento_relacion_predio: "",
         origen: 'preregistro_catatumbo'
+    };
+
+    const personaLineaProductivaData = {
+        persona_id: sender.data.Persona_Id,
+        linea_productiva_id: sender.data.linea_productiva,
+        experiencia_linea_productiva: 0,
+        vinculado_asociacion: 0,
+        activa: 1,
+        fcrea: new Date().toISOString(),
+        origen: 'preregistro_catatumbo',
+        fmodifica: new Date().toISOString()
     };
     console.log('personaData')
     console.log(personaData)
 
 
     uCrud.create(personaData)
-        .then((item) => {
-            
+        .then((item:any) => {
+            formularioPersonaData.persona_id = item.id
             console.log(item)
+            uCrud2.create(formularioPersonaData).then((item2:any) => {
+              console.log(item2)
+            })
+            personaAdjuntoData1.persona_id = item.id
+            uCrud3.create(personaAdjuntoData1).then((item3:any) => {
+              console.log(item3)
+            })
+            personaAdjuntoData2.persona_id = item.id
+            uCrud3.create(personaAdjuntoData2).then((item4:any) => {
+              console.log(item4)
+            })
+
+            predioLoteViveData.persona_id = item.id
+            uCrud4.create(predioLoteViveData).then((item6:any) => {
+              console.log(item6)
+            })
+
+            personaLineaProductivaData.persona_id = item.id
+            uCrud5.create(personaLineaProductivaData).then((item5:any) => {
+              console.log(item5)
+            })
             // const personas= []// Define personas como un objeto con claves dinámicas
 
             // for (let i = 1; i <= 10; i++) {
@@ -1369,42 +1375,7 @@
     const desplazadodepartamentoQuestion = survey.getQuestionByName("desplazado_departamento");
 
     
-    if (departamentoQuestion) {
-      departamentoQuestion.choices = itemsDepartments.value;
-    }
-    if (desplazadodepartamentoQuestion) {
-      desplazadodepartamentoQuestion.choices = itemsDepartments.value;
-    }
-    if (predio1departamentoQuestion) {
-      predio1departamentoQuestion.choices = itemsDepartments.value;
-    }
-    if (predio2departamentoQuestion) {
-      predio2departamentoQuestion.choices = itemsDepartments.value;
-    }
-    if (predio3departamentoQuestion) {
-      predio3departamentoQuestion.choices = itemsDepartments.value;
-    }
-    if (predio4departamentoQuestion) {
-      predio4departamentoQuestion.choices = itemsDepartments.value;
-    }
-    if (predio5departamentoQuestion) {
-      predio5departamentoQuestion.choices = itemsDepartments.value;
-    }
-    if (predio6departamentoQuestion) {
-      predio6departamentoQuestion.choices = itemsDepartments.value;
-    }
-    if (predio7departamentoQuestion) {
-      predio7departamentoQuestion.choices = itemsDepartments.value;
-    }
-    if (predio8departamentoQuestion) {
-      predio8departamentoQuestion.choices = itemsDepartments.value;
-    }
-    if (predio9departamentoQuestion) {
-      predio9departamentoQuestion.choices = itemsDepartments.value;
-    }
-    if (predio10departamentoQuestion) {
-      predio10departamentoQuestion.choices = itemsDepartments.value;
-    }
+  
     const municipioQuestion = survey.getQuestionByName("municipio");
     const predio1municipioQuestion = survey.getQuestionByName("predio1_municipio");
     const predio2municipioQuestion = survey.getQuestionByName("predio2_municipio");
@@ -1421,378 +1392,51 @@
     
     const municipioNucleoQuestion = survey.getQuestionByName("municipio_nucleo_familiar");
     const corregimientoQuestion = survey.getQuestionByName("corregimiento");
-    const veredaQuestion = survey.getQuestionByName("vereda");
-    const predio1corregimientoQuestion = survey.getQuestionByName("predio1_corregimiento");
-    const veredapredio1Question = survey.getQuestionByName("predio1_vereda");
-    const predio2corregimientoQuestion = survey.getQuestionByName("predio2_corregimiento");
-    const veredapredio2Question = survey.getQuestionByName("predio2_vereda");
-    const predio3corregimientoQuestion = survey.getQuestionByName("predio3_corregimiento");
-    const veredapredio3Question = survey.getQuestionByName("predio3_vereda");
-    const predio4corregimientoQuestion = survey.getQuestionByName("predio4_corregimiento");
-    const veredapredio4Question = survey.getQuestionByName("predio4_vereda");
-    const predio5corregimientoQuestion = survey.getQuestionByName("predio5_corregimiento");
-    const veredapredio5Question = survey.getQuestionByName("predio5_vereda");
-    const predio6corregimientoQuestion = survey.getQuestionByName("predio6_corregimiento");
-    const veredapredio6Question = survey.getQuestionByName("predio6_vereda");
-    const predio7corregimientoQuestion = survey.getQuestionByName("predio7_corregimiento");
-    const veredapredio7Question = survey.getQuestionByName("predio7_vereda");
-    const predio8corregimientoQuestion = survey.getQuestionByName("predio8_corregimiento");
-    const veredapredio8Question = survey.getQuestionByName("predio8_vereda");
-    const predio9corregimientoQuestion = survey.getQuestionByName("predio9_corregimiento");
-    const veredapredio9Question = survey.getQuestionByName("predio9_vereda");
-    const predio10corregimientoQuestion = survey.getQuestionByName("predio10_corregimiento");
-    const veredapredio10Question = survey.getQuestionByName("predio10_vereda");
+    const veredaQuestion = survey.getQuestionByName("vive_vereda");
+    const desplazadoveredaQuestion = survey.getQuestionByName("desplazado_vereda");
+    const prediococaveredaQuestion = survey.getQuestionByName("predio_coca_vereda");
+    const prediococaotroveredaQuestion = survey.getQuestionByName("predio_coca_otro_vereda");
 
-    if (options.name === "municipio") {
+    if (options.name === "vive_municipio") {
         const municipio_id = options.value;
         let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (corregimientoQuestion) {
-            corregimientoQuestion.choices = itemSTownShips.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "corregimiento") {
-        const vereda_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(vereda_id);
+        await getVillageList(municipio_id);
           if (veredaQuestion) {
             veredaQuestion.choices = itemsVillages.value
           }
         loading.hide()
     }
 
-    if (options.name === "predio1_municipio") {
+    if (options.name === "desplazado_municipio") {
         const municipio_id = options.value;
         let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (predio1corregimientoQuestion) {
-            predio1corregimientoQuestion.choices = itemSTownShips.value
+        await getVillageList(municipio_id);
+          if (desplazadoveredaQuestion) {
+            desplazadoveredaQuestion.choices = itemsVillages.value
           }
         loading.hide()
     }
 
-    if (options.name === "predio1_corregimiento") {
-        const vereda_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(vereda_id);
-          if (veredapredio1Question) {
-            veredapredio1Question.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio2_municipio") {
+    if (options.name === "predio_coca_municipio") {
         const municipio_id = options.value;
         let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (predio2corregimientoQuestion) {
-            predio2corregimientoQuestion.choices = itemSTownShips.value
+        await getVillageList(municipio_id);
+          if (prediococaveredaQuestion) {
+            prediococaveredaQuestion.choices = itemsVillages.value
           }
         loading.hide()
     }
 
-    if (options.name === "predio2_corregimiento") {
-        const vereda_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(vereda_id);
-          if (veredapredio2Question) {
-            veredapredio2Question.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio3_municipio") {
-      const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (predio3corregimientoQuestion) {
-            predio3corregimientoQuestion.choices = itemSTownShips.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio3_corregimiento") {
-        const vereda_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(vereda_id);
-          if (veredapredio3Question) {
-            veredapredio3Question.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio4_municipio") {
-      const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (predio4corregimientoQuestion) {
-            predio4corregimientoQuestion.choices = itemSTownShips.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio4_corregimiento") {
-        const vereda_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(vereda_id);
-          if (veredapredio4Question) {
-            veredapredio4Question.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio5_municipio") {
-      const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (predio5corregimientoQuestion) {
-            predio5corregimientoQuestion.choices = itemSTownShips.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio5_corregimiento") {
-        const vereda_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(vereda_id);
-          if (veredapredio5Question) {
-            veredapredio5Question.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio6_municipio") {
-      const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (predio6corregimientoQuestion) {
-            predio6corregimientoQuestion.choices = itemSTownShips.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio6_corregimiento") {
-        const vereda_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(vereda_id);
-          if (veredapredio6Question) {
-            veredapredio6Question.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio7_municipio") {
-      const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (predio7corregimientoQuestion) {
-            predio7corregimientoQuestion.choices = itemSTownShips.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio7_corregimiento") {
-        const vereda_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(vereda_id);
-          if (veredapredio7Question) {
-            veredapredio7Question.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio8_municipio") {
-      const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (predio8corregimientoQuestion) {
-            predio8corregimientoQuestion.choices = itemSTownShips.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio8_corregimiento") {
-        const vereda_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(vereda_id);
-          if (veredapredio8Question) {
-            veredapredio8Question.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio9_municipio") {
-      const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (predio9corregimientoQuestion) {
-            predio9corregimientoQuestion.choices = itemSTownShips.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio9_corregimiento") {
-        const vereda_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(vereda_id);
-          if (veredapredio9Question) {
-            veredapredio9Question.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio10_municipio") {
-      const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (predio10corregimientoQuestion) {
-            predio10corregimientoQuestion.choices = itemSTownShips.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio10_corregimiento") {
-        const vereda_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(vereda_id);
-          if (veredapredio10Question) {
-            veredapredio10Question.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio1_municipio") {
+    if (options.name === "predio_coca_otro_municipio") {
         const municipio_id = options.value;
         let loading = uLoading.show({});
-        await getTownShipsList(municipio_id);
-          if (veredapredio1Question) {
-            veredapredio1Question.choices = itemSTownShips.value
-          }
-        loading.hide()
-    }
-    
-    if (options.name === "departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (municipioQuestion) {
-              municipioQuestion.choices = itemsMunicipalities.value
+        await getVillageList(municipio_id);
+          if (prediococaotroveredaQuestion) {
+            prediococaotroveredaQuestion.choices = itemsVillages.value
           }
         loading.hide()
     }
 
-    if (options.name === "desplazado_departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (desplazadomunicipioQuestion) {
-              desplazadomunicipioQuestion.choices = itemsMunicipalities.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio1_departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (predio1municipioQuestion) {
-              predio1municipioQuestion.choices = itemsMunicipalities.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio2_departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (predio2municipioQuestion) {
-              predio2municipioQuestion.choices = itemsMunicipalities.value
-          }
-        loading.hide()
-    }
-
-
-    if (options.name === "predio3_departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (predio3municipioQuestion) {
-              predio3municipioQuestion.choices = itemsMunicipalities.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio4_departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (predio4municipioQuestion) {
-              predio4municipioQuestion.choices = itemsMunicipalities.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio5_departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (predio5municipioQuestion) {
-              predio5municipioQuestion.choices = itemsMunicipalities.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio6_departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (predio6municipioQuestion) {
-              predio6municipioQuestion.choices = itemsMunicipalities.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio7_departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (predio7municipioQuestion) {
-              predio7municipioQuestion.choices = itemsMunicipalities.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio8_departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (predio8municipioQuestion) {
-              predio8municipioQuestion.choices = itemsMunicipalities.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio9_departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (predio9municipioQuestion) {
-              predio9municipioQuestion.choices = itemsMunicipalities.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio10_departamento") {
-        const departamento_id = options.value;
-        let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
-          if (predio10municipioQuestion) {
-              predio10municipioQuestion.choices = itemsMunicipalities.value
-          }
-        loading.hide()
-    }
 
 
 
