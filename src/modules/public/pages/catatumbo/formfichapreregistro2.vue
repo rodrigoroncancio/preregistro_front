@@ -87,7 +87,7 @@
   });
 
   const json ={
-  "title": "Preinscripción Núcleos Familiares Individuales - Convención, El Tarra, Tibú y SardinataFicha de preinscripción para el \"Establecimiento y/o fortalecimiento de actividades económicas para el tránsito a economías lícitas en el marco de procesos de sustitución de cultivos de uso ilícito en los municipios de Convención, El Tarra, Tibú y Sardinata de Norte de Santander\"",
+  "title": "Ficha de preinscripción para el \"Establecimiento y/o fortalecimiento de actividades económicas para el tránsito a economías lícitas en el marco de procesos de sustitución de cultivos de uso ilícito en los municipios de Convención, El Tarra, Tibú y Sardinata de Norte de Santander\"",
   "pages": [
     {
       "name": "page1",
@@ -393,7 +393,8 @@
           "type": "text",
           "name": "titular_numero_documento",
           "title": "2.4 Número de documento",
-          "isRequired": true
+          "isRequired": true,
+          "inputType": "number"
         },
         {
           "type": "file",
@@ -437,7 +438,8 @@
           "type": "text",
           "name": "titular_email",
           "title": "2.12  Correo electrónico",
-          "isRequired": true
+          "isRequired": true,
+          "inputType": "email"
         }
       ]
     },
@@ -576,8 +578,8 @@
         {
           "type": "boolean",
           "name": "predio_coca_vive",
-          "isRequired": true,
-          "title": "7. ¿Usted vive en el mismo predio donde tiene el cultivo de coca?"
+          "title": "7. ¿Usted vive en el mismo predio donde tiene el cultivo de coca?",
+          "isRequired": true
         },
         {
           "type": "dropdown",
@@ -685,18 +687,35 @@
           "name": "predio_coca_latitud",
           "title": "Latitud (x.y °)",
           "isRequired": true,
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "regex",
+              "text": "El número debe tener máximo 9 caracteres y hasta 4 decimales.",
+              "regex": "^-?\\d{1,5}(\\.\\d{1,4})?$"
+            }
+          ]
         },
         {
           "type": "text",
           "name": "predio_coca_longitud",
           "title": "Longitud (x.y °) ",
           "isRequired": true,
+          "inputType": "number",
+          "validators": [
+            {
+              "type": "regex",
+              "text": "El número debe tener máximo 9 caracteres y hasta 4 decimales.",
+              "regex": "^-?\\d{1,5}(\\.\\d{1,4})?$"
+            }
+          ]
         },
         {
           "type": "text",
           "name": "predio_coca_altitud",
-          "title": "Altitud (m) ",
+          "title": "Altitud (m)",
           "isRequired": true,
+          "inputType": "number"
         },
         {
           "type": "text",
@@ -877,6 +896,40 @@
               "text": "Fortalecimiento"
             }
           ]
+        },
+        {
+          "type": "html",
+          "name": "question1",
+          "html": "<h4>Terminos y condiciones</h4>\n<a target = \"blank\" href=\"https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/13022025_ConvocatoriaFinal_v13%2027.2.25.pdf\"> Ver términos y condiciones </a>"
+        },
+        {
+          "type": "radiogroup",
+          "name": "question2",
+          "title": "He leído y acepto los términos y condiciones",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Si"
+            }
+          ]
+        },
+        {
+          "type": "html",
+          "name": "question5",
+          "html": "<h4> Tratamiento de datos personales</h4>\n<a target = \"blank\" href=\"https://centralpdet.renovacionterritorio.gov.co/wp-content/uploads/Documentos/Datos%20personales/2022-09-12_152912_706495414.pdf\"> Ver Tratamiento de Datos Personales </a>"
+        },
+        {
+          "type": "radiogroup",
+          "name": "question6",
+          "title": "He leído y acepto el tratamiento de datos personales",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Si"
+            }
+          ]
         }
       ]
     }
@@ -887,7 +940,7 @@
   "showNavigationButtons": true
 }
 
-    
+   
   const survey = new Model(json);
   
   survey.onCompleting.add((sender, options) => {
