@@ -30,6 +30,7 @@
   const uCrud3 = useCrud("api/2.0/nucleo/personaadjunto");
   const uCrud4 = useCrud("api/2.0/nucleo/predio");
   const uCrud5 = useCrud("api/2.0/nucleo/personalinea");
+  const uCrud6 = useCrud("api/2.0/nucleo/coordenada");
 
   const uToast = useToast();
 
@@ -556,6 +557,7 @@
         {
           "type": "boolean",
           "name": "predio_coca_vive",
+          "isRequired": true,
           "title": "7. ¿Usted vive en el mismo predio donde tiene el cultivo de coca?"
         },
         {
@@ -676,7 +678,7 @@
         },
         {
           "type": "text",
-          "name": "question53",
+          "name": "predio_coca_precision",
           "title": "Precisión (m)"
         },
         {
@@ -975,6 +977,16 @@
         origen: 'preregistro_catatumbo'
     };
 
+    const coordenadaLoteCocaData = {
+        predio_id: 0,
+        latitud: sender.data.predio_coca_latitud,
+        longitud: sender.data.predio_coca_longitud,
+        altitud: sender.data.predio_coca_altitud,
+        precision: sender.data.predio_coca_precision,
+        origen: 'preregistro_catatumbo',
+        fcrea: new Date().toISOString()
+    };
+
     const predioLoteDesplazadoData = {
         persona_id: 0,
         ubicacion_id: sender.data.desplazado_vereda !== null ? sender.data.desplazado_vereda : sender.data.desplazado_municipio,
@@ -1009,6 +1021,9 @@
         documento_relacion_predio: Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0 ? sender.data.predio_coca_tipo_documento[0].content : "",
         origen: 'preregistro_catatumbo'
     };
+
+    console.log('predioLoteCocaData')
+    console.log(predioLoteCocaData)
 
     const predioLoteCocaOtroData = {
         persona_id: 0,
@@ -1063,14 +1078,18 @@
             console.log(predioLoteViveData)
             uCrud4.create(predioLoteViveData).then((item6:any) => {
               console.log(item6)
+              coordenadaLoteCocaData.predio_id = item6.id
+              uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
             })
             console.log('predioLoteDesplazadoData')
             console.log(sender.data.desplazado_2025)
             console.log(predioLoteDesplazadoData)
             if (sender.data.desplazado_2025) {
               predioLoteDesplazadoData.persona_id = item.id
-              uCrud4.create(predioLoteDesplazadoData).then((item6:any) => {
-                console.log(item6)
+              uCrud4.create(predioLoteDesplazadoData).then((item61:any) => {
+                console.log(item61)
+                coordenadaLoteCocaData.predio_id = item61.id
+                uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
               })
 
             }
@@ -1081,6 +1100,8 @@
               predioLoteCocaData.persona_id = item.id
               uCrud4.create(predioLoteCocaData).then((item6:any) => {
                 console.log(item6)
+                coordenadaLoteCocaData.predio_id = item6.id
+                uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
               })
             }
             console.log('predioLoteCocaOtroData')
@@ -1091,6 +1112,8 @@
               predioLoteCocaOtroData.persona_id = item.id
               uCrud4.create(predioLoteCocaOtroData).then((item7:any) => {
                 console.log(item7)
+                coordenadaLoteCocaData.predio_id = item7.id
+                uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
               })
             }
 
@@ -1194,12 +1217,12 @@
       const tipoexclusion = sender.getValue("tipo_exclusion");
       const tienecoca = sender.getValue("tiene_coca");
 
-      if (options.name === "tiene_coca" && !tienecoca) {
-        uToast.toastError('Para poder seguir debe tener un cultivo de coca');
-      }
+      // if (options.name === "tiene_coca" && !tienecoca) {
+      //   uToast.toastError('En este momento usted no puede continuar con el preregistro al programa RenHacemos Catatumbo, de acuerdo con los criterios de la resolución 0071 de 2025');
+      // }
 
       if (options.name === "tipo_exclusion" && tipoexclusion !== '11') {
-        uToast.toastError('Para poder seguir, no debe contar con ninguna de las condiciones anteriores');
+        uToast.toastError('En este momento usted no puede continuar con el preregistro al programa RenHacemos Catatumbo, de acuerdo con los criterios de la resolución 0071 de 2025');
       }
 
       if (tienecoca && tipoexclusion === '11') {
