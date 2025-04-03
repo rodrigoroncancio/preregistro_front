@@ -333,7 +333,7 @@
           "type": "text",
           "name": "desplazado_otra_vereda",
           "visibleIf": "{deplazado_lugar} = 4  and {desplazado_2025} = true",
-          "title": "Corregimiento"
+          "title": "Nombre de vereda"
         }
       ]
     },
@@ -689,7 +689,7 @@
               "text": "En el mismo predio donde está la coca"
             },
             {
-              "value": "0",
+              "value": "2",
               "text": "En otro sitio"
             }
           ]
@@ -1010,6 +1010,24 @@
         origen: 'preregistro_catatumbo'
     };
 
+    const predioLoteCocaOtroData = {
+        persona_id: 0,
+        ubicacion_id: sender.data.predio_coca_otro_vereda !== null ? sender.data.predio_coca_otro_vereda : sender.data.predio_coca_otro_municipio,
+        cabecera: sender.data.predio_coca_otro_lugar === "1" ? 1 : 0,
+        centro_poblado: sender.data.predio_coca_otro_lugar === "2" ? 1 : 0,
+        corregimiento: sender.data.predio_coca_otro_lugar === "3" ? 1 : 0,
+        vereda: sender.data.predio_coca_otro_lugar === "4" ? 1 : 0,
+        direccion: sender.data.predio_coca_otro_lugar_direccion,
+        residencia: 0,
+        lotecoca:1,
+        area_total_hectareas: sender.data.predio_coca_area_total,
+        area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
+        proyecto_productivo: 0,
+        tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
+        documento_relacion_predio: Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0 ? sender.data.predio_coca_tipo_documento[0].content : "",
+        origen: 'preregistro_catatumbo'
+    };
+
     const personaLineaProductivaData = {
         persona_id: sender.data.Persona_Id,
         linea_productiva_id: sender.data.linea_productiva,
@@ -1041,10 +1059,14 @@
             })
 
             predioLoteViveData.persona_id = item.id
+            console.log('predioLoteViveData')
+            console.log(predioLoteViveData)
             uCrud4.create(predioLoteViveData).then((item6:any) => {
               console.log(item6)
             })
-
+            console.log('predioLoteDesplazadoData')
+            console.log(sender.data.desplazado_2025)
+            console.log(predioLoteDesplazadoData)
             if (sender.data.desplazado_2025) {
               predioLoteDesplazadoData.persona_id = item.id
               uCrud4.create(predioLoteDesplazadoData).then((item6:any) => {
@@ -1052,11 +1074,23 @@
               })
 
             }
-
+            console.log('predioLoteCocaData')
+            console.log(sender.data.predio_coca_vive)
+            console.log(predioLoteCocaData)
             if (sender.data.predio_coca_vive) {
               predioLoteCocaData.persona_id = item.id
               uCrud4.create(predioLoteCocaData).then((item6:any) => {
                 console.log(item6)
+              })
+            }
+            console.log('predioLoteCocaOtroData')
+            console.log(sender.data.predio_coca_ubicacion)
+            console.log(predioLoteCocaOtroData)
+            if (sender.data.predio_coca_vive)
+            if (sender.data.predio_coca_ubicacion==='2') {
+              predioLoteCocaOtroData.persona_id = item.id
+              uCrud4.create(predioLoteCocaOtroData).then((item7:any) => {
+                console.log(item7)
               })
             }
 
@@ -1090,9 +1124,9 @@
             // console.log(personas)
             // enviarNucleoFamiliar();
 
-            // uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
-            // sender.clear(true);
-            // survey.showNavigationButtons = false;
+            uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
+            sender.clear(true);
+            survey.showNavigationButtons = false;
         })
         .catch((error) => {
               uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
@@ -1416,33 +1450,8 @@
       }
     }
 
-    const departamentoQuestion = survey.getQuestionByName("departamento");
-    const predio1departamentoQuestion = survey.getQuestionByName("predio1_departamento");
-    const predio2departamentoQuestion = survey.getQuestionByName("predio2_departamento");
-    const predio3departamentoQuestion = survey.getQuestionByName("predio3_departamento");
-    const predio4departamentoQuestion = survey.getQuestionByName("predio4_departamento");
-    const predio5departamentoQuestion = survey.getQuestionByName("predio5_departamento");
-    const predio6departamentoQuestion = survey.getQuestionByName("predio6_departamento");
-    const predio7departamentoQuestion = survey.getQuestionByName("predio7_departamento");
-    const predio8departamentoQuestion = survey.getQuestionByName("predio8_departamento");
-    const predio9departamentoQuestion = survey.getQuestionByName("predio9_departamento");
-    const predio10departamentoQuestion = survey.getQuestionByName("predio10_departamento");
-    const desplazadodepartamentoQuestion = survey.getQuestionByName("desplazado_departamento");
 
-    
-  
-    const municipioQuestion = survey.getQuestionByName("municipio");
-    const predio1municipioQuestion = survey.getQuestionByName("predio1_municipio");
-    const predio2municipioQuestion = survey.getQuestionByName("predio2_municipio");
-    const predio3municipioQuestion = survey.getQuestionByName("predio3_municipio");
-    const predio4municipioQuestion = survey.getQuestionByName("predio4_municipio");
-    const predio5municipioQuestion = survey.getQuestionByName("predio5_municipio");
-    const predio6municipioQuestion = survey.getQuestionByName("predio6_municipio");
-    const predio7municipioQuestion = survey.getQuestionByName("predio7_municipio");
-    const predio8municipioQuestion = survey.getQuestionByName("predio8_municipio");
-    const predio9municipioQuestion = survey.getQuestionByName("predio9_municipio");
-    const predio10municipioQuestion = survey.getQuestionByName("predio10_municipio");
-    const desplazadomunicipioQuestion = survey.getQuestionByName("desplazado_municipio");
+
 
     
     const municipioNucleoQuestion = survey.getQuestionByName("municipio_nucleo_familiar");
