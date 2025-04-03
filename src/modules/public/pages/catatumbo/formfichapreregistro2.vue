@@ -223,12 +223,6 @@
         },
         {
           "type": "text",
-          "name": "vive_lugar_nombre",
-          "visibleIf": "{vive_lugar} < 3 and {vive_lugar} notempty",
-          "title": "Nombre del lugar"
-        },
-        {
-          "type": "text",
           "name": "vive_direccion",
           "visibleIf": "{vive_lugar} <> 4 and {vive_lugar} notempty",
           "title": "Dirección"
@@ -250,8 +244,7 @@
           "type": "text",
           "name": "vive_vereda_otra",
           "visibleIf": "{vive_lugar} = 4",
-          "title": "Nombre vereda",
-          "description": "Si la vereda no aparece en la lista, se digita el nombre de la vereda"
+          "title": "Nombre vereda"
         }
       ]
     },
@@ -324,12 +317,6 @@
               "text": "Vereda"
             }
           ]
-        },
-        {
-          "type": "text",
-          "name": "desplazado_lugar_nombre",
-          "visibleIf": "{deplazado_lugar} < 3 and {desplazado_2025} = true",
-          "title": "Nombre"
         },
         {
           "type": "text",
@@ -426,13 +413,15 @@
           "type": "text",
           "name": "titular_celular",
           "title": "2.9 Celular",
-          "isRequired": true
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
           "name": "titular_whatsapp",
           "title": "2.10 Whatsapp",
-          "isRequired": true
+          "isRequired": true,
+          "maxLength": 10
         },
         {
           "type": "text",
@@ -566,14 +555,30 @@
           "type": "text",
           "name": "predio_coca_area_total",
           "title": "5. ¿Cuál es el área total en hectáreas que tiene su predio?  ",
-          "inputType": "number"
+          "inputType": "number",
+          "isRequired": true,
+          "validators": [
+            {
+              "type": "regex",
+              "text": "Solo se permiten números positivos de hasta 4 cifras enteras y 4 decimales.",
+              "regex": "^[0-9]{1,4}(\\.[0-9]{1,4})?$"
+            }
+          ]
         },
         {
           "type": "text",
           "name": "predio_coca_area_cultivo",
           "title": "6. ¿Cuántas hectáreas de cultivos de coca tiene este predio?",
           "description": "Debe ser mayor o igual 0.5",
-          "inputType": "number"
+          "inputType": "number",
+          "isRequired": true,
+          "validators": [
+            {
+              "type": "regex",
+              "text": "Solo se permiten números positivos de hasta 4 cifras enteras y 4 decimales.",
+              "regex": "^[0-9]{1,4}(\\.[0-9]{1,4})?$"
+            }
+          ]
         },
         {
           "type": "boolean",
@@ -643,12 +648,6 @@
         },
         {
           "type": "text",
-          "name": "predio_coca_lugar_nombre",
-          "visibleIf": "{predio_coca_lugar} <3 and {predio_coca_vive} = false",
-          "title": "Nombre"
-        },
-        {
-          "type": "text",
           "name": "predio_coca_lugar_direccion",
           "visibleIf": "{predio_coca_lugar} <3 and {predio_coca_vive} = false",
           "title": "Dirección"
@@ -715,6 +714,13 @@
           "name": "predio_coca_altitud",
           "title": "Altitud (m)",
           "isRequired": true,
+          "validators": [
+            {
+              "type": "regex",
+              "text": "Solo se permiten números positivos de hasta 4 cifras enteras y 4 decimales.",
+              "regex": "^[0-9]{1,4}(\\.[0-9]{1,4})?$"
+            }
+          ],
           "inputType": "number"
         },
         {
@@ -805,12 +811,6 @@
               "text": "Vereda"
             }
           ]
-        },
-        {
-          "type": "text",
-          "name": "predio_coca_otro_nombre",
-          "visibleIf": "{predio_coca_otro_lugar} != '4'",
-          "title": "Nombre"
         },
         {
           "type": "text",
@@ -1323,6 +1323,13 @@
         console.error("Error al consultar el endpoint:", error);
       }
     }
+
+    // if (options.name === "titular_numero_documento") {
+    //   if (options.value === null || options.value === "")
+    //     return;
+    //     axios.get(`api/2.0/nucleo/forms/catatumbo/ficha/validar_documento/?documento=${options.value}`)
+    //     .then((resp: any) => {})   
+    // }
 
     if (options.name === "tiene_coca" || options.name === "tipo_exclusion") {
       const tipoexclusion = sender.getValue("tipo_exclusion");
