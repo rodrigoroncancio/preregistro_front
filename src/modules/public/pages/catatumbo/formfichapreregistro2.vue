@@ -96,7 +96,8 @@
           "type": "boolean",
           "name": "tiene_coca",
           "title": "¿Tiene, posee u ocupa usted un predio con cultivos de coca del cual depende su subsistencia?",
-          "isRequired": true
+          "isRequired": true,
+          "labelTrue": "Si"
         },
         {
           "type": "radiogroup",
@@ -254,7 +255,9 @@
         {
           "type": "boolean",
           "name": "desplazado_2025",
-          "title": "1.4 Su lugar de residencia cambió después del 16 de enero?  "
+          "title": "1.4 Su lugar de residencia cambió después del 16 de enero?  ",
+          "labelTrue": "Si",
+          "isRequired": true
         },
         {
           "type": "dropdown",
@@ -456,7 +459,8 @@
           "name": "titular_cabeza_familia",
           "visibleIf": "{titular_sexo} = 15",
           "title": "¿Es madre cabeza de familia? ",
-          "isRequired": true
+          "isRequired": true,
+          "labelTrue": "Si"
         },
         {
           "type": "dropdown",
@@ -569,7 +573,6 @@
           "type": "text",
           "name": "predio_coca_area_cultivo",
           "title": "6. ¿Cuántas hectáreas de cultivos de coca tiene este predio?",
-          "description": "Debe ser mayor o igual 0.5",
           "inputType": "number",
           "isRequired": true,
           "validators": [
@@ -584,7 +587,8 @@
           "type": "boolean",
           "name": "predio_coca_vive",
           "title": "7. ¿Usted vive en el mismo predio donde tiene el cultivo de coca?",
-          "isRequired": true
+          "isRequired": true,
+          "labelTrue": "Si"
         },
         {
           "type": "dropdown",
@@ -1047,10 +1051,15 @@
         console.log('transformado')
       });
     }
+    console.log('sender.data.vive_vereda')
+    console.log(sender.data.vive_vereda)
+    console.log(sender.data.vive_municipio)
+    console.log(sender.data.predio_coca_vive)
+    console.log(sender.data.predio_coca_ubicacion)
 
     const predioLoteViveData = {
         persona_id: 0,
-        ubicacion_id: sender.data.vive_vereda !== null ? sender.data.vive_vereda : sender.data.vive_municipio,
+        ubicacion_id: sender.data.vive_vereda != null ? sender.data.vive_vereda : sender.data.vive_municipio,
         cabecera: sender.data.viveLugar === "1" ? 1 : 0,
         centro_poblado: sender.data.viveLugar === "2" ? 1 : 0,
         corregimiento: sender.data.viveLugar === "3" ? 1 : 0,
@@ -1086,7 +1095,7 @@
 
     const predioLoteDesplazadoData = {
         persona_id: 0,
-        ubicacion_id: sender.data.desplazado_vereda !== null ? sender.data.desplazado_vereda : sender.data.desplazado_municipio,
+        ubicacion_id: sender.data.desplazado_vereda != null ? sender.data.desplazado_vereda : sender.data.desplazado_municipio,
         cabecera: sender.data.deplazado_lugar === "1" ? 1 : 0,
         centro_poblado: sender.data.deplazado_lugar === "2" ? 1 : 0,
         corregimiento: sender.data.deplazado_lugar === "3" ? 1 : 0,
@@ -1103,7 +1112,7 @@
 
     const predioLoteCocaData = {
         persona_id: 0,
-        ubicacion_id: sender.data.predio_coca_vereda !== null ? sender.data.predio_coca_vereda : sender.data.predio_coca_municipio,
+        ubicacion_id: sender.data.predio_coca_vereda != null ? sender.data.predio_coca_vereda : sender.data.predio_coca_municipio,
         cabecera: sender.data.predio_coca_lugar === "1" ? 1 : 0,
         centro_poblado: sender.data.predio_coca_lugar === "2" ? 1 : 0,
         corregimiento: sender.data.predio_coca_lugar === "3" ? 1 : 0,
@@ -1131,12 +1140,12 @@
 
     const predioLoteCocaOtroData = {
         persona_id: 0,
-        ubicacion_id: sender.data.predio_coca_otro_vereda !== null ? sender.data.predio_coca_otro_vereda : sender.data.predio_coca_otro_municipio,
+        ubicacion_id: sender.data.predio_coca_otro_vereda != null ? sender.data.predio_coca_otro_vereda : sender.data.predio_coca_otro_municipio,
         cabecera: sender.data.predio_coca_otro_lugar === "1" ? 1 : 0,
         centro_poblado: sender.data.predio_coca_otro_lugar === "2" ? 1 : 0,
         corregimiento: sender.data.predio_coca_otro_lugar === "3" ? 1 : 0,
         vereda: sender.data.predio_coca_otro_lugar === "4" ? 1 : 0,
-        direccion: sender.data.predio_coca_otro_lugar_direccion,
+        direccion: sender.data.predio_coca_otro_direccion,
         residencia: 0,
         lotecoca:1,
         area_total_hectareas: sender.data.predio_coca_area_total,
@@ -1157,6 +1166,7 @@
     const personaLineaProductivaData = {
         persona_id: sender.data.Persona_Id,
         linea_productiva_id: sender.data.linea_productiva,
+        tipo_experiencia_id: sender.data.establece_fortalece,
         experiencia_linea_productiva: 0,
         vinculado_asociacion: 0,
         activa: 1,
@@ -1188,6 +1198,7 @@
             console.log('predioLoteViveData')
             console.log(predioLoteViveData)
             uCrud4.create(predioLoteViveData).then((item6:any) => {
+              console.log('entra al primero')
               console.log(item6)
               coordenadaLoteCocaData.predio_id = item6.id
               uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
@@ -1207,18 +1218,18 @@
             console.log('predioLoteCocaData')
             console.log(sender.data.predio_coca_vive)
             console.log(predioLoteCocaData)
-            if (sender.data.predio_coca_vive) {
-              predioLoteCocaData.persona_id = item.id
-              uCrud4.create(predioLoteCocaData).then((item6:any) => {
-                console.log(item6)
-                coordenadaLoteCocaData.predio_id = item6.id
-                uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
-              })
-            }
+
+            predioLoteCocaData.persona_id = item.id
+            uCrud4.create(predioLoteCocaData).then((item6:any) => {
+              console.log(item6)
+              coordenadaLoteCocaData.predio_id = item6.id
+              uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+            })
+
             console.log('predioLoteCocaOtroData')
             console.log(sender.data.predio_coca_ubicacion)
             console.log(predioLoteCocaOtroData)
-            if (sender.data.predio_coca_vive)
+
             if (sender.data.predio_coca_ubicacion==='2') {
               predioLoteCocaOtroData.persona_id = item.id
               uCrud4.create(predioLoteCocaOtroData).then((item7:any) => {
