@@ -22,7 +22,7 @@
         </div>
         <div className="buttons-container">
           <div className="button-group">
-            <a target="blank" href="https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/gxOFWKMp6s50fkgz96Ra3exIX7namha?st=xlVPjurNGeNCd6fVJftfHUBbAcgoADDGYlA9dYefk69OJ9rk6!oz3QGXGFoH3atL" class="btnCat red">
+            <a target="blank" href="/catatumbo/preregistro" class="btnCat red">
               Preregistro de núcleos familiares
             </a>
             <p className="btnCat description red">Para quienes no hacen parte de una asociación</p>
