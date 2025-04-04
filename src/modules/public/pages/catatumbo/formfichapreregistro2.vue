@@ -302,6 +302,7 @@
           "name": "deplazado_lugar",
           "visibleIf": "{desplazado_2025} = true",
           "title": "EN QUE LUGAR DEL MUNICIPIO VIVIA USTED?",
+          "isRequired": true,
           "choices": [
             {
               "value": "1",
@@ -525,7 +526,8 @@
         {
           "type": "radiogroup",
           "name": "predio_coca_tipo_residencia",
-          "title": "4. ¿Cuál es su relación con el Predio donde se encuentra la coca? *Una sola opción",
+          "isRequired": true,
+          "title": "4. ¿Cuál es su relación con el Predio donde se encuentra la coca?",
           "choices": [
             {
               "value": "29",
@@ -761,6 +763,7 @@
           "name": "predio_coca_otro_departamento",
           "visibleIf": "{predio_coca_ubicacion} = '2'",
           "title": "9.1. Departamento",
+          "isRequired": true,
           "choices": [
             {
               "value": 28,
@@ -773,6 +776,7 @@
           "name": "predio_coca_otro_municipio",
           "visibleIf": "{predio_coca_ubicacion} = '2'",
           "title": "9.2. Municipio",
+          "isRequired": true,
           "choices": [
             {
               "value": 282,
@@ -1060,11 +1064,11 @@
     const predioLoteViveData = {
         persona_id: 0,
         ubicacion_id: sender.data.vive_vereda != null ? sender.data.vive_vereda : sender.data.vive_municipio,
-        cabecera: sender.data.viveLugar === "1" ? 1 : 0,
+        cabecera: sender.data.vive_lugar === "1" ? 1 : 0,
         centro_poblado: sender.data.viveLugar === "2" ? 1 : 0,
         corregimiento: sender.data.viveLugar === "3" ? 1 : 0,
         vereda: sender.data.viveLugar === "4" ? 1 : 0,
-        direccion: sender.data.vive_direccion,
+        direccion: sender.data.viveLugar === "4" ? sender.data.vive_vereda_otra : sender.data.vive_direccion,
         residencia: 1,
         lotecoca:sender.data.predio_coca_vive? 1 : 0,
         area_total_hectareas: sender.data.predio_coca_area_total,
@@ -1100,7 +1104,7 @@
         centro_poblado: sender.data.deplazado_lugar === "2" ? 1 : 0,
         corregimiento: sender.data.deplazado_lugar === "3" ? 1 : 0,
         vereda: sender.data.deplazado_lugar === "4" ? 1 : 0,
-        direccion: sender.data.desplazado_lugar_direccion,
+        direccion: sender.data.deplazado_lugar === "4" ? sender.data.desplazado_otra_vereda : sender.data.desplazado_lugar_direccion,
         residencia: 0,
         lotecoca:0,
         area_total_hectareas: 0,
@@ -1117,7 +1121,7 @@
         centro_poblado: sender.data.predio_coca_lugar === "2" ? 1 : 0,
         corregimiento: sender.data.predio_coca_lugar === "3" ? 1 : 0,
         vereda: sender.data.predio_coca_lugar === "4" ? 1 : 0,
-        direccion: sender.data.predio_coca_lugar_direccion,
+        direccion: sender.data.predio_coca_lugar === "4" ? sender.data.predio_coca_vereda_otra : sender.data.predio_coca_lugar_direccion,
         residencia: 0,
         lotecoca:1,
         area_total_hectareas: sender.data.predio_coca_area_total,
@@ -1145,7 +1149,7 @@
         centro_poblado: sender.data.predio_coca_otro_lugar === "2" ? 1 : 0,
         corregimiento: sender.data.predio_coca_otro_lugar === "3" ? 1 : 0,
         vereda: sender.data.predio_coca_otro_lugar === "4" ? 1 : 0,
-        direccion: sender.data.predio_coca_otro_direccion,
+        direccion: sender.data.predio_coca_otro_lugar === "4" ? sender.data.predio_coca_otro_vereda_otra : sender.data.predio_coca_otro_direccion,
         residencia: 0,
         lotecoca:1,
         area_total_hectareas: sender.data.predio_coca_area_total,
