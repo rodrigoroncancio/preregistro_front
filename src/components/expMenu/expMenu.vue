@@ -186,6 +186,17 @@ const itemsMenu = [
       url: "/pnis/catatumbogrupos",
     }]
   },
+  {
+    title: "Form Preregistro",
+    icon: "mdi-solar-panel",
+    roles: [1,7],
+    children: [{
+      title: "modules.pnis.catatumbo_form_preregistro2",
+      icon: "mdi-human-male-board-poll",
+      url: "/catatumbo/preregistro",
+    }]
+  },
+  
   
 ];
 
