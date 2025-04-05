@@ -256,8 +256,15 @@
           "type": "boolean",
           "name": "desplazado_2025",
           "title": "1.4 Su lugar de residencia cambió después del 16 de enero?  ",
-          "labelTrue": "Si",
-          "isRequired": true
+          "isRequired": true,
+          "labelTrue": "Si"
+        },
+        {
+          "type": "html",
+          "name": "question7",
+          "visibleIf": "{desplazado_2025} = true",
+          "title": "1.4 Su lugar de residencia cambió después del 16 de enero?  ",
+          "html": "<h4>\n Si marcó si: Indique donde vivía antes del 16 de enero de 2025:\n</h4>"
         },
         {
           "type": "dropdown",
@@ -526,8 +533,8 @@
         {
           "type": "radiogroup",
           "name": "predio_coca_tipo_residencia",
-          "isRequired": true,
           "title": "4. ¿Cuál es su relación con el Predio donde se encuentra la coca?",
+          "isRequired": true,
           "choices": [
             {
               "value": "29",
@@ -561,7 +568,6 @@
           "type": "text",
           "name": "predio_coca_area_total",
           "title": "5. ¿Cuál es el área total en hectáreas que tiene su predio?  ",
-          "inputType": "number",
           "isRequired": true,
           "validators": [
             {
@@ -569,13 +575,13 @@
               "text": "Solo se permiten números positivos de hasta 4 cifras enteras y 4 decimales.",
               "regex": "^[0-9]{1,4}(\\.[0-9]{1,4})?$"
             }
-          ]
+          ],
+          "inputType": "number"
         },
         {
           "type": "text",
           "name": "predio_coca_area_cultivo",
           "title": "6. ¿Cuántas hectáreas de cultivos de coca tiene este predio?",
-          "inputType": "number",
           "isRequired": true,
           "validators": [
             {
@@ -583,7 +589,8 @@
               "text": "Solo se permiten números positivos de hasta 4 cifras enteras y 4 decimales.",
               "regex": "^[0-9]{1,4}(\\.[0-9]{1,4})?$"
             }
-          ]
+          ],
+          "inputType": "number"
         },
         {
           "type": "boolean",
@@ -692,28 +699,28 @@
           "name": "predio_coca_latitud",
           "title": "Latitud (x.y °)",
           "isRequired": true,
-          "inputType": "number",
           "validators": [
             {
               "type": "regex",
               "text": "El número debe tener máximo 9 caracteres y hasta 4 decimales.",
               "regex": "^-?\\d{1,5}(\\.\\d{1,4})?$"
             }
-          ]
+          ],
+          "inputType": "number"
         },
         {
           "type": "text",
           "name": "predio_coca_longitud",
           "title": "Longitud (x.y °) ",
           "isRequired": true,
-          "inputType": "number",
           "validators": [
             {
               "type": "regex",
               "text": "El número debe tener máximo 9 caracteres y hasta 4 decimales.",
               "regex": "^-?\\d{1,5}(\\.\\d{1,4})?$"
             }
-          ]
+          ],
+          "inputType": "number"
         },
         {
           "type": "text",
@@ -944,8 +951,7 @@
   ],
   "pagePrevText": "Página anterior",
   "pageNextText": "Página siguiente",
-  "completeText": "Enviar",
-  "showNavigationButtons": true
+  "completeText": "Enviar"
 }
 
    
