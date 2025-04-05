@@ -87,65 +87,55 @@
   });
 
   const json ={
-  "title": "Ficha de preinscripción para el \"Establecimiento y/o fortalecimiento de actividades económicas para el tránsito a economías lícitas en el marco de procesos de sustitución de cultivos de uso ilícito en los municipios de Convención, El Tarra, Tibú y Sardinata de Norte de Santander\"",
+  "title": "FICHA DE VINCULACIÓN DE NÚCLEOS FAMILIARES AL PROGRAMA DE SUSTITUCIÓN DE CULTIVOS DE USO ILÍCITO DE LA DIRECCIÓN DE SUSTITUCIÓN DE CULTIVOS DE USO ILICITO",
   "pages": [
     {
-      "name": "page1",
+      "name": "numero_identificacion2",
       "elements": [
         {
-          "type": "boolean",
-          "name": "tiene_coca",
-          "title": "¿Tiene, posee u ocupa usted un predio con cultivos de coca del cual depende su subsistencia?",
-          "isRequired": true,
-          "labelTrue": "Si"
+          "type": "html",
+          "name": "question1",
+          "html": "<H4>\nA. Identificación\n</H4>"
+        },
+        {
+          "type": "text",
+          "name": "titular_nombres",
+          "title": "Nombres",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "titular_apellidos",
+          "title": "Apellidos",
+          "isRequired": true
         },
         {
           "type": "radiogroup",
-          "name": "tipo_exclusion",
-          "title": "Seleccione si cuenta con alguna de las siguientes condiciones:",
+          "name": "titular_tipo_identificacion",
+          "title": "Tipo de identificación",
           "isRequired": true,
           "choices": [
             {
-              "value": "1",
-              "text": "El predio de coca que va a someter a sustitución fue sembrado después del 24 de enero del 2025."
+              "value": "Item 1",
+              "text": "Cédula de ciudadania"
             },
             {
-              "value": "2",
-              "text": "Encontrarse en un programa de reincorporación"
-            },
-            {
-              "value": "3",
-              "text": "Ser funcionario o contratista público"
-            },
-            {
-              "value": "4",
-              "text": "En su hogar hay funcionarios o contratistas públicos"
-            },
-            {
-              "value": "5",
-              "text": "El predio donde está el cultivo de coca es un bien de la Nación o de una entidad pública. (Sólo se permite inscripción de predios de particulares)"
-            },
-            {
-              "value": "6",
-              "text": "Que alguien más del núcleo familiar haya inscrito el mismo predio a sustituir."
-            },
-            {
-              "value": "7",
-              "text": "Usted, su conyugue o alguien de su núcleo familiar es titular o beneficiario PNIS activo o retirado."
-            },
-            {
-              "value": "8",
-              "text": "Contar con un cultivo menor a 0.5 ha de coca sembradas-"
-            },
-            {
-              "value": "10",
-              "text": "Ser menor de 18 años de edad"
-            },
-            {
-              "value": "11",
-              "text": "NINGUNA DE LAS ANTERIORES"
+              "value": "Item 2",
+              "text": "Otra"
             }
           ]
+        },
+        {
+          "type": "text",
+          "name": "titular_tipo_identificacion_cual",
+          "visibleIf": "{titular_tipo_identificacion} = 'Item 2'",
+          "title": "Cuál"
+        },
+        {
+          "type": "text",
+          "name": "titular_numero_identificacion",
+          "title": "Número de identificación",
+          "description": "No se permite tarjeta de identificación ni registro civil"
         }
       ]
     },
@@ -154,98 +144,316 @@
       "elements": [
         {
           "type": "html",
-          "name": "question3",
-          "html": "<h3>\nCapítulo (A) Identificación\n</h3>"
-        },
-        {
-          "type": "html",
           "name": "question4",
-          "html": "<h4>\n1. ¿Dónde vive usted actualmente?\n</h4>"
+          "html": "<H4>\nB. Caracteristicas básicas del nucleo familiar del representante\n</H4>"
         },
         {
-          "type": "dropdown",
-          "name": "vive_departamento",
-          "title": "1.1 Departamento",
-          "isRequired": true,
+          "type": "radiogroup",
+          "name": "composiscion_hogar",
+          "title": "Cuál es la composición de su hogar actualmente ?",
           "choices": [
             {
-              "value": 28,
-              "text": "Norte de santander"
-            }
-          ]
-        },
-        {
-          "type": "dropdown",
-          "name": "vive_municipio",
-          "title": "1.2 Municipio",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": 282,
-              "text": "Convención"
+              "value": "Item 1a/o",
+              "text": "Jefe/a del núcleo familiar hombre"
             },
             {
-              "value": 367,
-              "text": "El tarra"
+              "value": "Item 2",
+              "text": "Jefe/a del núcleo familiar mujer"
             },
             {
-              "value": 962,
-              "text": "Sardinata"
-            },
-            {
-              "value": 1046,
-              "text": "Tibú"
+              "value": "Item 3",
+              "text": "Esposa/o, pareja, cónyuge del fefe/a"
             }
           ]
         },
         {
           "type": "radiogroup",
-          "name": "vive_lugar",
-          "title": "1.3 EN QUE LUGAR DEL MUNICIPIO VIVE USTED?",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": "1",
-              "text": "Cabecera municipal"
-            },
-            {
-              "value": "2",
-              "text": "Centro poblado"
-            },
-            {
-              "value": "3",
-              "text": "Corregimiento"
-            },
-            {
-              "value": "4",
-              "text": "Vereda"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "name": "vive_direccion",
-          "visibleIf": "{vive_lugar} <> 4 and {vive_lugar} notempty",
-          "title": "Dirección"
-        },
-        {
-          "type": "dropdown",
-          "name": "vive_vereda",
-          "visibleIf": "{vive_lugar} > 2",
-          "title": "Corregimiento",
+          "name": "hijostiene",
+          "title": "Hijos",
           "isRequired": true,
           "choices": [
             {
               "value": "Item 1",
-              "text": "Sin corregimiento"
+              "text": "Si"
+            },
+            {
+              "value": "Item 2",
+              "text": "No"
             }
           ]
         },
         {
           "type": "text",
-          "name": "vive_vereda_otra",
-          "visibleIf": "{vive_lugar} = 4",
-          "title": "Nombre vereda"
+          "name": "hijostiene_cuantos",
+          "visibleIf": "{hijostiene} = 'Item 1'",
+          "title": "Cuántos?",
+          "isRequired": true,
+          "inputType": "number"
+        },
+        {
+          "type": "radiogroup",
+          "name": "hijastrostiene",
+          "title": "Hijastros?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Si"
+            },
+            {
+              "value": "Item 2",
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "hijastrostiene_cuantos",
+          "visibleIf": "{hijastrostiene} = 'Item 1'",
+          "title": "Cuántos?",
+          "isRequired": true,
+          "inputType": "number"
+        },
+        {
+          "type": "radiogroup",
+          "name": "nietostiene",
+          "title": "Nietos?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Si"
+            },
+            {
+              "value": "Item 2",
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "nietostiene_cuantos",
+          "visibleIf": "{nietostiene} = 'Item 1'",
+          "title": "Cuántos?",
+          "isRequired": true,
+          "inputType": "number"
+        },
+        {
+          "type": "radiogroup",
+          "name": "otrosparientestiene",
+          "title": "Otros parientes?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Si"
+            },
+            {
+              "value": "Item 2",
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "otrosparientestiene_cuantos",
+          "visibleIf": "{otrosparientestiene} = 'Item 1'",
+          "title": "Cuántos?",
+          "isRequired": true,
+          "inputType": "number"
+        },
+        {
+          "type": "radiogroup",
+          "name": "titular_ocupacion",
+          "title": "En la actualidad usted es",
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Trabajador rural"
+            },
+            {
+              "value": "Item 2",
+              "text": "Jornalero"
+            },
+            {
+              "value": "Item 3",
+              "text": "Desempleado"
+            },
+            {
+              "value": "Item 4",
+              "text": "Amediero"
+            },
+            {
+              "value": "Item 5",
+              "text": "Trabajador independiente"
+            },
+            {
+              "value": "Item 6",
+              "text": "Estudiante"
+            },
+            {
+              "value": "Item 7",
+              "text": "Otro"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "titular_ocupacion_cual",
+          "visibleIf": "{titular_ocupacion} = 'Item 7'",
+          "title": "Cual"
+        },
+        {
+          "type": "radiogroup",
+          "name": "titular_educacion",
+          "title": "Cual es su nivel educativo actual?",
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Ninguno"
+            },
+            {
+              "value": "Item 2",
+              "text": "Primaria Completa"
+            },
+            {
+              "value": "Item 3",
+              "text": "Primaria Incompleta"
+            },
+            {
+              "value": "Item 4",
+              "text": "Secundaria Incompleta"
+            },
+            {
+              "value": "Item 5",
+              "text": "Secundaria Completa"
+            },
+            {
+              "value": "Item 6",
+              "text": "Universitaria / POstgrado"
+            },
+            {
+              "value": "Item 7",
+              "text": "Técnica /Tecnología"
+            },
+            {
+              "value": "Item 8",
+              "text": "Otra"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "titular_salud",
+          "title": "A cual regimén de salud pertenece usted",
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Subsidiado"
+            },
+            {
+              "value": "Item 2",
+              "text": "Contributivo"
+            },
+            {
+              "value": "Item 3",
+              "text": "Ninguno"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "titular_desplazado",
+          "title": "En la actualidad usted y/o su núcleo familiar son:",
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Desplazados desde el 15 de enero"
+            },
+            {
+              "value": "Item 2",
+              "text": "Retornados"
+            },
+            {
+              "value": "Item 3",
+              "text": "Reinsertados"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "page12",
+      "elements": [
+        {
+          "type": "html",
+          "name": "question27",
+          "title": "De los  siguientes grupos de edad, por favor digame cuantos miembros del hoga hay, hombres y mujeres",
+          "html": "<strong>\nDe los  siguientes grupos de edad, por favor digame cuantos miembros del hogar hay, hombres y mujeres\n</strong>"
+        },
+        {
+          "type": "text",
+          "name": "mujeres_menosde5",
+          "title": "Mujeres  de menos de 5 años",
+          "inputType": "number"
+        },
+        {
+          "type": "text",
+          "name": "hombres_menosde5",
+          "title": "Hombres  de menos de 5 años",
+          "inputType": "number"
+        },
+        {
+          "type": "text",
+          "name": "mujeres_de6a15",
+          "title": "Mujeres de 6 a 15 años"
+        },
+        {
+          "type": "text",
+          "name": "hombres_de6a15",
+          "title": "Hombres de 6 a 15 años"
+        },
+        {
+          "type": "text",
+          "name": "mujeres_de16a25",
+          "title": "Mujeres de 16 a 25 años"
+        },
+        {
+          "type": "text",
+          "name": "hombres_de16a25",
+          "title": "Hombres de 16 a 25 años"
+        },
+        {
+          "type": "text",
+          "name": "mujeres_de26a60",
+          "title": "Mujeres de 26 a 60 años",
+          "inputType": "number"
+        },
+        {
+          "type": "text",
+          "name": "hombres_de26a60",
+          "title": "Hombres de 26 a 60 años",
+          "inputType": "number"
+        },
+        {
+          "type": "text",
+          "name": "mujeres_de61a70",
+          "title": "Mujeres de 61 a 70"
+        },
+        {
+          "type": "text",
+          "name": "hombres_de61a70",
+          "title": "Hombres de 61 a 70"
+        },
+        {
+          "type": "text",
+          "name": "mujeres_de70",
+          "title": "Mujeres mayores de 70 años"
+        },
+        {
+          "type": "text",
+          "name": "hombres_de70",
+          "title": "Hombres mayores de 70 años"
         }
       ]
     },
@@ -253,105 +461,39 @@
       "name": "page3",
       "elements": [
         {
-          "type": "boolean",
-          "name": "desplazado_2025",
-          "title": "1.4 Su lugar de residencia cambió después del 16 de enero?  ",
-          "isRequired": true,
-          "labelTrue": "Si"
-        },
-        {
           "type": "html",
-          "name": "question7",
-          "visibleIf": "{desplazado_2025} = true",
-          "title": "1.4 Su lugar de residencia cambió después del 16 de enero?  ",
-          "html": "<h4>\n Si marcó si: Indique donde vivía antes del 16 de enero de 2025:\n</h4>"
-        },
-        {
-          "type": "dropdown",
-          "name": "desplazadoss_departamento",
-          "visibleIf": "{desplazado_2025} = true",
-          "title": "Departamento",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": 28,
-              "text": "Norte de santander"
-            }
-          ]
-        },
-        {
-          "type": "dropdown",
-          "name": "desplazado_municipio",
-          "visibleIf": "{desplazado_2025} = true",
-          "title": "Municipio",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": 282,
-              "text": "Convención"
-            },
-            {
-              "value": 367,
-              "text": "El tarra"
-            },
-            {
-              "value": 962,
-              "text": "Sardinata"
-            },
-            {
-              "value": 1046,
-              "text": "Tibú"
-            }
-          ]
-        },
-        {
-          "type": "radiogroup",
-          "name": "deplazado_lugar",
-          "visibleIf": "{desplazado_2025} = true",
-          "title": "EN QUE LUGAR DEL MUNICIPIO VIVIA USTED?",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": "1",
-              "text": "Cabecera municipal"
-            },
-            {
-              "value": "2",
-              "text": "Centro poblado"
-            },
-            {
-              "value": "3",
-              "text": "Corregimiento"
-            },
-            {
-              "value": "4",
-              "text": "Vereda"
-            }
-          ]
+          "name": "question28",
+          "html": "<H4>\nC. Los predios del núcleo familiar\n</H4>"
         },
         {
           "type": "text",
-          "name": "desplazado_lugar_direccion",
-          "visibleIf": "{deplazado_lugar} != '4' and {desplazado_2025} = true",
-          "title": "Dirección"
-        },
-        {
-          "type": "dropdown",
-          "name": "desplazado_vereda",
-          "visibleIf": "{deplazado_lugar} > 2 and {desplazado_2025} = true",
-          "title": "Corregimiento",
-          "choices": [
-            {
-              "value": "Item 1",
-              "text": "Sin corregimiento"
-            }
-          ]
+          "name": "predios_agnos_pertenencia",
+          "title": "Cuántos años hace que usted tiene el predio donde realizará el proyecto productivo?",
+          "isRequired": true,
+          "inputType": "number"
         },
         {
           "type": "text",
-          "name": "desplazado_otra_vereda",
-          "visibleIf": "{deplazado_lugar} = 4  and {desplazado_2025} = true",
-          "title": "Nombre de vereda"
+          "name": "predios_num",
+          "title": "En total cuántos predios con cultivos de coca tiene en la actualidad su nuúcleo familiar ?",
+          "isRequired": true,
+          "inputType": "number"
+        },
+        {
+          "type": "text",
+          "name": "predios_hectareas_total",
+          "title": "Cuántas hectareas en total tiene esos predios? ",
+          "description": "Ingresar número de hectareas",
+          "isRequired": true,
+          "inputType": "number"
+        },
+        {
+          "type": "text",
+          "name": "predios_hectareas_coca",
+          "title": "Cuántas hectareas en total tiene tiene sembradas en coca?",
+          "description": "Ingresar número de hectareas",
+          "isRequired": true,
+          "inputType": "number"
         }
       ]
     },
@@ -359,599 +501,94 @@
       "name": "page4",
       "elements": [
         {
-          "type": "html",
-          "name": "question19",
-          "html": "<h4>\n2. Datos del titular del programa de sustitución RenHacemos Catatumbo. \n</h4>"
-        },
-        {
-          "type": "text",
-          "name": "titular_nombres",
-          "title": "2.1 Nombres",
-          "isRequired": true
-        },
-        {
-          "type": "text",
-          "name": "titular_apellidos",
-          "title": "2.2 Apellidos",
-          "isRequired": true
-        },
-        {
-          "type": "dropdown",
-          "name": "titular_tipo_identificacion",
-          "title": "2.3 Tipo de documento de identidad",
-          "isRequired": true,
-          "choices": [
+          "type": "matrixdynamic",
+          "name": "nucleo_mayores",
+          "title": "Si es estrictamente necesario",
+          "description": "Por favor registre el número del documento de identidad de las personas del núcleo familiar mayores de 18 años",
+          "columns": [
             {
-              "value": "1",
-              "text": "Cédula de ciudadania"
+              "name": "Nombres",
+              "cellType": "text"
+            },
+            {
+              "name": "Apellidos",
+              "cellType": "text"
+            },
+            {
+              "name": "Número",
+              "cellType": "text"
             }
+          ],
+          "choices": [
+            1,
+            2,
+            3,
+            4,
+            5
           ]
         },
         {
           "type": "text",
-          "name": "titular_numero_documento",
-          "title": "2.4 Número de documento",
-          "isRequired": true,
-          "inputType": "number"
-        },
-        {
-          "type": "file",
-          "name": "titular_foto_cara",
-          "title": "2.5 Cara documento de identidad",
-          "isRequired": true
-        },
-        {
-          "type": "file",
-          "name": "titular_foto_contracara",
-          "title": "2.6 Contracara Documento de identidad",
+          "name": "beneficiario_nombres",
+          "title": "Registre el nombre del BENEFICIARIO del representante del Núcleo familiar",
           "isRequired": true
         },
         {
           "type": "text",
-          "name": "titular_fecha_nacimiento",
-          "title": "2.7 Fecha de nacimiento",
-          "isRequired": true,
-          "inputType": "date"
+          "name": "beneficiario_apellidos",
+          "title": "Registre el documento de identidad del BENEFICIARIO del representante del Núcleo familiar",
+          "isRequired": true
         },
-        {
-          "type": "text",
-          "name": "titular_fecha_expedicion",
-          "title": "2.8 Fecha de expedición de la cédula",
-          "isRequired": true,
-          "inputType": "date"
-        },
-        {
-          "type": "text",
-          "name": "titular_celular",
-          "title": "2.9 Celular",
-          "isRequired": true,
-          "maxLength": 10
-        },
-        {
-          "type": "text",
-          "name": "titular_whatsapp",
-          "title": "2.10 Whatsapp",
-          "isRequired": true,
-          "maxLength": 10
-        },
-        {
-          "type": "text",
-          "name": "titular_email",
-          "title": "2.12  Correo electrónico",
-          "isRequired": true,
-          "inputType": "email"
-        }
-      ]
-    },
-    {
-      "name": "page5",
-      "elements": [
-        {
-          "type": "radiogroup",
-          "name": "titular_sexo",
-          "title": "2.13 Sexo",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": "15",
-              "text": "Femenino"
-            },
-            {
-              "value": "16",
-              "text": "Masculino"
-            }
-          ]
-        },
-        {
-          "type": "boolean",
-          "name": "titular_cabeza_familia",
-          "visibleIf": "{titular_sexo} = 15",
-          "title": "¿Es madre cabeza de familia? ",
-          "isRequired": true,
-          "labelTrue": "Si"
-        },
-        {
-          "type": "dropdown",
-          "name": "tipo_comunidad_etnica",
-          "title": "2.14 ¿Usted se identifica como miembro de una comunidad étnica o de alguna de las poblaciones que se describen a continuación? ",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": "17",
-              "text": "Indígena"
-            },
-            {
-              "value": "18",
-              "text": "Comunidad Negra o Afrocolombiano"
-            },
-            {
-              "value": "24",
-              "text": "Raizal"
-            },
-            {
-              "value": "25",
-              "text": "Palenquero"
-            },
-            {
-              "value": "26",
-              "text": "Rrom (Gitano)"
-            },
-            {
-              "value": "27",
-              "text": "Campesino no perteneciente a las anteriores etnias"
-            },
-            {
-              "value": "28",
-              "text": "Ninguno"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "name": "tipo_comunidad_etnica_nombre",
-          "visibleIf": "({tipo_comunidad_etnica} != '27') and ({tipo_comunidad_etnica} != '28')",
-          "title": "¿A qué resguardo indígena o Consejo Comunitario de Comunidades negras pertenece Ud.?",
-          "description": "No dejar en blanco. Si no se dispone del dato, escribir NA *"
-        },
-        {
-          "type": "text",
-          "name": "num_nucleo",
-          "title": "3. ¿Cuántas personas en total, incluido usted, conforman su núcleo familiar? ",
-          "isRequired": true,
-          "inputType": "number"
-        }
-      ]
-    },
-    {
-      "name": "page6",
-      "elements": [
         {
           "type": "html",
           "name": "question36",
-          "html": "<h3>\nCapítulo B: relación predio coca\n</h3>"
+          "html": "<H4>\n2. Términos y Condiciones para Procesos de Sustitución de Cultivos Ilicitos\n</H4>"
+        },
+        {
+          "type": "html",
+          "name": "question38",
+          "html": "<strong>\n2.1. Compromisos del núcleo familiar participante\n</strong>\n<p>\nYo en nombre propio y en nombre y representación de las personas incluidas en este formularioque hacen parte de mi núcleo familiar declaro que:\n</p>\n<ul>\n<li>\n- Pertenecemos al mismo núcleo familiar\n</li>\n<li>\n- Entendemos que salvo entre los miembros del núcleo familiar , las prerrogativas y obligaciones surgidas del proceso de sustitución no son transmisibles a ningún título.\n</li>\n</ul>\n<br>\n<p>\nNos comprometemos a:\n</p>"
         },
         {
           "type": "radiogroup",
-          "name": "predio_coca_tipo_residencia",
-          "title": "4. ¿Cuál es su relación con el Predio donde se encuentra la coca?",
+          "name": "tipo_firma",
+          "title": "Firma de aceptación",
           "isRequired": true,
           "choices": [
             {
-              "value": "29",
-              "text": "Propietario"
+              "value": "Item 1",
+              "text": "Firma manual"
             },
             {
-              "value": "30",
-              "text": "Poseedor"
-            },
-            {
-              "value": "31",
-              "text": "Ocupante"
-            },
-            {
-              "value": "32",
-              "text": "Arrendatario"
-            },
-            {
-              "value": "33",
-              "text": "Amediero con contrato"
+              "value": "Item 2",
+              "text": "Subir documento de Firma"
             }
           ]
+        },
+        {
+          "type": "signaturepad",
+          "name": "question3",
+          "visibleIf": "{tipo_firma} = 'Item 1'",
+          "title": "Firma de aceptación",
+          "isRequired": true,
+          "signatureWidth": 500,
+          "signatureHeight": 354,
+          "placeholder": "Firmar aqui"
         },
         {
           "type": "file",
-          "name": "predio_coca_tipo_documento",
-          "title": "4.1 Documento de relación de tenencia con el predio en el formulario.  ",
-          "description": "Foto del documento que valide la relación con el predio"
-        },
-        {
-          "type": "text",
-          "name": "predio_coca_area_total",
-          "title": "5. ¿Cuál es el área total en hectáreas que tiene su predio?  ",
-          "isRequired": true,
-          "validators": [
-            {
-              "type": "regex",
-              "text": "Solo se permiten números positivos de hasta 4 cifras enteras y 4 decimales.",
-              "regex": "^[0-9]{1,4}(\\.[0-9]{1,4})?$"
-            }
-          ],
-          "inputType": "number"
-        },
-        {
-          "type": "text",
-          "name": "predio_coca_area_cultivo",
-          "title": "6. ¿Cuántas hectáreas de cultivos de coca tiene este predio?",
-          "isRequired": true,
-          "validators": [
-            {
-              "type": "regex",
-              "text": "Solo se permiten números positivos de hasta 4 cifras enteras y 4 decimales.",
-              "regex": "^[0-9]{1,4}(\\.[0-9]{1,4})?$"
-            }
-          ],
-          "inputType": "number"
-        },
-        {
-          "type": "boolean",
-          "name": "predio_coca_vive",
-          "title": "7. ¿Usted vive en el mismo predio donde tiene el cultivo de coca?",
-          "isRequired": true,
-          "labelTrue": "Si"
-        },
-        {
-          "type": "dropdown",
-          "name": "predio_coca_departamento",
-          "visibleIf": "{predio_coca_vive} = false",
-          "title": "7.1. Departamento",
-          "choices": [
-            {
-              "value": 28,
-              "text": "Norte de santader"
-            }
-          ]
-        },
-        {
-          "type": "dropdown",
-          "name": "predio_coca_municipio",
-          "visibleIf": "{predio_coca_vive} = false",
-          "title": "7.2 Municipio",
-          "choices": [
-            {
-              "value": 282,
-              "text": "Convención"
-            },
-            {
-              "value": 367,
-              "text": "El tarra"
-            },
-            {
-              "value": 962,
-              "text": "Sardinata"
-            },
-            {
-              "value": 1046,
-              "text": "Tibú"
-            }
-          ]
-        },
-        {
-          "type": "radiogroup",
-          "name": "predio_coca_lugar",
-          "visibleIf": "{predio_coca_vive} = false",
-          "title": "7.3 . LUGAR",
-          "choices": [
-            {
-              "value": "1",
-              "text": "Cabecera municipal"
-            },
-            {
-              "value": "2",
-              "text": "Centro poblado"
-            },
-            {
-              "value": "3",
-              "text": "Corregimiento"
-            },
-            {
-              "value": "4",
-              "text": "Vereda"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "name": "predio_coca_lugar_direccion",
-          "visibleIf": "{predio_coca_lugar} <3 and {predio_coca_vive} = false",
-          "title": "Dirección"
-        },
-        {
-          "type": "dropdown",
-          "name": "predio_coca_vereda",
-          "visibleIf": "{predio_coca_lugar} > 2 and {predio_coca_vive} = false",
-          "title": "Corregimiento",
-          "choices": [
-            {
-              "value": "Item 1",
-              "text": "Sin corregimiento"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "name": "predio_coca_vereda_otra",
-          "visibleIf": "{predio_coca_lugar} = 4 and {predio_coca_vive} = false",
-          "title": "Nombre vereda",
-          "description": "Si la vereda no aparece en la lista, se digita el nombre de la vereda"
-        }
-      ]
-    },
-    {
-      "name": "page7",
-      "elements": [
-        {
-          "type": "html",
-          "name": "question49",
-          "html": "<h4>\n8. Ingrese las coordenadas del lote de coca. \n</h4>"
-        },
-        {
-          "type": "text",
-          "name": "predio_coca_latitud",
-          "title": "Latitud (x.y °)",
-          "isRequired": true,
-          "validators": [
-            {
-              "type": "regex",
-              "text": "El número debe tener máximo 9 caracteres y hasta 4 decimales.",
-              "regex": "^-?\\d{1,5}(\\.\\d{1,4})?$"
-            }
-          ],
-          "inputType": "number"
-        },
-        {
-          "type": "text",
-          "name": "predio_coca_longitud",
-          "title": "Longitud (x.y °) ",
-          "isRequired": true,
-          "validators": [
-            {
-              "type": "regex",
-              "text": "El número debe tener máximo 9 caracteres y hasta 4 decimales.",
-              "regex": "^-?\\d{1,5}(\\.\\d{1,4})?$"
-            }
-          ],
-          "inputType": "number"
-        },
-        {
-          "type": "text",
-          "name": "predio_coca_altitud",
-          "title": "Altitud (m)",
-          "isRequired": true,
-          "validators": [
-            {
-              "type": "regex",
-              "text": "Solo se permiten números positivos de hasta 4 cifras enteras y 4 decimales.",
-              "regex": "^[0-9]{1,4}(\\.[0-9]{1,4})?$"
-            }
-          ],
-          "inputType": "number"
-        },
-        {
-          "type": "text",
-          "name": "predio_coca_precision",
-          "title": "Precisión (m)",
-          "isRequired": true,
-          "maxLength": 2
-        },
-        {
-          "type": "radiogroup",
-          "name": "predio_coca_ubicacion",
-          "title": "9. ¿En cuál de los siguientes lugares se encuentra el predio en donde ejecutará el proyecto productivo? ",
-          "choices": [
-            {
-              "value": "1",
-              "text": "En el mismo predio donde está la coca"
-            },
-            {
-              "value": "2",
-              "text": "En otro sitio"
-            }
-          ]
-        },
-        {
-          "type": "html",
-          "name": "question55",
-          "visibleIf": "{predio_coca_ubicacion} = '2'",
-          "title": "Cual?",
-          "html": "<h4>\nCuál\n</h4>"
-        },
-        {
-          "type": "dropdown",
-          "name": "predio_coca_otro_departamento",
-          "visibleIf": "{predio_coca_ubicacion} = '2'",
-          "title": "9.1. Departamento",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": 28,
-              "text": "Norte de santander"
-            }
-          ]
-        },
-        {
-          "type": "dropdown",
-          "name": "predio_coca_otro_municipio",
-          "visibleIf": "{predio_coca_ubicacion} = '2'",
-          "title": "9.2. Municipio",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": 282,
-              "text": "Convención"
-            },
-            {
-              "value": 367,
-              "text": "El tarra"
-            },
-            {
-              "value": 962,
-              "text": "Sardinata"
-            },
-            {
-              "value": 1046,
-              "text": "Tibú"
-            }
-          ]
-        },
-        {
-          "type": "radiogroup",
-          "name": "predio_coca_otro_lugar",
-          "visibleIf": "{predio_coca_ubicacion} = '2'",
-          "title": "9.3. Lugar",
-          "choices": [
-            {
-              "value": "1",
-              "text": "Cabecera municipal"
-            },
-            {
-              "value": "2",
-              "text": "Centro poblado"
-            },
-            {
-              "value": "3",
-              "text": "Corregimiento"
-            },
-            {
-              "value": "4",
-              "text": "Vereda"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "name": "predio_coca_otro_direccion",
-          "visibleIf": "{predio_coca_otro_lugar} != '4'",
-          "title": "Dirección"
-        },
-        {
-          "type": "dropdown",
-          "name": "predio_coca_otro_vereda",
-          "visibleIf": "{predio_coca_otro_lugar} = 4",
-          "title": "Corregimiento",
-          "choices": [
-            {
-              "value": "Item 1",
-              "text": "Sin Corregimiento"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "name": "predio_coca_otro_vereda_otra",
-          "visibleIf": "{predio_coca_otro_lugar} = 4",
-          "title": "Nombre vereda",
-          "description": "Si la vereda no aparece en la lista, se digita el nombre de la vereda"
-        }
-      ]
-    },
-    {
-      "name": "page8",
-      "elements": [
-        {
-          "type": "radiogroup",
-          "name": "linea_productiva",
-          "title": "10. Seleccione una de las siguientes líneas productivas lícitas. ",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": "34",
-              "text": "Caña"
-            },
-            {
-              "value": "35",
-              "text": "Cacao"
-            },
-            {
-              "value": "36",
-              "text": "Café"
-            },
-            {
-              "value": "37",
-              "text": "Yuca"
-            },
-            {
-              "value": "38",
-              "text": "Maíz"
-            },
-            {
-              "value": "40",
-              "text": "Aguacate"
-            },
-            {
-              "value": "41",
-              "text": "Piscicultura"
-            },
-            {
-              "value": "43",
-              "text": "No Agropecuaria (pequeño comercio, bienes o servicios)"
-            }
-          ]
-        },
-        {
-          "type": "radiogroup",
-          "name": "establece_fortalece",
-          "title": "11. ¿La línea productiva seleccionada es para establecimiento o fortalecimiento del proyecto productivo? ",
-          "choices": [
-            {
-              "value": "44",
-              "text": "Establecimiento"
-            },
-            {
-              "value": "45",
-              "text": "Fortalecimiento"
-            }
-          ]
-        },
-        {
-          "type": "html",
-          "name": "question1",
-          "html": "<h4>Terminos y condiciones</h4>\n<a target = \"blank\" href=\"https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/13022025_ConvocatoriaFinal_v13%2027.2.25.pdf\"> Ver términos y condiciones </a>"
-        },
-        {
-          "type": "radiogroup",
-          "name": "question2",
-          "title": "He leído y acepto los términos y condiciones",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": "1",
-              "text": "Si"
-            }
-          ]
-        },
-        {
-          "type": "html",
           "name": "question5",
-          "html": "<h4> Tratamiento de datos personales</h4>\n<a target = \"blank\" href=\"https://centralpdet.renovacionterritorio.gov.co/wp-content/uploads/Documentos/Datos%20personales/2022-09-12_152912_706495414.pdf\"> Ver Tratamiento de Datos Personales </a>"
-        },
-        {
-          "type": "radiogroup",
-          "name": "question6",
-          "title": "He leído y acepto el tratamiento de datos personales",
-          "isRequired": true,
-          "choices": [
-            {
-              "value": "Item 1",
-              "text": "Si"
-            }
-          ]
+          "visibleIf": "{tipo_firma} = 'Item 2'",
+          "title": "Documento de firma",
+          "isRequired": true
         }
       ]
     }
   ],
   "pagePrevText": "Página anterior",
   "pageNextText": "Página siguiente",
-  "completeText": "Enviar"
+  "completeText": "Enviar",
+  "showNavigationButtons": true
 }
 
    

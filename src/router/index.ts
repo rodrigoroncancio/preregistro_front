@@ -112,6 +112,11 @@ const routes: RouteRecordRaw[] = [
             component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfichapreregistro2.vue"),
           },
           {
+            path: "fichaacuerdofase2", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+            name: "public-catatumbo-ficha2",
+            component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formficha2.vue"),
+          },
+          {
             path: "vercupos",
             name: "public-catatumbo-vercupos",
             component: () => import( /* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/catatumbo/vercupos.vue"),
