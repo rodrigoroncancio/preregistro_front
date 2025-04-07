@@ -52,6 +52,88 @@ const routes: RouteRecordRaw[] = [
         ],
       },
       {
+        path: "narino", // Ruta relativa al path padre ("/catatumbo")
+        name: "public-narino",
+        component: () => import("@/modules/public/pages/narino/index.vue"), // Añade un componente para el layout de Catatumbo
+        children: [
+          {
+            path: "tumaco/preregistro", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-narino-tumaco",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/narino/tumacopreregistro.vue"),
+          },
+          {
+            path: "robertopayan/preregistro", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-narino-robertopayan",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/narino/robertopreregistro.vue"),
+          },
+          {
+            path: "samaniego/preregistro", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-narino-samaniego",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/narino/samaniegopreregistro.vue"),
+          }
+        ]
+      },
+      {
+        path: "putumayo", // Ruta relativa al path padre ("/catatumbo")
+        name: "public-putumayo",
+        component: () => import("@/modules/public/pages/putumayo/index.vue"), // Añade un componente para el layout de Catatumbo
+        children: [
+          {
+            path: "valleguamez/preregistro", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-putumayo-valleguamez",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/putumayo/valleguamezpreregistro.vue"),
+          }
+        ]
+      },
+      {
+        path: "choco", // Ruta relativa al path padre ("/catatumbo")
+        name: "public-choco",
+        component: () => import("@/modules/public/pages/choco/index.vue"), // Añade un componente para el layout de Catatumbo
+        children: [
+          {
+            path: "riosucio/preregistro", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-putumayo-valleguamez",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/choco/riosuciopreregistro.vue"),
+          }
+        ]
+      },
+      {
+        path: "antioquia", // Ruta relativa al path padre ("/catatumbo")
+        name: "public-antioquia",
+        component: () => import("@/modules/public/pages/choco/index.vue"), // Añade un componente para el layout de Catatumbo
+        children: [
+          {
+            path: "ituango/preregistro", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-antioquia-ituango",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/antioquia/ituangopreregistro.vue"),
+          }
+        ]
+      },
+      {
+        path: "valle", // Ruta relativa al path padre ("/catatumbo")
+        name: "public-valle",
+        component: () => import("@/modules/public/pages/choco/index.vue"), // Añade un componente para el layout de Catatumbo
+        children: [
+          {
+            path: "buenaventura/preregistro", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-valle-buenaventura",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/valle/buenaventurapreregistro.vue"),
+          }
+        ]
+      },
+      {
+        path: "vichada", // Ruta relativa al path padre ("/catatumbo")
+        name: "public-vichada",
+        component: () => import("@/modules/public/pages/choco/index.vue"), // Añade un componente para el layout de Catatumbo
+        children: [
+          {
+            path: "cumaribo/preregistro", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-vichada-cumaribo",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/vichada/cumaribopreregistro.vue"),
+          }
+        ]
+      },      
+      {
         path: "catatumbo", // Ruta relativa al path padre ("/catatumbo")
         name: "public-catatumbo",
         component: () => import("@/modules/public/pages/catatumbo/index.vue"), // Añade un componente para el layout de Catatumbo
