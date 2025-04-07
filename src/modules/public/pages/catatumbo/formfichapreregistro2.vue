@@ -1138,7 +1138,7 @@
       // };
 
       const personaData = {
-        tipo_identificacion_id: sender.data.titular_tipo_identificacion,
+        tipo_identificacion_id: parseInt(sender.data.titular_tipo_identificacion),
         cub_asociacion: sender.data.asociaciones === 999999 ? null : sender.data.asociaciones,
         cub: 0,
         numero_documento: sender.data.titular_numero_documento,
@@ -1150,7 +1150,7 @@
         email: sender.data.titular_email,
         telefono_celular: sender.data.titular_celular,
         whatsapp: sender.data.titular_whatsapp,
-        tipo_comunidad_etnica_id: sender.data.tipo_comunidad_etnica,
+        tipo_comunidad_etnica_id: parseInt(sender.data.tipo_comunidad_etnica),
         nombre_comunidad: sender.data.tipo_comunidad_etnica_nombre,
         pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0, 
         desplazado_2025: sender.data.desplazado_2025? 1 : 0,
