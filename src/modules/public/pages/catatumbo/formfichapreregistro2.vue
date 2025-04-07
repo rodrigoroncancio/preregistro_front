@@ -1154,7 +1154,7 @@
         nombre_comunidad: sender.data.tipo_comunidad_etnica_nombre,
         pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0, 
         desplazado_2025: sender.data.desplazado_2025? 1 : 0,
-        cabeza_flia: sender.data.titular_cabeza_familia,
+        cabeza_flia: sender.data.titular_cabeza_familia? 1 : 0,
         num_nucleo: sender.data.num_nucleo,
         ha_total_predios: sender.data.predio_coca_area_total,
         ha_total_loteCoca: sender.data.predio_coca_area_cultivo,
