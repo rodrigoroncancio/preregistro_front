@@ -116,11 +116,11 @@
           "isRequired": true,
           "choices": [
             {
-              "value": "Item 1",
+              "value": "12",
               "text": "Cédula de ciudadania"
             },
             {
-              "value": "Item 2",
+              "value": "46",
               "text": "Otra"
             }
           ]
@@ -599,36 +599,7 @@
       console.log('sender.data')
       console.log(sender.data)
 
-      // const senderData = {
-      //   ...sender.data,
-      //   actividades_otro_predio: sender.data.actividades_otro_predio.length ? sender.data.actividades_otro_predio.join(", ") : "",
-      //   grupo_especial: sender.data.grupo_especial.length ? sender.data.grupo_especial.join(", ") : "",
-      //   foto_doc_frente: Array.isArray(sender.data.foto_doc_frente) && sender.data.foto_doc_frente.length > 0 ? sender.data.foto_doc_frente[0].content : "",
-      //   foto_doc_atras: Array.isArray(sender.data.foto_doc_atras) && sender.data.foto_doc_atras.length > 0 ? sender.data.foto_doc_atras[0].content : "",
-      //   tipo_documento_file: Array.isArray(sender.data.tipo_documento_file) && sender.data.tipo_documento_file.length > 0 ? sender.data.tipo_documento_file[0].content : "",
-      //   predio1_documento_arraigo: Array.isArray(sender.data.predio1_documento_arraigo) && sender.data.predio1_documento_arraigo.length > 0 ? sender.data.predio1_documento_arraigo[0].content : "",
-      //   predio2_documento_arraigo: Array.isArray(sender.data.predio2_documento_arraigo) && sender.data.predio2_documento_arraigo.length > 0 ? sender.data.predio2_documento_arraigo[0].content : "",
-      //   predio3_documento_arraigo: Array.isArray(sender.data.predio3_documento_arraigo) && sender.data.predio3_documento_arraigo.length > 0 ? sender.data.predio3_documento_arraigo[0].content : "",
-      //   predio4_documento_arraigo: Array.isArray(sender.data.predio4_documento_arraigo) && sender.data.predio4_documento_arraigo.length > 0 ? sender.data.predio4_documento_arraigo[0].content : "",
-      //   predio5_documento_arraigo: Array.isArray(sender.data.predio5_documento_arraigo) && sender.data.predio5_documento_arraigo.length > 0 ? sender.data.predio5_documento_arraigo[0].content : "",
-      //   predio6_documento_arraigo: Array.isArray(sender.data.predio6_documento_arraigo) && sender.data.predio6_documento_arraigo.length > 0 ? sender.data.predio6_documento_arraigo[0].content : "",
-      //   predio7_documento_arraigo: Array.isArray(sender.data.predio7_documento_arraigo) && sender.data.predio7_documento_arraigo.length > 0 ? sender.data.predio7_documento_arraigo[0].content : "",
-      //   predio8_documento_arraigo: Array.isArray(sender.data.predio8_documento_arraigo) && sender.data.predio8_documento_arraigo.length > 0 ? sender.data.predio8_documento_arraigo[0].content : "",
-      //   predio9_documento_arraigo: Array.isArray(sender.data.predio9_documento_arraigo) && sender.data.predio9_documento_arraigo.length > 0 ? sender.data.predio9_documento_arraigo[0].content : "",
-      //   predio10_documento_arraigo: Array.isArray(sender.data.predio10_documento_arraigo) && sender.data.predio10_documento_arraigo.length > 0 ? sender.data.predio10_documento_arraigo[0].content : "",
-      //   predio1_arraigo_documento_soporte: Array.isArray(sender.data.predio1_arraigo_documento_soporte) && sender.data.predio1_arraigo_documento_soporte.length > 0 ? sender.data.predio1_arraigo_documento_soporte[0].content : "",
-      //   predio2_arraigo_documento_soporte: Array.isArray(sender.data.predio2_arraigo_documento_soporte) && sender.data.predio2_arraigo_documento_soporte.length > 0 ? sender.data.predio2_arraigo_documento_soporte[0].content : "",
-      //   predio3_arraigo_documento_soporte: Array.isArray(sender.data.predio3_arraigo_documento_soporte) && sender.data.predio3_arraigo_documento_soporte.length > 0 ? sender.data.predio3_arraigo_documento_soporte[0].content : "",
-      //   predio4_arraigo_documento_soporte: Array.isArray(sender.data.predio4_arraigo_documento_soporte) && sender.data.predio4_arraigo_documento_soporte.length > 0 ? sender.data.predio4_arraigo_documento_soporte[0].content : "",
-      //   predio5_arraigo_documento_soporte: Array.isArray(sender.data.predio5_arraigo_documento_soporte) && sender.data.predio5_arraigo_documento_soporte.length > 0 ? sender.data.predio5_arraigo_documento_soporte[0].content : "",
-      //   predio6_arraigo_documento_soporte: Array.isArray(sender.data.predio6_arraigo_documento_soporte) && sender.data.predio6_arraigo_documento_soporte.length > 0 ? sender.data.predio6_arraigo_documento_soporte[0].content : "",
-      //   predio7_arraigo_documento_soporte: Array.isArray(sender.data.predio7_arraigo_documento_soporte) && sender.data.predio7_arraigo_documento_soporte.length > 0 ? sender.data.predio7_arraigo_documento_soporte[0].content : "",
-      //   predio8_arraigo_documento_soporte: Array.isArray(sender.data.predio8_arraigo_documento_soporte) && sender.data.predio8_arraigo_documento_soporte.length > 0 ? sender.data.predio8_arraigo_documento_soporte[0].content : "",
-      //   predio9_arraigo_documento_soporte: Array.isArray(sender.data.predio9_arraigo_documento_soporte) && sender.data.predio9_arraigo_documento_soporte.length > 0 ? sender.data.predio9_arraigo_documento_soporte[0].content : "",
-      //   predio10_arraigo_documento_soporte: Array.isArray(sender.data.predio10_arraigo_documento_soporte) && sender.data.predio10_arraigo_documento_soporte.length > 0 ? sender.data.predio10_arraigo_documento_soporte[0].content : "",
-      //   firma_file: Array.isArray(sender.data.firma_file) && sender.data.firma_file.length > 0 ? sender.data.firma_file[0].content : "",
-      //   documento_pertenencia_etnica_file: Array.isArray(sender.data.documento_pertenencia_etnica_file) && sender.data.documento_pertenencia_etnica_file.length > 0 ? sender.data.documento_pertenencia_etnica_file[0].content : "",
-      // };
+     
 
       const personaData = {
         tipo_identificacion_id: sender.data.titular_tipo_identificacion,

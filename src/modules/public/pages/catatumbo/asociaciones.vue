@@ -8,7 +8,7 @@
         </v-row>
         <v-row>
           <v-col className="general-asociaciones-catatumbo">
-            <router-link to="/" class="back-section">
+            <router-link to="/catatumbo/inicio" class="back-section">
                 <font-awesome-icon icon="fa-arrow-left" class="login-icon" />
                 <span class="login-text"> Regresar</span>
               </router-link>

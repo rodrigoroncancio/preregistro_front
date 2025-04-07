@@ -25,34 +25,46 @@
 
   const uLoading = useLoading();
 
-  const uCrud = useCrud("forms/catatumbo/preinscripciongrupoproductores");
+  const uCrud = useCrud("api/2.0/nucleo/asociaciones");
   const uToast = useToast();
 
   const itemsDepartments = ref<Array<{ id: number; label: string }>>([]);
 
   const getDepartmentList = async () => {
     try {
-      const response = await axios.get("/api/1.0/core/departments");
+      const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/1/`);
       itemsDepartments.value = response.data.map((dept: any) => ({
         value: dept.id,
-        text: dept.nombre || dept.name || "Sin nombre" // Asegurar compatibilidad
+        text: dept.nombre // Asegurar compatibilidad
       }));
-
     } catch (error) {
-      console.error("Error fetching department list:", error);
+      console.error("Error fetching village list:", error);
     }
   };
 
-  const itemsMunicipalities = ref<Array<{ id: number; label: string }>>([]);
-  const getMunicipalityList = async (departmentId: number) => {
+  // const itemsMunicipalities = ref<Array<{ id: number; label: string }>>([]);
+  // const getMunicipalityList = async (departmentId: number) => {
+  //   try {
+  //     const response = await axios.get(`/api/1.0/core/municipalities/by-department/${departmentId}/`);
+  //     itemsMunicipalities.value = response.data.map((dept: any) => ({
+  //       value: dept.id,
+  //       text: dept.nombre || dept.name || "Sin nombre" // Asegurar compatibilidad
+  //     }));
+  //   } catch (error) {
+  //     console.error("Error fetching municipality list:", error);
+  //   }
+  // };
+
+  const itemsVillages = ref<Array<{ value: number; text: string }>>([]);
+  const getVillageList = async (ubicacionId: number) => {
     try {
-      const response = await axios.get(`/api/1.0/core/municipalities/by-department/${departmentId}/`);
-      itemsMunicipalities.value = response.data.map((dept: any) => ({
+      const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
+      itemsVillages.value = response.data.map((dept: any) => ({
         value: dept.id,
-        text: dept.nombre || dept.name || "Sin nombre" // Asegurar compatibilidad
+        text: dept.nombre // Asegurar compatibilidad
       }));
     } catch (error) {
-      console.error("Error fetching municipality list:", error);
+      console.error("Error fetching village list:", error);
     }
   };
 
@@ -106,9 +118,16 @@
               "name": "actividad_transito",
               "title": "Actividad económica para el tránsito a economías lícitas",
               "description": "Seleccione una opción.",
+              "isRequired": true,
               "choices": [
-                  "Agropecuaría",
-                  "No Agropecuaría"
+                {
+                  "value": "89",
+                  "text": "Agropecuaría"
+                },
+                {
+                  "value": "90",
+                  "text": "No Agropecuaría"
+                } 
               ]
               }
           ]
@@ -119,13 +138,13 @@
               {
               "type": "html",
               "name": "question2",
-              "visibleIf": "{actividad_transito} = 'Agropecuaría'",
+              "visibleIf": "{actividad_transito} = '89'",
               "html": "<h4>Actividades económicas agropecuarias</h4>\n"
               },
               {
               "type": "html",
               "name": "question3",
-              "visibleIf": "{actividad_transito} = 'No Agropecuaría'",
+              "visibleIf": "{actividad_transito} = '90'",
               "html": "<h4>Actividades económicas no agropecuarias</h4>\n"
               },
               {
@@ -135,35 +154,63 @@
               "description": "Seleccione una opción.",
               "isRequired": true,
               "choices": [
-                  "Establecimiento",
-                  "Fortalecimiento"
+                {
+                  "value": "44",
+                  "text": "Establecimiento"
+                },
+                {
+                  "value": "45",
+                  "text": "Fortalecimiento"
+                }
               ]
               },
               {
               "type": "radiogroup",
               "name": "linea_productiva",
-              "visibleIf": "{actividad_transito} = 'Agropecuaría'",
+              "visibleIf": "{actividad_transito} = '89'",
               "title": "Línea productiva que selecciona",
               "description": "Seleccione una opción.",
               "isRequired": true,
               "choices": [
-                  "Caña",
-                  "Cacao",
-                  "Café",
-                  "Yuca",
-                  "Maíz",
-                  "Aguacate",
-                  "Piscicultura",
                   {
-                  "value": "Otra",
-                  "visibleIf": "{actividad_transito} = 'No Agropecuaría'"
+                  "value": "34",
+                  "text": "Caña"
+                  },
+                  {
+                  "value": "35",
+                  "text": "Cacao"
+                  },
+                  {
+                  "value": "36",
+                  "text": "Café"
+                  },
+                  {
+                  "value": "37",
+                  "text": "Yuca"
+                  },
+                  {
+                  "value": "38",
+                  "text": "Maíz"
+                  },
+                  {
+                  "value": "40",
+                  "text": "Aguacate"
+                  },
+                  {
+                  "value": "41",
+                  "text": "Piscicultura"
+                  },
+                  {
+                  "value": "101",
+                  "text": "Otra",
+                  "visibleIf": "{actividad_transito} = '90'"
                   }
               ]
               },
               {
               "type": "text",
               "name": "linea_productiva_otra",
-              "visibleIf": "{linea_productiva} = 'Otra'",
+              "visibleIf": "{linea_productiva} = '101'",
               "title": "Si seleccionó en la respuesta anterior \"Otra\", mencione cual",
               "description": "No dejar en blanco.",
               "isRequired": true
@@ -171,14 +218,24 @@
               {
               "type": "radiogroup",
               "name": "actividad_economica",
-              "visibleIf": "{actividad_transito} = 'No Agropecuaría'",
+              "visibleIf": "{actividad_transito} = '90'",
               "title": "Actividades económicas que selecciona",
               "description": "No dejar en blanco.",
               "isRequired": true,
               "choices": [
-                  "Comercio al por menor",
-                  "Producción y transformación básica de bienes",
-                  "Servicios y otras actividades Este campo es obligatorio"
+                {
+                "value": "102",
+                "text": "Comercio al por menor"
+                },
+                {
+                "value": "103",
+                "text": "Producción y transformación básica de bienes"
+                },
+                {
+                "value": "104",
+                "text": "Servicios y otras actividades Este campo es obligatorio"
+                }
+                  
               ]
               },
               {
@@ -208,18 +265,16 @@
               "html": "<h4>Lugar de implementación de la actividad económica</h4>\n"
               },
               {
-              "type": "radiogroup",
+              "type": "dropdown",
               "name": "departamento",
               "title": "Departamento",
               "isRequired": true,
               "choices": [
-                  "Item 1",
-                  "Item 2",
-                  "Item 3"
+                  "Sin departamento",
               ]
               },
               {
-              "type": "radiogroup",
+              "type": "dropdown",
               "name": "municipio",
               "title": "Municipio",
               "description": "Seleccione una opción.",
@@ -229,11 +284,29 @@
               ]
               },
               {
-              "type": "text",
+              "type": "dropdown",
+              "name": "corregimiento",
+              "title": "Corregimiento",
+              "description": "Seleccione una opción.",
+              "isRequired": true,
+              "choices": [
+                  "sin corregimiento"
+              ]
+              },
+              {
+              "type": "dropdown",
               "name": "vereda",
               "title": "Vereda",
-              "description": "No dejar en blanco.",
-              "isRequired": true
+              "description": "Seleccione una opción.",
+              "choices": [
+                  "sin corregimiento"
+              ]
+              },
+              {
+              "type": "text",
+              "name": "vereda_otra",
+              "title": "Vereda Otra",
+              "description": "Si la vereda no aparece en la lista, se digite el nombre de la vereda"
               }
           ]
           },
@@ -259,25 +332,47 @@
               "description": "Seleccione una opción.\n\n",
               "isRequired": true,
               "choices": [
-                  "Grupo de hecho no formalizado",
                   {
-                  "value": "Asociación formalizada",
+                  "value": "91",
+                  "text": "Grupo de hecho no formalizado"
+                  },
+                  {
+                  "value": "92",
                   "text": "Asociación formalizada (Con registro ante Cámara de comercio)"
                   },
                   {
-                  "value": "ItCooperativa formalizadaem 3",
+                  "value": "93",
                   "text": "Cooperativa formalizada"
                   },
-                  "Junta de Acción Comunal - JAC",
-                  "Consejos Comunitarios",
-                  "Resguardos Indígenas",
-                  "Otro"
+                  {
+                  "value": "94",
+                  "text": "Junta de Acción Comunal - JAC"
+                  },
+                  {
+                  "value": "95",
+                  "text": "Consejos Comunitarios"
+                  },
+                  {
+                  "value": "97",
+                  "text": "Resguardos Indígenas"
+                  },
+                  {
+                  "value": "98",
+                  "text": "Otro"
+                  }
               ]
+              },
+              {
+                "type": "text",
+                "name": "fecha_creacion",
+                "title": "Fecha de creación",
+                "isRequired": true,
+                "inputType": "date"
               },
               {
               "type": "text",
               "name": "grupo_otro",
-              "visibleIf": "{grupo_tipo} = 'Otro'",
+              "visibleIf": "{grupo_tipo} = '98'",
               "title": "Si seleccionó en la respuesta anterior \"Otro\", mencione cual",
               "description": "No dejar en blanco.\n",
               "isRequired": true
@@ -285,7 +380,7 @@
               {
               "type": "text",
               "name": "grupo_num_registro",
-              "visibleIf": "{grupo_tipo} = 'Asociación formalizada' or {grupo_tipo} = 'ItCooperativa formalizadaem 3'",
+              "visibleIf": "{grupo_tipo} = '92' or {grupo_tipo} = '93'",
               "title": "Número de registro de la organización",
               "description": "Indique el número del NIT – Registro o similar",
               "isRequired": true
@@ -306,16 +401,15 @@
               },
               {
               "type": "text",
-              "name": "grupo_telefonos",
-              "title": "Número de teléfono celular",
-              "description": "Sin son varios, separar con guion (-).",
-              "inputType": "tel"
-              },
+              "name": "grupo_telefono",
+              "title": "Número de teléfono",
+              "isRequired": true,
+              "maxLength": 10
+                  },
               {
               "type": "text",
               "name": "grupo_email",
               "title": "Correo electrónico",
-              "description": "Sin son varios, separar con guion (-). Si no se dispone del dato, escribir \"NA\"",
               "inputType": "email"
               }
           ]
@@ -329,9 +423,10 @@
               "html": "<h4>Impacto territorial / Cobertura territorial del grupo de productores</h4>\n<strong>La actividad económica solo se implementara en el territorio inscrito para este fins</strong>"
               },
               {
-              "type": "radiogroup",
+              "type": "dropdown",
               "name": "departamento_cobertura",
               "title": "Departamento(s) en los que tienen incidencia",
+              "isRequired": true,
               "choices": [
                   "Item 1",
                   "Item 2",
@@ -397,7 +492,7 @@
               "html": "<h4>Lugar de creación del grupo de productores</h4>\n"
               },
               {
-              "type": "radiogroup",
+              "type": "dropdown",
               "name": "departamento_creacion",
               "title": "Departamento de creación del grupo de productores",
               "isRequired": true,
@@ -405,6 +500,16 @@
                   "Item 1",
                   "Item 2",
                   "Item 3"
+              ]
+              },
+              {
+              "type": "dropdown",
+              "name": "municipio_creacion",
+              "title": "Municipio creacion",
+              "description": "Seleccione una opción.",
+              "isRequired": true,
+              "choices": [
+                  "sin municipio"
               ]
               },
               {
@@ -425,6 +530,30 @@
   
   survey.onCompleting.add((sender, options) => {
       options.allowComplete = false;
+      const asociacionaData = {
+        cub: 0,
+        tipo: parseInt(sender.data.grupo_tipo),
+        id_registro: 0,
+        nombre: sender.data.grupo_nombre,
+        nit: sender.data.grupo_num_registro,
+        tiene_experiencia: sender.data.experiencia_tiene_experiencia?1:0,
+        anios_experiencia: sender.data.experiencia_agnos,
+        tipo_actividad_economica: sender.data.actividad_transito,
+        nombre_lider: sender.data.lider_nombre,
+        identificacion_lider: sender.data.lider_identificacion,
+        celular: sender.data.grupo_telefono,
+        correo: sender.data.grupo_email,
+        desplazados: sender.data.victimas_desplazamiento === "1" ? 1 : 0,
+        coca: sender.data.ocupacion_asociados === "1" ? 1 : 0,
+        fecha_creacion: sender.data.fecha_creacion,
+        linea_productiva_cual: sender.data.linea_productiva_otra || "",
+        linea_productiva: parseInt(sender.data.linea_productiva) || parseInt(sender.data.actividad_economica),
+        num_nucleos: 0,
+        municipioid: parseInt(sender.data.municipio_creacion),
+        tipo_experiencia: parseInt(sender.data.actividad_etapa),
+        origen: 'preregistro_catatumbo',
+        fcrea: new Date().toISOString(),
+      };
 
       // Asegurarse de que lineas_productivas sea un string separado por comas
       if (Array.isArray(sender.data.lineas_productivas)) {
@@ -433,7 +562,7 @@
           });
       }
 
-      uCrud.create(sender.data)
+      uCrud.create(asociacionaData)
           .then((item) => {
               uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
               sender.clear(true);
@@ -454,19 +583,57 @@
 
     const departamentoQuestion = survey.getQuestionByName("departamento");
     const departamentocoberturaQuestion = survey.getQuestionByName("departamento_cobertura");
+    const departamentocreacionQuestion = survey.getQuestionByName("departamento_creacion");
     
     if (departamentoQuestion) {
       departamentoQuestion.choices = itemsDepartments.value;
       departamentocoberturaQuestion.choices = itemsDepartments.value;
+      departamentocreacionQuestion.choices = itemsDepartments.value;
     }
     const municipioQuestion = survey.getQuestionByName("municipio");
     
     if (options.name === "departamento") {
         const departamento_id = options.value;
         let loading = uLoading.show({});
-        await getMunicipalityList(departamento_id);
+        await getVillageList(departamento_id);
           if (municipioQuestion) {
-              municipioQuestion.choices = itemsMunicipalities.value
+              municipioQuestion.choices = itemsVillages.value
+          }
+        loading.hide()
+    }
+
+    const municipiocreacionQuestion = survey.getQuestionByName("municipio_creacion");
+    
+    if (options.name === "departamento_creacion") {
+        const departamento_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(departamento_id);
+          if (municipiocreacionQuestion) {
+              municipiocreacionQuestion.choices = itemsVillages.value
+          }
+        loading.hide()
+    }
+
+    const corregimientoQuestion = survey.getQuestionByName("corregimiento");
+    
+    if (options.name === "municipio") {
+        const departamento_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(departamento_id);
+          if (corregimientoQuestion) {
+            corregimientoQuestion.choices = itemsVillages.value
+          }
+        loading.hide()
+    }
+
+    const veredaQuestion = survey.getQuestionByName("vereda");
+    
+    if (options.name === "corregimiento") {
+        const departamento_id = options.value;
+        let loading = uLoading.show({});
+        await getVillageList(departamento_id);
+          if (veredaQuestion) {
+            veredaQuestion.choices = itemsVillages.value
           }
         loading.hide()
     }
