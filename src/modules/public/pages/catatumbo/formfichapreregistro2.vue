@@ -1146,7 +1146,7 @@
         apellido: sender.data.titular_apellidos,
         fecha_expedicion: sender.data.titular_fecha_expedicion,
         fecha_nacimiento: sender.data.titular_fecha_nacimiento,
-        sexo_id: sender.data.titular_sexo,
+        sexo_id: parseInt(sender.data.titular_sexo),
         email: sender.data.titular_email,
         telefono_celular: sender.data.titular_celular,
         whatsapp: sender.data.titular_whatsapp,
