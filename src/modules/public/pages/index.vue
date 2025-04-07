@@ -19,7 +19,7 @@
       <Swiper
           :modules="[Navigation, Pagination]"
           :slides-per-view="1"
-          :space-between="20"
+          :space-between="0"
           :navigation="true"
           :pagination="{ clickable: true }"
           :breakpoints="{
@@ -213,6 +213,9 @@ const convocatorias = [
 
 
 <style scoped lang="scss">
+body {
+  font-family: 'Nunito', sans-serif;
+}
 /* Sección de login */
 .login-section {
   display: flex;
@@ -236,6 +239,7 @@ const convocatorias = [
 }
 
 .title-convocatorias {
+  font-family: 'Nunito', sans-serif;
   font-weight: 800;
   font-size: 48px;
   text-align: center;
@@ -298,8 +302,9 @@ const convocatorias = [
     padding: 0 16px;
 
     h1 {
-      font-size: 36px;
-      font-weight: bold;
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 32px;
+      font-weight: 900;
       Line-height: 40px;
       letter-spacing: 0%;
 
@@ -311,7 +316,7 @@ const convocatorias = [
 
     h2 {
       font-size: 24px;
-      font-weight: bold;
+      font-weight: 600;
 
       @media (max-width: 768px) {
         font-size: 18px;
