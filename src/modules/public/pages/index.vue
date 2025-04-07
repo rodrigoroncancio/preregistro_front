@@ -237,7 +237,7 @@ const convocatorias = [
 
 .title-convocatorias {
   font-weight: 800;
-  font-size: 66px;
+  font-size: 48px;
   text-align: center;
   color: #326cf3;
   margin-bottom: 20px;
