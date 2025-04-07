@@ -1141,7 +1141,7 @@
         tipo_identificacion_id: parseInt(sender.data.titular_tipo_identificacion),
         cub_asociacion: sender.data.asociaciones === 999999 ? null : sender.data.asociaciones,
         cub: 0,
-        numero_documento: sender.data.titular_numero_documento,
+        numero_documento: String(sender.data.titular_numero_documento),
         nombre: sender.data.titular_nombres,
         apellido: sender.data.titular_apellidos,
         fecha_expedicion: sender.data.titular_fecha_expedicion,
