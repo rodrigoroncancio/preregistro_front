@@ -70,6 +70,10 @@
             "text": "Sardinata"
           },
           {
+            "value": 1040,
+            "text": "Teorama"
+          },
+          {
             "value": 1047,
             "text": "Tibú"
           }
@@ -79,7 +83,7 @@
         type: Array,
         default: [
           {
-            "value": 28,
+            "value": 29,
             "text": "Norte de santander"
           }
         ]
@@ -1293,8 +1297,9 @@
   survey.onValueChanged.add(async (sender, options) => {
 
     const asociacionesQuestion = survey.getQuestionByName("asociaciones");
+    const perteneceQuestion = survey.getQuestionByName("pertenecegrupo");
 
-    if (asociacionesQuestion) {
+    if (perteneceQuestion) {
       asociacionesQuestion.choices = itemsAsociaciones.value;
     }
 
@@ -1407,7 +1412,7 @@
 
       itemsVillages.value.push({
         value: 9999,
-        text: 'Nucleo  no encontrado'
+        text: 'Vereda  no encontrada'
       });
 
       if (prediococaveredaQuestion) {
@@ -1471,7 +1476,7 @@
 
       itemsVillages.value.push({
         value: 9999,
-        text: 'Nucleo  no encontrado'
+        text: 'Vereda  no encontrado'
       });
 
       if (prediococaotraveredaQuestion) {
@@ -1534,7 +1539,7 @@
 
       itemsVillages.value.push({
         value: 9999,
-        text: 'Nucleo  no encontrado'
+        text: 'Vereda  no encontrado'
       });
 
       if (viveveredaQuestion) {
@@ -1597,7 +1602,7 @@
 
       itemsVillages.value.push({
         value: 9999,
-        text: 'Nucleo  no encontrado'
+        text: 'Vereda  no encontrado'
       });
 
       if (desplazadoveredaQuestion) {
