@@ -143,7 +143,7 @@ const clickSave = () => {
   console.log(formData.value);
   let loader = loading.show({});
   // Realiza la solicitud POST y maneja la respuesta con .then()
-  axios.get(`/public/consultar_documento/${formData.value.numdocumento}/${formData.value.fechanacimiento}`)
+  axios.get(`forms/public/consultar_documento/${formData.value.numdocumento}/${formData.value.fechanacimiento}`)
   .then((response) => {
     console.log('response');
     console.log(response);
