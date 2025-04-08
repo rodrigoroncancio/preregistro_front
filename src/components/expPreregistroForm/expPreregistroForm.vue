@@ -273,7 +273,7 @@
             {
               "type": "text",
               "name": "vive_vereda_otra",
-              "visibleIf": "{vive_lugar} = 4",
+              "visibleIf": "{vive_lugar} = 4 and {vive_vereda} = 9999",
               "title": "Nombre vereda",
               "description": "si la vereda no aparece en la lista, se digita el nombre de la vereda"
             }
@@ -382,7 +382,7 @@
             {
               "type": "text",
               "name": "desplazado_otra_vereda",
-              "visibleIf": "{deplazado_lugar} = 4  and {desplazado_2025} = true",
+              "visibleIf": "{deplazado_lugar} = 4  and {desplazado_2025} = true and {desplazado_vereda} = 9999",
               "title": "Nombre de vereda",
               "description": "si la vereda no aparece en la lista, se digita el nombre de la vereda"
             }
@@ -633,10 +633,18 @@
               "labelTrue": "Si"
             },
             {
+              "type": "html",
+              "name": "question7",
+              "visibleIf": "{predio_coca_vive} = false",
+              "title": "1.4 Su lugar de residencia cambió después del 16 de enero?  ",
+              "html": "<h4>\n Si marcó No, Indique donde tiene el cultivo de coca:\n</h4>"
+            },
+            {
               "type": "dropdown",
               "name": "predio_coca_departamento",
               "visibleIf": "{predio_coca_vive} = false",
               "title": "7.1. Departamento",
+              "isRequired": true,
               "choices": props.departamentos
             },
             {
@@ -644,6 +652,7 @@
               "name": "predio_coca_municipio",
               "visibleIf": "{predio_coca_vive} = false",
               "title": "7.2 Municipio",
+              "isRequired": true,
               "choices": props.municipios
             },
             {
@@ -651,6 +660,7 @@
               "name": "predio_coca_lugar",
               "visibleIf": "{predio_coca_vive} = false",
               "title": "7.3 . LUGAR",
+              "isRequired": true,
               "choices": [
                 {
                   "value": "1",
@@ -715,7 +725,7 @@
             {
               "type": "text",
               "name": "predio_coca_vereda_otra",
-              "visibleIf": "{predio_coca_lugar} = 4 and {predio_coca_vive} = false",
+              "visibleIf": "{predio_coca_lugar} = 4 and {predio_coca_vive} = false  and {predio_coca_vereda} = 9999",
               "title": "Nombre vereda",
               "description": "Si la vereda no aparece en la lista, se digita el nombre de la vereda"
             }
@@ -805,7 +815,7 @@
               "name": "question55",
               "visibleIf": "{predio_coca_ubicacion} = '2'",
               "title": "Cual?",
-              "html": "<h4>\nCuál\n</h4>"
+              "html": "<h4>\nEn que otro sitio ejecutará el proyecto productivo?\n</h4>"
             },
             {
               "type": "dropdown",
@@ -865,18 +875,18 @@
                 }
               ]
             },
-            {
-              "type": "dropdown",
-              "name": "predio_coca_otro_nucleo_veredal",
-              "visibleIf": "{predio_coca_otro_lugar} = 4",
-              "title": "Nucleo veredal",
-              "choices": [
-                {
-                  "value": "Item 1",
-                  "text": "Sin Corregimiento"
-                }
-              ]
-            },
+            // {
+            //   "type": "dropdown",
+            //   "name": "predio_coca_otro_nucleo_veredal",
+            //   "visibleIf": "{predio_coca_otro_lugar} = 4",
+            //   "title": "Nucleo veredal",
+            //   "choices": [
+            //     {
+            //       "value": "Item 1",
+            //       "text": "Sin Corregimiento"
+            //     }
+            //   ]
+            // },
             {
               "type": "dropdown",
               "name": "predio_coca_otro_vereda",
@@ -892,7 +902,7 @@
             {
               "type": "text",
               "name": "predio_coca_otro_vereda_otra",
-              "visibleIf": "{predio_coca_otro_lugar} = 4",
+              "visibleIf": "{predio_coca_otro_lugar} = 4 and {predio_coca_otro_vereda} = 9999",
               "title": "Nombre vereda",
               "description": "Si la vereda no aparece en la lista, se digita el nombre de la vereda"
             }
