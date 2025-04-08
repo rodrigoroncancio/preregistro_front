@@ -57,6 +57,21 @@ const routes: RouteRecordRaw[] = [
         component: () => import("@/modules/public/pages/narino/index.vue"), // Añade un componente para el layout de Catatumbo
         children: [
           {
+            path: "iniciotumaco", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-narino-inicio",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/narino/iniciotumaco.vue"),
+          },
+          {
+            path: "inicioroberto", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-narino-inicioroberto",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/narino/inicioroberto.vue"),
+          },
+          {
+            path: "iniciosamaniego", // Ruta raíz relativa al path padre ("/catatumbo")
+            name: "public-narino-iniciosamaniego",
+            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/narino/iniciosamaniego.vue"),
+          },
+          {
             path: "tumaco/preregistro", // Ruta raíz relativa al path padre ("/catatumbo")
             name: "public-narino-tumaco",
             component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/narino/tumacopreregistro.vue"),
