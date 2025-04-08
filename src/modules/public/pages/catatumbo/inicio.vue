@@ -58,7 +58,7 @@
           </div>
       </v-col>
     </v-row>
-    <<v-row justify="center">
+    <v-row justify="center">
       <v-col cols="auto">
         <a 
           target="_blank"

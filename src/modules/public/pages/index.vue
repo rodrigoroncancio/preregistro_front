@@ -1,6 +1,5 @@
 <template>
-  <v-main>
-    <!-- Header -->
+  <v-main class="page-home">
     <v-container>
       <v-row>
         <v-col class="text-center mt-6">
@@ -13,44 +12,51 @@
       </router-link>
       <div class="title-convocatorias">Convocatorias</div>
     </v-container>
+    <v-row justify="center">
+      <v-col cols="auto">
+        <a 
+          target="_blank"
+          href="/catatumbo/vercupos"
+          style="color: black; background-color: rgba(255, 255, 255, 0.6); padding: 5px 10px; text-decoration: none; border-radius: 5px; display: inline-block; text-align: center;"
+        >
+          Ver cupos
+        </a>
+      </v-col>
+    </v-row>
 
-    <!-- Swiper Carousel -->
     <div class="carrusel-wrapper">
       <Swiper
-          :modules="[Navigation, Pagination]"
-          :slides-per-view="1"
-          :space-between="0"
-          :navigation="true"
-          :pagination="{ clickable: true }"
-          :breakpoints="{
-          600: { slidesPerView: 1.2 },
+        :modules="[Navigation, Pagination]"
+        :slides-per-view="1"
+        :space-between="0"
+        :loop="true"
+        :navigation="true"
+        :pagination="false"
+        :breakpoints="{
+          768: { slidesPerView: 1.2 },
           960: { slidesPerView: 2.2 },
           1264: { slidesPerView: 3.2 },
           1904: { slidesPerView: 4 }
         }"
-          class="swiper-convocatorias"
       >
         <SwiperSlide v-for="conv in convocatorias" :key="conv.municipio">
-          <v-card
-              class="convocatoria-card"
-          >
-            <div class="card-content">
+          <div class="convocatoria-card" :style="{ backgroundImage: `url('${conv.img}')` }">
+            <div class="card-content-top">
               <h1 :style="{ color: conv.colorTitulo }">{{ conv.municipio }}</h1>
               <h2 :style="{ color: conv.colorSub }">{{ conv.departamento }}</h2>
-              <h3
-                  v-if="conv.fecha"
-                  v-html="conv.fecha"
-                  :style="{
-                    border: '1px solid ' + conv.colorBorderFecha,
-                    color: conv.colorFecha}"
+              <h3 v-if="conv.fecha" v-html="conv.fecha"
+                :style="{
+                  border: '1px solid ' + conv.colorBorderFecha,
+                  color: conv.colorFecha
+                }"
               ></h3>
-              <div v-else style="height: 115px;"></div>
-
+            </div>
+            <div class="card-content-bottom">
               <v-btn
-                  :color="conv.colorBtn"
-                  :to="conv.link"
-                  :disabled="conv.proximamente"
-                  class="btn-convocatoria"
+                :color="conv.colorBtn"
+                :to="conv.link"
+                :disabled="conv.proximamente"
+                class="btn-convocatoria"
               >
                 <v-icon start size="35" color="white" class="me-2">
                   {{ conv.proximamente ? "mdi-clock-outline" : "mdi-play-circle-outline" }}
@@ -58,11 +64,7 @@
                 {{ conv.proximamente ? "PRÓXIMAMENTE" : "INSCRÍBETE AQUÍ" }}
               </v-btn>
             </div>
-
-            <div class="card-footer" :style="{ backgroundImage: `url('${conv.img}')` }">
-
-            </div>
-          </v-card>
+          </div>
         </SwiperSlide>
       </Swiper>
     </div>
@@ -211,160 +213,154 @@ const convocatorias = [
 ];
 </script>
 
-
 <style scoped lang="scss">
 body {
   font-family: 'Nunito', sans-serif;
 }
-/* Sección de login */
-.login-section {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: bold;
-  color: #585958;
-  transition: color 0.3s ease;
-  z-index: 99999;
-  position: absolute;
-  right: 20px;
-  top: 20px;
-}
-/* Efecto hover en el login */
-.login-section:hover {
-  color: #106737; /* Cambia de color al pasar el mouse */
-  .login-icon {
-    color: #106737; /* Cambia el color del icono en hover */
+
+.page-home {
+  .login-section {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: #585958;
+    transition: color 0.3s ease;
+    z-index: 99999;
+    position: absolute;
+    right: 20px;
+    top: 20px;
   }
-}
-
-.title-convocatorias {
-  font-family: 'Nunito', sans-serif;
-  font-weight: 800;
-  font-size: 48px;
-  text-align: center;
-  color: #326cf3;
-  margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    font-size: 38px;
-  }
-}
-
-.carrusel-wrapper {
-  width: 100%;
-  padding: 0 40px;
-  box-sizing: border-box;
-
-  .swiper-convocatorias {
-    padding-bottom: 40px;
+  .login-section:hover {
+    color: #106737;
+    .login-icon {
+      color: #106737;
+    }
   }
 
-  .swiper-button-next,
-  .swiper-button-prev {
-    color: #326cf3;
-    background: white;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
-
-  .swiper-pagination-bullet-active {
-    background: #326cf3;
-  }
-}
-
-.convocatoria-card {
-  width: 100%;
-  max-width: 380px;
-  height: 600px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 0;
-  background-color: transparent;
-  transition: transform 0.3s ease;
-  overflow: hidden;
-  margin: auto;
-
-  &:hover {
-    transform: scale(1.02);
-  }
-
-  @media (max-width: 768px) {
-    height: auto;
-    padding-bottom: 20px;
-  }
-
-  .card-content {
+  .title-convocatorias {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 48px;
     text-align: center;
-    padding: 0 16px;
+    color: #326cf3;
+    @media (max-width: 768px) {
+      font-size: 38px;
+    }
+  }
 
-    h1 {
-      font-family: 'Nunito Sans', sans-serif;
-      font-size: 32px;
-      font-weight: 900;
-      Line-height: 40px;
-      letter-spacing: 0%;
+  .carrusel-wrapper {
+    width: 100%;
+  }
+
+  .convocatoria-card {
+    min-height: calc(100vh - 257px);
+    width: 100%;
+    max-height: 600px;
+    box-sizing: border-box;
+    background-position: bottom;
+    background-size: contain;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 768px) {
+      min-height: calc(100vh - 242px);
+    }
+
+    .card-content-top {
+      height: 260px;
+      position: relative;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
 
       @media (max-width: 768px) {
+        height: 180px;
+      }
+
+      h1 {
+        font-family: 'Nunito Sans', sans-serif;
+        font-size: 34px;
+        line-height: 34px;
+        font-weight: 900;
+      }
+
+      h2 {
+        font-size: 24px;
+        font-weight: normal !important;
+        margin-bottom: 10px;
+
+        @media (max-width: 768px) {
+          font-size: 18px;
+        }
+      }
+
+      h3 {
+        font-family: 'Nunito Sans', sans-serif;
+        width: 220px;
+        margin: 10px auto;
+        padding: 10px;
+        margin-top: 0;
+        font-weight: normal !important;
         font-size: 28px;
-        max-height: 56px;
+        line-height: 28px;
+        font-weight: 600;
+
+        @media (max-width: 768px) {
+          font-size: 18px;
+        }
       }
     }
 
-    h2 {
-      font-size: 24px;
-      font-weight: 600;
+    .card-content-bottom {
+      text-align: center;
 
-      @media (max-width: 768px) {
-        font-size: 18px;
-      }
-    }
+      .btn-convocatoria {
+        height: 50px;
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+        color: white !important;
 
-    h3 {
-      width: 220px;
-      margin: 10px auto;
-      padding: 10px;
-      font-size: 30px;
-      Line-height: 35px;
-
-      @media (max-width: 768px) {
-        font-size: 18px;
-        width: 96%;
-      }
-    }
-
-    .btn-convocatoria {
-      height: 80px;
-      width: 220px;
-      font-size: 16px;
-      font-weight: bold;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      color: white !important;
-
-      @media (max-width: 600px) {
-        width: 100%;
-        font-size: 14px;
-        height: 60px;
+        @media (max-width: 768px) {
+          width: 200px;
+          font-size: 12px;
+          height: 45px;
+        }
       }
     }
   }
+}
+</style>
 
+<style lang="scss">
+.swiper-button-prev,
+.swiper-button-next {
+  border-radius: 50%;
+  background-color: white;
+  width: 55px;
+  height: 55px;
 }
 
-.card-footer {
-  height: 98%;
-  width: 100%;
-  background-repeat: no-repeat;
-  background-position: center bottom;
-  background-size: contain;
-
-  @media (max-width: 600px) {
-    display: none;
-  }
+.swiper-button-prev:after ,
+.swiper-button-next:after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
 }
-
+.swiper-button-prev:after {
+  border-right: 25px solid #326cf3;
+  margin-right: 10px;
+}
+.swiper-button-next:after {
+  border-left: 25px solid #326cf3;
+  margin-left: 10px;
+}
 </style>
