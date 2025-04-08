@@ -12,14 +12,14 @@
       </router-link>
       <div class="title-convocatorias">Convocatorias</div>
     </v-container>
-    <v-row justify="center">
-      <v-col cols="auto">
+    <v-row>
+      <v-col md="12" cols="12" class="text-center div-argelia">
         <a 
-          target="_blank"
-          href="/catatumbo/vercupos"
-          style="color: black; background-color: rgba(255, 255, 255, 0.6); padding: 5px 10px; text-decoration: none; border-radius: 5px; display: inline-block; text-align: center;"
+          @click="openConsultaForm"
+          style="color: black; background-color: rgba(255, 255, 255, 0.8); padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-flex; align-items: center; height: 60px; justify-content: center;"
         >
-          Ver cupos
+          <v-icon left>mdi-magnify</v-icon> <!-- Icono de lupa -->
+          Consultar estado de Aspirante por Número documento
         </a>
       </v-col>
     </v-row>
@@ -69,6 +69,11 @@
       </Swiper>
     </div>
   </v-main>
+  <consultaForm
+    v-if="consultaModal"
+    v-model="consultaModal"
+    @onFind="onFindDocument"
+  />
 </template>
 
 <script setup lang="ts">
@@ -78,6 +83,17 @@ import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+
+import { ref, onMounted } from "vue";
+import consultaForm from "@/modules/public/pages/components/consultar.vue";
+
+const consultaModal = ref(false);
+const onFindDocument = (uuid: string) => {
+  consultaModal.value = false;
+}
+const openConsultaForm = () => {
+  consultaModal.value = true;
+}
 
 const convocatorias = [
   {
@@ -109,10 +125,10 @@ const convocatorias = [
   {
     municipio: "Tumaco",
     departamento: "Nariño",
-    fecha: "",
+    fecha: "---------- <br> --------------",
     colorTitulo: "#009971",
     colorSub: "#009971",
-    colorFecha: "#002f86",
+    colorFecha: "#009971",
     colorBorderFecha: "#1a8f1a",
     colorBtn: "#1349A0",
     link: "/narino/iniciotumaco",
@@ -122,10 +138,10 @@ const convocatorias = [
   {
     municipio: "Roberto Payán",
     departamento: "Nariño",
-    fecha: "",
+    fecha: "---------- <br> --------------",
     colorTitulo: "#223942",
     colorSub: "#223942",
-    colorFecha: "#002f86",
+    colorFecha: "#223942",
     colorBorderFecha: "#1a8f1a",
     colorBtn: "#4FC58E",
     link: "/narino/inicioroberto",
@@ -135,10 +151,10 @@ const convocatorias = [
   {
     municipio: "Samaniego",
     departamento: "Nariño",
-    fecha: "",
+    fecha: "---------- <br> --------------",
     colorTitulo: "#009971",
     colorSub: "#009971",
-    colorFecha: "#002f86",
+    colorFecha: "#009971",
     colorBorderFecha: "#1a8f1a",
     colorBtn: "#8BBD06",
     link: "/narino/iniciosamaniego",
@@ -148,10 +164,10 @@ const convocatorias = [
   {
     municipio: "Valle del Guamuez Villagarzón",
     departamento: "Putumayo",
-    fecha: "",
+    fecha: "---------- <br> --------------",
     colorTitulo: "#566180",
     colorSub: "#566180",
-    colorFecha: "#002f86",
+    colorFecha: "#566180",
     colorBorderFecha: "#1a8f1a",
     colorBtn: "#5696A6",
     link: "#",
@@ -161,10 +177,10 @@ const convocatorias = [
   {
     municipio: "Riosucio",
     departamento: "Choco",
-    fecha: "",
+    fecha: "---------- <br> --------------",
     colorTitulo: "#911C09",
     colorSub: "#911C09",
-    colorFecha: "#002f86",
+    colorFecha: "#911C09",
     colorBorderFecha: "#1a8f1a",
     colorBtn: "#C07E26",
     link: "#",
@@ -174,7 +190,7 @@ const convocatorias = [
   {
     municipio: "Ituango",
     departamento: "Antioquia",
-    fecha: "",
+    fecha: "---------- <br> --------------",
     colorTitulo: "#004276",
     colorSub: "#004276",
     colorFecha: "#004276",
@@ -187,7 +203,7 @@ const convocatorias = [
   {
     municipio: "Buenaventura",
     departamento: "Valle del cauca",
-    fecha: "",
+    fecha: "---------- <br> --------------",
     colorTitulo: "#1A3891",
     colorSub: "#1A3891",
     colorFecha: "#0076CE",
@@ -200,7 +216,7 @@ const convocatorias = [
   {
     municipio: "Cumaribo",
     departamento: "Vichada",
-    fecha: "",
+    fecha: "---------- <br> --------------",
     colorTitulo: "#BB7918",
     colorSub: "#BB7918",
     colorFecha: "#BB7918",
