@@ -89,7 +89,7 @@ const convocatorias = [
     colorBtn: "#d6513e",
     link: "/catatumbo/inicio",
     proximamente: false,
-    img: "/src/assets/img/home/catatumbo.png",
+    img: "https://expansionti.com/pnis/catatumbo.png",
   },
   {
     municipio: "Argelia",
@@ -102,7 +102,7 @@ const convocatorias = [
     colorBtn: "#0d6efd",
     link: "/argeliainicio",
     proximamente: false,
-    img: "/src/assets/img/home/argelia.png",
+    img: "https://expansionti.com/pnis/argelia.png",
   },
   {
     municipio: "Tumaco",
@@ -115,7 +115,7 @@ const convocatorias = [
     colorBtn: "#1349A0",
     link: "/narino/iniciotumaco",
     proximamente: true,
-    img: "/src/assets/img/home/tumaco.png",
+    img: "https://expansionti.com/pnis/tumaco.png",
   },
   {
     municipio: "Roberto Payán",
@@ -128,7 +128,7 @@ const convocatorias = [
     colorBtn: "#4FC58E",
     link: "/narino/inicioroberto",
     proximamente: true,
-    img: "/src/assets/img/home/roberto.png",
+    img: "https://expansionti.com/pnis/roberto.png",
   },
   {
     municipio: "Samaniego",
@@ -141,7 +141,7 @@ const convocatorias = [
     colorBtn: "#8BBD06",
     link: "/narino/iniciosamaniego",
     proximamente: true,
-    img: "/src/assets/img/home/samananiego.png",
+    img: "https://expansionti.com/pnis/samananiego.png",
   },
   {
     municipio: "Valle del Guamuez Villagarzón",
@@ -154,7 +154,7 @@ const convocatorias = [
     colorBtn: "#5696A6",
     link: "#",
     proximamente: true,
-    img: "/src/assets/img/home/villagarzon.png",
+    img: "https://expansionti.com/pnis/villagarzon.png",
   },
   {
     municipio: "Riosucio",
@@ -167,7 +167,7 @@ const convocatorias = [
     colorBtn: "#C07E26",
     link: "#",
     proximamente: true,
-    img: "/src/assets/img/home/riosucio.png",
+    img: "https://expansionti.com/pnis/riosucio.png",
   },
   {
     municipio: "Ituango",
@@ -180,7 +180,7 @@ const convocatorias = [
     colorBtn: "#00B86D",
     link: "#",
     proximamente: true,
-    img: "/src/assets/img/home/ituango.png",
+    img: "https://expansionti.com/pnis/ituango.png",
   },
   {
     municipio: "Buenaventura",
@@ -193,7 +193,7 @@ const convocatorias = [
     colorBtn: "#0076CE",
     link: "#",
     proximamente: true,
-    img: "/src/assets/img/home/buenaventura.png",
+    img: "https://expansionti.com/pnis/buenaventura.png",
   },
   {
     municipio: "Cumaribo",
@@ -206,7 +206,7 @@ const convocatorias = [
     colorBtn: "#DB6C5B",
     link: "#",
     proximamente: true,
-    img: "/src/assets/img/home/cumaribo.png",
+    img: "https://expansionti.com/pnis/cumaribo.png",
   },
 ];
 </script>
