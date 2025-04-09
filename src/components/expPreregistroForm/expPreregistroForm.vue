@@ -1184,12 +1184,25 @@ import { object } from 'yup';
       });
     }
 
-    const [longitud, latitud] = sender.data.coordinates.split('|').map(parseFloat);
+    let longitud = 0;
+    let latitud = 0;
+
+    if (sender.data?.coordinates) {
+      const coords = sender.data.coordinates.split('|').map(parseFloat);
+      if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+        [longitud, latitud] = coords;
+      }
+    }
+
+    const altitud = sender.data?.predio_coca_altitud ?? 0;
+    const presicion = sender.data?.predio_coca_precision ?? 0;
 
     const coordenadaLoteCocaData = {
       predio_id: 0,
       coordenada: `POINT (${longitud} ${latitud})`,
-      coordenadastr: `${latitud} ${longitud}`,   
+      coordenadastr: `${latitud} ${longitud}`,
+      altitud,
+      presicion,
       origen: 'preregistro_catatumbo',
       fcrea: new Date().toISOString()
     };
@@ -1599,11 +1612,12 @@ import { object } from 'yup';
       }
 
       const villages2 = await getVillageList(municipio_id, 'VE');
-      itemsVillages.value = []
 
       if (Array.isArray(villages2)) {
         itemsVillages.value = [...villages2];
       }
+      console.log('itemsVillages.value')
+      console.log(itemsVillages.value)
 
       itemsVillages.value.push({
         value: 9999,
@@ -1637,7 +1651,6 @@ import { object } from 'yup';
       }
 
       const villages2 = await getVillageList(municipio_id, 'VE');
-      itemsVillages.value = []
 
       if (Array.isArray(villages2)) {
         itemsVillages.value = [...villages2];
@@ -1674,7 +1687,6 @@ import { object } from 'yup';
       }
 
       const villages2 = await getVillageList(municipio_id, 'VE');
-      itemsVillages.value = []
 
       if (Array.isArray(villages2)) {
         itemsVillages.value = [...villages2];
@@ -1711,7 +1723,6 @@ import { object } from 'yup';
       }
 
       const villages2 = await getVillageList(municipio_id, 'VE');
-      itemsVillages.value = []
 
       if (Array.isArray(villages2)) {
         itemsVillages.value = [...villages2];
@@ -1722,8 +1733,8 @@ import { object } from 'yup';
         text: 'Vereda no encontrada'
       });
 
-      if (prediococaotroveredaQuestion) {
-        prediococaotroveredaQuestion.choices = itemsVillages.value;
+      if (prediococaotraveredaQuestion) {
+        prediococaotraveredaQuestion.choices = itemsVillages.value;
       }
 
       loading.hide();
