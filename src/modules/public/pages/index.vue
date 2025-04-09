@@ -271,7 +271,7 @@ body {
   }
 
   .convocatoria-card {
-    min-height: calc(100vh - 257px);
+    min-height: calc(100vh - 317px);
     width: 100%;
     max-height: 600px;
     box-sizing: border-box;
@@ -281,7 +281,7 @@ body {
     flex-direction: column;
 
     @media (max-width: 768px) {
-      min-height: calc(100vh - 242px);
+      min-height: calc(100vh - 282px);
     }
 
     .card-content-top {

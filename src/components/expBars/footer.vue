@@ -41,6 +41,7 @@ export default {
   }
   .social {
     font-size: 15px;
+    gap: 12px;
   }
 }
 
@@ -57,7 +58,7 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 12px; /* Espaciado entre los iconos */
+  gap: 6px; /* Espaciado entre los iconos */
 }
 
 .social svg {

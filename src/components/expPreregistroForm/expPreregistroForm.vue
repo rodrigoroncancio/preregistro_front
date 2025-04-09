@@ -22,6 +22,7 @@
     import axios from "axios";
     import { useLoading } from "vue-loading-overlay";
     import { ref, onMounted } from "vue";
+import { object } from 'yup';
 
     
 
@@ -55,38 +56,52 @@
         default: 1
       },
       municipios: {
-        type: Array,
-        default: [
-          {
-            "value": 283,
-            "text": "Convención"
-          },
-          {
-            "value": 368,
-            "text": "El tarra"
-          },
-          {
-            "value": 963,
-            "text": "Sardinata"
-          },
-          {
-            "value": 1040,
-            "text": "Teorama"
-          },
-          {
-            "value": 1047,
-            "text": "Tibú"
-          }
-      ]
+        type: Object, // con O mayúscula
+        default: () => ({
+          data: [
+            {
+              "value": 283,
+              "text": "Convención"
+            },
+            {
+              "value": 368,
+              "text": "El tarra"
+            },
+            {
+              "value": 963,
+              "text": "Sardinata"
+            },
+            {
+              "value": 1040,
+              "text": "Teorama"
+            },
+            {
+              "value": 1047,
+              "text": "Tibú"
+            }
+        ],
+          datadefault: 0
+        })
       },
       departamentos: {
-        type: Array,
-        default: [
-          {
-            "value": 29,
-            "text": "Norte de santander"
-          }
-        ]
+        type: Object, // con O mayúscula
+        default: () => ({
+          data: [
+            { value: 29, text: "Norte de Santander" }
+          ],
+          datadefault: 29,
+          readOnlyState: true
+        })
+      },
+      departamentosVive: {
+        type: Object, // con O mayúscula
+        default: () => ({
+          data: [
+            { value: 29, text: "Norte de Santander" }
+          ],
+          datadefault: 29,
+          readOnlyState: true
+        })
       }
 
     });
@@ -192,14 +207,17 @@
               "name": "vive_departamento",
               "title": "1.1 Departamento",
               "isRequired": true,
-              "choices": props.departamentos
+              "choices": props.departamentosVive.data,
+              "defaultValue": props.departamentosVive.datadefault,
+              "readOnly": props.departamentosVive.readOnlyState
             },
             {
               "type": "dropdown",
               "name": "vive_municipio",
               "title": "1.2 Municipio",
               "isRequired": true,
-              "choices": props.municipios
+              "choices": props.municipios.data,
+              "defaultValue": props.municipios.datadefault,
             },
             {
               "type": "radiogroup",
@@ -213,11 +231,7 @@
                 },
                 {
                   "value": "2",
-                  "text": "Centro poblado"
-                },
-                {
-                  "value": "3",
-                  "text": "Corregimiento"
+                  "text": "Corregimiento y Centro poblado"
                 },
                 {
                   "value": "4",
@@ -226,16 +240,10 @@
               ]
             },
             {
-              "type": "text",
-              "name": "vive_direccion",
-              "visibleIf": "{vive_lugar} <> 4 and {vive_lugar} notempty",
-              "title": "Dirección"
-            },
-            {
               "type": "dropdown",
               "name": "vive_corregimiento",
-              "visibleIf": "{vive_lugar} > 2",
-              "title": "Corregimiento",
+              "visibleIf": "{vive_lugar} = 2",
+              "title": "Corregimiento y Centro poblado",
               "isRequired": true,
               "choices": [
                 {
@@ -243,6 +251,12 @@
                   "text": "Sin corregimiento"
                 }
               ]
+            },
+            {
+              "type": "text",
+              "name": "vive_direccion",
+              "visibleIf": "{vive_lugar} <> 4 and {vive_lugar} notempty",
+              "title": "Dirección"
             },
             // {
             //   "type": "dropdown",
@@ -273,9 +287,9 @@
             {
               "type": "text",
               "name": "vive_vereda_otra",
-              "visibleIf": "{vive_lugar} = 4 and {vive_vereda} = 9999",
-              "title": "Nombre vereda",
-              "description": "si la vereda no aparece en la lista, se digita el nombre de la vereda"
+              "visibleIf": "{vive_lugar} > 1 and ({vive_vereda} = 9999 or {vive_corregimiento} = 9999)",
+              "title": "Nombre",
+              "description": "si no aparece en la lista, se digita el nombre del lugar donde vive"
             }
           ]
         },
@@ -302,7 +316,8 @@
               "visibleIf": "{desplazado_2025} = true",
               "title": "Departamento",
               "isRequired": true,
-              "choices": props.departamentos
+              "choices": props.departamentos.data,
+              "defaultValue": props.departamentos.datadefault 
             },
             {
               "type": "dropdown",
@@ -310,7 +325,8 @@
               "visibleIf": "{desplazado_2025} = true",
               "title": "Municipio",
               "isRequired": true,
-              "choices": props.municipios
+              "choices": props.municipios.data,
+              "defaultValue": props.municipios.datadefault,
             },
             {
               "type": "radiogroup",
@@ -325,11 +341,7 @@
                 },
                 {
                   "value": "2",
-                  "text": "Centro poblado"
-                },
-                {
-                  "value": "3",
-                  "text": "Corregimiento"
+                  "text": "Corregimiento y Centro poblado"
                 },
                 {
                   "value": "4",
@@ -338,22 +350,22 @@
               ]
             },
             {
-              "type": "text",
-              "name": "desplazado_lugar_direccion",
-              "visibleIf": "{deplazado_lugar} != '4' and {desplazado_2025} = true",
-              "title": "Dirección"
-            },
-            {
               "type": "dropdown",
               "name": "desplazado_corregimiento",
-              "visibleIf": "{deplazado_lugar} > 2 and {desplazado_2025} = true",
-              "title": "Corregimiento",
+              "visibleIf": "{deplazado_lugar} = 2 and {desplazado_2025} = true",
+              "title": "Corregimiento y centro poblado",
               "choices": [
                 {
                   "value": "Item 1",
                   "text": "Sin corregimiento"
                 }
               ]
+            },
+            {
+              "type": "text",
+              "name": "desplazado_lugar_direccion",
+              "visibleIf": "{deplazado_lugar} != '4' and {desplazado_2025} = true",
+              "title": "Dirección"
             },
             // {
             //   "type": "dropdown",
@@ -382,9 +394,9 @@
             {
               "type": "text",
               "name": "desplazado_otra_vereda",
-              "visibleIf": "{deplazado_lugar} = 4  and {desplazado_2025} = true and {desplazado_vereda} = 9999",
-              "title": "Nombre de vereda",
-              "description": "si la vereda no aparece en la lista, se digita el nombre de la vereda"
+              "visibleIf": "{deplazado_lugar} > 1  and {desplazado_2025} = true and ({desplazado_vereda} = 9999 or {desplazado_corregimiento} = 9999)",
+              "title": "Nombre",
+              "description": "si no aparece en la lista, se digita el nombre del lugar donde vive"
             }
           ]
         },
@@ -645,7 +657,8 @@
               "visibleIf": "{predio_coca_vive} = false",
               "title": "7.1. Departamento",
               "isRequired": true,
-              "choices": props.departamentos
+              "choices": props.departamentos.data,
+              "defaultValue": props.departamentos.datadefault 
             },
             {
               "type": "dropdown",
@@ -653,7 +666,8 @@
               "visibleIf": "{predio_coca_vive} = false",
               "title": "7.2 Municipio",
               "isRequired": true,
-              "choices": props.municipios
+              "choices": props.municipios.data,
+              "defaultValue": props.municipios.datadefault,
             },
             {
               "type": "radiogroup",
@@ -668,11 +682,7 @@
                 },
                 {
                   "value": "2",
-                  "text": "Centro poblado"
-                },
-                {
-                  "value": "3",
-                  "text": "Corregimiento"
+                  "text": "Corregimiento y Centro poblado"
                 },
                 {
                   "value": "4",
@@ -681,22 +691,22 @@
               ]
             },
             {
-              "type": "text",
-              "name": "predio_coca_lugar_direccion",
-              "visibleIf": "{predio_coca_lugar} <3 and {predio_coca_vive} = false",
-              "title": "Dirección"
-            },
-            {
               "type": "dropdown",
               "name": "predio_coca_corregimiento",
-              "visibleIf": "{predio_coca_lugar} > 2 and {predio_coca_vive} = false",
-              "title": "Corregimiento",
+              "visibleIf": "{predio_coca_lugar} = 2 and {predio_coca_vive} = false",
+              "title": "Corregimiento y Centro poblado",
               "choices": [
                 {
                   "value": "Item 1",
                   "text": "Sin corregimiento"
                 }
               ]
+            },
+            {
+              "type": "text",
+              "name": "predio_coca_lugar_direccion",
+              "visibleIf": "{predio_coca_lugar} <3 and {predio_coca_vive} = false",
+              "title": "Dirección"
             },
             // {
             //   "type": "dropdown",
@@ -713,7 +723,7 @@
             {
               "type": "dropdown",
               "name": "predio_coca_vereda",
-              "visibleIf": "{predio_coca_lugar} > 2 and {predio_coca_vive} = false",
+              "visibleIf": "{predio_coca_lugar} = 4 and {predio_coca_vive} = false",
               "title": "Vereda",
               "choices": [
                 {
@@ -725,9 +735,9 @@
             {
               "type": "text",
               "name": "predio_coca_vereda_otra",
-              "visibleIf": "{predio_coca_lugar} = 4 and {predio_coca_vive} = false  and {predio_coca_vereda} = 9999",
-              "title": "Nombre vereda",
-              "description": "Si la vereda no aparece en la lista, se digita el nombre de la vereda"
+              "visibleIf": "{predio_coca_lugar} > 1 and {predio_coca_vive} = false  and ({predio_coca_vereda} = 9999 or {predio_coca_corregimiento} = 9999)",
+              "title": "Nombre",
+              "description": "Si no aparece en la lista, se digita el nombre del lugar donde vive"
             }
           ]
         },
@@ -737,7 +747,7 @@
             {
               "type": "html",
               "name": "question49",
-              "html": "<h4>\n8. Ingrese las coordenadas del lote de coca. \n</h4>"
+              "html": "<h4>\n8. Ingrese los Datos del lote de coca. \n</h4>"
             },
             // {
             //   "type": "text",
@@ -754,9 +764,17 @@
             //   "inputType": "number"
             // },
             {
+              "type": "boolean",
+              "name": "tienecoordenadas",
+              "title": "Tiene las coordenadas GPS del lote de coca?",
+              "isRequired": true,
+              "labelTrue": "Si"
+            },
+            {
               "type": "coordinates-question",
               "name": "coordinates",
               "title": "Ingrese sus coordenadas",
+              "visibleIf": "{tienecoordenadas} = true",
               "isRequired": true,
               "polygon": props.polygon
             },
@@ -778,6 +796,7 @@
               "type": "text",
               "name": "predio_coca_altitud",
               "title": "Altitud (m)",
+              "visibleIf": "{tienecoordenadas} = true",
               "isRequired": true,
               "validators": [
                 {
@@ -792,6 +811,7 @@
               "type": "text",
               "name": "predio_coca_precision",
               "title": "Precisión (m)",
+              "visibleIf": "{tienecoordenadas} = true",
               "isRequired": true,
               "maxLength": 2
             },
@@ -823,7 +843,8 @@
               "visibleIf": "{predio_coca_ubicacion} = '2'",
               "title": "9.1. Departamento",
               "isRequired": true,
-              "choices": props.departamentos
+              "choices": props.departamentos.data,
+              "defaultValue": props.departamentos.datadefault 
             },
             {
               "type": "dropdown",
@@ -831,7 +852,8 @@
               "visibleIf": "{predio_coca_ubicacion} = '2'",
               "title": "9.2. Municipio",
               "isRequired": true,
-              "choices": props.municipios
+              "choices": props.municipios.data,
+              "defaultValue": props.municipios.datadefault,
             },
             {
               "type": "radiogroup",
@@ -845,11 +867,7 @@
                 },
                 {
                   "value": "2",
-                  "text": "Centro poblado"
-                },
-                {
-                  "value": "3",
-                  "text": "Corregimiento"
+                  "text": "Corregimiento y Centro poblado"
                 },
                 {
                   "value": "4",
@@ -858,22 +876,22 @@
               ]
             },
             {
-              "type": "text",
-              "name": "predio_coca_otro_direccion",
-              "visibleIf": "{predio_coca_otro_lugar} != '4'",
-              "title": "Dirección"
-            },
-            {
               "type": "dropdown",
               "name": "predio_coca_otro_corregimiento",
-              "visibleIf": "{predio_coca_otro_lugar} = 4",
-              "title": "Corregimiento",
+              "visibleIf": "{predio_coca_otro_lugar} = 2",
+              "title": "Corregimiento y Centro poblado",
               "choices": [
                 {
                   "value": "Item 1",
                   "text": "Sin Corregimiento"
                 }
               ]
+            },
+            {
+              "type": "text",
+              "name": "predio_coca_otro_direccion",
+              "visibleIf": "{predio_coca_otro_lugar} != 4",
+              "title": "Dirección"
             },
             // {
             //   "type": "dropdown",
@@ -902,9 +920,9 @@
             {
               "type": "text",
               "name": "predio_coca_otro_vereda_otra",
-              "visibleIf": "{predio_coca_otro_lugar} = 4 and {predio_coca_otro_vereda} = 9999",
-              "title": "Nombre vereda",
-              "description": "Si la vereda no aparece en la lista, se digita el nombre de la vereda"
+              "visibleIf": "{predio_coca_otro_lugar} > 1  and ({predio_coca_otro_vereda} = 9999 or {predio_coca_otro_corregimiento} = 9999)",
+              "title": "Nombre",
+              "description": "Si  no aparece en la lista, se digita el nombre del lugar donde vive"
             }
           ]
         },
@@ -1010,9 +1028,9 @@
   
 
   const itemsVillages = ref<Array<{ value: number; text: string }>>([]);
-  const getVillageList = async (ubicacionId: number) => {
+  const getVillageList = async (ubicacionId: number, tipo: string) => {
       try {
-      const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
+      const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/${tipo}`);
       itemsVillages.value = response.data.map((dept: any) => ({
           value: dept.id,
           text: dept.nombre // Asegurar compatibilidad
@@ -1308,9 +1326,21 @@
 
     const asociacionesQuestion = survey.getQuestionByName("asociaciones");
     const perteneceQuestion = survey.getQuestionByName("pertenecegrupo");
+    const prediococaOtroDepQuestion = survey.getQuestionByName("predio_coca_otro_departamento");
 
     if (perteneceQuestion) {
       asociacionesQuestion.choices = itemsAsociaciones.value;
+
+      const villages = await getVillageList(1, 'NA');
+
+      if (Array.isArray(villages)) {
+        itemsVillages.value = [...villages];
+      }
+
+      if (prediococaOtroDepQuestion) {
+        prediococaOtroDepQuestion.choices = itemsVillages.value;
+      }
+      // await getVillageList(1, 'NA');
     }
 
     if (options.name === "titular_numero_documento") {
@@ -1372,28 +1402,100 @@
 
 
     const vivecorregimientoQuestion = survey.getQuestionByName("vive_corregimiento");
+    const vivemunicipioQuestion = survey.getQuestionByName("vive_municipio");
     const nucleoveredalQuestion = survey.getQuestionByName("vive_nucleo_veredal")
     const viveveredaQuestion = survey.getQuestionByName("vive_vereda");
+    const desplazadoMunicipioQuestion = survey.getQuestionByName("desplazado_municipio");
     const desplazadoCorregimientoQuestion = survey.getQuestionByName("desplazado_corregimiento");
     const desplazadonucleoveredalQuestion = survey.getQuestionByName("desplazado_nucleo_veredal")
     const desplazadoveredaQuestion = survey.getQuestionByName("desplazado_vereda");
 
-
-
+    
+    const prediococaMunicipioQuestion = survey.getQuestionByName("predio_coca_municipio");
     const prediococaCorregimientoQuestion = survey.getQuestionByName("predio_coca_corregimiento");
     const prediococanucleoveredalQuestion = survey.getQuestionByName("predio_coca_nucleo_veredal")
     const prediococaveredaQuestion = survey.getQuestionByName("predio_coca_vereda");
     const prediococaotroveredaQuestion = survey.getQuestionByName("predio_coca_otro_vereda_otra");
 
+    const prediococaotraMunicipioQuestion = survey.getQuestionByName("predio_coca_otro_municipio");
     const prediococaotraCorregimientoQuestion = survey.getQuestionByName("predio_coca_otro_corregimiento");
     const prediococaotranucleoveredalQuestion = survey.getQuestionByName("predio_coca_otro_nucleo_veredal")
     const prediococaotraveredaQuestion = survey.getQuestionByName("predio_coca_otro_vereda");
 
 
+    if (options.name === "vive_departamento") {
+      const municipio_id = options.value;
+      const loading = uLoading.show({});
+      const villages = await getVillageList(municipio_id, 'NA');
+
+      if (Array.isArray(villages)) {
+        itemsVillages.value = [...villages];
+      }
+
+      if (vivemunicipioQuestion) {
+        vivemunicipioQuestion.choices = itemsVillages.value;
+      }
+
+      loading.hide();
+
+    }
+
+    if (options.name === "desplazadoss_departamento") {
+      const municipio_id = options.value;
+      const loading = uLoading.show({});
+      const villages = await getVillageList(municipio_id, 'NA');
+
+      if (Array.isArray(villages)) {
+        itemsVillages.value = [...villages];
+      }
+
+      if (desplazadoMunicipioQuestion) {
+        desplazadoMunicipioQuestion.choices = itemsVillages.value;
+      }
+
+      loading.hide();
+
+    }
+
+    if (options.name === "predio_coca_departamento") {
+      const municipio_id = options.value;
+      const loading = uLoading.show({});
+      const villages = await getVillageList(municipio_id, 'NA');
+
+      if (Array.isArray(villages)) {
+        itemsVillages.value = [...villages];
+      }
+
+      if (prediococaMunicipioQuestion) {
+        prediococaMunicipioQuestion.choices = itemsVillages.value;
+      }
+
+      loading.hide();
+
+    }
+
+    if (options.name === "predio_coca_otro_departamento") {
+      const municipio_id = options.value;
+      const loading = uLoading.show({});
+      const villages = await getVillageList(municipio_id, 'NA');
+
+      if (Array.isArray(villages)) {
+        itemsVillages.value = [...villages];
+      }
+
+      if (prediococaotraMunicipioQuestion) {
+        prediococaotraMunicipioQuestion.choices = itemsVillages.value;
+      }
+
+      loading.hide();
+
+    }
+
+
     if (options.name === "predio_coca_municipio") {
       const municipio_id = options.value;
       const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
+      const villages = await getVillageList(municipio_id, 'NA');
 
       if (Array.isArray(villages)) {
         itemsVillages.value = [...villages];
@@ -1411,116 +1513,77 @@
       loading.hide();
     }
 
-    if (options.name === "predio_coca_corregimiento") {
-      const municipio_id = options.value;
-      const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
-
-      if (Array.isArray(villages)) {
-        itemsVillages.value = [...villages];
-      }
-
-      itemsVillages.value.push({
-        value: 9999,
-        text: 'Vereda  no encontrada'
-      });
-
-      if (prediococaveredaQuestion) {
-        prediococaveredaQuestion.choices = itemsVillages.value;
-      }
-
-      loading.hide();
-    }
-
-    if (options.name === "predio_coca_nucleo_veredal") {
-      const municipio_id = options.value;
-      const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
-
-      if (Array.isArray(villages)) {
-        itemsVillages.value = [...villages];
-      }
-
-      itemsVillages.value.push({
-        value: 9999,
-        text: 'Vereda  no encontrada'
-      });
-
-      if (prediococaveredaQuestion) {
-        prediococaveredaQuestion.choices = itemsVillages.value;
-      }
-
-      loading.hide();
-    }
+    // if (options.name === "predio_coca_corregimiento") {
+    //   const municipio_id = options.value;
+    //   const loading = uLoading.show({});
+    //   const villages = await getVillageList(municipio_id, 'NA');
 
 
-    if (options.name === "predio_coca_otro_municipio") {
-      const municipio_id = options.value;
-      const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
+    //   if (Array.isArray(villages)) {
+    //     itemsVillages.value = [...villages];
+    //   }
 
-      if (Array.isArray(villages)) {
-        itemsVillages.value = [...villages];
-      }
+    //   itemsVillages.value.push({
+    //     value: 9999,
+    //     text: 'Vereda  no encontrada'
+    //   });
 
-      itemsVillages.value.push({
-        value: 9999,
-        text: 'Corregimiento no encontrado'
-      });
+    //   if (prediococaveredaQuestion) {
+    //     prediococaveredaQuestion.choices = itemsVillages.value;
+    //   }
 
-      if (prediococaotraCorregimientoQuestion) {
-        prediococaotraCorregimientoQuestion.choices = itemsVillages.value;
-      }
+    //   loading.hide();
+    // }
 
-      loading.hide();
-    }
 
-    if (options.name === "predio_coca_otro_corregimiento") {
-      const municipio_id = options.value;
-      const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
+   
 
-      if (Array.isArray(villages)) {
-        itemsVillages.value = [...villages];
-      }
+    // if (options.name === "predio_coca_otro_corregimiento") {
+    //   const municipio_id = options.value;
+    //   const loading = uLoading.show({});
+    //   const villages = await getVillageList(municipio_id, 'NA');
 
-      itemsVillages.value.push({
-        value: 9999,
-        text: 'Vereda  no encontrado'
-      });
+    //   if (Array.isArray(villages)) {
+    //     itemsVillages.value = [...villages];
+    //   }
 
-      if (prediococaotraveredaQuestion) {
-        prediococaotraveredaQuestion.choices = itemsVillages.value;
-      }
+    //   itemsVillages.value.push({
+    //     value: 9999,
+    //     text: 'Vereda  no encontrado'
+    //   });
 
-      loading.hide();
-    }
+    //   if (prediococaotraveredaQuestion) {
+    //     prediococaotraveredaQuestion.choices = itemsVillages.value;
+    //   }
 
-    if (options.name === "predio_coca_otro_nucleo_veredal") {
-      const municipio_id = options.value;
-      const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
+    //   loading.hide();
+    // }
 
-      if (Array.isArray(villages)) {
-        itemsVillages.value = [...villages];
-      }
+    // if (options.name === "predio_coca_otro_nucleo_veredal") {
+    //   const municipio_id = options.value;
+    //   const loading = uLoading.show({});
+    //   const villages = await getVillageList(municipio_id, 'NA');
 
-      itemsVillages.value.push({
-        value: 9999,
-        text: 'Vereda  no encontrada'
-      });
+    //   if (Array.isArray(villages)) {
+    //     itemsVillages.value = [...villages];
+    //   }
 
-      if (prediococaotraveredaQuestion) {
-        prediococaotraveredaQuestion.choices = itemsVillages.value;
-      }
+    //   itemsVillages.value.push({
+    //     value: 9999,
+    //     text: 'Vereda  no encontrada'
+    //   });
 
-      loading.hide();
-    }
+    //   if (prediococaotraveredaQuestion) {
+    //     prediococaotraveredaQuestion.choices = itemsVillages.value;
+    //   }
+
+    //   loading.hide();
+    // }
 
     if (options.name === "vive_municipio") {
       const municipio_id = options.value;
       const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
+      const villages = await getVillageList(municipio_id, 'CO,CP');
 
       if (Array.isArray(villages)) {
         itemsVillages.value = [...villages];
@@ -1535,21 +1598,16 @@
         vivecorregimientoQuestion.choices = itemsVillages.value;
       }
 
-      loading.hide();
-    }
+      const villages2 = await getVillageList(municipio_id, 'VE');
+      itemsVillages.value = []
 
-    if (options.name === "vive_corregimiento") {
-      const municipio_id = options.value;
-      const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
-
-      if (Array.isArray(villages)) {
-        itemsVillages.value = [...villages];
+      if (Array.isArray(villages2)) {
+        itemsVillages.value = [...villages2];
       }
 
       itemsVillages.value.push({
         value: 9999,
-        text: 'Vereda  no encontrado'
+        text: 'Vereda no encontrada'
       });
 
       if (viveveredaQuestion) {
@@ -1559,31 +1617,11 @@
       loading.hide();
     }
 
-    if (options.name === "desplazado_nucleo_veredal") {
-      const municipio_id = options.value;
-      const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
-
-      if (Array.isArray(villages)) {
-        itemsVillages.value = [...villages];
-      }
-
-      itemsVillages.value.push({
-        value: 9999,
-        text: 'Vereda  no encontrada'
-      });
-
-      if (desplazadoveredaQuestion) {
-        desplazadoveredaQuestion.choices = itemsVillages.value;
-      }
-
-      loading.hide();
-    }
 
     if (options.name === "desplazado_municipio") {
       const municipio_id = options.value;
       const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
+      const villages = await getVillageList(municipio_id, 'CO,CP');
 
       if (Array.isArray(villages)) {
         itemsVillages.value = [...villages];
@@ -1598,21 +1636,16 @@
         desplazadoCorregimientoQuestion.choices = itemsVillages.value;
       }
 
-      loading.hide();
-    }
+      const villages2 = await getVillageList(municipio_id, 'VE');
+      itemsVillages.value = []
 
-    if (options.name === "desplazado_corregimiento") {
-      const municipio_id = options.value;
-      const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
-
-      if (Array.isArray(villages)) {
-        itemsVillages.value = [...villages];
+      if (Array.isArray(villages2)) {
+        itemsVillages.value = [...villages2];
       }
 
       itemsVillages.value.push({
         value: 9999,
-        text: 'Vereda  no encontrado'
+        text: 'Vereda no encontrada'
       });
 
       if (desplazadoveredaQuestion) {
@@ -1622,10 +1655,10 @@
       loading.hide();
     }
 
-    if (options.name === "vive_nucleo_veredal") {
+    if (options.name === "predio_coca_municipio") {
       const municipio_id = options.value;
       const loading = uLoading.show({});
-      const villages = await getVillageList(municipio_id);
+      const villages = await getVillageList(municipio_id, 'CO,CP');
 
       if (Array.isArray(villages)) {
         itemsVillages.value = [...villages];
@@ -1633,35 +1666,67 @@
 
       itemsVillages.value.push({
         value: 9999,
-        text: 'Vereda  no encontrado'
+        text: 'Corregimiento no encontrado'
       });
 
-      if (viveveredaQuestion) {
-        viveveredaQuestion.choices = itemsVillages.value;
+      if (prediococaCorregimientoQuestion) {
+        prediococaCorregimientoQuestion.choices = itemsVillages.value;
+      }
+
+      const villages2 = await getVillageList(municipio_id, 'VE');
+      itemsVillages.value = []
+
+      if (Array.isArray(villages2)) {
+        itemsVillages.value = [...villages2];
+      }
+
+      itemsVillages.value.push({
+        value: 9999,
+        text: 'Vereda no encontrada'
+      });
+
+      if (prediococaveredaQuestion) {
+        prediococaveredaQuestion.choices = itemsVillages.value;
       }
 
       loading.hide();
     }
 
-
-    if (options.name === "predio_coca_municipio") {
-        const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(municipio_id);
-          if (prediococaveredaQuestion) {
-            prediococaveredaQuestion.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
     if (options.name === "predio_coca_otro_municipio") {
-        const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(municipio_id);
-          if (prediococaotroveredaQuestion) {
-            prediococaotroveredaQuestion.choices = itemsVillages.value
-          }
-        loading.hide()
+      const municipio_id = options.value;
+      const loading = uLoading.show({});
+      const villages = await getVillageList(municipio_id, 'CO,CP');
+
+      if (Array.isArray(villages)) {
+        itemsVillages.value = [...villages];
+      }
+
+      itemsVillages.value.push({
+        value: 9999,
+        text: 'Corregimiento no encontrado'
+      });
+
+      if (prediococaotraCorregimientoQuestion) {
+        prediococaotraCorregimientoQuestion.choices = itemsVillages.value;
+      }
+
+      const villages2 = await getVillageList(municipio_id, 'VE');
+      itemsVillages.value = []
+
+      if (Array.isArray(villages2)) {
+        itemsVillages.value = [...villages2];
+      }
+
+      itemsVillages.value.push({
+        value: 9999,
+        text: 'Vereda no encontrada'
+      });
+
+      if (prediococaotroveredaQuestion) {
+        prediococaotroveredaQuestion.choices = itemsVillages.value;
+      }
+
+      loading.hide();
     }
 
   });
