@@ -39,7 +39,10 @@
               </div>
               <div className="button-group">
                 <p className="step red">Paso 2</p>
-                <a href='https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/80DR7sXgD3a2dV7WKWvwdouV1I5uqn0?st=MHbrbE2N0MT$B7AgO6OKihInjoujJk8mrlep97e9C4uqwWJMGi9DMIZ9khTDxhzg' class="btnCatAsoc red">
+                <!-- <a href='https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/80DR7sXgD3a2dV7WKWvwdouV1I5uqn0?st=MHbrbE2N0MT$B7AgO6OKihInjoujJk8mrlep97e9C4uqwWJMGi9DMIZ9khTDxhzg' class="btnCatAsoc red">
+                  Preinscripción núcleos familiares
+                </a> -->
+                <a href='/catatumbo/familiasproductores/preregistro' class="btnCatAsoc red">
                   Preinscripción núcleos familiares
                 </a>
                 <p className="btnCatAsoc description red">
@@ -48,7 +51,10 @@
               </div>
               <div className="button-group">
                 <p className="step red">&nbsp;</p>
-                <a href='https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/MaFqYs3DATRosxbec3CX4wuxWBe6Nvr?st=Pzxfmg7j81qW7vB5D$BJgaczM5KDZjmScIgUvL379YQlYwZVc!gTgOHoVY3uanGR' class="btnCatAsoc red2">
+                <!-- <a href='https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/MaFqYs3DATRosxbec3CX4wuxWBe6Nvr?st=Pzxfmg7j81qW7vB5D$BJgaczM5KDZjmScIgUvL379YQlYwZVc!gTgOHoVY3uanGR' class="btnCatAsoc red2">
+                  Preinscripción núcleos familiares que han sido víctimas de desplazamiento forzado
+                </a> -->
+                <a href='/catatumbo/familiasdesplazados/preregistro' class="btnCatAsoc red2">
                   Preinscripción núcleos familiares que han sido víctimas de desplazamiento forzado
                 </a>
                 <p className="btnCatAsoc description red">
