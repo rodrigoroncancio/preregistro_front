@@ -55,6 +55,10 @@ import { object } from 'yup';
         type: Number,
         default: 1
       },
+      faseid: {
+        type: Number,
+        default: 1
+      },
       municipios: {
         type: Object, // con O mayúscula
         default: () => ({
@@ -1113,7 +1117,7 @@ import { object } from 'yup';
       bloqueado:0,
       vinculado_asociacion:0,
       estado_id: 1,
-      fase:1,
+      fase:props.faseid,
       discapacidad:0,
       fcrea: new Date().toISOString(),
       fecha_estado: new Date().toISOString() 
@@ -1162,12 +1166,13 @@ import { object } from 'yup';
 
     const predioLoteViveData = {
       persona_id: 0,
-      ubicacion_id: sender.data.vive_corregimiento != null ? sender.data.vive_corregimiento : sender.data.vive_municipio,
+      ubicacion_id: (sender.data.vive_corregimiento != null && sender.data.vive_corregimiento != 9999) ? sender.data.vive_corregimiento : (sender.data.vive_vereda != null && sender.data.vive_vereda != 9999) ?sender.data.vive_vereda : sender.data.vive_municipio,
       cabecera: sender.data.vive_lugar === "1" ? 1 : 0,
       centro_poblado: sender.data.viveLugar === "2" ? 1 : 0,
       corregimiento: sender.data.viveLugar === "3" ? 1 : 0,
       vereda: sender.data.viveLugar === "4" ? 1 : 0,
-      direccion: sender.data.viveLugar === "4" ? sender.data.vive_vereda_otra : sender.data.vive_direccion,
+      direccion: sender.data.vive_direccion != null ? sender.data.vive_direccion : 'Sin dirección',
+      nombre_lugar: sender.data.vive_vereda_otra != null ? sender.data.vive_vereda_otra : 'Sin nombre',
       residencia: 1,
       lotecoca:sender.data.predio_coca_vive? 1 : 0,
       area_total_hectareas: sender.data.predio_coca_area_total,
@@ -1209,12 +1214,13 @@ import { object } from 'yup';
 
     const predioLoteDesplazadoData = {
       persona_id: 0,
-      ubicacion_id: sender.data.desplazado_corregimiento != null ? sender.data.desplazado_corregimiento : sender.data.desplazado_municipio,
+      ubicacion_id: (sender.data.desplazado_corregimiento != null && sender.data.desplazado_corregimiento != 9999) ? sender.data.desplazado_corregimiento : (sender.data.desplazado_vereda != null && sender.data.desplazado_vereda != 9999) ?sender.data.desplazado_vereda : sender.data.desplazado_municipio,
       cabecera: sender.data.deplazado_lugar === "1" ? 1 : 0,
       centro_poblado: sender.data.deplazado_lugar === "2" ? 1 : 0,
       corregimiento: sender.data.deplazado_lugar === "3" ? 1 : 0,
       vereda: sender.data.deplazado_lugar === "4" ? 1 : 0,
-      direccion: sender.data.deplazado_lugar === "4" ? sender.data.desplazado_otra_vereda : sender.data.desplazado_lugar_direccion,
+      direccion: sender.data.desplazado_lugar_direccion != null ? sender.data.desplazado_lugar_direccion : 'Sin dirección',
+      nombre_lugar: sender.data.desplazado_otra_vereda != null ? sender.data.desplazado_otra_vereda : 'Sin nombre',
       residencia: 0,
       lotecoca:0,
       area_total_hectareas: 0,
@@ -1226,12 +1232,12 @@ import { object } from 'yup';
 
     const predioLoteCocaData = {
       persona_id: 0,
-      ubicacion_id: sender.data.predio_coca_vereda != null ? sender.data.predio_coca_vereda : sender.data.predio_coca_municipio,
+      ubicacion_id: (sender.data.predio_coca_corregimiento != null && sender.data.predio_coca_corregimiento != 9999) ? sender.data.predio_coca_corregimiento : (sender.data.predio_coca_vereda != null && sender.data.predio_coca_vereda != 9999) ?sender.data.predio_coca_vereda : sender.data.predio_coca_municipio,
       cabecera: sender.data.predio_coca_lugar === "1" ? 1 : 0,
       centro_poblado: sender.data.predio_coca_lugar === "2" ? 1 : 0,
       corregimiento: sender.data.predio_coca_lugar === "3" ? 1 : 0,
-      vereda: sender.data.predio_coca_lugar === "4" ? 1 : 0,
-      direccion: sender.data.predio_coca_lugar === "4" ? sender.data.predio_coca_vereda_otra : sender.data.predio_coca_lugar_direccion,
+      direccion: sender.data.predio_coca_lugar_direccion != null ? sender.data.predio_coca_lugar_direccion : 'Sin dirección',
+      nombre_lugar: sender.data.predio_coca_vereda_otra != null ? sender.data.predio_coca_vereda_otra : 'Sin nombre',
       residencia: 0,
       lotecoca:1,
       area_total_hectareas: sender.data.predio_coca_area_total,
@@ -1251,12 +1257,13 @@ import { object } from 'yup';
 
     const predioLoteCocaOtroData = {
       persona_id: 0,
-      ubicacion_id: sender.data.predio_coca_otro_vereda != null ? sender.data.predio_coca_otro_vereda : sender.data.predio_coca_otro_municipio,
+      ubicacion_id: (sender.data.predio_coca_otro_corregimiento != null && sender.data.predio_coca_otro_corregimiento != 9999) ? sender.data.predio_coca_otro_corregimiento : (sender.data.predio_coca_vereda != null && sender.data.predio_coca_vereda != 9999) ?sender.data.predio_coca_vereda : sender.data.predio_coca_otro_municipio,
       cabecera: sender.data.predio_coca_otro_lugar === "1" ? 1 : 0,
       centro_poblado: sender.data.predio_coca_otro_lugar === "2" ? 1 : 0,
       corregimiento: sender.data.predio_coca_otro_lugar === "3" ? 1 : 0,
       vereda: sender.data.predio_coca_otro_lugar === "4" ? 1 : 0,
-      direccion: sender.data.predio_coca_otro_lugar === "4" ? sender.data.predio_coca_otro_vereda_otra : sender.data.predio_coca_otro_direccion,
+      direccion: sender.data.predio_coca_otro_direccion != null ? sender.data.predio_coca_otro_direccion : 'Sin dirección',
+      nombre_lugar: sender.data.predio_coca_otro_vereda_otra != null ? sender.data.predio_coca_otro_vereda_otra : 'Sin nombre',
       residencia: 0,
       lotecoca:1,
       area_total_hectareas: sender.data.predio_coca_area_total,
