@@ -127,7 +127,7 @@ import { object } from 'yup';
               "isRequired": true,
               "choices": [
                 {
-                  "value": 999999,
+                  "value": 99999,
                   "text": "Sin asociación"
                 }
               ]
@@ -1089,7 +1089,7 @@ import { object } from 'yup';
     
     const personaData = {
       tipo_identificacion_id: parseInt(sender.data.titular_tipo_identificacion),
-      cub_asociacion: sender.data.asociaciones === 999999 ? null : sender.data.asociaciones,
+      cub_asociacion: sender.data.asociaciones === 99999 ? null : sender.data.asociaciones,
       cub: 0,
       numero_documento: String(sender.data.titular_numero_documento),
       nombre: sender.data.titular_nombres,
