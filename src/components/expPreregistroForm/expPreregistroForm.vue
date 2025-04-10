@@ -970,6 +970,10 @@ import { object } from 'yup';
                 {
                   "value": "43",
                   "text": "No Agropecuaria (pequeño comercio, bienes o servicios)"
+                },
+                {
+                  "value": "101",
+                  "text": "Palma"
                 }
               ]
             },
