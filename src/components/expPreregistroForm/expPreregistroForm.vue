@@ -973,7 +973,7 @@ import { object } from 'yup';
                 },
                 {
                   "value": "101",
-                  "text": "Palma"
+                  "text": "Otra"
                 }
               ]
             },
@@ -991,6 +991,12 @@ import { object } from 'yup';
                   "text": "Fortalecimiento"
                 }
               ]
+            },
+            {
+              "type": "text",
+              "name": "otra_cual",
+              "visibleIf": "{linea_productiva} = '101' and {establece_fortalece} = '45'",
+              "title": "Cual otra línea"
             },
             {
               "type": "html",
@@ -1288,6 +1294,7 @@ import { object } from 'yup';
       persona_id: sender.data.Persona_Id,
       linea_productiva_id: sender.data.linea_productiva,
       tipo_experiencia_id: sender.data.establece_fortalece,
+      otra_cual: sender.data.otra_cual,
       experiencia_linea_productiva: 0,
       tiempo_experiencia_linea: 0,
       vinculado_asociacion: 0,
