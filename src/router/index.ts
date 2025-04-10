@@ -209,6 +209,16 @@ const routes: RouteRecordRaw[] = [
             component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfichapreregistro2.vue"),
           },
           {
+            path: "familiasproductores/preregistro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+            name: "public-catatumbo-preregfamiliaproductores",
+            component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfamiliaproductores.vue"),
+          },
+          {
+            path: "familiasdesplazados/preregistro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+            name: "public-catatumbo-preregfamiliadesplazados",
+            component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfamiliadesplazados.vue"),
+          },
+          {
             path: "fichaacuerdofase2", // Ruta relativa al path padre ("/catatumbo/asociaciones")
             name: "public-catatumbo-ficha2",
             component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formficha2.vue"),
