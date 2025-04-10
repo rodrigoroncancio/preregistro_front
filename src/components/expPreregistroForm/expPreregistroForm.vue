@@ -935,6 +935,22 @@ import { object } from 'yup';
           "elements": [
             {
               "type": "radiogroup",
+              "name": "establece_fortalece",
+              "isRequired": true,
+              "title": "11. ¿La línea productiva seleccionada es para establecimiento o fortalecimiento del proyecto productivo? ",
+              "choices": [
+                {
+                  "value": "44",
+                  "text": "Establecimiento"
+                },
+                {
+                  "value": "45",
+                  "text": "Fortalecimiento"
+                }
+              ]
+            },
+            {
+              "type": "radiogroup",
               "name": "linea_productiva",
               "title": "10. Seleccione una de las siguientes líneas productivas lícitas. ",
               "isRequired": true,
@@ -973,22 +989,8 @@ import { object } from 'yup';
                 },
                 {
                   "value": "101",
-                  "text": "Otra"
-                }
-              ]
-            },
-            {
-              "type": "radiogroup",
-              "name": "establece_fortalece",
-              "title": "11. ¿La línea productiva seleccionada es para establecimiento o fortalecimiento del proyecto productivo? ",
-              "choices": [
-                {
-                  "value": "44",
-                  "text": "Establecimiento"
-                },
-                {
-                  "value": "45",
-                  "text": "Fortalecimiento"
+                  "text": "Otra",
+                  "visibleIf": "{establece_fortalece} = '45'"
                 }
               ]
             },
