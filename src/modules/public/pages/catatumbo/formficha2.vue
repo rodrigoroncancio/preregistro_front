@@ -98,18 +98,6 @@
           "html": "<H4>\nA. Identificación\n</H4>"
         },
         {
-          "type": "text",
-          "name": "titular_nombres",
-          "title": "Nombres",
-          "isRequired": true
-        },
-        {
-          "type": "text",
-          "name": "titular_apellidos",
-          "title": "Apellidos",
-          "isRequired": true
-        },
-        {
           "type": "radiogroup",
           "name": "titular_tipo_identificacion",
           "title": "Tipo de identificación",
@@ -127,15 +115,47 @@
         },
         {
           "type": "text",
+          "name": "titular_numero_identificacion",
+          "title": "Número de identificación",
+          "description": "No se permite tarjeta de identificación ni registro civil"
+        },
+        {
+          "type": "text",
+          "name": "fecha_expedicion",
+          "title": "Fecha expedición",
+          "isRequired": true,
+          "inputType": "date"
+        },
+        {
+          "type": "text",
+          "name": "fecha_nacimiento",
+          "title": "Fecha nacimiento",
+          "isRequired": true,
+          "inputType": "date"
+        },
+        {
+          "type": "text",
+          "name": "titular_nombres",
+          "title": "Nombres",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "titular_apellidos",
+          "title": "Apellidos",
+          "isRequired": true
+        },
+        {
+          "type": "text",
           "name": "titular_tipo_identificacion_cual",
           "visibleIf": "{titular_tipo_identificacion} = 'Item 2'",
           "title": "Cuál"
         },
         {
           "type": "text",
-          "name": "titular_numero_identificacion",
-          "title": "Número de identificación",
-          "description": "No se permite tarjeta de identificación ni registro civil"
+          "name": "telefono",
+          "title": "Número de teléfono de contacto",
+          "inputType": "number"
         }
       ]
     },
@@ -268,31 +288,31 @@
           "title": "En la actualidad usted es",
           "choices": [
             {
-              "value": "Item 1",
+              "value": "56",
               "text": "Trabajador rural"
             },
             {
-              "value": "Item 2",
+              "value": "57",
               "text": "Jornalero"
             },
             {
-              "value": "Item 3",
+              "value": "58",
               "text": "Desempleado"
             },
             {
-              "value": "Item 4",
+              "value": "59",
               "text": "Amediero"
             },
             {
-              "value": "Item 5",
+              "value": "61",
               "text": "Trabajador independiente"
             },
             {
-              "value": "Item 6",
+              "value": "62",
               "text": "Estudiante"
             },
             {
-              "value": "Item 7",
+              "value": "63",
               "text": "Otro"
             }
           ]
@@ -300,7 +320,7 @@
         {
           "type": "text",
           "name": "titular_ocupacion_cual",
-          "visibleIf": "{titular_ocupacion} = 'Item 7'",
+          "visibleIf": "{titular_ocupacion} = '63'",
           "title": "Cual"
         },
         {
@@ -309,35 +329,35 @@
           "title": "Cual es su nivel educativo actual?",
           "choices": [
             {
-              "value": "Item 1",
+              "value": "64",
               "text": "Ninguno"
             },
             {
-              "value": "Item 2",
+              "value": "65",
               "text": "Primaria Completa"
             },
             {
-              "value": "Item 3",
+              "value": "66",
               "text": "Primaria Incompleta"
             },
             {
-              "value": "Item 4",
+              "value": "67",
               "text": "Secundaria Incompleta"
             },
             {
-              "value": "Item 5",
+              "value": "68",
               "text": "Secundaria Completa"
             },
             {
-              "value": "Item 6",
+              "value": "69",
               "text": "Universitaria / POstgrado"
             },
             {
-              "value": "Item 7",
+              "value": "70",
               "text": "Técnica /Tecnología"
             },
             {
-              "value": "Item 8",
+              "value": "71",
               "text": "Otra"
             }
           ]
@@ -348,15 +368,15 @@
           "title": "A cual regimén de salud pertenece usted",
           "choices": [
             {
-              "value": "Item 1",
+              "value": "72",
               "text": "Subsidiado"
             },
             {
-              "value": "Item 2",
+              "value": "75",
               "text": "Contributivo"
             },
             {
-              "value": "Item 3",
+              "value": "76",
               "text": "Ninguno"
             }
           ]
@@ -377,6 +397,10 @@
             {
               "value": "Item 3",
               "text": "Reinsertados"
+            },
+            {
+              "value": "Item 4",
+              "text": "Ninguna"
             }
           ]
         }
@@ -400,6 +424,7 @@
         {
           "type": "text",
           "name": "hombres_menosde5",
+          "startWithNewLine": false,
           "title": "Hombres  de menos de 5 años",
           "inputType": "number"
         },
@@ -411,6 +436,7 @@
         {
           "type": "text",
           "name": "hombres_de6a15",
+          "startWithNewLine": false,
           "title": "Hombres de 6 a 15 años"
         },
         {
@@ -421,6 +447,7 @@
         {
           "type": "text",
           "name": "hombres_de16a25",
+          "startWithNewLine": false,
           "title": "Hombres de 16 a 25 años"
         },
         {
@@ -432,6 +459,7 @@
         {
           "type": "text",
           "name": "hombres_de26a60",
+          "startWithNewLine": false,
           "title": "Hombres de 26 a 60 años",
           "inputType": "number"
         },
@@ -443,6 +471,7 @@
         {
           "type": "text",
           "name": "hombres_de61a70",
+          "startWithNewLine": false,
           "title": "Hombres de 61 a 70"
         },
         {
@@ -453,6 +482,7 @@
         {
           "type": "text",
           "name": "hombres_de70",
+          "startWithNewLine": false,
           "title": "Hombres mayores de 70 años"
         }
       ]
@@ -466,6 +496,60 @@
           "html": "<H4>\nC. Los predios del núcleo familiar\n</H4>"
         },
         {
+          "type": "radiogroup",
+          "name": "establece_fortalece",
+          "title": "¿La línea productiva seleccionada es para establecimiento o fortalecimiento del proyecto productivo?",
+          "choices": [
+            {
+              "value": "44",
+              "text": "Establecimiento"
+            },
+            {
+              "value": "45",
+              "text": "Fortalecimiento"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "linea_productiva",
+          "title": "Seleccione una de las siguientes líneas productivas lícitas",
+          "choices": [
+            {
+              "value": "44",
+              "text": "Caña"
+            },
+            {
+              "value": "45",
+              "text": "Cacao"
+            },
+            {
+              "value": "46",
+              "text": "Café"
+            },
+            {
+              "value": "47",
+              "text": "Yuca"
+            },
+            {
+              "value": "48",
+              "text": "Maíz"
+            },
+            {
+              "value": "49",
+              "text": "Aguacate"
+            },
+            {
+              "value": "50",
+              "text": "Piscicultura"
+            },
+            {
+              "value": "51",
+              "text": "No Agropecuaria (pequeño comercio, bienes o servicios)"
+            }
+          ]
+        },
+        {
           "type": "text",
           "name": "predios_agnos_pertenencia",
           "title": "Cuántos años hace que usted tiene el predio donde realizará el proyecto productivo?",
@@ -475,7 +559,7 @@
         {
           "type": "text",
           "name": "predios_num",
-          "title": "En total cuántos predios con cultivos de coca tiene en la actualidad su nuúcleo familiar ?",
+          "title": "En total cuántos predios con cultivos de coca tiene en la actualidad su núcleo familiar ?",
           "isRequired": true,
           "inputType": "number"
         },
@@ -501,21 +585,53 @@
       "name": "page4",
       "elements": [
         {
+          "type": "radiogroup",
+          "name": "interesado_becas",
+          "title": "¿Usted o alguien de su núcleo familiar está interesado en acceder a una beca para estudio de carrera técnica o profesional? ",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Si"
+            },
+            {
+              "value": "0",
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "question6",
+          "visibleIf": "{interesado_becas} = 1",
+          "title": "¿CUANTAS PERSONAS?",
+          "isRequired": true
+        },
+        {
           "type": "matrixdynamic",
-          "name": "nucleo_mayores",
-          "title": "Si es estrictamente necesario",
-          "description": "Por favor registre el número del documento de identidad de las personas del núcleo familiar mayores de 18 años",
+          "name": "question7",
+          "visibleIf": "{interesado_becas} = 1",
+          "title": "¿Cuál sería la carrera profesional o técnica que desea estudiar?",
+          "isRequired": true,
           "columns": [
             {
-              "name": "Nombres",
-              "cellType": "text"
+              "name": "tipo_carrerera",
+              "title": "Tipo",
+              "cellType": "dropdown",
+              "choices": [
+                {
+                  "value": "1",
+                  "text": "Profesional"
+                },
+                {
+                  "value": "2",
+                  "text": "Técnico"
+                }
+              ]
             },
             {
-              "name": "Apellidos",
-              "cellType": "text"
-            },
-            {
-              "name": "Número",
+              "name": "Column 2",
+              "title": "Carrera",
               "cellType": "text"
             }
           ],
@@ -528,15 +644,67 @@
           ]
         },
         {
-          "type": "text",
-          "name": "beneficiario_nombres",
-          "title": "Registre el nombre del BENEFICIARIO del representante del Núcleo familiar",
-          "isRequired": true
+          "type": "matrixdynamic",
+          "name": "nucleo_mayores",
+          "title": "Si es estrictamente necesario",
+          "description": "Relacione las personas del núcleo familiar e identifique cual de ellas es el beneficiario",
+          "columns": [
+            {
+              "name": "Nombres",
+              "cellType": "text"
+            },
+            {
+              "name": "Apellidos",
+              "cellType": "text"
+            },
+            {
+              "name": "Número",
+              "cellType": "text"
+            },
+            {
+              "name": "fecha_exp",
+              "title": "Fecha exp. cédula",
+              "cellType": "text",
+              "inputType": "date"
+            },
+            {
+              "name": "beneficiario",
+              "title": "Beneficiario",
+              "cellType": "boolean"
+            }
+          ],
+          "choices": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "addRowButtonLocation": "bottom",
+          "addRowText": "Agregar nuevo familiar",
+          "removeRowText": "Eliminar"
         },
         {
-          "type": "text",
+          "type": "radiogroup",
+          "name": "interesado_mejora",
+          "title": "¿Usted está interesado en ser candidato a mejoramiento de vivienda en el predio donde se encuentra la coca?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Si"
+            },
+            {
+              "value": "2",
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "file",
           "name": "beneficiario_apellidos",
-          "title": "Registre el documento de identidad del BENEFICIARIO del representante del Núcleo familiar",
+          "visibleIf": "{interesado_mejora} = 1",
+          "title": "Foto de la vivienda a mejorar\n",
           "isRequired": true
         },
         {
@@ -562,6 +730,10 @@
             {
               "value": "Item 2",
               "text": "Subir documento de Firma"
+            },
+            {
+              "value": "Item 3",
+              "text": "Contact Center"
             }
           ]
         },

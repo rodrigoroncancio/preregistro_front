@@ -22,7 +22,7 @@
     import axios from "axios";
     import { useLoading } from "vue-loading-overlay";
     import { ref, onMounted } from "vue";
-import { object } from 'yup';
+    import { object } from 'yup';
 
     
 
