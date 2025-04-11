@@ -8,12 +8,26 @@
   >
     <div class="mapContainer">
       <l-map ref="map" :zoom="zoom" :center="center" :useGlobalLeaflet="false">
-        <l-tile-layer :url="getWsUrl()" layer-type="base" name="OpenStreetMap"></l-tile-layer>
+        <l-tile-layer :url="getWsUrl" layer-type="base" name="OpenStreetMap"></l-tile-layer>
         <l-feature-group ref="fg">
           <l-marker :lat-lng="objLocation" />
         </l-feature-group>
       </l-map>
     </div>
+    <v-btn icon="" style="position:absolute; z-index: 9999; margin-top: -60px; margin-left: 10px;"><v-icon>mdi-map</v-icon>
+      <v-menu activator="parent">
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in typeMaps"
+            :key="index"
+            :value="index"
+            @click="typeMapSelected = item.id"
+          >
+            <v-list-item-title>{{ item.name }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-btn>
   </expModalForm>
 
   <table class="w-100">
@@ -100,6 +114,12 @@ const result = ref(true);
 const latitude = ref("");
 const longitude = ref("");
 const modalMap = ref(false);
+const typeMapSelected = ref(1);
+const typeMaps = ref([
+  { id: 1, name: "ArcGIS", url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png' },
+  { id: 2, name: "OpenStreetMap", url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' },
+  { id: 3, name: "Google", url: 'http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}' },
+]);
 
 const objLocation = ref([]);
 const zoom = ref(15)
@@ -126,9 +146,9 @@ function updateValue() {
   }
 }
 
-const getWsUrl = (): string => {
-  return 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png'
-}
+const getWsUrl = computed(() => {
+  return typeMaps.value.find((item) => (item.id == typeMapSelected.value))?.url || "";
+})
 
 function isPointInPolygon(coordinates: string[], pointStr: string): boolean {
   const polygonCoordinates = coordinates.map(coord => {
