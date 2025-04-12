@@ -802,6 +802,7 @@
               "title": "Altitud (m)",
               "visibleIf": "{tienecoordenadas} = true",
               "isRequired": true,
+              "maxLength": 4,
               "validators": [
                 {
                   "type": "regex",

@@ -25,16 +25,69 @@
   
   const uLoading = useLoading();
 
-  const uCrud = useCrud("api/2.0/nucleo/persona");
-  const uCrud2 = useCrud("api/2.0/nucleo/formpersona");
-  const uCrud3 = useCrud("api/2.0/nucleo/personaadjunto");
-  const uCrud4 = useCrud("api/2.0/nucleo/predio");
-  const uCrud5 = useCrud("api/2.0/nucleo/personalinea");
-  const uCrud6 = useCrud("api/2.0/nucleo/coordenada");
+  const uCrud_persona = useCrud("api/2.0/nucleo/persona");
+  const uCrud_edades= useCrud("api/2.0/nucleo/composicionedades");
+  const uCrud_nucleo = useCrud("api/2.0/nucleo/composicionucleo");
+  const uCrud_formpersona = useCrud("api/2.0/nucleo/formpersona");
+  const uCrud_linea = useCrud("api/2.0/nucleo/personalinea");
 
   const uToast = useToast();
 
   const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
+  const dataLineaProductiva = ref({
+    id: 0,
+    linea_productiva_id: 0,
+    tipo_experiencia_id: 0,
+  })
+  const dataFormularioPersona = ref({
+    id: 0
+  })
+  const dataUser = ref({
+    id: 0,
+    tipo_identificacion_id: null,
+    numero_documento: '',
+    cub_asociacion: null,
+    cub: 0,
+    ha_total_predios: '0.00',
+    ha_total_loteCoca: '0.00',
+    beneficiario: false,
+    cupo: null,
+    vinculado_asociacion: false,
+    id_registro: null,
+    nombre: '',
+    apellido: '',
+    fecha_expedicion: '',
+    fecha_nacimiento: '',
+    sexo_id: null,
+    genero_orientacion_sexual_id: null,
+    estado_civil_id: null,
+    nivel_escolaridad_id: null,
+    tipo_afiliacion_salud_id: null,
+    discapacidad: false,
+    email: '',
+    telefono_celular: '',
+    whatsapp: '',
+    pertenece_comunidad_etnica: false,
+    desplazado_2025: false,
+    ubicacion_ant2025_id: null,
+    cabeza_flia: false,
+    grupo_atencion_especial_dsci_id: null,
+    tipo_comunidad_etnica_id: null,
+    nombre_comunidad: null,
+    ingresos_mensuales: '0.0000',
+    gastos_mensuales: '0.0000',
+    num_nucleo: 0,
+    titular_id: null,
+    parentesco_id: null,
+    menor_edad: false,
+    fase: '',
+    estado_id: null,
+    fecha_estado: '',
+    fcrea: '',
+    bloqueado: null,
+    observacion: null,
+    fmodifica: null
+  })
   const getVillageList = async (ubicacionId: number) => {
     try {
       const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
@@ -42,6 +95,26 @@
         value: dept.id,
         text: dept.nombre // Asegurar compatibilidad
       }));
+    } catch (error) {
+      console.error("Error fetching village list:", error);
+    }
+  };
+
+  const getLineaProductiva = async (personaId: number) => {
+    try {
+      const response = await axios.get(`/api/2.0/nucleo/lineaproductiva/by-id/${personaId}/`);
+      dataLineaProductiva.value = response.data[0]
+      survey.setValue('establece_fortalece', dataLineaProductiva.value.tipo_experiencia_id || 0);
+      survey.setValue('linea_productiva', dataLineaProductiva.value.linea_productiva_id || 0);
+    } catch (error) {
+      console.error("Error fetching village list:", error);
+    }
+  };
+
+  const getFormularioPersona = async (personaId: number) => {
+    try {
+      const response = await axios.get(`/api/2.0/nucleo/formulariopersona/by-id/${personaId}/`);
+      dataFormularioPersona.value = response.data[0]
     } catch (error) {
       console.error("Error fetching village list:", error);
     }
@@ -116,6 +189,7 @@
         {
           "type": "text",
           "name": "titular_numero_identificacion",
+          "isRequired": true,
           "title": "Número de identificación",
           "description": "No se permite tarjeta de identificación ni registro civil"
         },
@@ -190,6 +264,7 @@
           "type": "radiogroup",
           "name": "hijostiene",
           "title": "Hijos",
+          "defaultValue": "Item 2",
           "isRequired": true,
           "choices": [
             {
@@ -214,6 +289,7 @@
           "type": "radiogroup",
           "name": "hijastrostiene",
           "title": "Hijastros?",
+          "defaultValue": "Item 2",
           "isRequired": true,
           "choices": [
             {
@@ -238,6 +314,7 @@
           "type": "radiogroup",
           "name": "nietostiene",
           "title": "Nietos?",
+          "defaultValue": "Item 2",
           "isRequired": true,
           "choices": [
             {
@@ -262,6 +339,7 @@
           "type": "radiogroup",
           "name": "otrosparientestiene",
           "title": "Otros parientes?",
+          "defaultValue": "Item 2",
           "isRequired": true,
           "choices": [
             {
@@ -278,6 +356,31 @@
           "type": "text",
           "name": "otrosparientestiene_cuantos",
           "visibleIf": "{otrosparientestiene} = 'Item 1'",
+          "title": "Cuántos?",
+          "isRequired": true,
+          "inputType": "number"
+        },
+        {
+          "type": "radiogroup",
+          "name": "noparientestiene",
+          "title": "No parientes?",
+          "defaultValue": "Item 2",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Si"
+            },
+            {
+              "value": "Item 2",
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "noparientestiene_cuantos",
+          "visibleIf": "{noparientestiene} = 'Item 1'",
           "title": "Cuántos?",
           "isRequired": true,
           "inputType": "number"
@@ -387,19 +490,19 @@
           "title": "En la actualidad usted y/o su núcleo familiar son:",
           "choices": [
             {
-              "value": "Item 1",
+              "value": "77",
               "text": "Desplazados desde el 15 de enero"
             },
             {
-              "value": "Item 2",
+              "value": "78",
               "text": "Retornados"
             },
             {
-              "value": "Item 3",
+              "value": "79",
               "text": "Reinsertados"
             },
             {
-              "value": "Item 4",
+              "value": "80",
               "text": "Ninguna"
             }
           ]
@@ -516,35 +619,35 @@
           "title": "Seleccione una de las siguientes líneas productivas lícitas",
           "choices": [
             {
-              "value": "44",
+              "value": "34",
               "text": "Caña"
             },
             {
-              "value": "45",
+              "value": "35",
               "text": "Cacao"
             },
             {
-              "value": "46",
+              "value": "36",
               "text": "Café"
             },
             {
-              "value": "47",
+              "value": "37",
               "text": "Yuca"
             },
             {
-              "value": "48",
+              "value": "38",
               "text": "Maíz"
             },
             {
-              "value": "49",
+              "value": "40",
               "text": "Aguacate"
             },
             {
-              "value": "50",
+              "value": "41",
               "text": "Piscicultura"
             },
             {
-              "value": "51",
+              "value": "43",
               "text": "No Agropecuaria (pequeño comercio, bienes o servicios)"
             }
           ]
@@ -602,14 +705,14 @@
         },
         {
           "type": "text",
-          "name": "question6",
+          "name": "interesado_becas_numero",
           "visibleIf": "{interesado_becas} = 1",
           "title": "¿CUANTAS PERSONAS?",
           "isRequired": true
         },
         {
           "type": "matrixdynamic",
-          "name": "question7",
+          "name": "interesado_becas_carreras",
           "visibleIf": "{interesado_becas} = 1",
           "title": "¿Cuál sería la carrera profesional o técnica que desea estudiar?",
           "isRequired": true,
@@ -650,22 +753,29 @@
           "description": "Relacione las personas del núcleo familiar e identifique cual de ellas es el beneficiario",
           "columns": [
             {
-              "name": "Nombres",
-              "cellType": "text"
+              "name": "nombres",
+              "title": "Nombres",
+              "cellType": "text",
+              "isRequired": true,
             },
             {
-              "name": "Apellidos",
-              "cellType": "text"
+              "name": "apellidos",
+              "title": "Apellidos",
+              "cellType": "text",
+              "isRequired": true,
             },
             {
-              "name": "Número",
-              "cellType": "text"
+              "name": "numero_documento",
+              "title": "Núm. documento",
+              "cellType": "text",
+              "isRequired": true,
             },
             {
               "name": "fecha_exp",
               "title": "Fecha exp. cédula",
               "cellType": "text",
-              "inputType": "date"
+              "inputType": "date",
+              "isRequired": true,
             },
             {
               "name": "beneficiario",
@@ -680,6 +790,8 @@
             4,
             5
           ],
+          "rowCount": 0,
+          "minRowCount": 0,
           "addRowButtonLocation": "bottom",
           "addRowText": "Agregar nuevo familiar",
           "removeRowText": "Eliminar"
@@ -695,14 +807,14 @@
               "text": "Si"
             },
             {
-              "value": "2",
+              "value": "0",
               "text": "No"
             }
           ]
         },
         {
           "type": "file",
-          "name": "beneficiario_apellidos",
+          "name": "interesado_mejora_foto",
           "visibleIf": "{interesado_mejora} = 1",
           "title": "Foto de la vivienda a mejorar\n",
           "isRequired": true
@@ -739,7 +851,7 @@
         },
         {
           "type": "signaturepad",
-          "name": "question3",
+          "name": "firma_manual",
           "visibleIf": "{tipo_firma} = 'Item 1'",
           "title": "Firma de aceptación",
           "isRequired": true,
@@ -749,7 +861,7 @@
         },
         {
           "type": "file",
-          "name": "question5",
+          "name": "firma_file",
           "visibleIf": "{tipo_firma} = 'Item 2'",
           "title": "Documento de firma",
           "isRequired": true
@@ -767,301 +879,236 @@
   const survey = new Model(json);
   
   survey.onCompleting.add((sender, options) => {
-      options.allowComplete = false;
-      console.log('sender.data')
-      console.log(sender.data)
+    options.allowComplete = false;
 
-     
-
-      const personaData = {
-        tipo_identificacion_id: sender.data.titular_tipo_identificacion,
-        numero_documento: sender.data.titular_numero_documento,
-        nombre: sender.data.titular_nombres,
-        apellido: sender.data.titular_apellidos,
-        fecha_expedicion: sender.data.titular_fecha_expedicion,
-        fecha_nacimiento: sender.data.titular_fecha_nacimiento,
-        sexo_id: sender.data.titular_sexo,
-        email: sender.data.titular_email,
-        telefono_celular: sender.data.titular_celular,
-        whatsapp: sender.data.titular_whatsapp,
-        tipo_comunidad_etnica_id: sender.data.tipo_comunidad_etnica,
-        nombre_comunidad: sender.data.tipo_comunidad_etnica_nombre,
-        pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0, 
-        desplazado_2025: sender.data.desplazado_2025,
-        cabeza_flia: sender.data.titular_cabeza_familia,
-        num_nucleo: sender.data.num_nucleo,
-        bloqueado:0,
-        vinculado_asociacion:0,
-        estado_id: 1,
-        fase:1,
-        discapacidad:0,
-        fcrea: new Date().toISOString(),
-        fecha_estado: new Date().toISOString() 
+    const personaData = {
+      id: dataUser.value.id,
+      tipo_identificacion_id: sender.data.titular_tipo_identificacion,
+      numero_documento: sender.data.titular_numero_identificacion,
+      nombre: sender.data.titular_nombres,
+      apellido: sender.data.titular_apellidos,
+      fecha_expedicion: sender.data.fecha_expedicion,
+      fecha_nacimiento: sender.data.fecha_nacimiento,
+      telefono_celular: sender.data.telefono,
+      actividad_laboral: sender.data.titular_ocupacion,
+      nivel_escolaridad_id: sender.data.titular_educacion,
+      tipo_afiliacion_salud_id: sender.data.titular_salud,
+      grupo_atencion_especial_dsci_id: sender.data.titular_desplazado,
+      num_predios: sender.data.predios_num,
+      ha_total_predios: sender.data.predios_hectareas_total,
+      ha_total_loteCoca: sender.data.predios_hectareas_coca
     };
     console.log('personaData')
     console.log(personaData)
 
-    const formularioPersonaData = {
-        formulario_id: 1,
-        tiene_coca: sender.data.tiene_coca?1:0,
-        persona_id: 0,
-        acepta_terminos: 1,
-        acepta_tratamiento_datos: 1,
-        fcrea: new Date().toISOString(),
-        fecha_aceptacion: new Date().toISOString() 
-    };
-    // persona_id
-    console.log('sender.data.titular_foto_cara')
-    console.log(sender.data.titular_foto_cara)
-    const personaAdjuntoData1 = {
-        persona_id: 0,
-        tipo_documento_id: 13,
-        ruta: "",
-        origen: 'preregistro_catatumbo',
-        fcrea: new Date().toISOString(),
-    };
-
-    if (Array.isArray(sender.data.titular_foto_cara) && sender.data.titular_foto_cara.length > 0) {
-      resizeBase64Img(sender.data.titular_foto_cara[0].content, (resizedImage:any) => {
-        personaAdjuntoData1.ruta = resizedImage;
-        console.log('transformado')
-      });
-    }
-
-    const personaAdjuntoData2 = {
-        persona_id: 0,
-        tipo_documento_id: 14,
-        ruta: "",
-        origen: 'preregistro_catatumbo',
-        fcrea: new Date().toISOString(),
-    };
-    if (Array.isArray(sender.data.titular_foto_contracara) && sender.data.titular_foto_contracara.length > 0) {
-      resizeBase64Img(sender.data.titular_foto_contracara[0].content, (resizedImage:any) => {
-        personaAdjuntoData2.ruta = resizedImage;
-        console.log('transformado')
-      });
-    }
-    console.log('sender.data.vive_vereda')
-    console.log(sender.data.vive_vereda)
-    console.log(sender.data.vive_municipio)
-    console.log(sender.data.predio_coca_vive)
-    console.log(sender.data.predio_coca_ubicacion)
-
-    const predioLoteViveData = {
-        persona_id: 0,
-        ubicacion_id: sender.data.vive_vereda != null ? sender.data.vive_vereda : sender.data.vive_municipio,
-        cabecera: sender.data.vive_lugar === "1" ? 1 : 0,
-        centro_poblado: sender.data.viveLugar === "2" ? 1 : 0,
-        corregimiento: sender.data.viveLugar === "3" ? 1 : 0,
-        vereda: sender.data.viveLugar === "4" ? 1 : 0,
-        direccion: sender.data.viveLugar === "4" ? sender.data.vive_vereda_otra : sender.data.vive_direccion,
-        residencia: 1,
-        lotecoca:sender.data.predio_coca_vive? 1 : 0,
-        area_total_hectareas: sender.data.predio_coca_area_total,
-        area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
-        proyecto_productivo: 0,
-        tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-        documento_relacion_predio: "",
-        origen: 'preregistro_catatumbo'
-    };
-
-    // Si hay un documento en Base64, lo redimensionamos
-    if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
-      resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
-        predioLoteViveData.documento_relacion_predio = resizedImage;
-        console.log('transformado')
-      });
-    }
-
-    const coordenadaLoteCocaData = {
-        predio_id: 0,
-        latitud: sender.data.predio_coca_latitud,
-        longitud: sender.data.predio_coca_longitud,
-        altitud: sender.data.predio_coca_altitud,
-        precision: sender.data.predio_coca_precision,
-        origen: 'preregistro_catatumbo',
+    const crearComposicionEdad = (tipo_grupo_etario: number, sexo_id: number, valor: any) => {
+    const numero = Number(valor);
+    if (!isNaN(numero) && numero > 0) {
+      uCrud_edades.create({
+        persona_id: dataUser.value.id,
+        tipo_grupo_etario,
+        sexo_id,
+        numero,
         fcrea: new Date().toISOString()
-    };
+      });
+    }
+  };
 
-    const predioLoteDesplazadoData = {
-        persona_id: 0,
-        ubicacion_id: sender.data.desplazado_vereda != null ? sender.data.desplazado_vereda : sender.data.desplazado_municipio,
-        cabecera: sender.data.deplazado_lugar === "1" ? 1 : 0,
-        centro_poblado: sender.data.deplazado_lugar === "2" ? 1 : 0,
-        corregimiento: sender.data.deplazado_lugar === "3" ? 1 : 0,
-        vereda: sender.data.deplazado_lugar === "4" ? 1 : 0,
-        direccion: sender.data.deplazado_lugar === "4" ? sender.data.desplazado_otra_vereda : sender.data.desplazado_lugar_direccion,
-        residencia: 0,
-        lotecoca:0,
-        area_total_hectareas: 0,
-        area_cultivo_hectareas: 0,
-        proyecto_productivo: 0,
-        documento_relacion_predio: "",
-        origen: 'preregistro_catatumbo'
-    };
+  // Menores de 5 años
+  crearComposicionEdad(81, 15, sender.data.mujeres_menosde5);
+  crearComposicionEdad(81, 16, sender.data.hombres_menosde5);
 
-    const predioLoteCocaData = {
-        persona_id: 0,
-        ubicacion_id: sender.data.predio_coca_vereda != null ? sender.data.predio_coca_vereda : sender.data.predio_coca_municipio,
-        cabecera: sender.data.predio_coca_lugar === "1" ? 1 : 0,
-        centro_poblado: sender.data.predio_coca_lugar === "2" ? 1 : 0,
-        corregimiento: sender.data.predio_coca_lugar === "3" ? 1 : 0,
-        vereda: sender.data.predio_coca_lugar === "4" ? 1 : 0,
-        direccion: sender.data.predio_coca_lugar === "4" ? sender.data.predio_coca_vereda_otra : sender.data.predio_coca_lugar_direccion,
-        residencia: 0,
-        lotecoca:1,
-        area_total_hectareas: sender.data.predio_coca_area_total,
-        area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
-        proyecto_productivo: 0,
-        tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-        documento_relacion_predio: "",
-        origen: 'preregistro_catatumbo'
-    };
+  // De 6 a 15 años
+  crearComposicionEdad(82, 15, sender.data.mujeres_de6a15);
+  crearComposicionEdad(82, 16, sender.data.hombres_de6a15);
 
-    if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
-      resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
-        predioLoteCocaData.documento_relacion_predio = resizedImage;
-        console.log('transformado')
+  // De 16 a 25 años
+  crearComposicionEdad(83, 15, sender.data.mujeres_de16a25);
+  crearComposicionEdad(83, 16, sender.data.hombres_de16a25);
+
+  // De 26 a 60 años
+  crearComposicionEdad(84, 15, sender.data.mujeres_de26a60);
+  crearComposicionEdad(84, 16, sender.data.hombres_de26a60);
+
+  // De 61 a 70 años
+  crearComposicionEdad(85, 15, sender.data.mujeres_de61a70);
+  crearComposicionEdad(85, 16, sender.data.hombres_de61a70);
+
+  // Mayores de 70 años
+  crearComposicionEdad(86, 15, sender.data.mujeres_de70);
+  crearComposicionEdad(86, 16, sender.data.hombres_de70);
+    
+  const crearComposicionNucleo = (tipo_composicion_id: number, valor: number) => {
+    const numero = Number(valor);
+    if (!isNaN(numero) && numero > 0) {
+      uCrud_nucleo.create({
+        persona_id: dataUser.value.id,
+        tipo_composicion_id,
+        numero,
+        fcrea: new Date().toISOString()
+      });
+    }
+  };
+
+  crearComposicionNucleo(50, sender.data.hijostiene_cuantos);
+  crearComposicionNucleo(115, sender.data.hijastrostiene_cuantos);
+  crearComposicionNucleo(51, sender.data.nietostiene_cuantos);
+  crearComposicionNucleo(54, sender.data.otrosparientestiene_cuantos);
+  crearComposicionNucleo(55, sender.data.noparientestiene_cuantos);
+
+  let personaLineaProductivaData;
+
+  if (dataLineaProductiva?.value?.id && dataLineaProductiva.value.id > 0) {
+    personaLineaProductivaData = {
+      id: dataLineaProductiva.value.id,
+      linea_productiva_id: sender.data.linea_productiva,
+      tipo_experiencia_id: sender.data.establece_fortalece,
+      fmodifica: new Date().toISOString()
+    };
+    uCrud_linea.update(personaLineaProductivaData);
+  } else {
+    personaLineaProductivaData = {
+      persona_id: dataUser.value.id,
+      linea_productiva_id: sender.data.linea_productiva,
+      tipo_experiencia_id: sender.data.establece_fortalece,
+      experiencia_linea_productiva: 0,
+      tiempo_experiencia_linea: 0,
+      vinculado_asociacion: 0,
+      activa: 1,
+      fcrea: new Date().toISOString(),
+      origen: 'ficha_catatumbo',
+      fmodifica: new Date().toISOString()
+    };
+    uCrud_linea.create(personaLineaProductivaData);
+  }
+
+  
+
+
+    function resizeBase64ImgAsync(base64: string): Promise<string> {
+      return new Promise((resolve) => {
+        resizeBase64Img(base64, (resizedImage: string) => {
+          resolve(resizedImage);
+        });
       });
     }
 
-    console.log('predioLoteCocaData')
-    console.log(predioLoteCocaData)
+    async function enviarFormularioPersona() {
+      let vivienda_imagen = "";
+      let firma = "";
 
-    const predioLoteCocaOtroData = {
-        persona_id: 0,
-        ubicacion_id: sender.data.predio_coca_otro_vereda != null ? sender.data.predio_coca_otro_vereda : sender.data.predio_coca_otro_municipio,
-        cabecera: sender.data.predio_coca_otro_lugar === "1" ? 1 : 0,
-        centro_poblado: sender.data.predio_coca_otro_lugar === "2" ? 1 : 0,
-        corregimiento: sender.data.predio_coca_otro_lugar === "3" ? 1 : 0,
-        vereda: sender.data.predio_coca_otro_lugar === "4" ? 1 : 0,
-        direccion: sender.data.predio_coca_otro_lugar === "4" ? sender.data.predio_coca_otro_vereda_otra : sender.data.predio_coca_otro_direccion,
-        residencia: 0,
-        lotecoca:1,
-        area_total_hectareas: sender.data.predio_coca_area_total,
-        area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
-        proyecto_productivo: 0,
-        tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-        documento_relacion_predio: "",
-        origen: 'preregistro_catatumbo'
-    };
+      if (Array.isArray(sender.data.interesado_mejora_foto) && sender.data.interesado_mejora_foto.length > 0) {
+        vivienda_imagen = await resizeBase64ImgAsync(sender.data.interesado_mejora_foto[0].content);
+      }
 
-    if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
-      resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
-        predioLoteCocaOtroData.documento_relacion_predio = resizedImage;
-        console.log('transformado')
+      console.log('sender.data.firma_manual')
+      console.log(sender.data.firma_manual)
+
+      if (Array.isArray(sender.data.firma_file) && sender.data.firma_file.length > 0) {
+        firma = await resizeBase64ImgAsync(sender.data.firma_file[0].content);
+      } else if (sender.data.firma_manual && typeof sender.data.firma_manual === 'string') {
+        firma = sender.data.firma_manual;
+      }
+
+      // if (sender.data.firma_file && sender.data.firma_file.content) {
+      //   firma = await resizeBase64ImgAsync(sender.data.firma_file.content);
+      // }
+
+      const formularioPersonaData = {
+        id: dataFormularioPersona.value.id,
+        beca_desea: sender.data.interesado_becas,
+        beca_num: sender.data.interesado_becas_numero,
+        beca_descrip: sender.data.interesado_becas_carreras != null ? JSON.stringify(sender.data.interesado_becas_carreras) : '',
+        vivienda: sender.data.interesado_mejora,
+        vivienda_imagen,
+        firma
+      };
+
+      uCrud_formpersona.update(formularioPersonaData);
+      console.log('Datos enviados:', formularioPersonaData);
+    }
+
+    enviarFormularioPersona();
+
+    // if (Array.isArray(sender.data.interesado_mejora_foto) && sender.data.interesado_mejora_foto.length > 0) {
+    //   resizeBase64Img(sender.data.interesado_mejora_foto[0].content, (resizedImage: any) => {
+    //     const formularioPersonaData = {
+    //       id: dataFormularioPersona.value.id,
+    //       beca_desea: sender.data.interesado_becas,
+    //       beca_num: sender.data.interesado_becas_numero,
+    //       beca_descrip: sender.data.interesado_becas_carreras != null ? JSON.stringify(sender.data.interesado_becas_carreras) : '',
+    //       vivienda: sender.data.interesado_mejora,
+    //       vivienda_imagen: resizedImage,
+    //       firma: ""
+    //     };
+
+    //     // Aquí haces el envío al backend
+    //     uCrud_formpersona.update(formularioPersonaData);
+    //     console.log('Datos enviados con imagen:', formularioPersonaData);
+    //   });
+    // } else {
+    //   // Si no hay imagen, lo envías directamente
+    //   const formularioPersonaData = {
+    //     id: dataFormularioPersona.value.id,
+    //     beca_desea: sender.data.interesado_becas,
+    //     beca_num: sender.data.interesado_becas_numero,
+    //     beca_descrip: sender.data.interesado_becas_carreras != null ? JSON.stringify(sender.data.interesado_becas_carreras) : '',
+    //     vivienda: sender.data.interesado_mejora,
+    //     vivienda_imagen: "",
+    //     firma: ""
+    //   };
+
+    //   uCrud_formpersona.update(formularioPersonaData);
+    //   console.log('Datos enviados sin imagen:', formularioPersonaData);
+    // }
+
+    if (Array.isArray(sender.data.nucleo_mayores)) {
+      sender.data.nucleo_mayores.forEach((usuariodata: { numero_documento: any; nombres: any; apellidos: any; fecha_exp: any; beneficiario: any; }) => {
+        const personaDataVarios = {
+          titular_id: dataUser.value.id,
+          vinculado_asociacion: 0,
+          fecha_nacimiento: "1900-01-01",
+          sexo_id: 15,
+          discapacidad: 0,
+          email: "no email",
+          tipo_identificacion_id: 12,
+          telefono_celular: "3000000000",
+          whatsapp: "3000000000",
+          pertenece_comunidad_etnica: 0,
+          desplazado_2025: 0,
+          cabeza_flia: 0,
+          tipo_comunidad_etnica_id: 28,
+          numero_documento: usuariodata.numero_documento,
+          nombre: usuariodata.nombres,
+          apellido: usuariodata.apellidos,
+          fecha_expedicion: usuariodata.fecha_exp,
+          beneficiario: usuariodata.beneficiario || false,
+          num_predios: 0,
+          num_nucleo: 0,
+          ha_total_predios: 0,
+          ha_total_loteCoca: 0,
+          menor_edad: 0,
+          bloqueado: 0,
+          fase: "FASE3",
+          estado_id: 1,
+          fcrea: dataUser.value.fcrea,
+          fecha_estado: dataUser.value.fecha_estado,
+          origen: 'ficha_catatumbo',
+        };
+
+        uCrud_persona.create(personaDataVarios);
+        console.log(personaDataVarios);
       });
     }
 
-    const personaLineaProductivaData = {
-        persona_id: sender.data.Persona_Id,
-        linea_productiva_id: sender.data.linea_productiva,
-        tipo_experiencia_id: sender.data.establece_fortalece,
-        experiencia_linea_productiva: 0,
-        vinculado_asociacion: 0,
-        activa: 1,
-        fcrea: new Date().toISOString(),
-        origen: 'preregistro_catatumbo',
-        fmodifica: new Date().toISOString()
-    };
-    console.log('personaData')
-    console.log(personaData)
 
-
-    uCrud.create(personaData)
+    uCrud_persona.update(personaData)
         .then((item:any) => {
-            formularioPersonaData.persona_id = item.id
-            console.log(item)
-            uCrud2.create(formularioPersonaData).then((item2:any) => {
-              console.log(item2)
-            })
-            personaAdjuntoData1.persona_id = item.id
-            uCrud3.create(personaAdjuntoData1).then((item3:any) => {
-              console.log(item3)
-            })
-            personaAdjuntoData2.persona_id = item.id
-            uCrud3.create(personaAdjuntoData2).then((item4:any) => {
-              console.log(item4)
-            })
-
-            predioLoteViveData.persona_id = item.id
-            console.log('predioLoteViveData')
-            console.log(predioLoteViveData)
-            uCrud4.create(predioLoteViveData).then((item6:any) => {
-              console.log('entra al primero')
-              console.log(item6)
-              coordenadaLoteCocaData.predio_id = item6.id
-              uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
-            })
-            console.log('predioLoteDesplazadoData')
-            console.log(sender.data.desplazado_2025)
-            console.log(predioLoteDesplazadoData)
-            if (sender.data.desplazado_2025) {
-              predioLoteDesplazadoData.persona_id = item.id
-              uCrud4.create(predioLoteDesplazadoData).then((item61:any) => {
-                console.log(item61)
-                coordenadaLoteCocaData.predio_id = item61.id
-                uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
-              })
-
-            }
-            console.log('predioLoteCocaData')
-            console.log(sender.data.predio_coca_vive)
-            console.log(predioLoteCocaData)
-
-            predioLoteCocaData.persona_id = item.id
-            uCrud4.create(predioLoteCocaData).then((item6:any) => {
-              console.log(item6)
-              coordenadaLoteCocaData.predio_id = item6.id
-              uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
-            })
-
-            console.log('predioLoteCocaOtroData')
-            console.log(sender.data.predio_coca_ubicacion)
-            console.log(predioLoteCocaOtroData)
-
-            if (sender.data.predio_coca_ubicacion==='2') {
-              predioLoteCocaOtroData.persona_id = item.id
-              uCrud4.create(predioLoteCocaOtroData).then((item7:any) => {
-                console.log(item7)
-                coordenadaLoteCocaData.predio_id = item7.id
-                uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
-              })
-            }
-
-
-            personaLineaProductivaData.persona_id = item.id
-            uCrud5.create(personaLineaProductivaData).then((item5:any) => {
-              console.log(item5)
-            })
-            // const personas= []// Define personas como un objeto con claves dinámicas
-
-            // for (let i = 1; i <= 10; i++) {
-            //     if (senderData[`persona${i}_nombre`]) { // Verifica si existen datos
-            //         personas.push({
-            //             ficha: ( item as any).id,
-            //             nombre: senderData[`persona${i}_nombre`],
-            //             tipo_identificacion: senderData[`persona${i}_tipo_identificacion`],
-            //             numero_identificacion: senderData[`persona${i}_num_identificación`],
-            //             fecha_expedicion_identificacion: senderData[`persona${i}_fecha_expedicion_identificacion`],
-            //             parentesco: senderData[`persona${i}_parentesco`],
-            //             foto_doc_atras: Array.isArray(senderData[`persona${i}_foto_doc_atras`]) && senderData[`persona${i}_foto_doc_atras`].length > 0 ? senderData[`persona${i}_foto_doc_atras`][0].content : "",
-            //             foto_doc_frente: Array.isArray(senderData[`persona${i}_foto_doc_frente`]) && senderData[`persona${i}_foto_doc_frente`].length > 0 ? senderData[`persona${i}_foto_doc_frente`][0].content : "",
-            //             parentesco_otro: senderData[`persona${i}_parentesco_cual`],
-            //             fecha_nacimiento: senderData[`persona${i}_fecha_nacimiento`],
-            //             sexo: senderData[`persona${i}_sexo`],
-            //             estado_civil: senderData[`persona${i}_estado_civil`],
-            //             grupo_especial: senderData[`persona${i}_atencion_especial`]
-            //         });
-            //     }
-            // }
-            // personasNUcleo.value = personas;
-            // console.log(personas)
-            // enviarNucleoFamiliar();
+            
 
             uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
             sender.clear(true);
-            survey.showNavigationButtons = false;
+            // survey.showNavigationButtons = false;
         })
         .catch((error) => {
               uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
@@ -1072,73 +1119,107 @@
 
 
   survey.onValueChanged.add(async (sender, options) => {
-
-    const match = options.name.match(/^persona(\d+)_num_identificación$/);
-  
-    if (match) {
-      const personaIndex = match[1]; // Extrae el número de persona (1-10)
-
-      if (!options.value) return;
-
-      try {
-        let loader = uLoading.show({});
-        if (parseInt(options.value) < 2000000000) {
-          const response = await axios.get(`forms/catatumbo/ficha/validar_nucleo/?documento=${options.value}`);
-          console.log(response);
-
-          const status = response.data.status;
-          const mostrarKey = `mostrar_persona${personaIndex}`; // Genera la clave correcta
-
-          if (status > 1) {
-            survey.setVariable(mostrarKey, false);
-            survey.setValue(options.name, ""); // Borra el número de identificación
-
-            let mensajeError = "";
-            switch (status) {
-              case 2:
-                mensajeError = "Usuario con ficha de acuerdo diligenciada. No se puede ingresar como núcleo familiar.";
-                break;
-              case 3:
-                mensajeError = "Usuario se encuentra entre los validados para firma de ficha de acuerdo Catatumbo. No se puede ingresar como núcleo familiar.";
-                break;
-              case 4:
-                mensajeError = "El usuario ha sido titular en el proyecto PNIS. No se puede ingresar como núcleo familiar.";
-                break;
-              case 5:
-                mensajeError = "El usuario ya aparece como nucleo familiar de otro titular. No se puede ingresar como núcleo familiar.";
-                break;
-            }
-
-            if (mensajeError) uToast.toastError(mensajeError);
-          } else {
-            survey.setVariable(mostrarKey, true);
-          }
-        } else {
-          const mostrarKey = `mostrar_persona${personaIndex}`;
-          survey.setVariable(mostrarKey, false)
-          survey.setValue(options.name, "");
-          uToast.toastError("Digite un número de cedula valido");
-        }
-        loader.hide();
-      } catch (error) {
-        console.error("Error al consultar el endpoint:", error);
-      }
+    if (options.name === "interesado_mejora_foto") {
+      console.log('options.value')
+      console.log(options.value)
     }
-
-    if (options.name === "titular_numero_documento") {
+    if (options.name === "titular_numero_identificacion") {
       if (options.value === null || options.value === "")
         return;
-        axios.get(`/api/2.0/nucleo/forms/catatumbo/validar_documento/?documento=${options.value}`)
+        const loading = uLoading.show({});
+        axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}`)
         .then((resp: any) => {
           console.log(resp)
-          if (resp.data) {
-              survey.setValue(options.name, "");
-             uToast.toastError("Número de cedula ya registrado en la convocatoria");
+          getLineaProductiva(resp.data.data.id)
+          getFormularioPersona(resp.data.data.id)
+          if (resp.data && resp.data.status===1 ) {
+            console.log('resp.data')
+            console.log(resp.data.data.nombre)
+            dataUser.value = resp.data.data
+            console.log(dataUser.value.id)
+            // titular_nombres
+            survey.setValue('titular_nombres', resp.data.data.nombre || "");
+            survey.setValue('titular_apellidos', resp.data.data.apellido || "");
+            survey.setValue('fecha_nacimiento', resp.data.data.fecha_nacimiento || "");
+            survey.setValue('fecha_expedicion', resp.data.data.fecha_expedicion || "");
+            survey.setValue('telefono', resp.data.data.telefono_celular || "");
+            survey.setValue('titular_tipo_identificacion', resp.data.data.tipo_identificacion_id || "");
+          }else{
+            survey.setValue('titular_nombres', "");
+            uToast.toastError("Número de cedula no se encuentra en Pre- Registro");
+            survey.setValue('titular_numero_identificacion', "");
           }
-
+          loading.hide();
         })   
         // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
     }
+
+    // const match = options.name.match(/^persona(\d+)_num_identificación$/);
+  
+    // if (match) {
+    //   const personaIndex = match[1]; // Extrae el número de persona (1-10)
+
+    //   if (!options.value) return;
+
+    //   try {
+    //     let loader = uLoading.show({});
+    //     if (parseInt(options.value) < 2000000000) {
+    //       const response = await axios.get(`forms/catatumbo/ficha/validar_nucleo/?documento=${options.value}`);
+    //       console.log(response);
+
+    //       const status = response.data.status;
+    //       const mostrarKey = `mostrar_persona${personaIndex}`; // Genera la clave correcta
+
+    //       if (status > 1) {
+    //         survey.setVariable(mostrarKey, false);
+    //         survey.setValue(options.name, ""); // Borra el número de identificación
+
+    //         let mensajeError = "";
+    //         switch (status) {
+    //           case 2:
+    //             mensajeError = "Usuario con ficha de acuerdo diligenciada. No se puede ingresar como núcleo familiar.";
+    //             break;
+    //           case 3:
+    //             mensajeError = "Usuario se encuentra entre los validados para firma de ficha de acuerdo Catatumbo. No se puede ingresar como núcleo familiar.";
+    //             break;
+    //           case 4:
+    //             mensajeError = "El usuario ha sido titular en el proyecto PNIS. No se puede ingresar como núcleo familiar.";
+    //             break;
+    //           case 5:
+    //             mensajeError = "El usuario ya aparece como nucleo familiar de otro titular. No se puede ingresar como núcleo familiar.";
+    //             break;
+    //         }
+
+    //         if (mensajeError) uToast.toastError(mensajeError);
+    //       } else {
+    //         survey.setVariable(mostrarKey, true);
+    //       }
+    //     } else {
+    //       const mostrarKey = `mostrar_persona${personaIndex}`;
+    //       survey.setVariable(mostrarKey, false)
+    //       survey.setValue(options.name, "");
+    //       uToast.toastError("Digite un número de cedula valido");
+    //     }
+    //     loader.hide();
+    //   } catch (error) {
+    //     console.error("Error al consultar el endpoint:", error);
+    //   }
+    // }
+
+    // if (options.name === "titular_numero_documento") {
+    //   if (options.value === null || options.value === "")
+    //     return;
+    //     axios.get(`/api/2.0/nucleo/forms/catatumbo/validar_documento/?documento=${options.value}`)
+    //     .then((resp: any) => {
+    //       console.log(resp)
+    //       if (resp.data) {
+    //           survey.setValue("titular_numero_identificacion", "");
+    //          uToast.toastError("Número de cedula no se encuentra en preregistro");
+    //       }
+
+    //     })   
+    //     // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
+    // }
 
     if (options.name === "tiene_coca" || options.name === "tipo_exclusion") {
       const tipoexclusion = sender.getValue("tipo_exclusion");
