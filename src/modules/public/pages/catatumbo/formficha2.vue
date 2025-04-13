@@ -528,71 +528,91 @@
           "type": "text",
           "name": "mujeres_menosde5",
           "title": "Mujeres  de menos de 5 años",
-          "inputType": "number"
+          "inputType": "number",
+          "maxLength": 3
         },
         {
           "type": "text",
           "name": "hombres_menosde5",
           "startWithNewLine": false,
           "title": "Hombres  de menos de 5 años",
-          "inputType": "number"
+          "inputType": "number",
+          "maxLength": 3
         },
         {
           "type": "text",
           "name": "mujeres_de6a15",
-          "title": "Mujeres de 6 a 15 años"
+          "title": "Mujeres de 6 a 15 años",
+          "inputType": "number",
+          "maxLength": 3
         },
         {
           "type": "text",
           "name": "hombres_de6a15",
           "startWithNewLine": false,
-          "title": "Hombres de 6 a 15 años"
+          "title": "Hombres de 6 a 15 años",
+          "inputType": "number",
+          "maxLength": 3
         },
         {
           "type": "text",
           "name": "mujeres_de16a25",
-          "title": "Mujeres de 16 a 25 años"
+          "title": "Mujeres de 16 a 25 años",
+          "inputType": "number",
+          "maxLength": 3
         },
         {
           "type": "text",
           "name": "hombres_de16a25",
           "startWithNewLine": false,
-          "title": "Hombres de 16 a 25 años"
+          "title": "Hombres de 16 a 25 años",
+          "inputType": "number",
+          "maxLength": 3
         },
         {
           "type": "text",
           "name": "mujeres_de26a60",
           "title": "Mujeres de 26 a 60 años",
-          "inputType": "number"
+          "inputType": "number",
+          "maxLength": 3
         },
         {
           "type": "text",
           "name": "hombres_de26a60",
           "startWithNewLine": false,
           "title": "Hombres de 26 a 60 años",
-          "inputType": "number"
+          "inputType": "number",
+          "maxLength": 3
         },
         {
           "type": "text",
           "name": "mujeres_de61a70",
-          "title": "Mujeres de 61 a 70"
+          "title": "Mujeres de 61 a 70",
+          "inputType": "number",
+          "maxLength": 3
         },
         {
           "type": "text",
           "name": "hombres_de61a70",
           "startWithNewLine": false,
-          "title": "Hombres de 61 a 70"
+          "title": "Hombres de 61 a 70",
+          "inputType": "number",
+          "maxLength": 3
         },
         {
           "type": "text",
           "name": "mujeres_de70",
-          "title": "Mujeres mayores de 70 años"
+          "title": "Mujeres mayores de 70 años",
+          "inputType": "number",
+          "maxLength": 3
         },
         {
           "type": "text",
           "name": "hombres_de70",
           "startWithNewLine": false,
-          "title": "Hombres mayores de 70 años"
+          "title": "Hombres mayores de 70 años",
+          "inputType": "number",
+          "maxLength": 3
         }
       ]
     },
@@ -725,11 +745,15 @@
           "visibleIf": "{interesado_becas} = 1",
           "title": "¿Cuál sería la carrera profesional o técnica que desea estudiar?",
           "isRequired": true,
+          "addRowText": "Agregar nuevo carrera",
+          "minRowCount": 1,
+          "rowCount": 1,
           "columns": [
             {
               "name": "tipo_carrerera",
               "title": "Tipo",
               "cellType": "dropdown",
+              "isRequired": true,
               "choices": [
                 {
                   "value": "1",
@@ -744,7 +768,8 @@
             {
               "name": "Column 2",
               "title": "Carrera",
-              "cellType": "text"
+              "cellType": "text",
+              "isRequired": true,
             }
           ],
           "choices": [
