@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
   import 'survey-core/defaultV2.min.css';
+  import "survey-core/survey.i18n.js";
   import { Model } from "survey-core";
   import { SurveyComponent } from "survey-vue3-ui";
   import useCrud from "@/composables/useCrud";
@@ -245,6 +246,7 @@
           "type": "radiogroup",
           "name": "composiscion_hogar",
           "title": "Cuál es la composición de su hogar actualmente ?",
+          "isRequired": true,
           "choices": [
             {
               "value": "Item 1a/o",
@@ -256,7 +258,7 @@
             },
             {
               "value": "Item 3",
-              "text": "Esposa/o, pareja, cónyuge del fefe/a"
+              "text": "Esposa/o, pareja, cónyuge del jefe/a"
             }
           ]
         },
@@ -389,6 +391,7 @@
           "type": "radiogroup",
           "name": "titular_ocupacion",
           "title": "En la actualidad usted es",
+          "isRequired": true,
           "choices": [
             {
               "value": "56",
@@ -430,6 +433,7 @@
           "type": "radiogroup",
           "name": "titular_educacion",
           "title": "Cual es su nivel educativo actual?",
+          "isRequired": true,
           "choices": [
             {
               "value": "64",
@@ -453,7 +457,7 @@
             },
             {
               "value": "69",
-              "text": "Universitaria / POstgrado"
+              "text": "Universitaria / Postgrado"
             },
             {
               "value": "70",
@@ -468,6 +472,7 @@
         {
           "type": "radiogroup",
           "name": "titular_salud",
+          "isRequired": true,
           "title": "A cual regimén de salud pertenece usted",
           "choices": [
             {
@@ -487,6 +492,7 @@
         {
           "type": "radiogroup",
           "name": "titular_desplazado",
+          "isRequired": true,
           "title": "En la actualidad usted y/o su núcleo familiar son:",
           "choices": [
             {
@@ -601,6 +607,7 @@
         {
           "type": "radiogroup",
           "name": "establece_fortalece",
+          "isRequired": true,
           "title": "¿La línea productiva seleccionada es para establecimiento o fortalecimiento del proyecto productivo?",
           "choices": [
             {
@@ -616,6 +623,7 @@
         {
           "type": "radiogroup",
           "name": "linea_productiva",
+          "isRequired": true,
           "title": "Seleccione una de las siguientes líneas productivas lícitas",
           "choices": [
             {
@@ -707,8 +715,9 @@
           "type": "text",
           "name": "interesado_becas_numero",
           "visibleIf": "{interesado_becas} = 1",
-          "title": "¿CUANTAS PERSONAS?",
-          "isRequired": true
+          "title": "¿Cuantas personas?",
+          "isRequired": true,
+          "inputType": "number"
         },
         {
           "type": "matrixdynamic",
@@ -780,7 +789,9 @@
             {
               "name": "beneficiario",
               "title": "Beneficiario",
-              "cellType": "boolean"
+              "cellType": "boolean",
+              "defaultValue": "False",
+              "isRequired": true
             }
           ],
           "choices": [
@@ -827,7 +838,7 @@
         {
           "type": "html",
           "name": "question38",
-          "html": "<strong>\n2.1. Compromisos del núcleo familiar participante\n</strong>\n<p>\nYo en nombre propio y en nombre y representación de las personas incluidas en este formularioque hacen parte de mi núcleo familiar declaro que:\n</p>\n<ul>\n<li>\n- Pertenecemos al mismo núcleo familiar\n</li>\n<li>\n- Entendemos que salvo entre los miembros del núcleo familiar , las prerrogativas y obligaciones surgidas del proceso de sustitución no son transmisibles a ningún título.\n</li>\n</ul>\n<br>\n<p>\nNos comprometemos a:\n</p>"
+          "html": "<strong>2.1. Compromisos del núcleo familiar participante</strong><p>Yo en nombre propio y en nombre y representación de las personas incluidas en este formularioque hacen parte de mi núcleo familiar declaro que:</p><ul><li>- Pertenecemos al mismo núcleo familiar</li><li>- Entendemos que salvo entre los miembros del núcleo familiar , las prerrogativas y obligaciones surgidas del proceso de sustitución no son transmisibles a ningún título.</li></ul><br><p>Nos comprometemos a:</p>\n<ul>\n  <li> - Arrancar de raíz la totalidad del área sembrada de los cultivos de uso ilícito en el predio objeto de sustitución de cultivos de uso ilícito y/o intervención, en el periodo que determine la DSCI y adelantar el consecuente establecimiento y/o fortalecimiento de la línea productiva, forestal y/o de la biodiversidad de sustitución de economías.</li>\n  <li>- No resembrar cultivos de uso ilícito en el predio objeto de intervención o sembrar en otros predios.</li>\n  <li>- No propiciar, participar o promocionar en ningún grado en la comisión de conductas asociadas a economías ilícitas o conexas, a partir de la suscripción de este documento.</li>\n  <li>-Acreditar sumariamente la propiedad, posesión u ocupación de buena fe exenta de culpa del predio objeto de sustitución de cultivos de uso ilícito y/o intervención en los 30 días siguientes a la suscripción del presente documento.</li>\n  <li>-Implementar la(s) alternativa(s) productiva(s) ambientalmente sostenibles y lícita(s) en el predio objeto de sustitución de cultivos de uso ilícito a la fecha de suscripción del presente documento y conservarlo durante al menos 5 años posteriores al inicio de actividades de implementación.</li>\n  <li>-Permitir, cuando sea debidamente requerido, el ingreso al predio y facilitar la caracterización predial, las validaciones y monitoreo de presencia de cultivos de uso ilícito en el predio objeto de sustitución de cultivos de uso ilícito y/o intervención de acuerdo con el Sistema Integrado de Monitoreo de Cultivos de Uso Ilícito y demás mecanismos de verificación que el Estado en cabeza de la DSCI pueda definir.</li>\n  <li>-Participar activamente y realizar las actividades que se requieran para acceder a las alternativas de sustitución de ingresos y de economías en el/los predio(s) indicadas por el equipo de Asistencia Técnica Integral, para el adecuado desarrollo de la línea productiva, forestal y/o de la biodiversidad seleccionada.</li>\n  <li>-Hacer uso adecuado de los bienes y servicios entregados durante la intervención y orientados a la implementación de la(s) alternativa(s) productiva(s). Lo anterior incluye no donar, no vender y/o permutar cualquiera de las herramientas, recursos, insumos, infraestructuras y demás bienes y servicios entregados en el marco del proceso de sustitución, así como no utilizarlos para fines ilícitos.</li>\n  <li>-Suministrar información veraz en cada etapa del proceso de tránsito a las economías lícitas, respecto a aquellos aspectos que puedan afectar el cumplimiento de los compromisos señalados y/o derivados del Acuerdo de Sustitución del municipio seleccionado<strong></strong>.</li>\n  <li>-Contribuir activamente para el cumplimiento del Acuerdo de Sustitución de Cultivos de Uso Ilícito y la consecuente implementación del Plan Operativo para el Tránsito a Economías Lícitas en el municipio de <strong></strong>, en la(s) vereda(s) de <strong></strong>.</li>\n  <li>Incluir en cualquier negocio jurídico que pretenda tramitar o transmitir el uso, goce o disposición del predio objeto de intervención, una cláusula que obligue al adquirente, tenedor, usufructuario u ocupante, que, ante la presencia de cultivos de uso ilícito, procederá la erradicación forzosa en cabeza del Estado colombiano.</li>\n</ul>\n\n"
         },
         {
           "type": "radiogroup",
@@ -845,7 +856,7 @@
             },
             {
               "value": "Item 3",
-              "text": "Contact Center"
+              "text": "Validado mesa de ayuda"
             }
           ]
         },
@@ -872,7 +883,8 @@
   "pagePrevText": "Página anterior",
   "pageNextText": "Página siguiente",
   "completeText": "Enviar",
-  "showNavigationButtons": true
+  "showNavigationButtons": true,
+  "locale": "es"
 }
 
    
