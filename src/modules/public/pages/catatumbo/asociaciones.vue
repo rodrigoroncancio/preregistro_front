@@ -64,7 +64,7 @@
             </div>
             <a className="ABC"
               target="blank"
-              href="https://stpnis.blob.core.windows.net/testdsci/preregistroArgelia/_Abc_convocatoria%20argelia.pdf">
+              href="https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/Abc_convocatoria%20CATATUMBO_asociaciones_17032025.pptx.pdf">
               ABC de la convocatoria
             </a>
             <div className="pdf-container-asociaciones-catatumbo">

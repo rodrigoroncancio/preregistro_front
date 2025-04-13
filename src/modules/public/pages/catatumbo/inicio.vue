@@ -26,14 +26,14 @@
               Preregistro de núcleos familiares
             </a>
             <p className="btnCat description red">Para quienes no hacen parte de una asociación</p>
-            <button className="btnCat grey">ABC de la convocatoria</button>
+            <a target="blank" href="https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/Abc_convocatoria%20CATATUMBO_familias%20sin_asociacio%CC%81n_17032025.pptx.pdf" className="btnCat grey">ABC de la convocatoria</a>
           </div>
           <div className="button-group">
             <router-link :to="'/catatumbo/asociaciones'" class="btnCat blue">
               Preregistro de grupo de productores
             </router-link>
             <p className="btnCat description blue">Para quienes se registran a través de su asociación</p>
-            <button className="btnCat grey">ABC de la convocatoria</button>
+            <a target="blank" href="http://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/Abc_convocatoria%20CATATUMBO_asociaciones_17032025.pptx.pdf" className="btnCat grey">ABC de la convocatoria</a>
           </div>
           <div className="button-group">
               <a className="btnCat red"
@@ -44,7 +44,7 @@
                   Familias PNIS que renegociaron y recolectores
               </a>
               <p className="btnCat description red">Beneficiarios del programa</p>
-              <button className="btnCat grey">ABC de la convocatoria</button>
+              <a target="blank" href="https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/Abc_convocatoria%20CATATUMBO_familias%20pnis.pptx.pdf" className="btnCat grey">ABC de la convocatoria</a>
           </div>
         </div>
         <div className="pdf-container-catatumbo">
