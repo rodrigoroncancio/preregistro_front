@@ -1133,7 +1133,8 @@
       fase:props.faseid,
       discapacidad:0,
       fcrea: new Date().toISOString(),
-      fecha_estado: new Date().toISOString() 
+      fecha_estado: new Date().toISOString() ,
+      origen: 'preregistro_catatumbo'
     };
 
     const formularioPersonaData = {
