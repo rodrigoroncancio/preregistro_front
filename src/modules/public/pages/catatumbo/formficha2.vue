@@ -863,8 +863,7 @@
           "type": "file",
           "name": "interesado_mejora_foto",
           "visibleIf": "{interesado_mejora} = 1",
-          "title": "Foto de la vivienda a mejorar\n",
-          "isRequired": true
+          "title": "Foto de la vivienda a mejorar\n"
         },
         {
           "type": "html",
