@@ -51,6 +51,10 @@
         type: String,
         default: 'Titulo del formulario'
       },
+      origen: {
+        type: String,
+        default: 'CATATUMBO PREREGISTRO'
+      },
       formid: {
         type: Number,
         default: 1
@@ -1060,7 +1064,7 @@
   const itemsAsociaciones = ref<Array<{ value: number; text: string }>>([]);
   const getAsociaciones = async () => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/asociaciones/`);
+      const response = await axios.get(`/api/2.0/nucleo/asociacion/by-origen/${props.origen}`);
       const results = response?.data?.results || [];
 
       if (results.length === 0) {
