@@ -677,8 +677,19 @@
             {
               "value": "43",
               "text": "No Agropecuaria (pequeño comercio, bienes o servicios)"
+            },
+            {
+              "value": "101",
+              "text": "Otra",
+              "visibleIf": "{establece_fortalece} = '45'"
             }
           ]
+        },
+        {
+          "type": "text",
+          "name": "otra_cual",
+          "visibleIf": "{linea_productiva} = '101' and {establece_fortalece} = '45'",
+          "title": "Cual otra línea"
         },
         {
           "type": "text",
@@ -1000,6 +1011,7 @@
       id: dataLineaProductiva.value.id,
       linea_productiva_id: sender.data.linea_productiva,
       tipo_experiencia_id: sender.data.establece_fortalece,
+      otra_cual: sender.data.otra_cual,
       fmodifica: new Date().toISOString()
     };
     uCrud_linea.update(personaLineaProductivaData);
