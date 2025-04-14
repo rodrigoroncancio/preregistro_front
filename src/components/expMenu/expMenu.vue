@@ -181,6 +181,11 @@ const itemsMenu = [
       url: "/catatumbo/fichaacuerdo",
     },
     {
+      title: "modules.pnis.fichacatatumbo3",
+      icon: "mdi-human-male-board-poll",
+      url: "/catatumbo/fichaacuerdofase2",
+    },
+    {
       title: "modules.pnis.ficha_argelia",
       icon: "mdi-human-male-board-poll",
       url: "/pnis/catatumbogrupos",
