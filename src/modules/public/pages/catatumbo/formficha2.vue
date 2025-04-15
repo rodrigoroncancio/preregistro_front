@@ -1107,7 +1107,7 @@
           estado_id: 1,
           fcrea: dataUser.value.fcrea,
           fecha_estado: dataUser.value.fecha_estado,
-          origen: 'ficha_catatumbo',
+          origen: 'CATATUMBO - FICHA ACUERDO INDIVIDUAL (FASE 3)'
         };
 
         uCrud_persona.create(personaDataVarios);
