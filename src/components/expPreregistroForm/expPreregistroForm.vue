@@ -131,7 +131,7 @@
             {
               "type": "boolean",
               "name": "pertenecegrupo",
-              "title": "¿Pertenece usted a un Grupo,  Asociación, Cooperativa o Junta de accion comunal  ?",
+              "title": "¿Su inscripción se realizará a través de una asociación que ya participa en el en el programa RenHacemos?",
               "isRequired": true,
               "labelTrue": "Si"
             },
@@ -496,7 +496,15 @@
               "maxLength": 10
             },
             {
+              "type": "boolean",
+              "name": "tiene_email",
+              "title": "¿Tiene correo electrónico?",
+              "isRequired": true,
+              "labelTrue": "Si"
+            },
+            {
               "type": "text",
+              "visibleIf": "{tiene_email} = true",
               "name": "titular_email",
               "title": "2.12  Correo electrónico",
               "isRequired": true,
@@ -1126,7 +1134,7 @@
       fecha_expedicion: sender.data.titular_fecha_expedicion,
       fecha_nacimiento: sender.data.titular_fecha_nacimiento,
       sexo_id: parseInt(sender.data.titular_sexo),
-      email: sender.data.titular_email,
+      email: sender.data.tiene_email ? sender.data.titular_email : 'NA',
       telefono_celular: sender.data.titular_celular,
       whatsapp: sender.data.titular_whatsapp,
       tipo_comunidad_etnica_id: parseInt(sender.data.tipo_comunidad_etnica),
@@ -1233,7 +1241,6 @@
 
     const coordenadaLoteCocaData = {
       predio_id: 0,
-      coordenada: `POINT (${longitud} ${latitud})`,
       coordenadastr: `${latitud} ${longitud}`,
       altitud,
       presicion,
