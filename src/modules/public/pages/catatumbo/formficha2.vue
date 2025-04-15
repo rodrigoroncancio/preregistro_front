@@ -1030,9 +1030,6 @@
     uCrud_linea.create(personaLineaProductivaData);
   }
 
-  
-
-
     function resizeBase64ImgAsync(base64: string): Promise<string> {
       return new Promise((resolve) => {
         resizeBase64Img(base64, (resizedImage: string) => {
@@ -1049,66 +1046,35 @@
         vivienda_imagen = await resizeBase64ImgAsync(sender.data.interesado_mejora_foto[0].content);
       }
 
-      console.log('sender.data.firma_manual')
-      console.log(sender.data.firma_manual)
-
       if (Array.isArray(sender.data.firma_file) && sender.data.firma_file.length > 0) {
         firma = await resizeBase64ImgAsync(sender.data.firma_file[0].content);
       } else if (sender.data.firma_manual && typeof sender.data.firma_manual === 'string') {
         firma = sender.data.firma_manual;
       }
 
-      // if (sender.data.firma_file && sender.data.firma_file.content) {
-      //   firma = await resizeBase64ImgAsync(sender.data.firma_file.content);
-      // }
-
       const formularioPersonaData = {
-        id: dataFormularioPersona.value.id,
+        persona_id: dataUser.value.id,
+        formulario_id: 18,
+        tiene_coca: 1,
+        acepta_terminos: 1,
+        acepta_tratamiento_datos: 1,
+        compromiso_proceso_susticion:1,
         beca_desea: sender.data.interesado_becas,
-        beca_num: sender.data.interesado_becas_numero,
+        beca_num: sender.data.interesado_becas_numero ?? 0,
         beca_descrip: sender.data.interesado_becas_carreras != null ? JSON.stringify(sender.data.interesado_becas_carreras) : '',
         vivienda: sender.data.interesado_mejora,
         vivienda_imagen,
-        firma
+        fecha_aceptacion: new Date().toISOString(),
+        firma,
+        origen: 'CATATUMBO - FICHA ACUERDO INDIVIDUAL (FASE 3)'
       };
 
-      uCrud_formpersona.update(formularioPersonaData);
+      uCrud_formpersona.create(formularioPersonaData);
       console.log('Datos enviados:', formularioPersonaData);
     }
 
     enviarFormularioPersona();
 
-    // if (Array.isArray(sender.data.interesado_mejora_foto) && sender.data.interesado_mejora_foto.length > 0) {
-    //   resizeBase64Img(sender.data.interesado_mejora_foto[0].content, (resizedImage: any) => {
-    //     const formularioPersonaData = {
-    //       id: dataFormularioPersona.value.id,
-    //       beca_desea: sender.data.interesado_becas,
-    //       beca_num: sender.data.interesado_becas_numero,
-    //       beca_descrip: sender.data.interesado_becas_carreras != null ? JSON.stringify(sender.data.interesado_becas_carreras) : '',
-    //       vivienda: sender.data.interesado_mejora,
-    //       vivienda_imagen: resizedImage,
-    //       firma: ""
-    //     };
-
-    //     // Aquí haces el envío al backend
-    //     uCrud_formpersona.update(formularioPersonaData);
-    //     console.log('Datos enviados con imagen:', formularioPersonaData);
-    //   });
-    // } else {
-    //   // Si no hay imagen, lo envías directamente
-    //   const formularioPersonaData = {
-    //     id: dataFormularioPersona.value.id,
-    //     beca_desea: sender.data.interesado_becas,
-    //     beca_num: sender.data.interesado_becas_numero,
-    //     beca_descrip: sender.data.interesado_becas_carreras != null ? JSON.stringify(sender.data.interesado_becas_carreras) : '',
-    //     vivienda: sender.data.interesado_mejora,
-    //     vivienda_imagen: "",
-    //     firma: ""
-    //   };
-
-    //   uCrud_formpersona.update(formularioPersonaData);
-    //   console.log('Datos enviados sin imagen:', formularioPersonaData);
-    // }
 
     if (Array.isArray(sender.data.nucleo_mayores)) {
       sender.data.nucleo_mayores.forEach((usuariodata: { numero_documento: any; nombres: any; apellidos: any; fecha_exp: any; beneficiario: any; }) => {
@@ -1137,7 +1103,7 @@
           ha_total_loteCoca: 0,
           menor_edad: 0,
           bloqueado: 0,
-          fase: "FASE3",
+          fase: "FASE 3",
           estado_id: 1,
           fcrea: dataUser.value.fcrea,
           fecha_estado: dataUser.value.fecha_estado,

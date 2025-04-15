@@ -51,9 +51,13 @@
         type: String,
         default: 'Titulo del formulario'
       },
-      origen: {
+      origenasociaciones: {
         type: String,
         default: 'CATATUMBO PREREGISTRO'
+      },
+      origen: {
+        type: String,
+        default: 'PREREGISTRO CATATUMBO - FASE 3'
       },
       formid: {
         type: Number,
@@ -61,6 +65,10 @@
       },
       faseid: {
         type: Number,
+        default: 1
+      },
+      fasename: {
+        type: String,
         default: 1
       },
       municipios: {
@@ -1064,7 +1072,7 @@
   const itemsAsociaciones = ref<Array<{ value: number; text: string }>>([]);
   const getAsociaciones = async () => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/asociacion/by-origen/${props.origen}`);
+      const response = await axios.get(`/api/2.0/nucleo/asociacion/by-origen/${props.origenasociaciones}`);
       const results = response?.data?.results || [];
 
       if (results.length === 0) {
@@ -1133,12 +1141,12 @@
       beneficiario: 0,
       bloqueado:0,
       vinculado_asociacion:0,
-      estado_id: 1,
-      fase:props.faseid,
+      estado_id: 111,
+      fase:props.fasename,
       discapacidad:0,
-      fcrea: new Date().toISOString(),
       fecha_estado: new Date().toISOString() ,
-      origen: 'preregistro_catatumbo'
+      origen: props.origen,
+      num_predios: 0
     };
 
     const formularioPersonaData = {
@@ -1149,7 +1157,10 @@
       acepta_tratamiento_datos: 1,
       compromiso_proceso_susticion:1,
       fcrea: new Date().toISOString(),
-      fecha_aceptacion: new Date().toISOString() 
+      fecha_aceptacion: new Date().toISOString(),
+      beca_desea: 0,
+      vivienda:0,
+      beca_num: 0
     };
 
     const personaAdjuntoData1 = {
@@ -1323,26 +1334,36 @@
 
         predioLoteViveData.persona_id = item.id
         uCrud4.create(predioLoteViveData).then((item6:any) => {
+          console.log('item6')
+          console.log(item6)
           coordenadaLoteCocaData.predio_id = item6.id
+          console.log('coordenadaLoteCocaData')
+          console.log(coordenadaLoteCocaData)
           uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
         })
         if (sender.data.desplazado_2025) {
           predioLoteDesplazadoData.persona_id = item.id
           uCrud4.create(predioLoteDesplazadoData).then((item61:any) => {
+            console.log('item61')
+            console.log(item61)
             coordenadaLoteCocaData.predio_id = item61.id
             uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
           })
         }
 
         predioLoteCocaData.persona_id = item.id
-        uCrud4.create(predioLoteCocaData).then((item6:any) => {
-          coordenadaLoteCocaData.predio_id = item6.id
+        uCrud4.create(predioLoteCocaData).then((item62:any) => {
+          console.log('item62')
+          console.log(item62)
+          coordenadaLoteCocaData.predio_id = item62.id
           uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
         })
 
         if (sender.data.predio_coca_ubicacion==='2') {
           predioLoteCocaOtroData.persona_id = item.id
           uCrud4.create(predioLoteCocaOtroData).then((item7:any) => {
+            console.log('item7')
+            console.log(item7)
             coordenadaLoteCocaData.predio_id = item7.id
             uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
           })
