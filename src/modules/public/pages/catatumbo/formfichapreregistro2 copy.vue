@@ -103,7 +103,7 @@
   });
 
   const json ={
-  "title": "Ficha de preinscripción para el \"Establecimiento y/o fortalecimiento de actividades económicas para el tránsito a economías lícitas en el marco de procesos de sustitución de cultivos de uso ilícito en los municipios de Convención, El Tarra, Tibú y Sardinata de Norte de Santander\"",
+  "title": "Ficha de preinscripción para el \"Establecimiento y/o fortalecimiento de actividades económicas para el tránsito a economías lícitas en el marco de procesos de sustitución de cultivos de uso ilícito en los municipios de Convención, El Tarra, Tibú y Sardinata de Norte de xxxxx Santander\"",
   "pages": [
     {
       "name": "page1",
@@ -1160,7 +1160,6 @@
         ha_total_loteCoca: sender.data.predio_coca_area_cultivo,
         menor_edad: sender.data.Menor_Edad,
         beneficiario: 0,
-        bloqueado:0,
         vinculado_asociacion:0,
         estado_id: 1,
         fase:1,
@@ -1212,7 +1211,7 @@
         console.log('transformado')
       });
     }
-
+    const [longitud, latitud] = sender.data.coordinates.split('|').map(parseFloat);
     const predioLoteViveData = {
         persona_id: 0,
         ubicacion_id: sender.data.vive_corregimiento != null ? sender.data.vive_corregimiento : sender.data.vive_municipio,
@@ -1221,14 +1220,16 @@
         corregimiento: sender.data.viveLugar === "3" ? 1 : 0,
         vereda: sender.data.viveLugar === "4" ? 1 : 0,
         direccion: sender.data.viveLugar === "4" ? sender.data.vive_vereda_otra : sender.data.vive_direccion,
-        residencia: 1,
+        residencia: 1,   
         lotecoca:sender.data.predio_coca_vive? 1 : 0,
         area_total_hectareas: sender.data.predio_coca_area_total,
         area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
         proyecto_productivo: 0,
         tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
         documento_relacion_predio: "",
-        origen: 'preregistro_catatumbo'
+        origen: 'preregistro_catatumbo',
+        coordenada_registro: `${latitud} ${longitud}`,
+        sig: 0
     };
 
     // Si hay un documento en Base64, lo redimensionamos
@@ -1238,15 +1239,15 @@
         console.log('transformado')
       });
     }
-    const [longitud, latitud] = sender.data.coordinates.split('|').map(parseFloat);
+    
 
-    const coordenadaLoteCocaData = {
-        predio_id: 0,
-        coordenada: `POINT (${longitud} ${latitud})`,
-        coordenadastr: `${latitud} ${longitud}`,   
-        origen: 'preregistro_catatumbo',
-        fcrea: new Date().toISOString()
-    };
+    // const coordenadaLoteCocaData = {
+    //     predio_id: 0,
+    //     coordenada: `POINT (${longitud} ${latitud})`,
+    //     coordenadastr: `${latitud} ${longitud}`,   
+    //     origen: 'preregistro_catatumbo',
+    //     fcrea: new Date().toISOString()
+    // };
 
     const predioLoteDesplazadoData = {
         persona_id: 0,
@@ -1262,7 +1263,9 @@
         area_cultivo_hectareas: 0,
         proyecto_productivo: 0,
         documento_relacion_predio: "",
-        origen: 'preregistro_catatumbo'
+        origen: 'preregistro_catatumbo',
+        coordenada_registro: `${latitud} ${longitud}`,
+        sig: 0
     };
 
     const predioLoteCocaData = {
@@ -1280,18 +1283,16 @@
         proyecto_productivo: 0,
         tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
         documento_relacion_predio: "",
-        origen: 'preregistro_catatumbo'
+        origen: 'preregistro_catatumbo',
+        coordenada_registro: `${latitud} ${longitud}`,
+        sig: 0
     };
 
     if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
       resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
         predioLoteCocaData.documento_relacion_predio = resizedImage;
-        console.log('transformado')
       });
     }
-
-    console.log('predioLoteCocaData')
-    console.log(predioLoteCocaData)
 
     const predioLoteCocaOtroData = {
         persona_id: 0,
@@ -1308,13 +1309,14 @@
         proyecto_productivo: 0,
         tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
         documento_relacion_predio: "",
-        origen: 'preregistro_catatumbo'
+        origen: 'preregistro_catatumbo',
+        coordenada_registro: `${latitud} ${longitud}`,
+        sig: 0
     };
 
     if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
       resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
         predioLoteCocaOtroData.documento_relacion_predio = resizedImage;
-        console.log('transformado')
       });
     }
 
@@ -1356,8 +1358,8 @@
             uCrud4.create(predioLoteViveData).then((item6:any) => {
               console.log('entra al primero')
               console.log(item6)
-              coordenadaLoteCocaData.predio_id = item6.id
-              uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+              // coordenadaLoteCocaData.predio_id = item6.id
+              // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
             })
             console.log('predioLoteDesplazadoData')
             console.log(sender.data.desplazado_2025)
@@ -1366,8 +1368,8 @@
               predioLoteDesplazadoData.persona_id = item.id
               uCrud4.create(predioLoteDesplazadoData).then((item61:any) => {
                 console.log(item61)
-                coordenadaLoteCocaData.predio_id = item61.id
-                uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+                // coordenadaLoteCocaData.predio_id = item61.id
+                // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
               })
 
             }
@@ -1378,8 +1380,8 @@
             predioLoteCocaData.persona_id = item.id
             uCrud4.create(predioLoteCocaData).then((item6:any) => {
               console.log(item6)
-              coordenadaLoteCocaData.predio_id = item6.id
-              uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+              // coordenadaLoteCocaData.predio_id = item6.id
+              // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
             })
 
             console.log('predioLoteCocaOtroData')
@@ -1390,8 +1392,8 @@
               predioLoteCocaOtroData.persona_id = item.id
               uCrud4.create(predioLoteCocaOtroData).then((item7:any) => {
                 console.log(item7)
-                coordenadaLoteCocaData.predio_id = item7.id
-                uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+                // coordenadaLoteCocaData.predio_id = item7.id
+                // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
               })
             }
 

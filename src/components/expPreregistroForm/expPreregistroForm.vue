@@ -69,7 +69,7 @@
       },
       fasename: {
         type: String,
-        default: 1
+        default: 'FASE 3'
       },
       municipios: {
         type: Object, // con O mayúscula
@@ -1147,7 +1147,6 @@
       ha_total_loteCoca: sender.data.predio_coca_area_cultivo,
       menor_edad: sender.data.Menor_Edad,
       beneficiario: 0,
-      bloqueado:0,
       vinculado_asociacion:0,
       estado_id: 111,
       fase:props.fasename,
@@ -1201,6 +1200,19 @@
       });
     }
 
+    let longitud = 0;
+    let latitud = 0;
+
+    if (sender.data?.coordinates) {
+      const coords = sender.data.coordinates.split('|').map(parseFloat);
+      if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+        [longitud, latitud] = coords;
+      }
+    }
+
+    const altitud = sender.data?.predio_coca_altitud ?? 0;
+    const presicion = sender.data?.predio_coca_precision ?? 0;
+
     const predioLoteViveData = {
       persona_id: 0,
       ubicacion_id: (sender.data.vive_corregimiento != null && sender.data.vive_corregimiento != 9999) ? sender.data.vive_corregimiento : (sender.data.vive_vereda != null && sender.data.vive_vereda != 9999) ?sender.data.vive_vereda : sender.data.vive_municipio,
@@ -1217,7 +1229,12 @@
       proyecto_productivo: 0,
       tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
       documento_relacion_predio: "",
-      origen: 'preregistro_catatumbo'
+      origen: 'preregistro_catatumbo',
+      sig: 0,
+      coordenada_registro: `${latitud} ${longitud}`, 
+      altitud: altitud,
+      presion: presicion,
+      tiempo_propietario_predio:0
     };
 
     if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
@@ -1226,18 +1243,6 @@
       });
     }
 
-    let longitud = 0;
-    let latitud = 0;
-
-    if (sender.data?.coordinates) {
-      const coords = sender.data.coordinates.split('|').map(parseFloat);
-      if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
-        [longitud, latitud] = coords;
-      }
-    }
-
-    const altitud = sender.data?.predio_coca_altitud ?? 0;
-    const presicion = sender.data?.predio_coca_precision ?? 0;
 
     const coordenadaLoteCocaData = {
       predio_id: 0,
@@ -1263,7 +1268,12 @@
       area_cultivo_hectareas: 0,
       proyecto_productivo: 0,
       documento_relacion_predio: "",
-      origen: 'preregistro_catatumbo'
+      origen: 'preregistro_catatumbo',
+      sig: 0,
+      coordenada_registro: `${latitud} ${longitud}`, 
+      altitud: altitud,
+      presion: presicion,
+      tiempo_propietario_predio:0
     };
 
     const predioLoteCocaData = {
@@ -1281,7 +1291,12 @@
       proyecto_productivo: 0,
       tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
       documento_relacion_predio: "",
-      origen: 'preregistro_catatumbo'
+      origen: 'preregistro_catatumbo',
+      sig: 0,
+      coordenada_registro: `${latitud} ${longitud}`, 
+      altitud: altitud,
+      presion: presicion,
+      tiempo_propietario_predio:0
     };
 
     if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
@@ -1307,7 +1322,12 @@
       proyecto_productivo: 0,
       tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
       documento_relacion_predio: "",
-      origen: 'preregistro_catatumbo'
+      origen: 'preregistro_catatumbo',
+      sig: 0,
+      coordenada_registro: `${latitud} ${longitud}`, 
+      altitud: altitud,
+      presion: presicion,
+      tiempo_propietario_predio:0
     };
 
     if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
@@ -1346,7 +1366,7 @@
           coordenadaLoteCocaData.predio_id = item6.id
           console.log('coordenadaLoteCocaData')
           console.log(coordenadaLoteCocaData)
-          uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+          // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
         })
         if (sender.data.desplazado_2025) {
           predioLoteDesplazadoData.persona_id = item.id
@@ -1354,7 +1374,7 @@
             console.log('item61')
             console.log(item61)
             coordenadaLoteCocaData.predio_id = item61.id
-            uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+            // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
           })
         }
 
@@ -1363,7 +1383,7 @@
           console.log('item62')
           console.log(item62)
           coordenadaLoteCocaData.predio_id = item62.id
-          uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+          // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
         })
 
         if (sender.data.predio_coca_ubicacion==='2') {
@@ -1372,7 +1392,7 @@
             console.log('item7')
             console.log(item7)
             coordenadaLoteCocaData.predio_id = item7.id
-            uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+            // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
           })
         }
         personaLineaProductivaData.persona_id = item.id
