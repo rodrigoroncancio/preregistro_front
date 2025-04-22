@@ -169,12 +169,23 @@ const clickSave = () => {
       if (fichaData.value.id_ficha !== null) {
         fichaData.value.estadoactual = 'Ficha de acuerdo firmada, pendiente de validación';
       } else if (fichaData.value.id_validado !== null) {
-        fichaData.value.estadoactual = 'Preregistro validado, esperando ficha de acuerdo individual';
+        fichaData.value.estadoactual = 'Preregistro validado, esperando firma de ficha de acuerdo individual';
       } else if (fichaData.value.id_validado_pre !== null) {
         fichaData.value.estadoactual = 'Pendiente para revisión de datos de Preregistro';
       } else {
+        axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${formData.value.numdocumento}&formulario=19`)
+        .then((resp: any) => {
+          if (resp.data && resp.data.status===1 ) {
+            fichaData.value.estadoactual = 'Pendiente para revisión de datos de Preregistro';
+          } else if (resp.data && resp.data.status===2) {
+            fichaData.value.estadoactual = 'Preregistro validado, esperando firma de ficha de acuerdo individual';
+          } else {
+            fichaData.value.estadoactual = 'Estado desconocido';
+          }
+
+        })
         // Si ninguno de los casos anteriores se cumple, se puede establecer un estado por defecto
-        fichaData.value.estadoactual = 'Estado desconocido';
+        
       }
     } else {
       console.log('Entra a 2');

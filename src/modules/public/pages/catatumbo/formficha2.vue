@@ -1139,7 +1139,7 @@
       if (options.value === null || options.value === "")
         return;
         const loading = uLoading.show({});
-        axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}`)
+        axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
         .then((resp: any) => {
           console.log(resp)
           getLineaProductiva(resp.data.data.id)
@@ -1156,7 +1156,12 @@
             survey.setValue('fecha_expedicion', resp.data.data.fecha_expedicion || "");
             survey.setValue('telefono', resp.data.data.telefono_celular || "");
             survey.setValue('titular_tipo_identificacion', resp.data.data.tipo_identificacion_id || "");
-          }else{
+          }else if (resp.data && resp.data.status===2) {
+            survey.setValue('titular_nombres', "");
+            uToast.toastError("Ya existe una ficha diligenciada con este número de documento");
+            survey.setValue('titular_numero_identificacion', "");
+          }
+          else{
             survey.setValue('titular_nombres', "");
             uToast.toastError("Número de cedula no se encuentra en Pre- Registro");
             survey.setValue('titular_numero_identificacion', "");

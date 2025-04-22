@@ -1436,7 +1436,7 @@
         axios.get(`/api/2.0/nucleo/forms/catatumbo/validar_documento/?documento=${options.value}`)
         .then((resp: any) => {
           console.log(resp)
-          if (resp.data) {
+          if (resp.data.status) {
               survey.setValue(options.name, "");
             uToast.toastError("Número de cedula ya registrado en la convocatoria");
           }
