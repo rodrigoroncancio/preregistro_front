@@ -85,7 +85,6 @@
     estado_id: null,
     fecha_estado: '',
     fcrea: '',
-    bloqueado: null,
     observacion: null,
     fmodifica: null
   })
@@ -1102,7 +1101,6 @@
           ha_total_predios: 0,
           ha_total_loteCoca: 0,
           menor_edad: 0,
-          bloqueado: 0,
           fase: "FASE 3",
           estado_id: 1,
           fcrea: dataUser.value.fcrea,
