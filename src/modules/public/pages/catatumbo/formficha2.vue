@@ -1408,9 +1408,6 @@
                 survey.setValue("predio1_longitud", longitud);
                 survey.setValue("predio1_altura", altitud);
 
-                
-
-
                 if (data.foto_documento_frente && data.foto_documento_frente.trim().length > 0) {
                   survey.getQuestionByName("foto_doc_frente").visible = false;
                 } else {
@@ -1421,7 +1418,6 @@
                 } else {
                   survey.setVariable("mostrar_documentos", true);
                 }
-
 
                 const fields = [
                   { "origin":['nombres', 'apellidos'], target:'nombre' },
@@ -1438,10 +1434,7 @@
                   { "origin": ["area_coca"], "target": "predio1_area_coca" },
                   { "origin": ["predio_residencia"], "target": "predio_nombre" },
                   { "origin": ["area_predio"], "target": "predio_area" },
-                  
                 ]
-
-                
 
                 fields.forEach(field => {
                   let dataOrigin = field.origin.map(key => (data as any)[key]).filter(Boolean).join(" ");
