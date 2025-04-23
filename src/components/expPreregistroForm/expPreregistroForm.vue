@@ -1438,7 +1438,17 @@
           console.log(resp)
           if (resp.data) {
               survey.setValue(options.name, "");
-            uToast.toastError("Número de cedula ya registrado en la convocatoria");
+              uToast.toastError("Número de cedula ya registrado en la convocatoria");
+          } 
+          else {
+            axios.get(`forms/catatumbo/ficha/validar_documento/?documento=${options.value}`)
+            .then((resp: any) => {
+
+              if (resp.data.status === 5) {
+                survey.setValue(options.name, "");
+                uToast.toastError("El usuario ha sido titular en el proyecto PNIS");
+              }
+            })
           }
 
         })   
