@@ -816,7 +816,7 @@
             },
             {
               "name": "fecha_exp",
-              "title": "Fecha exp. cédula",
+              "title": "Fecha expedición cédula",
               "cellType": "text",
               "inputType": "date",
               "isRequired": true,
