@@ -1435,23 +1435,33 @@
         return;
         axios.get(`/api/2.0/nucleo/forms/catatumbo/validar_documento/?documento=${options.value}`)
         .then((resp: any) => {
-          console.log(resp)
-          if (resp.data) {
-              survey.setValue(options.name, "");
-              uToast.toastError("Número de cedula ya registrado en la convocatoria");
-          } 
-          else {
-            axios.get(`forms/catatumbo/ficha/validar_documento/?documento=${options.value}`)
-            .then((resp: any) => {
+          console.log("Primera respuesta:", resp);
 
-              if (resp.data.status === 5) {
-                survey.setValue(options.name, "");
-                uToast.toastError("El usuario ha sido titular en el proyecto PNIS");
-              }
-            })
+          // Si data es `true`, el documento ya está registrado
+          if (resp.data === true) {
+            survey.setValue(options.name, "");
+            uToast.toastError("Número de cédula ya registrado en la convocatoria");
+          } else {
+            // Segunda verificación
+            axios.get(`/forms/catatumbo/ficha/validar_documento/?documento=${options.value}`)
+              .then((resp: any) => {
+                console.log("Segunda respuesta:", resp);
+
+                // Asegúrate que resp.data sea un objeto antes de revisar `status`
+                if (resp.data && resp.data.status === 5) {
+                  survey.setValue(options.name, "");
+                  uToast.toastError("El usuario ha sido titular en el proyecto PNIS");
+                }
+              })
+              .catch((error) => {
+                console.error("Error en segunda validación:", error);
+              });
           }
+        })
+        .catch((error) => {
+          console.error("Error en primera validación:", error);
+        });
 
-        })   
         // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
     }
 
