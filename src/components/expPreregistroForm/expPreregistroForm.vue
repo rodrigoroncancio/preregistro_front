@@ -1622,9 +1622,6 @@
     //   loading.hide();
     // }
 
-
-   
-
     // if (options.name === "predio_coca_otro_corregimiento") {
     //   const municipio_id = options.value;
     //   const loading = uLoading.show({});

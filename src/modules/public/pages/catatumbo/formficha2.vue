@@ -921,7 +921,6 @@
   "locale": "es"
 }
 
-   
   const survey = new Model(json);
   
   survey.onCompleting.add((sender, options) => {
@@ -1492,10 +1491,6 @@
         console.error("Error al consultar el endpoint:", error);
       }
     }
-
-
-
-
     
     const municipioNucleoQuestion = survey.getQuestionByName("municipio_nucleo_familiar");
     const corregimientoQuestion = survey.getQuestionByName("corregimiento");
