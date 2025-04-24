@@ -160,7 +160,7 @@
   });
 
   const json ={
-  "title": "FICHA DE VINCULACIÓN DE NÚCLEOS FAMILIARES AL PROGRAMA DE SUSTITUCIÓN DE CULTIVOS DE USO ILÍCITO DE LA DIRECCIÓN DE SUSTITUCIÓN DE CULTIVOS DE USO ILICITO",
+  "title": "FICHA DE VINCULACIÓN DE NÚCLEOS FAMILIARES A PROCESOS DE SUSTITUCIÓN DE CULTIVOS DE USO ILÍCITO DE LA DIRECCIÓN DE SUSTITUCIÓN DE CULTIVOS DE USO ILÍCITO",
   "pages": [
     {
       "name": "numero_identificacion2",
@@ -1006,8 +1006,8 @@
   if (dataLineaProductiva?.value?.id && dataLineaProductiva.value.id > 0) {
     personaLineaProductivaData = {
       id: dataLineaProductiva.value.id,
-      linea_productiva_id: sender.data.linea_productiva,
-      tipo_experiencia_id: sender.data.establece_fortalece,
+      linea_productiva_id: parseInt(sender.data.linea_productiva),
+      tipo_experiencia_id: parseInt(sender.data.establece_fortalece),
       otra_cual: sender.data.otra_cual,
       fmodifica: new Date().toISOString()
     };
@@ -1015,8 +1015,8 @@
   } else {
     personaLineaProductivaData = {
       persona_id: dataUser.value.id,
-      linea_productiva_id: sender.data.linea_productiva,
-      tipo_experiencia_id: sender.data.establece_fortalece,
+      linea_productiva_id: parseInt(sender.data.linea_productiva),
+      tipo_experiencia_id: parseInt(sender.data.establece_fortalece),
       experiencia_linea_productiva: 0,
       tiempo_experiencia_linea: 0,
       vinculado_asociacion: 0,
@@ -1052,7 +1052,7 @@
 
       const formularioPersonaData = {
         persona_id: dataUser.value.id,
-        formulario_id: 18,
+        formulario_id: 21,
         tiene_coca: 1,
         acepta_terminos: 1,
         acepta_tratamiento_datos: 1,
@@ -1064,7 +1064,7 @@
         vivienda_imagen,
         fecha_aceptacion: new Date().toISOString(),
         firma,
-        origen: 'CATATUMBO - FICHA ACUERDO INDIVIDUAL (FASE 3)'
+        origen: 'Argelia - Ficha Acuerdo Individual (Fase 5)'
       };
 
       uCrud_formpersona.create(formularioPersonaData);
@@ -1104,7 +1104,7 @@
           estado_id: 1,
           fcrea: dataUser.value.fcrea,
           fecha_estado: dataUser.value.fecha_estado,
-          origen: 'CATATUMBO - FICHA ACUERDO INDIVIDUAL (FASE 3)'
+          origen: 'Argelia - Ficha Acuerdo Individual (Fase 5)'
         };
 
         uCrud_persona.create(personaDataVarios);
