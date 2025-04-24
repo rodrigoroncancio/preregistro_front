@@ -24,9 +24,17 @@
   import { ref, onMounted } from "vue";
   
   const uLoading = useLoading();
-
-  const uCrud = useCrud("forms/catatumbo/fichaacuerdo");
   const uToast = useToast();
+
+  //Anterior modelo
+  const uCrud = useCrud("forms/catatumbo/fichaacuerdo");
+
+  //Nuevo Modelo
+  const uCrud_persona = useCrud("api/2.0/nucleo/persona");
+  const uCrud_formpersona = useCrud("api/2.0/nucleo/formpersona");
+  const uCrud_linea = useCrud("api/2.0/nucleo/personalinea");
+  const uCrud_predio = useCrud("api/2.0/nucleo/predio");
+  const uCrud_personaAdjunto = useCrud("api/2.0/nucleo/personaadjunto");
 
   const itemsDepartments = ref<Array<{ id: number; label: string }>>([]);
 
@@ -126,24 +134,29 @@
         },
         {
           "type": "text",
-          "name": "nombre",
+          "name": "nombres",
           "visibleIf": "{mostrar_campos} = true",
-          "title": "Nombres y apellidos",
+          "title": "Nombres",
           "isRequired": true
         },
         {
           "type": "text",
-          "name": "tipo_identificacion",
+          "name": "apellidos",
           "visibleIf": "{mostrar_campos} = true",
+          "title": "Apellidos",
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "titular_tipo_identificacion",
           "title": "Tipo de identificación",
-          "isRequired": true
-        },
-        {
-          "type": "text",
-          "name": "tipo_identificacion_cual",
-          "visibleIf": "{tipo_identificacion} = 'Otro'",
-          "title": "Cuál?",
-          "isRequired": true
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "12",
+              "text": "Cédula de ciudadania"
+            },
+          ]
         },
         {
           "type": "text",
@@ -170,14 +183,16 @@
           "name": "fecha_expedicion",
           "visibleIf": "{mostrar_campos} = true",
           "title": "Fecha expedición",
-          "isRequired": true
+          "isRequired": true,
+          "inputType": "date"
         },
         {
           "type": "text",
           "name": "fecha_nacimiento",
           "visibleIf": "{mostrar_campos} = true",
           "title": "Fecha nacimiento",
-          "isRequired": true
+          "isRequired": true,
+          "inputType": "date"
         },
         {
           "type": "text",
@@ -190,7 +205,7 @@
         },
         {
           "type": "text",
-          "name": "email",
+          "name": "email_user",
           "visibleIf": "{mostrar_campos} = true",
           "title": "Correo electrónico",
           "description": "Indicar el correo electrónico donde será notificado",
@@ -198,26 +213,38 @@
         },
         {
           "type": "dropdown",
-          "name": "sexo",
+          "name": "sexo_id",
           "visibleIf": "{mostrar_campos} = true",
           "title": "Sexo",
           "description": "Indique si la persona\nrepresentante del núcleo familiar es masculino o femenino.",
           "isRequired": true,
           "choices": [
-            "Masculino",
-            "Femenino"
+            {
+              "value": "1",
+              "text": "Masculino",
+            },
+            {
+              "value": "2",
+              "text": "Femenino"
+            },
           ]
         },
         {
           "type": "dropdown",
-          "name": "identidad_genero",
+          "name": "identidad_genero_id",
           "visibleIf": "{mostrar_campos} = true",
           "title": "Tiene identidad de Género y/o Orientación sexual diversa (OSIGD)?\n",
           "description": "Seleccione SI en caso afirmativo, o NO en caso negativo.\n",
           "isRequired": true,
           "choices": [
-            "Si",
-            "No"
+            {
+              "value": "1",
+              "text": "Si",
+            },
+            {
+              "value": "2",
+              "text": "No"
+            },
           ]
         },
         {
@@ -227,14 +254,26 @@
           "title": "Estado civil",
           "isRequired": true,
           "choices": [
-            "Soltero(a)",
             {
-              "value": "Casado(a)",
-              "text": "Casado (a)"
+              "value": "1",
+              "text": "Soltero(a)",
             },
-            "Separado(a)",
-            "Viudo(a)",
-            "Unión libre"
+            {
+              "value": "2",
+              "text": "Casado(a)"
+            },
+            {
+              "value": "3",
+              "text": "Separado(a)",
+            },
+            {
+              "value": "4",
+              "text": "Viudo(a)",
+            },
+            {
+              "value": "5",
+              "text": "Unión libre"
+            }
           ]
         },
         {
@@ -245,64 +284,118 @@
           "description": "Indique cuál es la ocupación",
           "isRequired": true,
           "choices": [
-            "Ama de casa",
-            "Independiente",
-            "Jubilado/pensionado",
-            "Estudiante",
-            "Informalidad",
-            "Desempleado",
-            "No aplica por edad"
+            {
+              "value": "1",
+              "text": "Ama de casa",
+            },
+            {
+              "value": "2",
+              "text": "Independiente",
+            },
+            {
+              "value": "3",
+              "text": "Jubilado/pensionado",
+            },
+            {
+              "value": "4",
+              "text": "Estudiante",
+            },
+            {
+              "value": "5",
+              "text": "Informalidad",
+            },
+            {
+              "value": "6",
+              "text": "Desempleado",
+            },
+            {
+              "value": "7",
+              "text": "No aplica por edad"
+            },
           ]
-        },
-        {
-          "type": "text",
-          "name": "escolaridad",
-          "visibleIf": "{mostrar_campos} = true",
-          "title": "Nivel de escolaridad",
-          "isRequired": true
-        },
-        {
-          "type": "text",
-          "name": "escolarida_otro",
-          "visibleIf": "{escolaridad} = 'Otro'",
-          "title": "Otro"
         },
         {
           "type": "dropdown",
-          "name": "tipo_salud",
-          "visibleIf": "{mostrar_campos} = true",
-          "title": "Tipo de afiliación a salud\n",
+          "name": "titular_educacion",
+          "title": "Cual es su nivel educativo actual?",
           "isRequired": true,
           "choices": [
-            "Contributivo",
-            "Subsidiado",
-            "PPNA"
+            {
+              "value": "64",
+              "text": "Ninguno"
+            },
+            {
+              "value": "65",
+              "text": "Primaria Completa"
+            },
+            {
+              "value": "66",
+              "text": "Primaria Incompleta"
+            },
+            {
+              "value": "67",
+              "text": "Secundaria Incompleta"
+            },
+            {
+              "value": "68",
+              "text": "Secundaria Completa"
+            },
+            {
+              "value": "69",
+              "text": "Universitaria / Postgrado"
+            },
+            {
+              "value": "70",
+              "text": "Técnica /Tecnología"
+            },
           ]
-        }
+        },
+        {
+          "type": "dropdown",
+          "name": "titular_salud",
+          "isRequired": true,
+          "title": "A cual regimén de salud pertenece usted",
+          "choices": [
+            {
+              "value": "72",
+              "text": "Subsidiado"
+            },
+            {
+              "value": "75",
+              "text": "Contributivo"
+            },
+            {
+              "value": "76",
+              "text": "Ninguno"
+            }
+          ]
+        },
       ]
     },
     {
       "name": "page2",
       "elements": [
         {
-          "type": "tagbox",
-          "name": "grupo_especial",
-          "title": "Grupo de atención especial ",
+          "type": "dropdown",
+          "name": "titular_desplazado",
           "isRequired": true,
+          "title": "En la actualidad usted y/o su núcleo familiar son:",
           "choices": [
-            "Desplazados",
-            "Retornado",
-            "Reinsertado",
-            "Afrodescendiente",
-            "Indígenas",
-            "ROM/gitano",
-            "LGTBI",
-            "Palenquero y/o raizal",
-            "Victima",
-            "Campesinado",
             {
-              "value": "ninguno",
-              "text": "Ninguno"
+              "value": "77",
+              "text": "Desplazados desde el 15 de enero"
+            },
+            {
+              "value": "78",
+              "text": "Retornados"
+            },
+            {
+              "value": "79",
+              "text": "Reinsertados"
+            },
+            {
+              "value": "80",
+              "text": "Ninguna"
             }
           ]
         },
@@ -551,16 +644,7 @@
           "title": "¿Cuántas personas dependen económicamente del titular y/o habitan en el mismo lugar? ",
           "description": "Indique el número de personas que componen el núcleo familiar, este puede estar compuesto por cónyuge o compañero(a) permanente, padre – madre, suegro, hermano(a), cuñado(a), hijo(a), sobrino(a), yerno, nuera, nieto, abuelo(a) u otro.",
           "choices": [
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10"
+            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
           ]
         }
       ]
@@ -2003,16 +2087,7 @@
           "name": "numero_predios_uso_ilicito",
           "title": "¿Cuántos predios con cultivos de uso ilícito tiene su núcleo familiar?\n",
           "choices": [
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10"
+            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
           ]
         }
       ]
@@ -5414,13 +5489,143 @@
     "showNavigationButtons": false
 }
 
-    
+  const resizeBase64Img = (base64:string, callback:any) => {
+    const img = new Image();
+    img.src = base64;
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      // Reducción al 50%
+      canvas.width = img.width / 3;
+      canvas.height = img.height / 3;
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // Convertir a Base64 nuevamente
+      const resizedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+      callback(resizedBase64);
+    };
+  };
+
   const survey = new Model(json);
   
   survey.onCompleting.add((sender, options) => {
       options.allowComplete = false;
       console.log('sender.data')
       console.log(sender.data)
+
+    const personaData = {
+      tipo_identificacion_id: sender.data.titular_tipo_identificacion,
+      numero_documento: sender.data.numero_identificacion,
+      nombre: sender.data.nombres,
+      apellido: sender.data.apellidos,
+      fecha_expedicion: sender.data.fecha_expedicion,
+      fecha_nacimiento: sender.data.fecha_nacimiento,
+      sexo_id: sender.data.sexo_id,
+      genero_orientacion_sexual_id: sender.data.identidad_genero_id,
+      estado_civil_id:sender.data.estado_civil,
+      actividad_laboral:sender.data.ocupacion,
+      nivel_escolaridad_id:sender.data.titular_educacion,
+      tipo_afiliacion_salud_id:sender.data.titular_salud,
+      discapacidad: 0,
+      email: sender.data.email_user,
+      telefono_celular: sender.data.numero_contacto,
+      whatsapp: sender.data.numero_contacto,
+      //pertenece_comunidad_etnica
+      //cabeza_flia:
+      //desplazado_2025
+      //ubicacion_ant2025_id
+      grupo_atencion_especial_dsci_id: sender.data.titular_desplazado,
+      tipo_comunidad_etnica_id: sender.data.comunidad_etnica,
+      nombre_comunidad: sender.data.pueblo_indigena,
+      ingresos_mensuales: sender.data.valor_ingresos,
+      gastos_mensuales: sender.data.valor_gastos,
+      titular_id: 1,
+      parentesco_id: 1,
+      menor_edad: 1,
+      fase: 1,
+      estado_id: 0,
+      num_nucleo: sender.data.num_dependientes,
+      num_predios: sender.data.numero_predios_uso_ilicito,
+      ha_total_predios: sender.data.predio_area,
+      //ha_total_loteCoca: sender.data.predios_hectareas_coca
+      fecha_estado: new Date().toISOString(),
+      origen: 1,
+      beneficiario: 1,
+    }
+    console.log('personaData: ', personaData);
+
+    const formPersonaData = {
+      //id
+      //formulario_id
+      persona_id: 0,
+      tiene_coca: 1,
+      acepta_terminos: 1,
+      acepta_tratamiento_datos: 1,
+      compromiso_proceso_susticion:1,
+      //beca_desea
+      //beca_num
+      //beca_descrip
+      //vivienda
+      //vivienda_imagen
+      fecha_aceptacion: new Date().toISOString(),
+      firma: sender.data.firma,
+      //origen
+    }
+
+    const PersonaLineaProductiva = {
+      //id
+      persona_id: 0,
+      linea_productiva_id: sender.data.linea_productiva,
+      //otra_cual
+      experiencia_linea_productiva: 0,
+      tiempo_experiencia_linea: 0,
+      vinculado_asociacion: 0,
+      activa: 1,
+      fcrea: new Date().toISOString(),
+      origen: 'ficha_catatumbo',
+      fmodifica: new Date().toISOString()
+    }
+
+    const predioForm = {
+      //id
+      persona_id: 0,
+      ubicacion_id: sender.data.departamento,
+      cabecera: 0,
+      centro_poblado: 0,
+      corregimiento: sender.data.corregimiento,
+      vereda: sender.data.vereda,
+      //direccion
+      residencia: 1,
+      nombre_lugar: sender.data.predio_nombre,
+      lotecoca: 1,
+      //area_total_hectareas
+      //area_cultivo_hectareas,
+      documento_relacion_predio: "",
+      origen: 'preregistro_catatumbo',
+      sig: 0,
+      coordenada_registro:  `${sender.data.latitud} ${sender.data.longitud}`,
+      altitud: sender.data.altura,
+      presion: 0,
+      tiempo_propietario_predio: 0,
+    }
+
+    const personaAdjuntoData1 = {
+      //id
+      persona_id: 0,
+      tipo_documento_id: 13,
+      ruta: "",
+      origen: 'preregistro_catatumbo',
+      fcrea: new Date().toISOString(),
+    };
+
+    if (Array.isArray(sender.data.predio1_relacion_documento_acreditado) && sender.data.predio1_relacion_documento_acreditado.length > 0) {
+      resizeBase64Img(sender.data.predio1_relacion_documento_acreditado[0].content, (resizedImage:any) => {
+        personaAdjuntoData1.ruta = resizedImage;
+        console.log('transformado')
+      });
+    }
 
       const senderData = {
         ...sender.data,
@@ -5452,17 +5657,23 @@
         firma_file: Array.isArray(sender.data.firma_file) && sender.data.firma_file.length > 0 ? sender.data.firma_file[0].content : "",
         documento_pertenencia_etnica_file: Array.isArray(sender.data.documento_pertenencia_etnica_file) && sender.data.documento_pertenencia_etnica_file.length > 0 ? sender.data.documento_pertenencia_etnica_file[0].content : "",
       };
-
-    
     // personasNUcleo.value = personas
 
 
-    uCrud.create(senderData)
+    uCrud_persona.create(personaData)
         .then((item) => {
             
-            console.log(item)
-            const personas= []// Define personas como un objeto con claves dinámicas
+          console.log(item);
+          formPersonaData.persona_id = item.id
+          uCrud_formpersona.create(formPersonaData).then((item2:any) => {});
+          PersonaLineaProductiva.persona_id = item.id;
+          uCrud_linea.create(PersonaLineaProductiva).then((item3:any) => {});
+          predioForm.persona_id = item.id;
+          uCrud_predio.create(predioForm).then((item4:any) => {});
+          personaAdjuntoData1.persona_id = item.id;
+          uCrud_personaAdjunto.create(personaAdjuntoData1).then((item5:any) => {});
 
+            const personas= []// Define personas como un objeto con claves dinámicas
             for (let i = 1; i <= 10; i++) {
                 if (senderData[`persona${i}_nombre`]) { // Verifica si existen datos
                     personas.push({
