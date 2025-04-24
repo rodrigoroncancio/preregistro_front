@@ -53,7 +53,7 @@
       },
       origenasociaciones: {
         type: String,
-        default: 'CATATUMBO PREREGISTRO'
+        default: 'PREREGISTRO CATATUMBO - FASE 1 y FASE 2'
       },
       origen: {
         type: String,
