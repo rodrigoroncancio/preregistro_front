@@ -24,8 +24,6 @@
     import { ref, onMounted } from "vue";
     import { object } from 'yup';
 
-    
-
     const uLoading = useLoading();
     const uToast = useToast();
 
@@ -1242,7 +1240,6 @@
         predioLoteViveData.documento_relacion_predio = resizedImage;
       });
     }
-
 
     const coordenadaLoteCocaData = {
       predio_id: 0,

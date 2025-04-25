@@ -232,7 +232,7 @@ const routes: RouteRecordRaw[] = [
             path: "vercupos",
             name: "public-catatumbo-vercupos",
             component: () => import( /* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/catatumbo/vercupos.vue"),
-          }
+          },
         ],
       },
       {

@@ -107,6 +107,11 @@ const router = {
       name: "pnis-listafichas",
       component: () => import( /* webpackChunkName: "PnisListafichas" */ "@/modules/pnis/pages/listafichas.vue"),
     },
+    {//call-center
+      path: "preregistro-call-center/:id", // Ruta relativa al path padre
+      name: "pnis-catatumbo-preregistro-call-center",
+      component: () => import("@/modules/public/pages/catatumbo/callcenterformpreregistro.vue"),
+    },
   ],
 };
 
