@@ -1052,7 +1052,7 @@
 
       const formularioPersonaData = {
         persona_id: dataUser.value.id,
-        formulario_id: 21,
+        formulario_id: 3,
         tiene_coca: 1,
         acepta_terminos: 1,
         acepta_tratamiento_datos: 1,
@@ -1064,7 +1064,7 @@
         vivienda_imagen,
         fecha_aceptacion: new Date().toISOString(),
         firma,
-        origen: 'Argelia - Ficha Acuerdo Individual (Fase 5)'
+        origen: 'ficha_acuerdo_argelia'
       };
 
       uCrud_formpersona.create(formularioPersonaData);
@@ -1104,7 +1104,7 @@
           estado_id: 1,
           fcrea: dataUser.value.fcrea,
           fecha_estado: dataUser.value.fecha_estado,
-          origen: 'Argelia - Ficha Acuerdo Individual (Fase 5)'
+          origen: 'ficha_acuerdo_argelia'
         };
 
         uCrud_persona.create(personaDataVarios);
