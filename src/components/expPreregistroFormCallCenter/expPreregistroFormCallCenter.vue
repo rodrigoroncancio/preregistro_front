@@ -1208,7 +1208,7 @@ const fillOutForm = async (responsePersona: any, responseFormpersona: any, respo
   }
 };
 
-survey.onCompleting.add((sender, options) => {
+/*survey.onCompleting.add((sender, options) => {
   options.allowComplete = false;
 
   const personaData = {
@@ -1493,9 +1493,238 @@ survey.onCompleting.add((sender, options) => {
       });
 
   return false;
-});
+});*/
 
-/*survey.onValueChanged.add(async (sender, options) => {
+survey.onCompleting.add(async (sender, options) => {
+  options.allowComplete = false; // Bloquear mientras actualizamos
+
+  try {
+    const data = sender.data;
+    const idPersona = data.Persona_Id;
+
+    // 1. Actualizar datos principales
+    await updatePersona(idPersona, data);
+
+    // 2. Actualizar datos de formulario persona
+    await updateFormularioPersona(idPersona, data);
+
+    // 3. Actualizar predio donde vive
+    await updatePredioVive(idPersona, data);
+
+    // 4. Actualizar predio coca principal
+    await updatePredioLoteCoca(idPersona, data);
+
+    // 5. Si desplazado, actualizar predio desplazado
+    if (data.desplazado_2025) {
+      await updatePredioDesplazado(idPersona, data);
+    }
+
+    // 6. Si predio coca en otro municipio, actualizarlo
+    if (data.predio_coca_ubicacion === '2') {
+      await updatePredioOtro(idPersona, data);
+    }
+
+    // 7. Actualizar Línea Productiva
+    await updateLineaProductiva(idPersona, data);
+
+    // 8. Actualizar adjuntos (fotos/documentos)
+    await updateAdjuntos(idPersona, data);
+
+    options.allowComplete = true;
+    uToast.toastSuccess("Formulario actualizado correctamente.");
+
+  } catch (error) {
+    console.error("Error actualizando:", error);
+    uToast.toastError("Error actualizando formulario. Intenta de nuevo.");
+    options.allowComplete = false;
+  }
+});
+const updatePersona = async (id: any, data: any) => {
+  await axios.patch(`/api/2.0/nucleo/forms/catatumbo/persona/${id}/`, {
+    tipo_identificacion_id: parseInt(data.titular_tipo_identificacion),
+    numero_documento: String(data.titular_numero_documento),
+    nombre: data.titular_nombres,
+    apellido: data.titular_apellidos,
+    fecha_expedicion: data.titular_fecha_expedicion,
+    fecha_nacimiento: data.titular_fecha_nacimiento,
+    sexo_id: parseInt(data.titular_sexo),
+    email: data.tiene_email ? data.titular_email : 'NA',
+    telefono_celular: data.titular_celular,
+    whatsapp: data.titular_whatsapp,
+    tipo_comunidad_etnica_id: parseInt(data.tipo_comunidad_etnica),
+    nombre_comunidad: data.tipo_comunidad_etnica_nombre,
+    pertenece_comunidad_etnica: data.tipo_comunidad_etnica !== null ? 1 : 0,
+    desplazado_2025: data.desplazado_2025 ? 1 : 0,
+    cabeza_flia: data.titular_cabeza_familia ? 1 : 0,
+    num_nucleo: data.num_nucleo,
+    ha_total_predios: data.predio_coca_area_total,
+    ha_total_loteCoca: data.predio_coca_area_cultivo,
+    beneficiario: 0,
+    vinculado_asociacion: 0,
+    estado_id: 111,
+    fase: props.fasename,
+    discapacidad: 0,
+    fecha_estado: new Date().toISOString(),
+    origen: props.origen,
+    num_predios: 0,
+  });
+};
+
+const updateFormularioPersona = async (id: any, data: any) => {
+  await axios.patch(`/api/2.0/nucleo/forms/catatumbo/form_persona/${id}/`, {
+    tiene_coca: data.tiene_coca ? 1 : 0,
+    acepta_terminos: 1,
+    acepta_tratamiento_datos: 1,
+    compromiso_proceso_susticion: 1,
+  });
+};
+
+const updatePredioVive = async (id: any, data: any) => {
+  const ubicacion_id = (data.vive_corregimiento != null && data.vive_corregimiento != 9999)
+      ? data.vive_corregimiento
+      : (data.vive_vereda != null && data.vive_vereda != 9999)
+          ? data.vive_vereda
+          : data.vive_municipio;
+
+  await axios.patch(`/api/2.0/nucleo/forms/catatumbo/predio/${id}/`, {
+    ubicacion_id,
+    cabecera: data.vive_lugar === "1" ? 1 : 0,
+    centro_poblado: data.vive_lugar === "2" ? 1 : 0,
+    corregimiento: data.vive_lugar === "3" ? 1 : 0,
+    vereda: data.vive_lugar === "4" ? 1 : 0,
+    direccion: data.vive_direccion || 'Sin dirección',
+    nombre_lugar: data.vive_vereda_otra || 'Sin nombre',
+    residencia: 1,
+    lotecoca: data.predio_coca_vive ? 1 : 0,
+    area_total_hectareas: data.predio_coca_area_total,
+    area_cultivo_hectareas: data.predio_coca_area_cultivo,
+    tipo_relacion_predio_id: parseInt(data.predio_coca_tipo_residencia),
+    coordenada_registro: parseCoordinates(data.coordinates),
+    altitud: data.predio_coca_altitud ?? 0,
+    presion: data.predio_coca_precision ?? 0,
+  });
+};
+
+const updatePredioLoteCoca = async (id: any, data: any) => {
+  await axios.patch(`/api/2.0/nucleo/forms/catatumbo/predio/${id}/`, {
+    ubicacion_id: (data.predio_coca_corregimiento != null && data.predio_coca_corregimiento != 9999)
+        ? data.predio_coca_corregimiento
+        : (data.predio_coca_vereda != null && data.predio_coca_vereda != 9999)
+            ? data.predio_coca_vereda
+            : data.predio_coca_municipio,
+    cabecera: data.predio_coca_lugar === "1" ? 1 : 0,
+    centro_poblado: data.predio_coca_lugar === "2" ? 1 : 0,
+    corregimiento: data.predio_coca_lugar === "3" ? 1 : 0,
+    vereda: data.predio_coca_lugar === "4" ? 1 : 0,
+    direccion: data.predio_coca_lugar_direccion || 'Sin dirección',
+    nombre_lugar: data.predio_coca_vereda_otra || 'Sin nombre',
+    residencia: 0,
+    lotecoca: 1,
+    area_total_hectareas: data.predio_coca_area_total,
+    area_cultivo_hectareas: data.predio_coca_area_cultivo,
+    tipo_relacion_predio_id: parseInt(data.predio_coca_tipo_residencia),
+    coordenada_registro: parseCoordinates(data.coordinates),
+    altitud: data.predio_coca_altitud ?? 0,
+    presion: data.predio_coca_precision ?? 0,
+  });
+};
+
+const updatePredioDesplazado = async (id: any, data: any) => {
+  const ubicacion_id = (data.desplazado_corregimiento != null && data.desplazado_corregimiento != 9999)
+      ? data.desplazado_corregimiento
+      : (data.desplazado_vereda != null && data.desplazado_vereda != 9999)
+          ? data.desplazado_vereda
+          : data.desplazado_municipio;
+
+  await axios.patch(`/api/2.0/nucleo/forms/catatumbo/predio/${id}/`, {
+    ubicacion_id: ubicacion_id,
+    cabecera: data.deplazado_lugar === "1" ? 1 : 0,
+    centro_poblado: data.deplazado_lugar === "2" ? 1 : 0,
+    corregimiento: data.deplazado_lugar === "3" ? 1 : 0,
+    vereda: data.deplazado_lugar === "4" ? 1 : 0,
+    direccion: data.desplazado_lugar_direccion || 'Sin dirección',
+    nombre_lugar: data.desplazado_otra_vereda || 'Sin nombre',
+    residencia: 0,
+    lotecoca: 0,
+    area_total_hectareas: 0,
+    area_cultivo_hectareas: 0,
+    tipo_relacion_predio_id: 0,
+    coordenada_registro: parseCoordinates(data.coordinates),
+    altitud: data.predio_coca_altitud ?? 0,
+    presion: data.predio_coca_precision ?? 0,
+  });
+};
+
+const updatePredioOtro = async (id: any, data: any) => {
+  await axios.patch(`/api/2.0/nucleo/forms/catatumbo/predio/${id}/`, {
+    ubicacion_id: (data.predio_coca_otro_corregimiento != null && data.predio_coca_otro_corregimiento != 9999)
+        ? data.predio_coca_otro_corregimiento
+        : (data.predio_coca_vereda != null && data.predio_coca_vereda != 9999)
+            ? data.predio_coca_vereda
+            : data.predio_coca_otro_municipio,
+    cabecera: data.predio_coca_otro_lugar === "1" ? 1 : 0,
+    centro_poblado: data.predio_coca_otro_lugar === "2" ? 1 : 0,
+    corregimiento: data.predio_coca_otro_lugar === "3" ? 1 : 0,
+    vereda: data.predio_coca_otro_lugar === "4" ? 1 : 0,
+    direccion: data.predio_coca_otro_direccion || 'Sin dirección',
+    nombre_lugar: data.predio_coca_otro_vereda_otra || 'Sin nombre',
+    residencia: 0,
+    lotecoca: 1,
+    area_total_hectareas: data.predio_coca_area_total,
+    area_cultivo_hectareas: data.predio_coca_area_cultivo,
+    tipo_relacion_predio_id: parseInt(data.predio_coca_tipo_residencia),
+    coordenada_registro: parseCoordinates(data.coordinates),
+    altitud: data.predio_coca_altitud ?? 0,
+    presion: data.predio_coca_precision ?? 0,
+  });
+};
+
+const updateLineaProductiva = async (id: any, data: any) => {
+  await axios.patch(`/api/2.0/nucleo/forms/catatumbo/personalinea/${id}/`, {
+    linea_productiva_id: data.linea_productiva,
+    tipo_experiencia_id: data.establece_fortalece,
+    otra_cual: data.otra_cual,
+    experiencia_linea_productiva: 0,
+    tiempo_experiencia_linea: 0,
+    vinculado_asociacion: 0,
+    activa: 1,
+    origen: 'preregistro_catatumbo',
+  });
+};
+
+const updateAdjuntos = async (id: any, data: any) => {
+  if (Array.isArray(data.titular_foto_cara) && data.titular_foto_cara.length > 0) {
+    const resizedImage = await resizeBase64Img(data.titular_foto_cara[0].content);
+    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/persona/${id}/`, {
+      titular_foto_cara: resizedImage
+    });
+  }
+
+  if (Array.isArray(data.titular_foto_contracara) && data.titular_foto_contracara.length > 0) {
+    const resizedImage = await resizeBase64Img(data.titular_foto_contracara[0].content);
+    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/persona/${id}/`, {
+      titular_foto_contracara: resizedImage
+    });
+  }
+
+  if (Array.isArray(data.predio_coca_tipo_documento) && data.predio_coca_tipo_documento.length > 0) {
+    const resizedImage = await resizeBase64Img(data.predio_coca_tipo_documento[0].content);
+    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/predio/${id}/`, {
+      predio_coca_tipo_documento: resizedImage
+    });
+  }
+};
+
+const parseCoordinates = (coordinates: string) => {
+  if (!coordinates) return '';
+  const coords = coordinates.split('|').map(parseFloat);
+  if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+    return `${coords[0]} ${coords[1]}`;
+  }
+  return '';
+};
+
+survey.onValueChanged.add(async (sender, options) => {
 
   const asociacionesQuestion = survey.getQuestionByName("asociaciones");
   const perteneceQuestion = survey.getQuestionByName("pertenecegrupo");
@@ -1846,293 +2075,7 @@ survey.onCompleting.add((sender, options) => {
     }
     loading.hide();
   }
-});*/
-
-survey.onValueChanged.add(async (sender, options) => {
-  try {
-    const campo = options.name;
-    const valor = options.value;
-
-    if (!campo) return;
-
-    // 1. Primero: Validaciones especiales
-    if (campo === "titular_numero_documento") {
-      await validarDocumento(valor);
-      return; // no sigas haciendo update si falla
-    }
-
-    if (campo === "tiene_coca" || campo === "tipo_exclusion") {
-      await validarExclusion(sender);
-    }
-
-    // 2. Segundo: Cambios dinámicos de municipios/veredas
-    await manejarCambioDinamico(sender, campo, valor);
-
-    // 3. Tercero: Update real en BD según el campo
-    await actualizarCampoBD(userSurveyId, campo, valor);
-
-  } catch (error) {
-    console.error("Error en onValueChanged:", error);
-    uToast.toastError("Error procesando cambios en el formulario.");
-  }
 });
-
-const validarDocumento = async (documento: string) => {
-  if (!documento) return;
-
-  try {
-    const resp = await axios.get(`/api/2.0/nucleo/forms/catatumbo/validar_documento/?documento=${documento}`);
-    if (resp.data === true) {
-      survey.setValue("titular_numero_documento", "");
-      uToast.toastError("Número de cédula ya registrado en la convocatoria");
-      return;
-    }
-
-    const resp2 = await axios.get(`/forms/catatumbo/ficha/validar_documento/?documento=${documento}`);
-    if (resp2.data && resp2.data.status === 5) {
-      survey.setValue("titular_numero_documento", "");
-      uToast.toastError("El usuario ha sido titular en el proyecto PNIS");
-    }
-  } catch (error) {
-    console.error("Error validando documento:", error);
-    throw error;
-  }
-};
-
-const validarExclusion = async (sender: any) => {
-  const tipoexclusion = sender.getValue("tipo_exclusion");
-  const tienecoca = sender.getValue("tiene_coca");
-
-  if (!tienecoca && tipoexclusion !== '11') {
-    uToast.toastError('No puede continuar por criterios de exclusión.');
-    survey.showNavigationButtons = false;
-  } else {
-    survey.showNavigationButtons = true;
-  }
-};
-
-const manejarCambioDinamico = async (sender: any, campo: string, valor: any) => {
-  const loading = uLoading.show({});
-
-  try {
-    if (["vive_departamento", "desplazadoss_departamento", "predio_coca_departamento", "predio_coca_otro_departamento"].includes(campo)) {
-      const villages = await getVillageList(valor, 'NA');
-      if (Array.isArray(villages)) {
-        itemsVillages.value = [...villages];
-      }
-      actualizarDropdowns(sender, campo);
-    }
-
-    if (["vive_municipio", "desplazado_municipio", "predio_coca_municipio", "predio_coca_otro_municipio"].includes(campo)) {
-      const villagesCOCP = await getVillageList(valor, 'CO,CP');
-      const villagesVE = await getVillageList(valor, 'VE');
-
-      itemsVillages.value = [...villagesCOCP, ...villagesVE, { value: 9999, text: "No encontrado" }];
-
-      actualizarDropdowns(sender, campo);
-    }
-  } finally {
-    loading.hide();
-  }
-};
-
-const actualizarDropdowns = (sender: any, campo: string) => {
-  switch (campo) {
-    case "vive_departamento":
-      survey.getQuestionByName("vive_municipio").choices = itemsVillages.value;
-      break;
-    case "desplazadoss_departamento":
-      survey.getQuestionByName("desplazado_municipio").choices = itemsVillages.value;
-      break;
-    case "predio_coca_departamento":
-      survey.getQuestionByName("predio_coca_municipio").choices = itemsVillages.value;
-      break;
-    case "predio_coca_otro_departamento":
-      survey.getQuestionByName("predio_coca_otro_municipio").choices = itemsVillages.value;
-      break;
-
-    case "vive_municipio":
-      survey.getQuestionByName("vive_corregimiento").choices = itemsVillages.value;
-      survey.getQuestionByName("vive_vereda").choices = itemsVillages.value;
-      break;
-    case "desplazado_municipio":
-      survey.getQuestionByName("desplazado_corregimiento").choices = itemsVillages.value;
-      survey.getQuestionByName("desplazado_vereda").choices = itemsVillages.value;
-      break;
-    case "predio_coca_municipio":
-      survey.getQuestionByName("predio_coca_corregimiento").choices = itemsVillages.value;
-      survey.getQuestionByName("predio_coca_vereda").choices = itemsVillages.value;
-      break;
-    case "predio_coca_otro_municipio":
-      survey.getQuestionByName("predio_coca_otro_corregimiento").choices = itemsVillages.value;
-      survey.getQuestionByName("predio_coca_otro_vereda").choices = itemsVillages.value;
-      break;
-    default:
-      console.log(`Campo ${campo} no tiene dropdown relacionado.`);
-  }
-};
-
-const actualizarCampoBD = async (id: any, campo: string, valor: any) => {
-  try {
-    //1. Detectamos si es un archivo subido
-    if (Array.isArray(valor) && valor.length > 0 && valor[0].content) {
-      console.log(`Detectado archivo en el campo ${campo}`);
-
-      const archivo = valor[0];
-      const isImage = archivo.type.startsWith("image/");
-
-      if (isImage) {
-        // Si es una imagen, primero la redimensionamos antes de guardar
-        const resizedBase64 = await resizeBase64Img(archivo.content);
-        await updateAdjunto(id, campo, resizedBase64);
-      } else {
-        // Si no es imagen (ej: PDF), lo subimos tal cual
-        await updateAdjunto(id, campo, archivo.content);
-      }
-      return;
-    }
-
-    //2. Detectamos si es un campo normal (texto/número) y actualizamos normalmente
-    switch (campo) {
-      case "titular_nombres":
-      case "titular_apellidos":
-      case "titular_numero_documento":
-      case "titular_celular":
-      case "titular_whatsapp":
-      case "titular_fecha_expedicion":
-      case "titular_fecha_nacimiento":
-      case "titular_email":
-      case "tipo_comunidad_etnica":
-      case "tipo_comunidad_etnica_nombre":
-      case "num_nucleo":
-      case "titular_sexo":
-      case "tiene_email":
-      case "titular_cabeza_familia":
-      case "pertenecegrupo":
-      case "asociaciones":
-      case "desplazado_2025":
-        await updatePersonaField(id, campo, valor);
-        break;
-
-      case "tiene_coca":
-      case "tipo_exclusion":
-      case "question2":
-      case "question6":
-        await updateFormPersonaField(id, campo, valor);
-        break;
-
-      case "predio_coca_tipo_residencia":
-      case "predio_coca_area_total":
-      case "predio_coca_area_cultivo":
-      case "predio_coca_altitud":
-      case "predio_coca_precision":
-        await updatePredioField(id, campo, valor);
-        break;
-
-      case "linea_productiva":
-      case "establece_fortalece":
-      case "otra_cual":
-        await updatePersonalineaField(id, campo, valor);
-        break;
-
-      default:
-        console.log(`Campo ${campo} no mapeado para actualización.`);
-        break;
-    }
-  } catch (error) {
-    console.error(`Error actualizando campo ${campo}:`, error);
-    uToast.toastError("Error actualizando información, inténtelo de nuevo.");
-  }
-};
-
-const updateAdjunto = async (id: any, campo: string, base64Content: string) => {
-  try {
-    // Dependiendo el campo decides a qué tabla y servicio llamar
-    if (campo.startsWith("titular_foto_") || campo === "titular_documento_identidad") {
-      await updatePersonaAdjunto(id, campo, base64Content);
-    } else if (campo.startsWith("predio_coca_")) {
-      await updatePredioAdjunto(id, campo, base64Content);
-    } else {
-      console.warn(`Campo de archivo ${campo} no está mapeado en updateAdjunto.`);
-    }
-  } catch (error) {
-    console.error(`Error actualizando adjunto ${campo}:`, error);
-    throw error;
-  }
-};
-
-const updatePersonaField = async (id: any, campo: string, valor: any) => {
-  try {
-    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/persona/${id}/`, {
-      [campo]: valor
-    });
-    console.log(`Campo ${campo} actualizado en persona.`);
-  } catch (error) {
-    console.error(`Error actualizando persona ${campo}:`, error);
-    throw error;
-  }
-};
-
-const updateFormPersonaField = async (id: any, campo: string, valor: any) => {
-  try {
-    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/form_persona/${id}/`, {
-      [campo]: valor
-    });
-    console.log(`Campo ${campo} actualizado en form_persona.`);
-  } catch (error) {
-    console.error(`Error actualizando form_persona ${campo}:`, error);
-    throw error;
-  }
-};
-
-const updatePredioField = async (id: any, campo: string, valor: any) => {
-  try {
-    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/predio/${id}/`, {
-      [campo]: valor
-    });
-    console.log(`Campo ${campo} actualizado en predio.`);
-  } catch (error) {
-    console.error(`Error actualizando predio ${campo}:`, error);
-    throw error;
-  }
-};
-
-const updatePersonalineaField = async (id: any, campo: string, valor: any) => {
-  try {
-    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/personalinea/${id}/`, {
-      [campo]: valor
-    });
-    console.log(`Campo ${campo} actualizado en personalinea.`);
-  } catch (error) {
-    console.error(`Error actualizando personalinea ${campo}:`, error);
-    throw error;
-  }
-};
-
-const updatePersonaAdjunto = async (id: any, campo: string, base64Content: string) => {
-  try {
-    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/persona/${id}/`, {
-      [campo]: base64Content
-    });
-    console.log(`Adjunto ${campo} actualizado en persona.`);
-  } catch (error) {
-    console.error(`Error actualizando adjunto en persona ${campo}:`, error);
-    throw error;
-  }
-};
-
-const updatePredioAdjunto = async (id: any, campo: string, base64Content: string) => {
-  try {
-    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/predio/${id}/`, {
-      [campo]: base64Content
-    });
-    console.log(`Adjunto ${campo} actualizado en predio.`);
-  } catch (error) {
-    console.error(`Error actualizando adjunto en predio ${campo}:`, error);
-    throw error;
-  }
-};
-
 
 onMounted(async () => {
   try {
