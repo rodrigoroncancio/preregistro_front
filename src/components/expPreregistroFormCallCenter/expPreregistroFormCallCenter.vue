@@ -1153,7 +1153,7 @@ const fillOutForm = async (responsePersona: any, responseFormpersona: any, respo
       // === PAGE 1 ===
       pertenecegrupo: responsePersona.data.vinculado_asociacion || false,
       asociaciones: responsePersona.data.cub_asociacion || 99999, // 99999 = Sin asociación
-      tiene_coca: responseFormpersona.data.tiene_coca ?? null,
+      predio_coca_otro_departamento: responseFormpersona.data.tiene_coca ?? null,
       tipo_exclusion: responseFormpersona.data.tipo_exclusion_id ?? null,
 
       // === PAGE 2 ===
