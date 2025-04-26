@@ -260,6 +260,11 @@ const routes: RouteRecordRaw[] = [
         name: "public-vertest",
         component: () => import(/* webpackChunkName: "PublicListafichas" */ "@/modules/public/pages/argelia/testSurvey.vue"),
       },
+      {//call-center
+        path: "preregistro-call-center/:id", // Ruta relativa al path padre
+        name: "pnis-catatumbo-preregistro-call-center",
+        component: () => import("@/modules/public/pages/catatumbo/callcenterformpreregistro.vue"),
+      },
     ],
   },
   {

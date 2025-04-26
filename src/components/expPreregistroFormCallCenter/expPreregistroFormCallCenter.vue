@@ -1,1158 +1,2148 @@
 <template>
-  <exp-survey-view
-      v-if="modelValue"
-      :surveyJson="surveyJsonBase"
-      :surveyData="surveyData"
-      :is-read-only="true"
-  >
-  </exp-survey-view>
+  <v-main>
+    <v-container class="flex-grow-1">
+      <v-row>
+        <v-col class="text-center mt-6">
+          <v-img :src="'/src/assets/img/header-colombia.png'" :width="360" class="mx-auto" />
+        </v-col>
+      </v-row>
+      <div class="main-container">
+        <v-progress-circular v-if="isLoading" indeterminate color="primary"></v-progress-circular>
+        <SurveyComponent v-else-if="isSurveyReady" :model="survey" />
+      </div>
+    </v-container>
+  </v-main>
 </template>
 
-
-<script lang="ts" setup>
-import { ref, computed, onMounted, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { useVuelidate } from "@vuelidate/core";
-import { required, email, minLength } from "@vuelidate/validators";
-import { useRoute } from 'vue-router';
-import axios from "axios";
-
-const endpoint = "/api/1.0/core";
-const route = useRoute();
-const surveyId = route.params.id;
-
-import useAuth from "@/modules/auth/composables/useAuth";
+<script setup lang="ts">
+import 'survey-core/defaultV2.min.css';
+import { Model } from "survey-core";
+import { SurveyComponent } from "survey-vue3-ui";
 import useCrud from "@/composables/useCrud";
-import useUtils from "@/composables/useUtils";
-import expDynamicForm from "@/components/expDynamicForm";
-import useAuthStore from "@/modules/auth/stores/auth";
-import expSurveyView from "@/components/expSurveyView";
+import useToast from "@/composables/useToast";
+import axios from "axios";
+import { useLoading } from "vue-loading-overlay";
+import { ref, onMounted } from "vue";
+import { object } from 'yup';
+import {useRoute} from "vue-router";
 
-const uCrud = useCrud(`${endpoint}/userpnis`);
-const uUtils = useUtils();
-const { t } = useI18n();
-const uAuth = useAuth();
+const isLoading = ref(true);
+const isSurveyReady = ref(false);
 
-const modelValue = defineModel<boolean>();
+const route = useRoute();
+const userSurveyId = route.params.id;
+
+const uLoading = useLoading();
+const uToast = useToast();
+
+const uCrud = useCrud("api/2.0/nucleo/persona");
+const uCrud2 = useCrud("api/2.0/nucleo/formpersona");
+const uCrud3 = useCrud("api/2.0/nucleo/personaadjunto");
+const uCrud4 = useCrud("api/2.0/nucleo/predio");
+const uCrud5 = useCrud("api/2.0/nucleo/personalinea");
+const uCrud6 = useCrud("api/2.0/nucleo/lote");
+
+const modelValue = defineModel<object>();
+
 const props = defineProps({
-  id: {
-    type: Number,
-    default: null,
+  readOnly: {
+    type: Boolean,
+    default: false,
   },
+  polygon: {
+    type: Array,
+    default: []
+  },
+  form_title: {
+    type: String,
+    default: 'Titulo del formulario'
+  },
+  origenasociaciones: {
+    type: String,
+    default: 'PREREGISTRO CATATUMBO - FASE 1 y FASE 2'
+  },
+  origen: {
+    type: String,
+    default: 'PREREGISTRO CATATUMBO - FASE 3'
+  },
+  formid: {
+    type: Number,
+    default: 1
+  },
+  faseid: {
+    type: Number,
+    default: 1
+  },
+  fasename: {
+    type: String,
+    default: 'FASE 3'
+  },
+  municipios: {
+    type: Object, // con O mayúscula
+    default: () => ({
+      data: [
+        {
+          "value": 283,
+          "text": "Convención"
+        },
+        {
+          "value": 368,
+          "text": "El tarra"
+        },
+        {
+          "value": 963,
+          "text": "Sardinata"
+        },
+        {
+          "value": 1040,
+          "text": "Teorama"
+        },
+        {
+          "value": 1047,
+          "text": "Tibú"
+        }
+      ],
+      datadefault: 0
+    })
+  },
+  departamentos: {
+    type: Object, // con O mayúscula
+    default: () => ({
+      data: [
+        { value: 29, text: "Norte de Santander" }
+      ],
+      datadefault: 29,
+      readOnlyState: true
+    })
+  },
+  departamentosVive: {
+    type: Object, // con O mayúscula
+    default: () => ({
+      data: [
+        { value: 29, text: "Norte de Santander" }
+      ],
+      datadefault: 29,
+      readOnlyState: true
+    })
+  }
+
 });
 
-
-const surveyJsonBase = ref({
-  "title": "Preinscripción Núcleos Familiares Individuales - Convención, El Tarra, Tibú y Sardinata",
-  "description": "Ficha de preinscripción para el \"Establecimiento y/o fortalecimiento de actividades económicas para el tránsito a economías lícitas en el marco de procesos de sustitución de cultivos de uso ilícito en los municipios de Convención, El Tarra, Tibú y Sardinata de Norte de Santander",
-  "logoPosition": "right",
+const json ={
+  "title": props.form_title,
   "pages": [
+    {
+      "name": "page1",
+      "elements": [
+        {
+          "type": "boolean",
+          "name": "pertenecegrupo",
+          "title": "¿Su inscripción se realizará a través de una asociación que ya participa en el en el programa RenHacemos?",
+          "isRequired": true,
+          "labelTrue": "Si"
+        },
+        {
+          "type": "dropdown",
+          "name": "asociaciones",
+          "title": "Asociaciones",
+          "visibleIf": "{pertenecegrupo} = true",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": 99999,
+              "text": "Sin asociación"
+            }
+          ]
+        },
+        {
+          "type": "boolean",
+          "name": "tiene_coca",
+          "title": "¿Tiene, posee u ocupa usted un predio con cultivos de coca del cual depende su subsistencia?",
+          "isRequired": true,
+          "labelTrue": "Si"
+        },
+        {
+          "type": "radiogroup",
+          "name": "tipo_exclusion",
+          "title": "Seleccione si cuenta con alguna de las siguientes condiciones:",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "El predio de coca que va a someter a sustitución fue sembrado después del 24 de enero del 2025."
+            },
+            {
+              "value": "2",
+              "text": "Encontrarse en un programa de reincorporación"
+            },
+            {
+              "value": "3",
+              "text": "Ser funcionario o contratista público"
+            },
+            {
+              "value": "4",
+              "text": "En su hogar hay funcionarios o contratistas públicos"
+            },
+            {
+              "value": "5",
+              "text": "El predio donde está el cultivo de coca es un bien de la Nación o de una entidad pública. (Sólo se permite inscripción de predios de particulares)"
+            },
+            {
+              "value": "6",
+              "text": "Que alguien más del núcleo familiar haya inscrito el mismo predio a sustituir."
+            },
+            {
+              "value": "7",
+              "text": "Usted, su conyugue o alguien de su núcleo familiar es titular o beneficiario PNIS activo o retirado."
+            },
+            {
+              "value": "8",
+              "text": "Contar con un cultivo menor a 0.5 ha de coca sembradas-"
+            },
+            {
+              "value": "10",
+              "text": "Ser menor de 18 años de edad"
+            },
+            {
+              "value": "11",
+              "text": "NINGUNA DE LAS ANTERIORES"
+            }
+          ]
+        }
+      ]
+    },
     {
       "name": "page2",
       "elements": [
         {
           "type": "html",
-          "name": "question1",
-          "html": "<h4>Datos de registraduria</h4>\n"
+          "name": "question3",
+          "html": "<h3>\nCapítulo (A) Identificación\n</h3>"
+        },
+        {
+          "type": "html",
+          "name": "question4",
+          "html": "<h4>\n1. ¿Dónde vive usted actualmente?\n</h4>"
+        },
+        {
+          "type": "dropdown",
+          "name": "vive_departamento",
+          "title": "1.1 Departamento",
+          "isRequired": true,
+          "choices": props.departamentosVive.data,
+          "defaultValue": props.departamentosVive.datadefault,
+          "readOnly": props.departamentosVive.readOnlyState
+        },
+        {
+          "type": "dropdown",
+          "name": "vive_municipio",
+          "title": "1.2 Municipio",
+          "isRequired": true,
+          "choices": props.municipios.data,
+          "defaultValue": props.municipios.datadefault,
+        },
+        {
+          "type": "radiogroup",
+          "name": "vive_lugar",
+          "title": "1.3 EN QUE LUGAR DEL MUNICIPIO VIVE USTED?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Cabecera municipal"
+            },
+            {
+              "value": "2",
+              "text": "Corregimiento y Centro poblado"
+            },
+            {
+              "value": "4",
+              "text": "Vereda"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "vive_corregimiento",
+          "visibleIf": "{vive_lugar} = 2",
+          "title": "Corregimiento y Centro poblado",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Sin corregimiento"
+            }
+          ]
         },
         {
           "type": "text",
-          "name": "reg_numero_cedula",
-          "title": "Número de cedula"
+          "name": "vive_direccion",
+          "visibleIf": "{vive_lugar} <> 4 and {vive_lugar} notempty",
+          "title": "Dirección"
+        },
+        // {
+        //   "type": "dropdown",
+        //   "name": "vive_nucleo_veredal",
+        //   "visibleIf": "{vive_lugar} = 4",
+        //   "title": "Nucleo veredal",
+        //   "isRequired": true,
+        //   "choices": [
+        //     {
+        //       "value": "Item 1",
+        //       "text": "Sin nucleo"
+        //     }
+        //   ]
+        // },
+        {
+          "type": "dropdown",
+          "name": "vive_vereda",
+          "visibleIf": "{vive_lugar} = 4",
+          "title": "Vereda",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Sin nucleo"
+            }
+          ]
         },
         {
           "type": "text",
-          "name": "reg_primer_nombre",
-          "title": "Primer Nombre"
-        },
-        {
-          "type": "text",
-          "name": "reg_segundo_nombre",
-          "title": "Segundo Nombre"
-        },
-        {
-          "type": "text",
-          "name": "reg_primer_apellido",
-          "title": "Primer apellido"
-        },
-        {
-          "type": "text",
-          "name": "reg_segundo_apellido",
-          "title": "Segundo apellido"
-        },
-        {
-          "type": "text",
-          "name": "reg_departamento_exp",
-          "title": "Departamento de Expedición"
-        },
-        {
-          "type": "text",
-          "name": "reg_municipio_exp",
-          "title": "Municipio de expedición"
-        },
-        {
-          "type": "text",
-          "name": "reg_fecha_expedicion",
-          "title": "Fecha de expedición"
-        },
-        {
-          "type": "text",
-          "name": "reg_estado_cedula",
-          "title": "Estado de la cédula"
-        },
-        {
-          "type": "text",
-          "name": "reg_num_resolucion",
-          "title": "Número de resolución"
-        },
-        {
-          "type": "text",
-          "name": "reg_agno_resolucion",
-          "title": "Año de resolución"
-        },
-        {
-          "type": "text",
-          "name": "reg_genero",
-          "title": "Género"
-        },
-        {
-          "type": "text",
-          "name": "reg_fecha_nacimiento",
-          "title": "Fecha de nacimiento"
-        },
-        {
-          "type": "text",
-          "name": "reg_edad",
-          "title": "Edad"
+          "name": "vive_vereda_otra",
+          "visibleIf": "{vive_lugar} > 1 and ({vive_vereda} = 9999 or {vive_corregimiento} = 9999)",
+          "title": "Nombre",
+          "description": "si no aparece en la lista, se digita el nombre del lugar donde vive"
         }
       ]
     },
     {
-      "name": "page1",
+      "name": "page3",
       "elements": [
         {
+          "type": "boolean",
+          "name": "desplazado_2025",
+          "title": "1.4 Su lugar de residencia cambió después del 16 de enero?  ",
+          "isRequired": true,
+          "labelTrue": "Si"
+        },
+        {
           "type": "html",
-          "name": "question5",
-          "html": "<h4>Validación de datos</h4>"
+          "name": "question7",
+          "visibleIf": "{desplazado_2025} = true",
+          "title": "1.4 Su lugar de residencia cambió después del 16 de enero?  ",
+          "html": "<h4>\n Si marcó si: Indique donde vivía antes del 16 de enero de 2025:\n</h4>"
+        },
+        {
+          "type": "dropdown",
+          "name": "desplazadoss_departamento",
+          "visibleIf": "{desplazado_2025} = true",
+          "title": "Departamento",
+          "isRequired": true,
+          "choices": props.departamentos.data,
+          "defaultValue": props.departamentos.datadefault
+        },
+        {
+          "type": "dropdown",
+          "name": "desplazado_municipio",
+          "visibleIf": "{desplazado_2025} = true",
+          "title": "Municipio",
+          "isRequired": true,
+          "choices": props.municipios.data,
+          "defaultValue": props.municipios.datadefault,
         },
         {
           "type": "radiogroup",
-          "name": "tiene_coca",
-          "title": "¿Tiene, posee u ocupa usted un predio con presencia de cultivos de uso ilícito del cual depende su subsistencia?",
-          "description": "Seleccione una opción.",
+          "name": "deplazado_lugar",
+          "visibleIf": "{desplazado_2025} = true",
+          "title": "EN QUE LUGAR DEL MUNICIPIO VIVIA USTED?",
           "isRequired": true,
           "choices": [
-            "Si",
-            "No"
+            {
+              "value": "1",
+              "text": "Cabecera municipal"
+            },
+            {
+              "value": "2",
+              "text": "Corregimiento y Centro poblado"
+            },
+            {
+              "value": "4",
+              "text": "Vereda"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "desplazado_corregimiento",
+          "visibleIf": "{deplazado_lugar} = 2 and {desplazado_2025} = true",
+          "title": "Corregimiento y centro poblado",
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Sin corregimiento"
+            }
           ]
         },
         {
           "type": "text",
-          "name": "identificacion",
-          "title": "Ingrese el número de documento",
-          "description": "Digite el número de documento sin puntos \".\" ni comas \",\""
+          "name": "desplazado_lugar_direccion",
+          "visibleIf": "{deplazado_lugar} != '4' and {desplazado_2025} = true",
+          "title": "Dirección"
         },
+        // {
+        //   "type": "dropdown",
+        //   "name": "desplazado_nucleo_veredal",
+        //   "visibleIf": "{deplazado_lugar} = 4 and {desplazado_2025} = true",
+        //   "title": "Nucleo Veredal",
+        //   "choices": [
+        //     {
+        //       "value": "Item 1",
+        //       "text": "Sin corregimiento"
+        //     }
+        //   ]
+        // },
         {
-          "type": "radiogroup",
-          "name": "victima_posterior_2025",
-          "title": "¿Ha sido victima de desplazamiento forzado con fecha igual o posterior al 15 de enero de 2025?\n",
-          "description": "Seleccione una opción.",
-          "isRequired": true,
+          "type": "dropdown",
+          "name": "desplazado_vereda",
+          "visibleIf": "{deplazado_lugar} = 4 and {desplazado_2025} = true",
+          "title": "Vereda",
           "choices": [
-            "Si",
-            "No"
+            {
+              "value": "Item 1",
+              "text": "Sin vereda"
+            }
           ]
         },
         {
-          "type": "radiogroup",
-          "name": "tipo_linea_productiva",
-          "title": "Actividad económica para el tránsito a economías lícitas",
-          "description": "Seleccione una opción.",
-          "defaultValue": "Agropecuaria",
+          "type": "text",
+          "name": "desplazado_otra_vereda",
+          "visibleIf": "{deplazado_lugar} > 1  and {desplazado_2025} = true and ({desplazado_vereda} = 9999 or {desplazado_corregimiento} = 9999)",
+          "title": "Nombre",
+          "description": "si no aparece en la lista, se digita el nombre del lugar donde vive"
+        }
+      ]
+    },
+    {
+      "name": "page4",
+      "elements": [
+        {
+          "type": "html",
+          "name": "question19",
+          "html": "<h4>\n2. Datos del titular del programa de sustitución RenHacemos Catatumbo. \n</h4>"
+        },
+        {
+          "type": "text",
+          "name": "titular_nombres",
+          "title": "2.1 Nombres",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "titular_apellidos",
+          "title": "2.2 Apellidos",
+          "isRequired": true
+        },
+        {
+          "type": "dropdown",
+          "name": "titular_tipo_identificacion",
+          "title": "2.3 Tipo de documento de identidad",
+          "isRequired": true,
           "choices": [
-            "Agropecuaria",
-            "No Agropecuaria"
+            {
+              "value": "12",
+              "text": "Cédula de ciudadania"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "titular_numero_documento",
+          "title": "2.4 Número de documento",
+          "isRequired": true,
+          "inputType": "number"
+        },
+        {
+          "type": "file",
+          "name": "titular_foto_cara",
+          "title": "2.5 Cara documento de identidad",
+          "isRequired": true
+        },
+        {
+          "type": "file",
+          "name": "titular_foto_contracara",
+          "title": "2.6 Contracara Documento de identidad",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "titular_fecha_nacimiento",
+          "title": "2.7 Fecha de nacimiento",
+          "isRequired": true,
+          "inputType": "date"
+        },
+        {
+          "type": "text",
+          "name": "titular_fecha_expedicion",
+          "title": "2.8 Fecha de expedición de la cédula",
+          "isRequired": true,
+          "inputType": "date"
+        },
+        {
+          "type": "text",
+          "name": "titular_celular",
+          "title": "2.9 Celular",
+          "isRequired": true,
+          "maxLength": 10
+        },
+        {
+          "type": "text",
+          "name": "titular_whatsapp",
+          "title": "2.10 Whatsapp",
+          "isRequired": true,
+          "maxLength": 10
+        },
+        {
+          "type": "boolean",
+          "name": "tiene_email",
+          "title": "¿Tiene correo electrónico?",
+          "isRequired": true,
+          "labelTrue": "Si"
+        },
+        {
+          "type": "text",
+          "visibleIf": "{tiene_email} = true",
+          "name": "titular_email",
+          "title": "2.12  Correo electrónico",
+          "isRequired": true,
+          "inputType": "email"
+        }
+      ]
+    },
+    {
+      "name": "page5",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "titular_sexo",
+          "title": "2.13 Sexo",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "15",
+              "text": "Femenino"
+            },
+            {
+              "value": "16",
+              "text": "Masculino"
+            }
+          ]
+        },
+        {
+          "type": "boolean",
+          "name": "titular_cabeza_familia",
+          "visibleIf": "{titular_sexo} = 15",
+          "title": "¿Es madre cabeza de familia? ",
+          "isRequired": true,
+          "labelTrue": "Si"
+        },
+        {
+          "type": "dropdown",
+          "name": "tipo_comunidad_etnica",
+          "title": "2.14 ¿Usted se identifica como miembro de una comunidad étnica o de alguna de las poblaciones que se describen a continuación? ",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "17",
+              "text": "Indígena"
+            },
+            {
+              "value": "18",
+              "text": "Comunidad Negra o Afrocolombiano"
+            },
+            {
+              "value": "24",
+              "text": "Raizal"
+            },
+            {
+              "value": "25",
+              "text": "Palenquero"
+            },
+            {
+              "value": "26",
+              "text": "Rrom (Gitano)"
+            },
+            {
+              "value": "27",
+              "text": "Campesino no perteneciente a las anteriores etnias"
+            },
+            {
+              "value": "28",
+              "text": "Ninguno"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "tipo_comunidad_etnica_nombre",
+          "visibleIf": "({tipo_comunidad_etnica} != '27') and ({tipo_comunidad_etnica} != '28')",
+          "title": "¿A qué resguardo indígena o Consejo Comunitario de Comunidades negras pertenece Ud.?",
+          "description": "No dejar en blanco. Si no se dispone del dato, escribir NA *"
+        },
+        {
+          "type": "text",
+          "name": "num_nucleo",
+          "title": "3. ¿Cuántas personas en total, incluido usted, conforman su núcleo familiar? ",
+          "isRequired": true,
+          "inputType": "number"
+        }
+      ]
+    },
+    {
+      "name": "page6",
+      "elements": [
+        {
+          "type": "html",
+          "name": "question36",
+          "html": "<h3>\nCapítulo B: relación predio coca\n</h3>"
+        },
+        {
+          "type": "radiogroup",
+          "name": "predio_coca_tipo_residencia",
+          "title": "4. ¿Cuál es su relación con el Predio donde se encuentra la coca?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "29",
+              "text": "Propietario"
+            },
+            {
+              "value": "30",
+              "text": "Poseedor"
+            },
+            {
+              "value": "31",
+              "text": "Ocupante"
+            },
+            {
+              "value": "32",
+              "text": "Arrendatario"
+            },
+            {
+              "value": "33",
+              "text": "Amediero con contrato"
+            }
+          ]
+        },
+        {
+          "type": "file",
+          "name": "predio_coca_tipo_documento",
+          "title": "4.1 Documento de relación de tenencia con el predio en el formulario.  ",
+          "description": "Foto del documento que valide la relación con el predio"
+        },
+        {
+          "type": "text",
+          "name": "predio_coca_area_total",
+          "title": "5. ¿Cuál es el área total en hectáreas que tiene su predio?  ",
+          "isRequired": true,
+          "validators": [
+            {
+              "type": "regex",
+              "text": "Solo se permiten números positivos de hasta 4 cifras enteras y 4 decimales.",
+              "regex": "^[0-9]{1,4}(\\.[0-9]{1,4})?$"
+            }
+          ],
+          "inputType": "number"
+        },
+        {
+          "type": "text",
+          "name": "predio_coca_area_cultivo",
+          "title": "6. ¿Cuántas hectáreas de cultivos de coca tiene este predio?",
+          "isRequired": true,
+          "validators": [
+            {
+              "type": "regex",
+              "text": "Solo se permiten números positivos de hasta 4 cifras enteras y 4 decimales.",
+              "regex": "^[0-9]{1,4}(\\.[0-9]{1,4})?$"
+            }
+          ],
+          "inputType": "number"
+        },
+        {
+          "type": "boolean",
+          "name": "predio_coca_vive",
+          "title": "7. ¿Usted vive en el mismo predio donde tiene el cultivo de coca?",
+          "isRequired": true,
+          "labelTrue": "Si"
+        },
+        {
+          "type": "html",
+          "name": "question7",
+          "visibleIf": "{predio_coca_vive} = false",
+          "title": "1.4 Su lugar de residencia cambió después del 16 de enero?  ",
+          "html": "<h4>\n Si marcó No, Indique donde tiene el cultivo de coca:\n</h4>"
+        },
+        {
+          "type": "dropdown",
+          "name": "predio_coca_departamento",
+          "visibleIf": "{predio_coca_vive} = false",
+          "title": "7.1. Departamento",
+          "isRequired": true,
+          "choices": props.departamentos.data,
+          "defaultValue": props.departamentos.datadefault
+        },
+        {
+          "type": "dropdown",
+          "name": "predio_coca_municipio",
+          "visibleIf": "{predio_coca_vive} = false",
+          "title": "7.2 Municipio",
+          "isRequired": true,
+          "choices": props.municipios.data,
+          "defaultValue": props.municipios.datadefault,
+        },
+        {
+          "type": "radiogroup",
+          "name": "predio_coca_lugar",
+          "visibleIf": "{predio_coca_vive} = false",
+          "title": "7.3 . LUGAR",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Cabecera municipal"
+            },
+            {
+              "value": "2",
+              "text": "Corregimiento y Centro poblado"
+            },
+            {
+              "value": "4",
+              "text": "Vereda"
+            }
+          ]
+        },
+        {
+          "type": "dropdown",
+          "name": "predio_coca_corregimiento",
+          "visibleIf": "{predio_coca_lugar} = 2 and {predio_coca_vive} = false",
+          "title": "Corregimiento y Centro poblado",
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Sin corregimiento"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "predio_coca_lugar_direccion",
+          "visibleIf": "{predio_coca_lugar} <3 and {predio_coca_vive} = false",
+          "title": "Dirección"
+        },
+        // {
+        //   "type": "dropdown",
+        //   "name": "predio_coca_nucleo_veredal",
+        //   "visibleIf": "{predio_coca_lugar} > 2 and {predio_coca_vive} = false",
+        //   "title": "Nucleo veredal",
+        //   "choices": [
+        //     {
+        //       "value": "Item 1",
+        //       "text": "Sin corregimiento"
+        //     }
+        //   ]
+        // },
+        {
+          "type": "dropdown",
+          "name": "predio_coca_vereda",
+          "visibleIf": "{predio_coca_lugar} = 4 and {predio_coca_vive} = false",
+          "title": "Vereda",
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Sin corregimiento"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "predio_coca_vereda_otra",
+          "visibleIf": "{predio_coca_lugar} > 1 and {predio_coca_vive} = false  and ({predio_coca_vereda} = 9999 or {predio_coca_corregimiento} = 9999)",
+          "title": "Nombre",
+          "description": "Si no aparece en la lista, se digita el nombre del lugar donde vive"
+        }
+      ]
+    },
+    {
+      "name": "page7",
+      "elements": [
+        {
+          "type": "html",
+          "name": "question49",
+          "html": "<h4>\n8. Ingrese los Datos del lote de coca. \n</h4>"
+        },
+        // {
+        //   "type": "text",
+        //   "name": "predio_coca_latitud",
+        //   "title": "Latitud (x.y °)",
+        //   "isRequired": true,
+        //   "validators": [
+        //     {
+        //       "type": "regex",
+        //       "text": "El número debe tener máximo 9 caracteres y hasta 4 decimales.",
+        //       "regex": "^-?\\d{1,5}(\\.\\d{1,4})?$"
+        //     }
+        //   ],
+        //   "inputType": "number"
+        // },
+        {
+          "type": "boolean",
+          "name": "tienecoordenadas",
+          "title": "Tiene las coordenadas GPS del lote de coca?",
+          "isRequired": true,
+          "labelTrue": "Si"
+        },
+        {
+          "type": "coordinates-question",
+          "name": "coordinates",
+          "title": "Ingrese sus coordenadas",
+          "visibleIf": "{tienecoordenadas} = true",
+          "isRequired": true,
+          "polygon": props.polygon
+        },
+        // {
+        //   "type": "text",
+        //   "name": "predio_coca_longitud",
+        //   "title": "Longitud (x.y °) ",
+        //   "isRequired": true,
+        //   "validators": [
+        //     {
+        //       "type": "regex",
+        //       "text": "El número debe tener máximo 9 caracteres y hasta 4 decimales.",
+        //       "regex": "^-?\\d{1,5}(\\.\\d{1,4})?$"
+        //     }
+        //   ],
+        //   "inputType": "number"
+        // },
+        {
+          "type": "text",
+          "name": "predio_coca_altitud",
+          "title": "Altitud (m)",
+          "visibleIf": "{tienecoordenadas} = true",
+          "isRequired": true,
+          "maxLength": 4,
+          "validators": [
+            {
+              "type": "regex",
+              "text": "Solo se permiten números positivos de hasta 4 cifras enteras y 4 decimales.",
+              "regex": "^[0-9]{1,4}(\\.[0-9]{1,4})?$"
+            }
+          ],
+          "inputType": "number"
+        },
+        {
+          "type": "text",
+          "name": "predio_coca_precision",
+          "title": "Precisión (m)",
+          "visibleIf": "{tienecoordenadas} = true",
+          "isRequired": true,
+          "maxLength": 2
+        },
+        {
+          "type": "radiogroup",
+          "name": "predio_coca_ubicacion",
+          "title": "9. ¿En cuál de los siguientes lugares se encuentra el predio en donde ejecutará el proyecto productivo? ",
+          "choices": [
+            {
+              "value": "1",
+              "text": "En el mismo predio donde está la coca"
+            },
+            {
+              "value": "2",
+              "text": "En otro sitio"
+            }
           ]
         },
         {
           "type": "html",
-          "name": "question2",
-          "visibleIf": "{tipo_linea_productiva} = 'Agropecuaria'",
-          "html": "<h4>Actividades económicas agropecuarias</h4>\n"
+          "name": "question55",
+          "visibleIf": "{predio_coca_ubicacion} = '2'",
+          "title": "Cual?",
+          "html": "<h4>\nEn que otro sitio ejecutará el proyecto productivo?\n</h4>"
         },
         {
-          "type": "html",
-          "name": "question3",
-          "visibleIf": "{tipo_linea_productiva} = 'No Agropecuaria'",
-          "html": "<h4>Actividades económicas no agropecuarias</h4>\n"
+          "type": "dropdown",
+          "name": "predio_coca_otro_departamento",
+          "visibleIf": "{predio_coca_ubicacion} = '2'",
+          "title": "9.1. Departamento",
+          "isRequired": true,
+          "choices": props.departamentos.data,
+          "defaultValue": props.departamentos.datadefault
+        },
+        {
+          "type": "dropdown",
+          "name": "predio_coca_otro_municipio",
+          "visibleIf": "{predio_coca_ubicacion} = '2'",
+          "title": "9.2. Municipio",
+          "isRequired": true,
+          "choices": props.municipios.data,
+          "defaultValue": props.municipios.datadefault,
         },
         {
           "type": "radiogroup",
-          "name": "condicion_linea_productiva",
-          "title": "Etapa de la actividad económica",
-          "description": "Seleccione una opción.",
-          "isRequired": true,
+          "name": "predio_coca_otro_lugar",
+          "visibleIf": "{predio_coca_ubicacion} = '2'",
+          "title": "9.3. Lugar",
           "choices": [
-            "Establecimiento",
-            "Fortalecimiento"
+            {
+              "value": "1",
+              "text": "Cabecera municipal"
+            },
+            {
+              "value": "2",
+              "text": "Corregimiento y Centro poblado"
+            },
+            {
+              "value": "4",
+              "text": "Vereda"
+            }
           ]
         },
         {
-          "type": "radiogroup",
-          "name": "actividad_economica",
-          "visibleIf": "{tipo_linea_productiva} = 'No Agropecuaria'",
-          "title": "Actividades económicas que selecciona",
-          "description": "No dejar en blanco.",
-          "isRequired": true,
+          "type": "dropdown",
+          "name": "predio_coca_otro_corregimiento",
+          "visibleIf": "{predio_coca_otro_lugar} = 2",
+          "title": "Corregimiento y Centro poblado",
           "choices": [
-            "Comercio al por menor",
-            "Producción y transformación básica de bienes",
-            "Servicios y otras actividades"
+            {
+              "value": "Item 1",
+              "text": "Sin Corregimiento"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "predio_coca_otro_direccion",
+          "visibleIf": "{predio_coca_otro_lugar} != 4",
+          "title": "Dirección"
+        },
+        // {
+        //   "type": "dropdown",
+        //   "name": "predio_coca_otro_nucleo_veredal",
+        //   "visibleIf": "{predio_coca_otro_lugar} = 4",
+        //   "title": "Nucleo veredal",
+        //   "choices": [
+        //     {
+        //       "value": "Item 1",
+        //       "text": "Sin Corregimiento"
+        //     }
+        //   ]
+        // },
+        {
+          "type": "dropdown",
+          "name": "predio_coca_otro_vereda",
+          "visibleIf": "{predio_coca_otro_lugar} = 4",
+          "title": "Vereda",
+          "choices": [
+            {
+              "value": "Item 1",
+              "text": "Sin Corregimiento"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "predio_coca_otro_vereda_otra",
+          "visibleIf": "{predio_coca_otro_lugar} > 1  and ({predio_coca_otro_vereda} = 9999 or {predio_coca_otro_corregimiento} = 9999)",
+          "title": "Nombre",
+          "description": "Si  no aparece en la lista, se digita el nombre del lugar donde vive"
+        }
+      ]
+    },
+    {
+      "name": "page8",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "establece_fortalece",
+          "isRequired": true,
+          "title": "11. ¿La línea productiva seleccionada es para establecimiento o fortalecimiento del proyecto productivo? ",
+          "choices": [
+            {
+              "value": "44",
+              "text": "Establecimiento"
+            },
+            {
+              "value": "45",
+              "text": "Fortalecimiento"
+            }
           ]
         },
         {
           "type": "radiogroup",
           "name": "linea_productiva",
-          "visibleIf": "{tipo_linea_productiva} = Agropecuaria",
-          "title": "Linea Productiva seleccionada ",
-          "description": "No dejar en blanco.",
+          "title": "10. Seleccione una de las siguientes líneas productivas lícitas. ",
           "isRequired": true,
           "choices": [
-            "Caña",
-            "Cacao",
-            "Cafe",
-            "Yuca",
-            "Maiz",
-            "Aguacate",
-            "Piscicultura",
-            "Otra"
+            {
+              "value": "34",
+              "text": "Caña"
+            },
+            {
+              "value": "35",
+              "text": "Cacao"
+            },
+            {
+              "value": "36",
+              "text": "Café"
+            },
+            {
+              "value": "37",
+              "text": "Yuca"
+            },
+            {
+              "value": "38",
+              "text": "Maíz"
+            },
+            {
+              "value": "40",
+              "text": "Aguacate"
+            },
+            {
+              "value": "41",
+              "text": "Piscicultura"
+            },
+            {
+              "value": "43",
+              "text": "No Agropecuaria (pequeño comercio, bienes o servicios)"
+            },
+            {
+              "value": "101",
+              "text": "Otra",
+              "visibleIf": "{establece_fortalece} = '45'"
+            }
           ]
         },
         {
           "type": "text",
-          "name": "linea_productiva_fortalecimiento_cual",
-          "visibleIf": "{tipo_linea_productiva} = 'Agropecuaria'",
-          "title": "Linea Productiva Otra ",
-          "description": "No dejar en blanco.",
-          "isRequired": true
-        },
-        {
-          "type": "radiogroup",
-          "name": "experiencia_linea_productiva",
-          "title": "¿Tiene experiencia en esta actividad económica?",
-          "isRequired": true,
-          "choices": [
-            "Si",
-            "No"
-          ]
-        },
-        {
-          "type": "text",
-          "name": "experiencia_linea_productiva_anos",
-          "visibleIf": "{experiencia_linea_productiva} = Si",
-          "title": "¿Hace cuántos años?",
-          "description": "No dejar en blanco, utilizar punto (.) para separar decimales",
-          "isRequired": true,
-          "inputType": "number",
-          "max": 99
-        },
-        {
-          "type": "radiogroup",
-          "name": "formacion_linea_productiva_no_agropecuaria",
-          "title": "¿Tiene formación en esta actividad económica?",
-          "description": "No dejar en blanco.",
-          "isRequired": true,
-          "choices": [
-            "Si",
-            "No"
-          ]
-        },
-        {
-          "type": "text",
-          "name": "ha_sembradas",
-          "title": "Hectareas sembradas",
-          "description": ""
-        },
-        {
-          "type": "text",
-          "name": "volumen_produccion",
-          "title": "Volumen de produccion",
-          "description": ""
+          "name": "otra_cual",
+          "visibleIf": "{linea_productiva} = '101' and {establece_fortalece} = '45'",
+          "title": "Cual otra línea"
         },
         {
           "type": "html",
-          "name": "question7",
-          "html": "<h4>Lugar de implementación de la actividad económica</h4>\n"
+          "name": "question1",
+          "html": "<h4>Terminos y condiciones</h4>\n<a target = \"blank\" href=\"https://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/13022025_ConvocatoriaFinal_v13%2027.2.25.pdf\"> Ver términos y condiciones </a>"
         },
         {
-          "type": "text",
-          "name": "departamento_proyecto_productivo_victima",
-          "title": "departamento",
-          "description": ""
-        },
-        {
-          "type": "text",
-          "name": "municipio_proyecto_productivo_victima",
-          "title": "municipio",
-          "description": ""
-        },
-        {
-          "type": "text",
-          "name": "centro_poblado_proyecto_productivo",
-          "title": "Cabecera municipal o centro poblado",
-          "description": "No dejar en blanco.",
-          "isRequired": true
-        },
-        {
-          "type": "text",
-          "name": "descripcion_acceso_proyecto_productivo_victima",
-          "title": "Dirección",
-          "description": "Dirección o breve descripción de acceso",
-          "isRequired": true
+          "type": "radiogroup",
+          "name": "question2",
+          "title": "He leído y acepto los términos y condiciones",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Si"
+            }
+          ]
         },
         {
           "type": "html",
-          "name": "question4",
-          "html": "<h4>Datos Personales del Representante del Núcleo Familiar.</h4>"
-        },
-        {
-          "type": "text",
-          "name": "nombres",
-          "title": "Nombres",
-          "description": "Digite los nombres del representante del núcleo familiar.",
-          "isRequired": true
-        },
-        {
-          "type": "text",
-          "name": "apellidos",
-          "title": "Apellidos",
-          "description": "Digite los apellidos del representante del núcleo familiar.",
-          "isRequired": true
+          "name": "question5",
+          "html": "<h4> Tratamiento de datos personales</h4>\n<a target = \"blank\" href=\"https://centralpdet.renovacionterritorio.gov.co/wp-content/uploads/Documentos/Datos%20personales/2022-09-12_152912_706495414.pdf\"> Ver Tratamiento de Datos Personales </a>"
         },
         {
           "type": "radiogroup",
-          "name": "tipo_documento",
-          "title": "Tipo de documento",
-          "description": "Seleccione una opción.\n\n",
+          "name": "question6",
+          "title": "He leído y acepto el tratamiento de datos personales",
           "isRequired": true,
-          "choices": [
-            "Cedula_de_Ciudadania",
-            "Permiso Especial de Permanencia (PEP)"
-          ]
-        },
-        {
-          "type": "text",
-          "name": "numero_documento",
-          "title": "Número de documento",
-          "description": "Digite el número de documento sin puntos \".\" ni comas \",\"\n",
-          "isRequired": true
-        },
-        {
-          "type": "text",
-          "name": "fecha_nacimiento",
-          "title": "Fecha de nacimiento",
-          "description": "Digite la fecha de nacimiento",
-          "inputType": "date"
-        },
-        {
-          "type": "radiogroup",
-          "name": "sexo",
-          "title": "Sexo",
-          "description": "Seleccione una opción.\n",
-          "choices": [
-            "Masculino",
-            "Femenino"
-          ]
-        },
-        {
-          "type": "radiogroup",
-          "name": "orientacion",
-          "title": "¿Tiene identidad de género y/o orientación sexual diversa (OSIGD)?",
-          "description": "Seleccione una opción.",
-          "choices": [
-            "Si",
-            "No"
-          ]
-        },
-        {
-          "type": "text",
-          "name": "telefono",
-          "title": "Número de teléfono celular"
-        },
-        {
-          "type": "text",
-          "name": "correo",
-          "title": "Correo electrónico",
-          "inputType": "email"
-        },
-        {
-          "type": "text",
-          "name": "tipo_ciudadano",
-          "title": "¿Usted se identifica como miembro de una comunidad étnica o de alguna de las poblaciones que se describen a continuación? (Sujeto de especial protección)"
-        },
-        {
-          "type": "text",
-          "name": "etnico",
-          "title": "La organización a la cual pertenece corresponde a"
-        },
-        {
-          "type": "text",
-          "name": "nombre_comunidad",
-          "title": "¿Cuál es el nombre completo del resguardo, consejo comunitario, zona de reserva campesina o junta de acción comunal a la que pertenece?",
-          "description": "No dejar en blanco. Si no se dispone del dato, escribir NA. Precisar el tipo de organización a la que pertenece (RI, CC, ZRC, JAC, Cabildo, Asociación)",
-          "isRequired": true
-        },
-        {
-          "type": "radiogroup",
-          "name": "lote_etnico",
-          "title": "¿El predio, lote o parcela en donde va implementar su actividad económica está ubicado en un territorio étnico formalmente constituido (titulado) o no formalmente constituido (pretendido)?",
-          "isRequired": true,
-          "choices": [
-            "si",
-            "no",
-            "ns"
-          ]
-        },
-        {
-          "type": "radiogroup",
-          "name": "condicion",
-          "title": "Condición",
-          "description": "Seleccione una opción. Va dirigida a todo el núcleo familiar.\n",
-          "isRequired": true,
-          "choices": [
-            "Victima",
-            "Desplazado",
-            "Ninguno"
-          ]
-        },
-        {
-          "type": "radiogroup",
-          "name": "discapacidad",
-          "title": "Persona con discapacidad",
-          "description": "Seleccione una opción.\n",
-          "isRequired": true,
-          "choices": [
-            "Si",
-            "No"
-          ]
-        },
-        {
-          "type": "radiogroup",
-          "name": "educacion",
-          "title": "Educación",
-          "description": "No dejar en blanco.",
-          "isRequired": true,
-          "choices": [
-            "Primaria",
-            "Bachillerato",
-            "Auxiliar",
-            "Técnico",
-            "Tecnólogo",
-            "Profesional",
-            "Especialista",
-            "Ninguna"
-          ]
-        },
-        {
-          "type": "text",
-          "name": "numero_personas",
-          "title": "¿Cuántas personas componen su núcleo familiar?",
-          "description": "Digite el número de personas sin puntos \".\" ni comas \",\"\n",
-          "isRequired": true,
-          "inputType": "number"
-        },
-        {
-          "type": "text",
-          "name": "numero_documentos_personas_nucleo",
-          "title": "Ingrese el número de documento de las personas que componen su núcleo familiar",
-          "description": "Incluir todos los documentos separados por guion (-).\n"
-        },
-        {
-          "type": "text",
-          "name": "nombres_documentos_personas_nucleo",
-          "title": "Ingrese los nombre y apellidos de las personas que componen su núcleo familiar",
-          "description": "Incluir todos los nombre completos separados por guion (-).\n\n"
-        },
-        {
-          "type": "html",
-          "name": "question10",
-          "html": "<h4>Predios a incribir con cultivo de uso ilícito</h4>\n"
-        },
-        {
-          "type": "text",
-          "name": "numero_total_predios_inscribir",
-          "title": "¿Cuántos predios tiene, posee u ocupa con presencia de cultivos de uso ilícito?",
-          "inputType": "number"
-        },
-        {
-          "type": "radiogroup",
-          "name": "numero_predios_inscribir",
-          "title": "Ubique hasta los 5s de mayor relevancia",
-          "choices": [
-            "1",
-            "2",
-            "3",
-            "4",
-            "5"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "page10",
-      "visibleIf": "{numero_predios_inscribir} = '1' or {numero_predios_inscribir} = '2' or {numero_predios_inscribir} = '3' or {numero_predios_inscribir} = '4' or {numero_predios_inscribir} = '5'",
-      "elements": [
-        {
-          "type": "html",
-          "name": "question14",
-          "html": "<h4>Identificación Predio 1</h4>\n"
-        },
-        {
-          "type": "text",
-          "name": "municipio",
-          "title": "Municipio"
-        },
-        {
-          "type": "text",
-          "name": "vereda",
-          "title": "Vereda"
-        },
-        {
-          "type": "text",
-          "name": "vereda_cual",
-          "visibleIf": "{vereda} = 'Otro'",
-          "title": "Si seleccionó en la respuesta anterior \"Otro\", mencione cual",
-          "description": "No dejar en blanco.\n"
-        },
-        {
-          "type": "text",
-          "name": "descripcion_acceso",
-          "title": "Descripción de acceso al predio o punto de referencia",
-          "description": "Breve descripción de acceso. Tiempo desde la cabecera municipal hasta la finca.\nAcceso en vehículo cuanto tiempo, en animal o a pie cuanto tiempo.\n"
-        },
-        {
-          "type": "text",
-          "name": "predio",
-          "title": "Nombre del predio",
-          "description": "Nombre de la finca que postula\n"
-        },
-        {
-          "type": "text",
-          "name": "area_predio",
-          "title": "Área total del predio en hectáreas",
-          "description": "No dejar en blanco, utilizar punto (.) para separar decimales",
-          "inputType": "number"
-        },
-        {
-          "type": "text",
-          "name": "area_coca",
-          "title": "¿Qué área en hectáreas de hoja de coca tiene en su predio?",
-          "description": "No dejar en blanco, utilizar punto (.) para separar decimales",
-          "inputType": "number"
-        },
-        {
-          "type": "radiogroup",
-          "name": "tenencia",
-          "title": "¿Qué relación de tenencia tiene con el predio?",
-          "choices": [
-            "Propietario",
-            "Poseedor",
-            "Ocupante"
-          ]
-        },
-        {
-          "type": "text",
-          "name": "coordenadas",
-          "title": "coordenadas"
-        }
-      ]
-    },
-    {
-      "name": "page11",
-      "visibleIf": "{numero_predios_inscribir} = '2' or {numero_predios_inscribir} = '3' or {numero_predios_inscribir} = '4' or {numero_predios_inscribir} = '5'",
-      "elements": [
-        {
-          "type": "html",
-          "name": "question9",
-          "html": "<h4>Identificación Predio 2</h4>\n"
-        },
-        {
-          "type": "text",
-          "name": "municipiop2",
-          "title": "Municipio"
-        },
-        {
-          "type": "text",
-          "name": "veredap2",
-          "title": "Vereda"
-        },
-        {
-          "type": "text",
-          "name": "vereda_cualp2",
-          "visibleIf": "{vereda} = 'Otro'",
-          "title": "Si seleccionó en la respuesta anterior \"Otro\", mencione cual",
-          "description": "No dejar en blanco.\n"
-        },
-        {
-          "type": "text",
-          "name": "descripcion_accesop2",
-          "title": "Descripción de acceso al predio o punto de referencia",
-          "description": "Breve descripción de acceso. Tiempo desde la cabecera municipal hasta la finca.\nAcceso en vehículo cuanto tiempo, en animal o a pie cuanto tiempo.\n"
-        },
-        {
-          "type": "text",
-          "name": "prediop2",
-          "title": "Nombre del predio",
-          "description": "Nombre de la finca que postula\n"
-        },
-        {
-          "type": "text",
-          "name": "area_prediop2",
-          "title": "Área total del predio en hectáreas",
-          "description": "No dejar en blanco, utilizar punto (.) para separar decimales",
-          "inputType": "number"
-        },
-        {
-          "type": "text",
-          "name": "area_cocap2",
-          "title": "¿Qué área en hectáreas de hoja de coca tiene en su predio?",
-          "description": "No dejar en blanco, utilizar punto (.) para separar decimales",
-          "inputType": "number"
-        },
-        {
-          "type": "radiogroup",
-          "name": "tenenciap2",
-          "title": "¿Qué relación de tenencia tiene con el predio?",
-          "choices": [
-            "Propietario",
-            "Poseedor",
-            "Ocupante"
-          ]
-        },
-        {
-          "type": "text",
-          "name": "coordenadasp2",
-          "title": "coordenadas"
-        }
-      ]
-    },
-    {
-      "name": "page12",
-      "visibleIf": "{numero_predios_inscribir} = '3' or {numero_predios_inscribir} = '4' or {numero_predios_inscribir} = '5'",
-      "elements": [
-        {
-          "type": "html",
-          "name": "question11",
-          "html": "<h4>Identificación Predio 3</h4>\n"
-        },
-        {
-          "type": "text",
-          "name": "municipiop3",
-          "title": "Municipio"
-        },
-        {
-          "type": "text",
-          "name": "veredap3",
-          "title": "Vereda"
-        },
-        {
-          "type": "text",
-          "name": "vereda_cualp3",
-          "visibleIf": "{vereda} = 'Otro'",
-          "title": "Si seleccionó en la respuesta anterior \"Otro\", mencione cual",
-          "description": "No dejar en blanco.\n"
-        },
-        {
-          "type": "text",
-          "name": "descripcion_accesop3",
-          "title": "Descripción de acceso al predio o punto de referencia",
-          "description": "Breve descripción de acceso. Tiempo desde la cabecera municipal hasta la finca.\nAcceso en vehículo cuanto tiempo, en animal o a pie cuanto tiempo.\n"
-        },
-        {
-          "type": "text",
-          "name": "prediop3",
-          "title": "Nombre del predio",
-          "description": "Nombre de la finca que postula\n"
-        },
-        {
-          "type": "text",
-          "name": "area_prediop3",
-          "title": "Área total del predio en hectáreas",
-          "description": "No dejar en blanco, utilizar punto (.) para separar decimales",
-          "inputType": "number"
-        },
-        {
-          "type": "text",
-          "name": "area_cocap3",
-          "title": "¿Qué área en hectáreas de hoja de coca tiene en su predio?",
-          "description": "No dejar en blanco, utilizar punto (.) para separar decimales",
-          "inputType": "number"
-        },
-        {
-          "type": "radiogroup",
-          "name": "tenenciap3",
-          "title": "¿Qué relación de tenencia tiene con el predio?",
-          "choices": [
-            "Propietario",
-            "Poseedor",
-            "Ocupante"
-          ]
-        },
-        {
-          "type": "text",
-          "name": "coordenadasp3",
-          "title": "coordenadas"
-        }
-      ]
-    },
-    {
-      "name": "page13",
-      "visibleIf": "{numero_predios_inscribir} = '4' or {numero_predios_inscribir} = '5'",
-      "elements": [
-        {
-          "type": "html",
-          "name": "question12",
-          "html": "<h4>Identificación Predio 4</h4>\n"
-        },
-        {
-          "type": "radiogroup",
-          "name": "municipio_predio4",
-          "title": "Municipio",
           "choices": [
             {
               "value": "Item 1",
-              "text": "CONVENCION"
-            },
-            {
-              "value": "Item 2",
-              "text": "EL TARRA"
-            },
-            {
-              "value": "Item 3",
-              "text": "SARDINATA"
-            },
-            {
-              "value": "Item 4",
-              "text": "TIBÚ"
+              "text": "Si"
             }
           ]
-        },
-        {
-          "type": "dropdown",
-          "name": "vereda_predio4",
-          "title": "Vereda",
-          "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
-            {
-              "value": "otro",
-              "text": "Otro"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "name": "vereda_otro_predio4",
-          "visibleIf": "{vereda_predio4} = 'otro'",
-          "title": "Si seleccionó en la respuesta anterior \"Otro\", mencione cual",
-          "description": "No dejar en blanco.\n"
-        },
-        {
-          "type": "text",
-          "name": "acceso_predio4",
-          "title": "Descripción de acceso al predio o punto de referencia",
-          "description": "Breve descripción de acceso. Tiempo desde la cabecera municipal hasta la finca.\nAcceso en vehículo cuanto tiempo, en animal o a pie cuanto tiempo.\n"
-        },
-        {
-          "type": "text",
-          "name": "nombre_predio4",
-          "title": "Nombre del predio",
-          "description": "Nombre de la finca que postula\n"
-        },
-        {
-          "type": "text",
-          "name": "area_total_predio4",
-          "title": "Área total del predio en hectáreas",
-          "description": "No dejar en blanco, utilizar punto (.) para separar decimales",
-          "inputType": "number"
-        },
-        {
-          "type": "text",
-          "name": "area_coca_predio4",
-          "title": "¿Qué área en hectáreas de hoja de coca tiene en su predio?",
-          "description": "No dejar en blanco, utilizar punto (.) para separar decimales",
-          "inputType": "number"
-        },
-        {
-          "type": "radiogroup",
-          "name": "relacion_predio4",
-          "title": "¿Qué relación de tenencia tiene con el predio?",
-          "choices": [
-            {
-              "value": "Item 1",
-              "text": "Propietario"
-            },
-            {
-              "value": "Item 2",
-              "text": "Poseedor"
-            },
-            {
-              "value": "Item 3",
-              "text": "Ocupante"
-            }
-          ]
-        },
-        {
-          "type": "html",
-          "name": "question25",
-          "html": "<strong>Foto del documento que valide la relación de tenencia</strong>\n<p>\nTomar la foto de manera que los datos sean legibles\n</p>\n"
-        },
-        {
-          "type": "text",
-          "name": "longitud_predio4",
-          "minWidth": "150px",
-          "title": "Longitud"
-        },
-        {
-          "type": "text",
-          "name": "latitud_predio4",
-          "minWidth": "150px",
-          "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "altirud_predio4",
-          "minWidth": "150px",
-          "title": "Altitud"
-        },
-        {
-          "type": "text",
-          "name": "precision_predio4",
-          "minWidth": "150px",
-          "title": "Precisión"
-        }
-      ]
-    },
-    {
-      "name": "page14",
-      "visibleIf": "{numero_predios_inscribir} = '5'",
-      "elements": [
-        {
-          "type": "html",
-          "name": "question13",
-          "html": "<h4>Identificación Predio 5</h4>\n"
-        },
-        {
-          "type": "radiogroup",
-          "name": "municipio_predio5",
-          "title": "Municipio",
-          "choices": [
-            {
-              "value": "Item 1",
-              "text": "CONVENCION"
-            },
-            {
-              "value": "Item 2",
-              "text": "EL TARRA"
-            },
-            {
-              "value": "Item 3",
-              "text": "SARDINATA"
-            },
-            {
-              "value": "Item 4",
-              "text": "TIBÚ"
-            }
-          ]
-        },
-        {
-          "type": "dropdown",
-          "name": "vereda_predio5",
-          "title": "Vereda",
-          "choices": [
-            "Item 1",
-            "Item 2",
-            "Item 3",
-            {
-              "value": "otro",
-              "text": "Otro"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "name": "vereda_otro_predio5",
-          "visibleIf": "{vereda_predio5} = 'otro'",
-          "title": "Si seleccionó en la respuesta anterior \"Otro\", mencione cual",
-          "description": "No dejar en blanco.\n"
-        },
-        {
-          "type": "text",
-          "name": "acceso_predio5",
-          "title": "Descripción de acceso al predio o punto de referencia",
-          "description": "Breve descripción de acceso. Tiempo desde la cabecera municipal hasta la finca.\nAcceso en vehículo cuanto tiempo, en animal o a pie cuanto tiempo.\n"
-        },
-        {
-          "type": "text",
-          "name": "nombre_predio5",
-          "title": "Nombre del predio",
-          "description": "Nombre de la finca que postula\n"
-        },
-        {
-          "type": "text",
-          "name": "area_total_predio5",
-          "title": "Área total del predio en hectáreas",
-          "description": "No dejar en blanco, utilizar punto (.) para separar decimales",
-          "inputType": "number"
-        },
-        {
-          "type": "text",
-          "name": "area_coca_predio5",
-          "title": "¿Qué área en hectáreas de hoja de coca tiene en su predio?",
-          "description": "No dejar en blanco, utilizar punto (.) para separar decimales",
-          "inputType": "number"
-        },
-        {
-          "type": "radiogroup",
-          "name": "relacion_predio5",
-          "title": "¿Qué relación de tenencia tiene con el predio?",
-          "choices": [
-            {
-              "value": "Item 1",
-              "text": "Propietario"
-            },
-            {
-              "value": "Item 2",
-              "text": "Poseedor"
-            },
-            {
-              "value": "Item 3",
-              "text": "Ocupante"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "name": "longitud_predio5",
-          "minWidth": "150px",
-          "title": "Longitud"
-        },
-        {
-          "type": "text",
-          "name": "latitud_predio5",
-          "minWidth": "150px",
-          "title": "Latitud"
-        },
-        {
-          "type": "text",
-          "name": "altitud_predio5",
-          "minWidth": "150px",
-          "title": "Altitud"
-        },
-        {
-          "type": "text",
-          "name": "precision_predio5",
-          "minWidth": "150px",
-          "title": "Precisión"
-        }
-      ]
-    },
-    {
-      "name": "page15",
-      "elements": [
-        {
-          "type": "html",
-          "name": "question15",
-          "html": "<h4>Residencia del núcleo familiar</h4>"
-        },
-        {
-          "type": "text",
-          "name": "departamento_residencia",
-          "title": "Departamento"
-        },
-        {
-          "type": "text",
-          "name": "municipio_residencia",
-          "title": "Municipio"
-        },
-        {
-          "type": "text",
-          "name": "vereda_residencia",
-          "title": "Vereda o Cabecera Municipal o Centro Poblado",
-          "description": "No dejar en blanco."
-        },
-        {
-          "type": "text",
-          "name": "descripcion_residencia",
-          "title": "Dirección o descripción de acceso al predio o punto de referencia",
-          "description": "Dirección o breve descripción de acceso. Tiempo desde la cabecera municipal hasta la finca.\nAcceso en vehículo cuanto tiempo, en animal o a pie cuanto tiempo."
-        },
-        {
-          "type": "text",
-          "name": "predio_residencia",
-          "title": "Nombre del predio",
-          "description": "Nombre de la finca de residencia, si no aplica poner NA"
-        },
-        {
-          "type": "radiogroup",
-          "name": "usufructa_predio",
-          "title": "¿Su núcleo familiar usufructúa un predio distinto a donde vive o a los que registró con cultivos de uso ilícito?",
-          "description": "Seleccione una opción.",
-          "choices": [
-            "Si",
-            "No"
-          ]
-        },
-        {
-          "type": "text",
-          "name": "actividad_econo_otro",
-          "title": "Actividad económica otro predio"
         }
       ]
     }
-
   ],
-  "showNavigationButtons": false,
   "pagePrevText": "Página anterior",
   "pageNextText": "Página siguiente",
   "completeText": "Enviar"
-});
-
-
-
-
-const isAdmin = computed(() => {
-  try {
-    return uAuth.getUserData().role == 1;
-  } catch (error) {
-    return false;
-  }
-});
-
-const rules = {
-  first_name: { required, minLength: minLength(2) },
-  last_name: { required, minLength: minLength(2) },
 };
 
-const surveyData = ref<Record<string, any> | null>(null); // Definir correctamente como objeto o null
+const itemsVillages = ref<Array<{ value: number; text: string }>>([]);
+const getVillageList = async (ubicacionId: number, tipo: string) => {
+  try {
+    const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/${tipo}`);
+    itemsVillages.value = response.data.map((dept: any) => ({
+      value: dept.id,
+      text: dept.nombre // Asegurar compatibilidad
+    }));
+  } catch (error) {
+    console.error("Error fetching village list:", error);
+  }
+};
+
+const itemsAsociaciones = ref<Array<{ value: number; text: string }>>([]);
+const getAsociaciones = async () => {
+  try {
+    const response = await axios.get(`/api/2.0/nucleo/asociacion/by-origen/${props.origenasociaciones}`);
+    const results = response?.data?.results || [];
+
+    if (results.length === 0) {
+      itemsAsociaciones.value = [{ value: 99999, text: 'Sin asociación' }];
+    } else {
+      itemsAsociaciones.value = results.map((asocia: any) => ({
+        value: asocia.cub,
+        text: asocia.nombre
+      }));
+    }
+
+    console.log('itemsAsociaciones', itemsAsociaciones.value);
+  } catch (error) {
+    console.error("Error fetching village list:", error);
+    // En caso de error también puedes mostrar "Sin asociación" si lo deseas
+    itemsAsociaciones.value = [{ value: 0, text: 'Sin asociación' }];
+  }
+};
+
+const resizeBase64Img = (base64:string, callback:any) => {
+  const img = new Image();
+  img.src = base64;
+  img.onload = () => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    // Reducción al 50%
+    canvas.width = img.width / 3;
+    canvas.height = img.height / 3;
+
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // Convertir a Base64 nuevamente
+    const resizedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+    callback(resizedBase64);
+  };
+};
+
+const survey = new Model(json);
+survey.data = {}; // Empieza vacío
 
 const getSurveyData = async () => {
   try {
-    modelValue.value=false
-    const response = await axios.get(`/api/1.0/core/catatumboindividual/${surveyId}/`);
-
-    getRegistraduriaData(response.data)
-    modelValue.value=true
+    const responsePersona = await axios.get(`api/2.0/nucleo/persona/${userSurveyId}/`);
+    const responseFormpersona = await axios.get(`api/2.0/nucleo/formpersona/7030/`);
+    const responseAdjunto1 = await axios.get(`api/2.0/nucleo/personaadjunto/129/`);
+    const responseAdjunto2 = await axios.get(`api/2.0/nucleo/personaadjunto/130/`);
+    const responsePredio = await axios.get(`api/2.0/nucleo/predio/38/`);
+    const responseLinea = await axios.get(`api/2.0/nucleo/personalinea/17/`);
+    await fillOutForm(responsePersona, responseFormpersona, responseAdjunto1, responseAdjunto2, responsePredio, responseLinea);
+    isSurveyReady.value = true;
   } catch (error) {
-    console.error("Error fetching validation items:", error);
+    console.error("Error cargando survey:", error);
+    isSurveyReady.value = false;
+  } finally {
+    modelValue.value = true;
   }
 };
 
-const getRegistraduriaData = async (userData: {
-  identificacion: any;
-  reg_agno_resolucion: any;
-  reg_edad: any;
-  reg_departamento_exp: any;
-  reg_estado_cedula: any;
-  reg_fecha_expedicion: any;
-  reg_fecha_nacimiento: any;
-  reg_genero: any;
-  reg_municipio_exp: any;
-  reg_numero_cedula: any;
-  reg_num_resolucion: any;
-  reg_primer_apellido: any;
-  reg_primer_nombre: any;
-  reg_segundo_apellido: any;
-  reg_segundo_nombre: any;
-}) => {
+const fillOutForm = async (responsePersona: any, responseFormpersona: any, responseAdjunto1: any, responseAdjunto2: any, responsePredio: any, responseLinea: any) => {
   try {
-    const response = await axios.get(`/api/1.0/core/cedulasrnec/getbyidentification/${userData.identificacion}/`);
+    survey.stopTimer();
 
-    // Si la respuesta es válida, asignamos los valores
-    userData.reg_agno_resolucion = response.data.agno_resolucion || '';
-    userData.reg_departamento_exp = response.data.departamento_expedicion || '';
-    userData.reg_estado_cedula = response.data.estado_cedula || '';
-    userData.reg_fecha_expedicion = response.data.fecha_expedicion || '';
-    userData.reg_fecha_nacimiento = response.data.fecha_nacimiento || '';
-    userData.reg_genero = response.data.genero || '';
-    userData.reg_municipio_exp = response.data.municipio_expedicion || '';
-    userData.reg_numero_cedula = response.data.numero_cedula || '';
-    userData.reg_num_resolucion = response.data.numero_resolucion || '';
-    userData.reg_primer_apellido = response.data.primer_apellido || '';
-    userData.reg_primer_nombre = response.data.primer_nombre || '';
-    userData.reg_segundo_apellido = response.data.segundo_apellido || '';
-    userData.reg_segundo_nombre = response.data.segundo_nombre || '';
+    survey.data = {
+      // === PAGE 1 ===
+      pertenecegrupo: responsePersona.data.vinculado_asociacion || false,
+      asociaciones: responsePersona.data.cub_asociacion || 99999, // 99999 = Sin asociación
+      tiene_coca: responseFormpersona.data.tiene_coca ?? null,
+      tipo_exclusion: responseFormpersona.data.tipo_exclusion_id ?? null,
 
-    userData.reg_edad = response.data.fecha_nacimiento ? calcularEdad(response.data.fecha_nacimiento) : '';
+      // === PAGE 2 ===
+      desplazado_2025: responsePersona.data.desplazado_2025 || false,
 
+      // === PAGE 4 ===
+      titular_nombres: responsePersona.data.nombre,
+      titular_apellidos: responsePersona.data.apellido,
+      titular_tipo_identificacion: responsePersona.data.tipo_identificacion_id,
+      titular_numero_documento: responsePersona.data.numero_documento,
+      titular_fecha_nacimiento: responsePersona.data.fecha_nacimiento,
+      titular_fecha_expedicion: responsePersona.data.fecha_expedicion,
+      titular_celular: responsePersona.data.telefono_celular,
+      titular_whatsapp: responsePersona.data.whatsapp?.trim(),
+      tiene_email: responsePersona.data.email && responsePersona.data.email !== "NA",
+      titular_email: responsePersona.data.email && responsePersona.data.email !== "NA" ? responsePersona.data.email : "",
+
+      // === PAGE 5 ===
+      titular_sexo: responsePersona.data.sexo_id,
+      titular_cabeza_familia: responsePersona.data.cabeza_flia || false,
+      tipo_comunidad_etnica: responsePersona.data.tipo_comunidad_etnica_id ?? "",
+      tipo_comunidad_etnica_nombre: responsePersona.data.nombre_comunidad ?? "NA",
+      num_nucleo: responsePersona.data.num_nucleo ?? "",
+
+      // === PAGE 6 ===
+      predio_coca_tipo_residencia: responsePredio.data.tipo_relacion_predio_id ?? null,
+      predio_coca_area_total: responsePredio.data.area_total_hectareas ?? "",
+      predio_coca_area_cultivo: responsePredio.data.area_cultivo_hectareas ?? "",
+      predio_coca_vive: responsePredio.data.residencia || false,
+
+      // === PAGE 7 ===
+      tienecoordenadas: !!responsePredio.data.coordenada_registro, // si hay coordenada, asumimos que sí
+      // coordinates: (AQUÍ se arma especial si quieres cargar coordenadas)
+
+      predio_coca_altitud: responsePredio.data.altitud ?? "",
+      predio_coca_precision: responsePredio.data.presion ?? "",
+
+      // === PAGE 8 ===
+      establece_fortalece: responseLinea.data.tipo_experiencia_id ?? null,
+      linea_productiva: responseLinea.data.linea_productiva_id ?? null,
+      otra_cual: responseLinea.data.otra_cual ?? "",
+
+      // === Aceptaciones
+      question2: responseFormpersona.data.acepta_terminos ? "1" : "",
+      question6: responseFormpersona.data.acepta_tratamiento_datos ? "Item 1" : "",
+    };
+
+    survey.startTimer();
   } catch (error) {
-    console.error('Error en la solicitud:', error);
-
-    // Llenar con valores vacíos si ocurre un error
-    userData.reg_agno_resolucion = '';
-    userData.reg_departamento_exp = '';
-    userData.reg_estado_cedula = '';
-    userData.reg_fecha_expedicion = '';
-    userData.reg_fecha_nacimiento = '';
-    userData.reg_genero = '';
-    userData.reg_municipio_exp = '';
-    userData.reg_numero_cedula = '';
-    userData.reg_num_resolucion = '';
-    userData.reg_primer_apellido = '';
-    userData.reg_primer_nombre = '';
-    userData.reg_segundo_apellido = '';
-    userData.reg_segundo_nombre = '';
-    userData.reg_edad = '';
+    console.error('Error en fillOutForm', error);
+    throw error;
   }
-
-  // Asignar los datos correctamente
-  surveyData.value = userData;
-  console.log('surveyData.value', surveyData.value);
 };
 
+survey.onCompleting.add((sender, options) => {
+  options.allowComplete = false;
 
-const calcularEdad = (fechaNacimiento: string): string => {
-  // Convertir "26/04/2018" a un formato compatible (YYYY-MM-DD)
-  const [dia, mes, año] = fechaNacimiento.split("/").map(Number);
-  const fechaNac = new Date(año, mes - 1, dia);
-  const fechaActual = new Date();
+  const personaData = {
+    tipo_identificacion_id: parseInt(sender.data.titular_tipo_identificacion),
+    cub_asociacion: sender.data.asociaciones === 99999 ? null : sender.data.asociaciones,
+    cub: 0,
+    numero_documento: String(sender.data.titular_numero_documento),
+    nombre: sender.data.titular_nombres,
+    apellido: sender.data.titular_apellidos,
+    fecha_expedicion: sender.data.titular_fecha_expedicion,
+    fecha_nacimiento: sender.data.titular_fecha_nacimiento,
+    sexo_id: parseInt(sender.data.titular_sexo),
+    email: sender.data.tiene_email ? sender.data.titular_email : 'NA',
+    telefono_celular: sender.data.titular_celular,
+    whatsapp: sender.data.titular_whatsapp,
+    tipo_comunidad_etnica_id: parseInt(sender.data.tipo_comunidad_etnica),
+    nombre_comunidad: sender.data.tipo_comunidad_etnica_nombre,
+    pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0,
+    desplazado_2025: sender.data.desplazado_2025? 1 : 0,
+    cabeza_flia: sender.data.titular_cabeza_familia? 1 : 0,
+    num_nucleo: sender.data.num_nucleo,
+    ha_total_predios: sender.data.predio_coca_area_total,
+    ha_total_loteCoca: sender.data.predio_coca_area_cultivo,
+    menor_edad: sender.data.Menor_Edad,
+    beneficiario: 0,
+    vinculado_asociacion:0,
+    estado_id: 111,
+    fase:props.fasename,
+    discapacidad:0,
+    fecha_estado: new Date().toISOString() ,
+    origen: props.origen,
+    num_predios: 0
+  };
 
-  let edadAnios = fechaActual.getFullYear() - fechaNac.getFullYear();
-  let edadMeses = fechaActual.getMonth() - fechaNac.getMonth();
-  let edadDias = fechaActual.getDate() - fechaNac.getDate();
+  const formularioPersonaData = {
+    formulario_id: props.formid,
+    tiene_coca: sender.data.tiene_coca?1:0,
+    persona_id: 0,
+    acepta_terminos: 1,
+    acepta_tratamiento_datos: 1,
+    compromiso_proceso_susticion:1,
+    fcrea: new Date().toISOString(),
+    fecha_aceptacion: new Date().toISOString(),
+    beca_desea: 0,
+    vivienda:0,
+    beca_num: 0
+  };
 
-  // Ajustar si el mes es negativo
-  if (edadMeses < 0) {
-    edadAnios--;
-    edadMeses += 12;
+  const personaAdjuntoData1 = {
+    persona_id: 0,
+    tipo_documento_id: 13,
+    ruta: "",
+    origen: 'preregistro_catatumbo',
+    fcrea: new Date().toISOString(),
+  };
+
+  if (Array.isArray(sender.data.titular_foto_cara) && sender.data.titular_foto_cara.length > 0) {
+    resizeBase64Img(sender.data.titular_foto_cara[0].content, (resizedImage:any) => {
+      personaAdjuntoData1.ruta = resizedImage;
+      console.log('transformado')
+    });
   }
 
-  // Ajustar si los días son negativos
-  if (edadDias < 0) {
-    edadMeses--;
-    const ultimoDiaMesAnterior = new Date(
-        fechaActual.getFullYear(),
-        fechaActual.getMonth(),
-        0
-    ).getDate();
-    edadDias += ultimoDiaMesAnterior;
+  const personaAdjuntoData2 = {
+    persona_id: 0,
+    tipo_documento_id: 14,
+    ruta: "",
+    origen: 'preregistro_catatumbo',
+    fcrea: new Date().toISOString(),
   }
 
-  return `${edadAnios} años, ${edadMeses} meses y ${edadDias} días`;
-};
+  if (Array.isArray(sender.data.titular_foto_contracara) && sender.data.titular_foto_contracara.length > 0) {
+    resizeBase64Img(sender.data.titular_foto_contracara[0].content, (resizedImage:any) => {
+      personaAdjuntoData2.ruta = resizedImage;
+      console.log('transformado')
+    });
+  }
 
+  let longitud = 0;
+  let latitud = 0;
 
+  if (sender.data?.coordinates) {
+    const coords = sender.data.coordinates.split('|').map(parseFloat);
+    if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+      [longitud, latitud] = coords;
+    }
+  }
 
-// const response = await axios.get(`/api/1.0/core/municipalities/by-department/${departmentId}/`);
-onMounted(async () => {
-  getSurveyData()
+  const altitud = sender.data?.predio_coca_altitud ?? 0;
+  const presicion = sender.data?.predio_coca_precision ?? 0;
+
+  const predioLoteViveData = {
+    persona_id: 0,
+    ubicacion_id: (sender.data.vive_corregimiento != null && sender.data.vive_corregimiento != 9999) ? sender.data.vive_corregimiento : (sender.data.vive_vereda != null && sender.data.vive_vereda != 9999) ?sender.data.vive_vereda : sender.data.vive_municipio,
+    cabecera: sender.data.vive_lugar === "1" ? 1 : 0,
+    centro_poblado: sender.data.viveLugar === "2" ? 1 : 0,
+    corregimiento: sender.data.viveLugar === "3" ? 1 : 0,
+    vereda: sender.data.viveLugar === "4" ? 1 : 0,
+    direccion: sender.data.vive_direccion != null ? sender.data.vive_direccion : 'Sin dirección',
+    nombre_lugar: sender.data.vive_vereda_otra != null ? sender.data.vive_vereda_otra : 'Sin nombre',
+    residencia: 1,
+    lotecoca:sender.data.predio_coca_vive? 1 : 0,
+    area_total_hectareas: sender.data.predio_coca_area_total,
+    area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
+    proyecto_productivo: 0,
+    tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
+    documento_relacion_predio: "",
+    origen: 'preregistro_catatumbo',
+    sig: 0,
+    coordenada_registro: `${latitud} ${longitud}`,
+    altitud: altitud,
+    presion: presicion,
+    tiempo_propietario_predio:0
+  };
+
+  if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
+    resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
+      predioLoteViveData.documento_relacion_predio = resizedImage;
+    });
+  }
+
+  const coordenadaLoteCocaData = {
+    predio_id: 0,
+    coordenadastr: `${latitud} ${longitud}`,
+    altitud,
+    presicion,
+    origen: 'preregistro_catatumbo',
+    fcrea: new Date().toISOString()
+  };
+
+  const predioLoteDesplazadoData = {
+    persona_id: 0,
+    ubicacion_id: (sender.data.desplazado_corregimiento != null && sender.data.desplazado_corregimiento != 9999) ? sender.data.desplazado_corregimiento : (sender.data.desplazado_vereda != null && sender.data.desplazado_vereda != 9999) ?sender.data.desplazado_vereda : sender.data.desplazado_municipio,
+    cabecera: sender.data.deplazado_lugar === "1" ? 1 : 0,
+    centro_poblado: sender.data.deplazado_lugar === "2" ? 1 : 0,
+    corregimiento: sender.data.deplazado_lugar === "3" ? 1 : 0,
+    vereda: sender.data.deplazado_lugar === "4" ? 1 : 0,
+    direccion: sender.data.desplazado_lugar_direccion != null ? sender.data.desplazado_lugar_direccion : 'Sin dirección',
+    nombre_lugar: sender.data.desplazado_otra_vereda != null ? sender.data.desplazado_otra_vereda : 'Sin nombre',
+    residencia: 0,
+    lotecoca:0,
+    area_total_hectareas: 0,
+    area_cultivo_hectareas: 0,
+    proyecto_productivo: 0,
+    documento_relacion_predio: "",
+    origen: 'preregistro_catatumbo',
+    sig: 0,
+    coordenada_registro: `${latitud} ${longitud}`,
+    altitud: altitud,
+    presion: presicion,
+    tiempo_propietario_predio:0
+  };
+
+  const predioLoteCocaData = {
+    persona_id: 0,
+    ubicacion_id: (sender.data.predio_coca_corregimiento != null && sender.data.predio_coca_corregimiento != 9999) ? sender.data.predio_coca_corregimiento : (sender.data.predio_coca_vereda != null && sender.data.predio_coca_vereda != 9999) ?sender.data.predio_coca_vereda : sender.data.predio_coca_municipio,
+    cabecera: sender.data.predio_coca_lugar === "1" ? 1 : 0,
+    centro_poblado: sender.data.predio_coca_lugar === "2" ? 1 : 0,
+    corregimiento: sender.data.predio_coca_lugar === "3" ? 1 : 0,
+    direccion: sender.data.predio_coca_lugar_direccion != null ? sender.data.predio_coca_lugar_direccion : 'Sin dirección',
+    nombre_lugar: sender.data.predio_coca_vereda_otra != null ? sender.data.predio_coca_vereda_otra : 'Sin nombre',
+    residencia: 0,
+    lotecoca:1,
+    area_total_hectareas: sender.data.predio_coca_area_total,
+    area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
+    proyecto_productivo: 0,
+    tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
+    documento_relacion_predio: "",
+    origen: 'preregistro_catatumbo',
+    sig: 0,
+    coordenada_registro: `${latitud} ${longitud}`,
+    altitud: altitud,
+    presion: presicion,
+    tiempo_propietario_predio:0
+  };
+
+  if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
+    resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
+      predioLoteCocaData.documento_relacion_predio = resizedImage;
+      console.log('transformado')
+    });
+  }
+
+  const predioLoteCocaOtroData = {
+    persona_id: 0,
+    ubicacion_id: (sender.data.predio_coca_otro_corregimiento != null && sender.data.predio_coca_otro_corregimiento != 9999) ? sender.data.predio_coca_otro_corregimiento : (sender.data.predio_coca_vereda != null && sender.data.predio_coca_vereda != 9999) ?sender.data.predio_coca_vereda : sender.data.predio_coca_otro_municipio,
+    cabecera: sender.data.predio_coca_otro_lugar === "1" ? 1 : 0,
+    centro_poblado: sender.data.predio_coca_otro_lugar === "2" ? 1 : 0,
+    corregimiento: sender.data.predio_coca_otro_lugar === "3" ? 1 : 0,
+    vereda: sender.data.predio_coca_otro_lugar === "4" ? 1 : 0,
+    direccion: sender.data.predio_coca_otro_direccion != null ? sender.data.predio_coca_otro_direccion : 'Sin dirección',
+    nombre_lugar: sender.data.predio_coca_otro_vereda_otra != null ? sender.data.predio_coca_otro_vereda_otra : 'Sin nombre',
+    residencia: 0,
+    lotecoca:1,
+    area_total_hectareas: sender.data.predio_coca_area_total,
+    area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
+    proyecto_productivo: 0,
+    tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
+    documento_relacion_predio: "",
+    origen: 'preregistro_catatumbo',
+    sig: 0,
+    coordenada_registro: `${latitud} ${longitud}`,
+    altitud: altitud,
+    presion: presicion,
+    tiempo_propietario_predio:0
+  };
+
+  if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
+    resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
+      predioLoteCocaOtroData.documento_relacion_predio = resizedImage;
+    });
+  }
+
+  const personaLineaProductivaData = {
+    persona_id: sender.data.Persona_Id,
+    linea_productiva_id: sender.data.linea_productiva,
+    tipo_experiencia_id: sender.data.establece_fortalece,
+    otra_cual: sender.data.otra_cual,
+    experiencia_linea_productiva: 0,
+    tiempo_experiencia_linea: 0,
+    vinculado_asociacion: 0,
+    activa: 1,
+    fcrea: new Date().toISOString(),
+    origen: 'preregistro_catatumbo',
+    fmodifica: new Date().toISOString()
+  };
+
+  uCrud.create(personaData)
+      .then((item:any) => {
+        formularioPersonaData.persona_id = item.id
+        uCrud2.create(formularioPersonaData).then((item2:any) => {})
+        personaAdjuntoData1.persona_id = item.id
+        uCrud3.create(personaAdjuntoData1).then((item3:any) => {})
+        personaAdjuntoData2.persona_id = item.id
+        uCrud3.create(personaAdjuntoData2).then((item4:any) => {})
+
+        predioLoteViveData.persona_id = item.id
+        uCrud4.create(predioLoteViveData).then((item6:any) => {
+          console.log('item6')
+          console.log(item6)
+          coordenadaLoteCocaData.predio_id = item6.id
+          console.log('coordenadaLoteCocaData')
+          console.log(coordenadaLoteCocaData)
+          // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+        })
+        if (sender.data.desplazado_2025) {
+          predioLoteDesplazadoData.persona_id = item.id
+          uCrud4.create(predioLoteDesplazadoData).then((item61:any) => {
+            console.log('item61')
+            console.log(item61)
+            coordenadaLoteCocaData.predio_id = item61.id
+            // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+          })
+        }
+
+        predioLoteCocaData.persona_id = item.id
+        uCrud4.create(predioLoteCocaData).then((item62:any) => {
+          console.log('item62')
+          console.log(item62)
+          coordenadaLoteCocaData.predio_id = item62.id
+          // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+        })
+
+        if (sender.data.predio_coca_ubicacion==='2') {
+          predioLoteCocaOtroData.persona_id = item.id
+          uCrud4.create(predioLoteCocaOtroData).then((item7:any) => {
+            console.log('item7')
+            console.log(item7)
+            coordenadaLoteCocaData.predio_id = item7.id
+            // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
+          })
+        }
+        personaLineaProductivaData.persona_id = item.id
+        uCrud5.create(personaLineaProductivaData).then((item5:any) => {})
+
+        uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
+        sender.clear(true);
+        survey.showNavigationButtons = false;
+      })
+      .catch((error) => {
+        uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
+      });
+
+  return false;
 });
 
+/*survey.onValueChanged.add(async (sender, options) => {
+
+  const asociacionesQuestion = survey.getQuestionByName("asociaciones");
+  const perteneceQuestion = survey.getQuestionByName("pertenecegrupo");
+  const prediococaOtroDepQuestion = survey.getQuestionByName("predio_coca_otro_departamento");
+
+  if (perteneceQuestion) {
+    asociacionesQuestion.choices = itemsAsociaciones.value;
+
+    const villages = await getVillageList(1, 'NA');
+
+    if (Array.isArray(villages)) {
+      itemsVillages.value = [...villages];
+    }
+
+    if (prediococaOtroDepQuestion) {
+      prediococaOtroDepQuestion.choices = itemsVillages.value;
+    }
+    // await getVillageList(1, 'NA');
+  }
+
+  if (options.name === "titular_numero_documento") {
+    if (options.value === null || options.value === "")
+      return;
+    axios.get(`/api/2.0/nucleo/forms/catatumbo/validar_documento/?documento=${options.value}`)
+        .then((resp: any) => {
+          console.log("Primera respuesta:", resp);
+
+          // Si data es `true`, el documento ya está registrado
+          if (resp.data === true) {
+            survey.setValue(options.name, "");
+            uToast.toastError("Número de cédula ya registrado en la convocatoria");
+          } else {
+            // Segunda verificación
+            axios.get(`/forms/catatumbo/ficha/validar_documento/?documento=${options.value}`)
+                .then((resp: any) => {
+                  console.log("Segunda respuesta:", resp);
+
+                  // Asegúrate que resp.data sea un objeto antes de revisar `status`
+                  if (resp.data && resp.data.status === 5) {
+                    survey.setValue(options.name, "");
+                    uToast.toastError("El usuario ha sido titular en el proyecto PNIS");
+                  }
+                })
+                .catch((error) => {
+                  console.error("Error en segunda validación:", error);
+                });
+          }
+        })
+        .catch((error) => {
+          console.error("Error en primera validación:", error);
+        });
+
+    // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
+  }
+
+  if (options.name === "tiene_coca" || options.name === "tipo_exclusion") {
+    const tipoexclusion = sender.getValue("tipo_exclusion");
+    const tienecoca = sender.getValue("tiene_coca");
+
+    if (options.name === "tipo_exclusion" && !tienecoca) {
+      uToast.toastError('En este momento usted no puede continuar con el preregistro al programa RenHacemos Catatumbo, de acuerdo con los criterios de la resolución 0071 de 2025');
+    }
+
+    if (options.name === "tipo_exclusion" && tipoexclusion !== '11') {
+      uToast.toastError('En este momento usted no puede continuar con el preregistro al programa RenHacemos Catatumbo, de acuerdo con los criterios de la resolución 0071 de 2025');
+    }
+
+    if (tienecoca && tipoexclusion === '11') {
+      survey.showNavigationButtons = true;
+    } else {
+      survey.showNavigationButtons = false;
+    }
+  }
+
+  if (options.name === "coordinates") {
+    console.log('options.value')
+    console.log(options.value)
+  }
+
+  // if (options.name === "latitud") {
+  //   if (options.value === null || options.value === "")
+  //     return;
+  //   if (options.value < 6.839111 || options.value > 9.316977) {
+  //     survey.setValue(options.name, "");
+  //     uToast.toastError("La latitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");
+  //   }
+  // }
+
+  // if (options.name === "longitud") {
+  //   if (options.value === null || options.value === "")
+  //     return;
+  //   if (options.value < -73.644220 || options.value > -72.025764) {
+  //     survey.setValue(options.name, "");
+  //     uToast.toastError("La Longitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");
+  //   }
+  // }
+
+  const vivecorregimientoQuestion = survey.getQuestionByName("vive_corregimiento");
+  const vivemunicipioQuestion = survey.getQuestionByName("vive_municipio");
+  const nucleoveredalQuestion = survey.getQuestionByName("vive_nucleo_veredal")
+  const viveveredaQuestion = survey.getQuestionByName("vive_vereda");
+  const desplazadoMunicipioQuestion = survey.getQuestionByName("desplazado_municipio");
+  const desplazadoCorregimientoQuestion = survey.getQuestionByName("desplazado_corregimiento");
+  const desplazadonucleoveredalQuestion = survey.getQuestionByName("desplazado_nucleo_veredal")
+  const desplazadoveredaQuestion = survey.getQuestionByName("desplazado_vereda");
+
+  const prediococaMunicipioQuestion = survey.getQuestionByName("predio_coca_municipio");
+  const prediococaCorregimientoQuestion = survey.getQuestionByName("predio_coca_corregimiento");
+  const prediococanucleoveredalQuestion = survey.getQuestionByName("predio_coca_nucleo_veredal")
+  const prediococaveredaQuestion = survey.getQuestionByName("predio_coca_vereda");
+  const prediococaotroveredaQuestion = survey.getQuestionByName("predio_coca_otro_vereda_otra");
+
+  const prediococaotraMunicipioQuestion = survey.getQuestionByName("predio_coca_otro_municipio");
+  const prediococaotraCorregimientoQuestion = survey.getQuestionByName("predio_coca_otro_corregimiento");
+  const prediococaotranucleoveredalQuestion = survey.getQuestionByName("predio_coca_otro_nucleo_veredal")
+  const prediococaotraveredaQuestion = survey.getQuestionByName("predio_coca_otro_vereda");
+
+  if (options.name === "vive_departamento") {
+    const municipio_id = options.value;
+    const loading = uLoading.show({});
+    const villages = await getVillageList(municipio_id, 'NA');
+
+    if (Array.isArray(villages)) {
+      itemsVillages.value = [...villages];
+    }
+
+    if (vivemunicipioQuestion) {
+      vivemunicipioQuestion.choices = itemsVillages.value;
+    }
+
+    loading.hide();
+
+  }
+
+  if (options.name === "desplazadoss_departamento") {
+    const municipio_id = options.value;
+    const loading = uLoading.show({});
+    const villages = await getVillageList(municipio_id, 'NA');
+
+    if (Array.isArray(villages)) {
+      itemsVillages.value = [...villages];
+    }
+
+    if (desplazadoMunicipioQuestion) {
+      desplazadoMunicipioQuestion.choices = itemsVillages.value;
+    }
+
+    loading.hide();
+
+  }
+
+  if (options.name === "predio_coca_departamento") {
+    const municipio_id = options.value;
+    const loading = uLoading.show({});
+    const villages = await getVillageList(municipio_id, 'NA');
+
+    if (Array.isArray(villages)) {
+      itemsVillages.value = [...villages];
+    }
+
+    if (prediococaMunicipioQuestion) {
+      prediococaMunicipioQuestion.choices = itemsVillages.value;
+    }
+
+    loading.hide();
+
+  }
+
+  if (options.name === "predio_coca_otro_departamento") {
+    const municipio_id = options.value;
+    const loading = uLoading.show({});
+    const villages = await getVillageList(municipio_id, 'NA');
+
+    if (Array.isArray(villages)) {
+      itemsVillages.value = [...villages];
+    }
+
+    if (prediococaotraMunicipioQuestion) {
+      prediococaotraMunicipioQuestion.choices = itemsVillages.value;
+    }
+
+    loading.hide();
+
+  }
+
+  if (options.name === "predio_coca_municipio") {
+    const municipio_id = options.value;
+    const loading = uLoading.show({});
+    const villages = await getVillageList(municipio_id, 'NA');
+
+    if (Array.isArray(villages)) {
+      itemsVillages.value = [...villages];
+    }
+
+    itemsVillages.value.push({
+      value: 9999,
+      text: 'Corregimiento no encontrado'
+    });
+
+    if (prediococaCorregimientoQuestion) {
+      prediococaCorregimientoQuestion.choices = itemsVillages.value;
+    }
+
+    loading.hide();
+  }
+
+  if (options.name === "vive_municipio") {
+    const municipio_id = options.value;
+    const loading = uLoading.show({});
+    const villages = await getVillageList(municipio_id, 'CO,CP');
+
+    if (Array.isArray(villages)) {
+      itemsVillages.value = [...villages];
+    }
+
+    itemsVillages.value.push({
+      value: 9999,
+      text: 'Corregimiento no encontrado'
+    });
+
+    if (vivecorregimientoQuestion) {
+      vivecorregimientoQuestion.choices = itemsVillages.value;
+    }
+
+    const villages2 = await getVillageList(municipio_id, 'VE');
+
+    if (Array.isArray(villages2)) {
+      itemsVillages.value = [...villages2];
+    }
+    console.log('itemsVillages.value')
+    console.log(itemsVillages.value)
+
+    itemsVillages.value.push({
+      value: 9999,
+      text: 'Vereda no encontrada'
+    });
+
+    if (viveveredaQuestion) {
+      viveveredaQuestion.choices = itemsVillages.value;
+    }
+
+    loading.hide();
+  }
+
+  if (options.name === "desplazado_municipio") {
+    const municipio_id = options.value;
+    const loading = uLoading.show({});
+    const villages = await getVillageList(municipio_id, 'CO,CP');
+
+    if (Array.isArray(villages)) {
+      itemsVillages.value = [...villages];
+    }
+
+    itemsVillages.value.push({
+      value: 9999,
+      text: 'Corregimiento no encontrado'
+    });
+
+    if (desplazadoCorregimientoQuestion) {
+      desplazadoCorregimientoQuestion.choices = itemsVillages.value;
+    }
+
+    const villages2 = await getVillageList(municipio_id, 'VE');
+
+    if (Array.isArray(villages2)) {
+      itemsVillages.value = [...villages2];
+    }
+
+    itemsVillages.value.push({
+      value: 9999,
+      text: 'Vereda no encontrada'
+    });
+
+    if (desplazadoveredaQuestion) {
+      desplazadoveredaQuestion.choices = itemsVillages.value;
+    }
+
+    loading.hide();
+  }
+
+  if (options.name === "predio_coca_municipio") {
+    const municipio_id = options.value;
+    const loading = uLoading.show({});
+    const villages = await getVillageList(municipio_id, 'CO,CP');
+
+    if (Array.isArray(villages)) {
+      itemsVillages.value = [...villages];
+    }
+
+    itemsVillages.value.push({
+      value: 9999,
+      text: 'Corregimiento no encontrado'
+    });
+
+    if (prediococaCorregimientoQuestion) {
+      prediococaCorregimientoQuestion.choices = itemsVillages.value;
+    }
+
+    const villages2 = await getVillageList(municipio_id, 'VE');
+
+    if (Array.isArray(villages2)) {
+      itemsVillages.value = [...villages2];
+    }
+
+    itemsVillages.value.push({
+      value: 9999,
+      text: 'Vereda no encontrada'
+    });
+
+    if (prediococaveredaQuestion) {
+      prediococaveredaQuestion.choices = itemsVillages.value;
+    }
+
+    loading.hide();
+  }
+
+  if (options.name === "predio_coca_otro_municipio") {
+    const municipio_id = options.value;
+    const loading = uLoading.show({});
+    const villages = await getVillageList(municipio_id, 'CO,CP');
+
+    if (Array.isArray(villages)) {
+      itemsVillages.value = [...villages];
+    }
+
+    itemsVillages.value.push({
+      value: 9999,
+      text: 'Corregimiento no encontrado'
+    });
+
+    if (prediococaotraCorregimientoQuestion) {
+      prediococaotraCorregimientoQuestion.choices = itemsVillages.value;
+    }
+
+    const villages2 = await getVillageList(municipio_id, 'VE');
+
+    if (Array.isArray(villages2)) {
+      itemsVillages.value = [...villages2];
+    }
+
+    itemsVillages.value.push({
+      value: 9999,
+      text: 'Vereda no encontrada'
+    });
+
+    if (prediococaotraveredaQuestion) {
+      prediococaotraveredaQuestion.choices = itemsVillages.value;
+    }
+    loading.hide();
+  }
+});*/
+
+survey.onValueChanged.add(async (sender, options) => {
+  try {
+    const campo = options.name;
+    const valor = options.value;
+
+    if (!campo) return;
+
+    // 1. Primero: Validaciones especiales
+    if (campo === "titular_numero_documento") {
+      await validarDocumento(valor);
+      return; // no sigas haciendo update si falla
+    }
+
+    if (campo === "tiene_coca" || campo === "tipo_exclusion") {
+      await validarExclusion(sender);
+    }
+
+    // 2. Segundo: Cambios dinámicos de municipios/veredas
+    await manejarCambioDinamico(sender, campo, valor);
+
+    // 3. Tercero: Update real en BD según el campo
+    await actualizarCampoBD(userSurveyId, campo, valor);
+
+  } catch (error) {
+    console.error("Error en onValueChanged:", error);
+    uToast.toastError("Error procesando cambios en el formulario.");
+  }
+});
+
+const validarDocumento = async (documento: string) => {
+  if (!documento) return;
+
+  try {
+    const resp = await axios.get(`/api/2.0/nucleo/forms/catatumbo/validar_documento/?documento=${documento}`);
+    if (resp.data === true) {
+      survey.setValue("titular_numero_documento", "");
+      uToast.toastError("Número de cédula ya registrado en la convocatoria");
+      return;
+    }
+
+    const resp2 = await axios.get(`/forms/catatumbo/ficha/validar_documento/?documento=${documento}`);
+    if (resp2.data && resp2.data.status === 5) {
+      survey.setValue("titular_numero_documento", "");
+      uToast.toastError("El usuario ha sido titular en el proyecto PNIS");
+    }
+  } catch (error) {
+    console.error("Error validando documento:", error);
+    throw error;
+  }
+};
+
+const validarExclusion = async (sender: any) => {
+  const tipoexclusion = sender.getValue("tipo_exclusion");
+  const tienecoca = sender.getValue("tiene_coca");
+
+  if (!tienecoca && tipoexclusion !== '11') {
+    uToast.toastError('No puede continuar por criterios de exclusión.');
+    survey.showNavigationButtons = false;
+  } else {
+    survey.showNavigationButtons = true;
+  }
+};
+
+const manejarCambioDinamico = async (sender: any, campo: string, valor: any) => {
+  const loading = uLoading.show({});
+
+  try {
+    if (["vive_departamento", "desplazadoss_departamento", "predio_coca_departamento", "predio_coca_otro_departamento"].includes(campo)) {
+      const villages = await getVillageList(valor, 'NA');
+      if (Array.isArray(villages)) {
+        itemsVillages.value = [...villages];
+      }
+      actualizarDropdowns(sender, campo);
+    }
+
+    if (["vive_municipio", "desplazado_municipio", "predio_coca_municipio", "predio_coca_otro_municipio"].includes(campo)) {
+      const villagesCOCP = await getVillageList(valor, 'CO,CP');
+      const villagesVE = await getVillageList(valor, 'VE');
+
+      itemsVillages.value = [...villagesCOCP, ...villagesVE, { value: 9999, text: "No encontrado" }];
+
+      actualizarDropdowns(sender, campo);
+    }
+  } finally {
+    loading.hide();
+  }
+};
+
+const actualizarDropdowns = (sender: any, campo: string) => {
+  switch (campo) {
+    case "vive_departamento":
+      survey.getQuestionByName("vive_municipio").choices = itemsVillages.value;
+      break;
+    case "desplazadoss_departamento":
+      survey.getQuestionByName("desplazado_municipio").choices = itemsVillages.value;
+      break;
+    case "predio_coca_departamento":
+      survey.getQuestionByName("predio_coca_municipio").choices = itemsVillages.value;
+      break;
+    case "predio_coca_otro_departamento":
+      survey.getQuestionByName("predio_coca_otro_municipio").choices = itemsVillages.value;
+      break;
+
+    case "vive_municipio":
+      survey.getQuestionByName("vive_corregimiento").choices = itemsVillages.value;
+      survey.getQuestionByName("vive_vereda").choices = itemsVillages.value;
+      break;
+    case "desplazado_municipio":
+      survey.getQuestionByName("desplazado_corregimiento").choices = itemsVillages.value;
+      survey.getQuestionByName("desplazado_vereda").choices = itemsVillages.value;
+      break;
+    case "predio_coca_municipio":
+      survey.getQuestionByName("predio_coca_corregimiento").choices = itemsVillages.value;
+      survey.getQuestionByName("predio_coca_vereda").choices = itemsVillages.value;
+      break;
+    case "predio_coca_otro_municipio":
+      survey.getQuestionByName("predio_coca_otro_corregimiento").choices = itemsVillages.value;
+      survey.getQuestionByName("predio_coca_otro_vereda").choices = itemsVillages.value;
+      break;
+    default:
+      console.log(`Campo ${campo} no tiene dropdown relacionado.`);
+  }
+};
+
+const actualizarCampoBD = async (id: any, campo: string, valor: any) => {
+  try {
+    //1. Detectamos si es un archivo subido
+    if (Array.isArray(valor) && valor.length > 0 && valor[0].content) {
+      console.log(`Detectado archivo en el campo ${campo}`);
+
+      const archivo = valor[0];
+      const isImage = archivo.type.startsWith("image/");
+
+      if (isImage) {
+        // Si es una imagen, primero la redimensionamos antes de guardar
+        const resizedBase64 = await resizeBase64Img(archivo.content);
+        await updateAdjunto(id, campo, resizedBase64);
+      } else {
+        // Si no es imagen (ej: PDF), lo subimos tal cual
+        await updateAdjunto(id, campo, archivo.content);
+      }
+      return;
+    }
+
+    //2. Detectamos si es un campo normal (texto/número) y actualizamos normalmente
+    switch (campo) {
+      case "titular_nombres":
+      case "titular_apellidos":
+      case "titular_numero_documento":
+      case "titular_celular":
+      case "titular_whatsapp":
+      case "titular_fecha_expedicion":
+      case "titular_fecha_nacimiento":
+      case "titular_email":
+      case "tipo_comunidad_etnica":
+      case "tipo_comunidad_etnica_nombre":
+      case "num_nucleo":
+      case "titular_sexo":
+      case "tiene_email":
+      case "titular_cabeza_familia":
+      case "pertenecegrupo":
+      case "asociaciones":
+      case "desplazado_2025":
+        await updatePersonaField(id, campo, valor);
+        break;
+
+      case "tiene_coca":
+      case "tipo_exclusion":
+      case "question2":
+      case "question6":
+        await updateFormPersonaField(id, campo, valor);
+        break;
+
+      case "predio_coca_tipo_residencia":
+      case "predio_coca_area_total":
+      case "predio_coca_area_cultivo":
+      case "predio_coca_altitud":
+      case "predio_coca_precision":
+        await updatePredioField(id, campo, valor);
+        break;
+
+      case "linea_productiva":
+      case "establece_fortalece":
+      case "otra_cual":
+        await updatePersonalineaField(id, campo, valor);
+        break;
+
+      default:
+        console.log(`Campo ${campo} no mapeado para actualización.`);
+        break;
+    }
+  } catch (error) {
+    console.error(`Error actualizando campo ${campo}:`, error);
+    uToast.toastError("Error actualizando información, inténtelo de nuevo.");
+  }
+};
+
+const updateAdjunto = async (id: any, campo: string, base64Content: string) => {
+  try {
+    // Dependiendo el campo decides a qué tabla y servicio llamar
+    if (campo.startsWith("titular_foto_") || campo === "titular_documento_identidad") {
+      await updatePersonaAdjunto(id, campo, base64Content);
+    } else if (campo.startsWith("predio_coca_")) {
+      await updatePredioAdjunto(id, campo, base64Content);
+    } else {
+      console.warn(`Campo de archivo ${campo} no está mapeado en updateAdjunto.`);
+    }
+  } catch (error) {
+    console.error(`Error actualizando adjunto ${campo}:`, error);
+    throw error;
+  }
+};
+
+const updatePersonaField = async (id: any, campo: string, valor: any) => {
+  try {
+    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/persona/${id}/`, {
+      [campo]: valor
+    });
+    console.log(`Campo ${campo} actualizado en persona.`);
+  } catch (error) {
+    console.error(`Error actualizando persona ${campo}:`, error);
+    throw error;
+  }
+};
+
+const updateFormPersonaField = async (id: any, campo: string, valor: any) => {
+  try {
+    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/form_persona/${id}/`, {
+      [campo]: valor
+    });
+    console.log(`Campo ${campo} actualizado en form_persona.`);
+  } catch (error) {
+    console.error(`Error actualizando form_persona ${campo}:`, error);
+    throw error;
+  }
+};
+
+const updatePredioField = async (id: any, campo: string, valor: any) => {
+  try {
+    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/predio/${id}/`, {
+      [campo]: valor
+    });
+    console.log(`Campo ${campo} actualizado en predio.`);
+  } catch (error) {
+    console.error(`Error actualizando predio ${campo}:`, error);
+    throw error;
+  }
+};
+
+const updatePersonalineaField = async (id: any, campo: string, valor: any) => {
+  try {
+    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/personalinea/${id}/`, {
+      [campo]: valor
+    });
+    console.log(`Campo ${campo} actualizado en personalinea.`);
+  } catch (error) {
+    console.error(`Error actualizando personalinea ${campo}:`, error);
+    throw error;
+  }
+};
+
+const updatePersonaAdjunto = async (id: any, campo: string, base64Content: string) => {
+  try {
+    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/persona/${id}/`, {
+      [campo]: base64Content
+    });
+    console.log(`Adjunto ${campo} actualizado en persona.`);
+  } catch (error) {
+    console.error(`Error actualizando adjunto en persona ${campo}:`, error);
+    throw error;
+  }
+};
+
+const updatePredioAdjunto = async (id: any, campo: string, base64Content: string) => {
+  try {
+    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/predio/${id}/`, {
+      [campo]: base64Content
+    });
+    console.log(`Adjunto ${campo} actualizado en predio.`);
+  } catch (error) {
+    console.error(`Error actualizando adjunto en predio ${campo}:`, error);
+    throw error;
+  }
+};
 
 
+onMounted(async () => {
+  try {
+    isLoading.value = true;
+    await getSurveyData();
+    await getAsociaciones();
+  } catch (error) {
+    console.error("Error al montar los datos:", error);
+  } finally {
+    isLoading.value = false;
+  }
+});
 </script>
-
-<style lang="scss">
-
-</style>
