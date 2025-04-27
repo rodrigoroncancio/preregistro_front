@@ -4,6 +4,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import authRouter from "../modules/auth/router";
 import coreRouter from "../modules/core/router";
 import pnisRouter from "../modules/pnis/router";
+import renhacemosRouter from "../modules/pnis/router";
 
 import useGlobalState from "../stores/global";
 
@@ -276,6 +277,11 @@ const routes: RouteRecordRaw[] = [
     path: "/pnis",
     meta: { requiresAuth: true },
     ...pnisRouter,
+  },
+  {
+    path: "/renhacemos",
+    meta: { requiresAuth: true },
+    ...renhacemosRouter,
   },
   {
     path: "/:pathMatch(.*)*",

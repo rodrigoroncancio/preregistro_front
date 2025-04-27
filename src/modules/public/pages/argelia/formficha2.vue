@@ -21,6 +21,7 @@
   import useCrud from "@/composables/useCrud";
   import useToast from "@/composables/useToast";
   import axios from "axios";
+  import type { AxiosRequestConfig, AxiosResponse } from 'axios'
   import { useLoading } from "vue-loading-overlay";
   import { ref, onMounted } from "vue";
   
@@ -33,6 +34,38 @@
   const uCrud_linea = useCrud("api/2.0/nucleo/personalinea");
 
   const uToast = useToast();
+
+  const api = axios.create()
+  const apikey = 'gAAAAABoDAoAK62G2X52O3HtVq6b40VgHydW_eKBzaouhXV4GrdTwlu8XXKqDKNP9CQD6p-THOI_4iDMa6G18Van94sbp8A2LK4DzQjs9D5oe9y8XSw3RYpK2Z9nmkSS-W-jrxaRC56k'
+  const base_url1 = 'http://localhost:8002/'
+  const base_url2 = 'http://localhost:8002'
+  const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
+
+    return api.get(base_url2 + url, {
+      ...config,
+      headers: {
+        ...config.headers,
+        'Authorization': 'Api-Key ' + apikey,
+      },
+    })
+  }
+
+  const apiUrl = ref<string>('')
+
+  const llamarApi = async () => {
+    if (!apiUrl.value) {
+      console.error('No se ha definido la URL')
+      return
+    }
+
+    try {
+      const response = await customGet(apiUrl.value)
+      console.log('Respuesta:', response?.data)
+      return response
+    } catch (error) {
+      console.error('Error al llamar la API:', error)
+    }
+  }
 
   const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
   const dataLineaProductiva = ref({
@@ -1138,7 +1171,9 @@
       if (options.value === null || options.value === "")
         return;
         const loading = uLoading.show({});
-        axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
+        // axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
+        apiUrl.value = `/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`
+        await llamarApi()
         .then((resp: any) => {
           console.log(resp)
           getLineaProductiva(resp.data.data.id)

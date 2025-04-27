@@ -68,37 +68,61 @@ const useCrud = (endpoint: string, extra: Object = null) => {
     });
   }
 
-  const create = (data: any) => {
+  const cleanAxios = axios.create(); // Axios sin ninguna configuración extra
+
+  const create = (data: any, apiKey?: string) => {
     return new Promise((resolve, reject) => {
-      let loader = loading.show({});
-      axios
-        .post(`${endpoint}/${queryParams(extra)}`, data)
-          .then((resp: any) => {
-            resolve(resp.data);
-          })
-          .catch((err: any) => {
-            reject(err);
-          })
-          .finally(() => {
-            loader.hide();
-          })
+      const loader = loading.show({});
+
+      const client = apiKey ? cleanAxios : axios; // Usa cleanAxios si quieres apiKey
+
+      const headers = apiKey
+        ? {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Api-Key ${apiKey}`,
+          }
+        : undefined; // usa los normales
+
+      client
+        .post(`${endpoint}/${queryParams(extra)}`, data, { headers })
+        .then((resp: any) => {
+          resolve(resp.data);
+        })
+        .catch((err: any) => {
+          reject(err);
+        })
+        .finally(() => {
+          loader.hide();
+        });
     });
   };
 
-  const update = (data: any) => {
+  const update = (data: any, apiKey?: string) => {
     return new Promise((resolve, reject) => {
-      let loader = loading.show({});
-      axios
-        .patch(`${endpoint}/${data.id}/${queryParams(extra)}`, data)
-          .then((resp: any) => {
-            resolve(resp.data);
-          })
-          .catch((err: any) => {
-            reject(err);
-          })
-          .finally(() => {
-            loader.hide();
-          })
+      const loader = loading.show({});
+  
+      const client = apiKey ? cleanAxios : axios; // Usa cleanAxios si hay apiKey
+  
+      const headers = apiKey
+        ? {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Api-Key ${apiKey}`,
+          }
+        : undefined; // usa los headers por defecto si no hay apiKey
+  
+      client
+        .patch(`${endpoint}/${data.id}/${queryParams(extra)}`, data, { headers })
+        .then((resp: any) => {
+          resolve(resp.data);
+        })
+        .catch((err: any) => {
+          reject(err);
+        })
+        .finally(() => {
+          loader.hide();
+        });
     });
   };
 

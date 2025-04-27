@@ -20,6 +20,7 @@
     import useCrud from "@/composables/useCrud";
     import useToast from "@/composables/useToast";
     import axios from "axios";
+    import type { AxiosRequestConfig, AxiosResponse } from 'axios'
     import { useLoading } from "vue-loading-overlay";
     import { ref, onMounted } from "vue";
     import { object } from 'yup';
@@ -28,15 +29,47 @@
 
     const uLoading = useLoading();
     const uToast = useToast();
+    const base_url1 = 'http://localhost:8002/'
+    const base_url2 = 'http://localhost:8002'
+    
 
-    const uCrud = useCrud("api/2.0/nucleo/persona");
-    const uCrud2 = useCrud("api/2.0/nucleo/formpersona");
-    const uCrud3 = useCrud("api/2.0/nucleo/personaadjunto");
-    const uCrud4 = useCrud("api/2.0/nucleo/predio");
-    const uCrud5 = useCrud("api/2.0/nucleo/personalinea");
-    const uCrud6 = useCrud("api/2.0/nucleo/lote");
-
+    const uCrud = useCrud(base_url1 + "api/2.0/inscripciones/persona");
+    const uCrud2 = useCrud(base_url1 + "api/2.0/inscripciones/formpersona");
+    const uCrud3 = useCrud(base_url1 + "api/2.0/inscripciones/personaadjunto");
+    const uCrud4 = useCrud(base_url1 + "api/2.0/inscripciones/predio");
+    const uCrud5 = useCrud(base_url1 + "api/2.0/inscripciones/personalinea");
+    // const uCrud6 = useCrud("api/2.0/nucleo/lote");
     const modelValue = defineModel<object>();
+    const api = axios.create()
+    const apikey = 'gAAAAABoDAoAK62G2X52O3HtVq6b40VgHydW_eKBzaouhXV4GrdTwlu8XXKqDKNP9CQD6p-THOI_4iDMa6G18Van94sbp8A2LK4DzQjs9D5oe9y8XSw3RYpK2Z9nmkSS-W-jrxaRC56k'
+
+    const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
+
+      return api.get(base_url2 + url, {
+        ...config,
+        headers: {
+          ...config.headers,
+          'Authorization': 'Api-Key ' + apikey,
+        },
+      })
+    }
+
+    const apiUrl = ref<string>('')
+
+    const llamarApi = async () => {
+      if (!apiUrl.value) {
+        console.error('No se ha definido la URL')
+        return
+      }
+
+      try {
+        const response = await customGet(apiUrl.value)
+        console.log('Respuesta:', response?.data)
+        return response
+      } catch (error) {
+        console.error('Error al llamar la API:', error)
+      }
+    }
 
     const props = defineProps({
       readOnly: {
@@ -1067,7 +1100,11 @@
   const itemsVillages = ref<Array<{ value: number; text: string }>>([]);
   const getVillageList = async (ubicacionId: number, tipo: string) => {
       try {
-      const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/${tipo}`);
+      // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/${tipo}`);
+      apiUrl.value = `/api/2.0/nucleo/ubicacion/by-id/?padre_id=${ubicacionId}&tipos=${tipo}`
+      const response = await llamarApi()
+      console.log(response)
+      
       itemsVillages.value = response.data.map((dept: any) => ({
           value: dept.id,
           text: dept.nombre // Asegurar compatibilidad
@@ -1080,15 +1117,21 @@
   const itemsAsociaciones = ref<Array<{ value: number; text: string }>>([]);
   const getAsociaciones = async () => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/asociacion/by-origen/${props.origenasociaciones}`);
-      const results = response?.data?.results || [];
+      // const response = await axios.get(`http://localhost:8002/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`);
+      apiUrl.value = `/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`
+      const response = await llamarApi()
+
+      console.log('response')
+      console.log(response)
+      
+      const results = response?.data || []; 
 
       if (results.length === 0) {
         itemsAsociaciones.value = [{ value: 99999, text: 'Sin asociación' }];
       } else {
         itemsAsociaciones.value = results.map((asocia: any) => ({
-          value: asocia.cub,
-          text: asocia.nombre
+          value: asocia.id, 
+          text: asocia.nombre_grupo
         }));
       }
 
@@ -1125,7 +1168,7 @@
     options.allowComplete = false;
     
     const personaData = {
-      tipo_identificacion_id: parseInt(sender.data.titular_tipo_identificacion),
+      tipo_identificacion: parseInt(sender.data.titular_tipo_identificacion),
       cub_asociacion: sender.data.asociaciones === 99999 ? null : sender.data.asociaciones,
       cub: 0,
       numero_documento: String(sender.data.titular_numero_documento),
@@ -1133,11 +1176,11 @@
       apellido: sender.data.titular_apellidos,
       fecha_expedicion: sender.data.titular_fecha_expedicion,
       fecha_nacimiento: sender.data.titular_fecha_nacimiento,
-      sexo_id: parseInt(sender.data.titular_sexo),
+      sexo: parseInt(sender.data.titular_sexo),
       email: sender.data.tiene_email ? sender.data.titular_email : 'NA',
       telefono_celular: sender.data.titular_celular,
       whatsapp: sender.data.titular_whatsapp,
-      tipo_comunidad_etnica_id: parseInt(sender.data.tipo_comunidad_etnica),
+      tipo_comunidad_etnica: parseInt(sender.data.tipo_comunidad_etnica),
       nombre_comunidad: sender.data.tipo_comunidad_etnica_nombre,
       pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0, 
       desplazado_2025: sender.data.desplazado_2025? 1 : 0,
@@ -1148,7 +1191,7 @@
       menor_edad: sender.data.Menor_Edad,
       beneficiario: 0,
       vinculado_asociacion:0,
-      estado_id: 111,
+      estado: 111,
       fase:props.fasename,
       discapacidad:0,
       fecha_estado: new Date().toISOString() ,
@@ -1157,9 +1200,9 @@
     };
 
     const formularioPersonaData = {
-      formulario_id: props.formid,
+      formulario: props.formid,
       tiene_coca: sender.data.tiene_coca?1:0,
-      persona_id: 0,
+      persona: 0,
       acepta_terminos: 1,
       acepta_tratamiento_datos: 1,
       compromiso_proceso_susticion:1,
@@ -1168,7 +1211,7 @@
       beca_desea: 0,
       vivienda:0,
       beca_num: 0,
-      origen: 'preregistro_catatumbo',
+      origen: 'preregistro_catatumbo'
     };
 
     const personaAdjuntoData1 = {
@@ -1215,10 +1258,10 @@
     const presicion = sender.data?.predio_coca_precision ?? 0;
 
     const predioLoteViveData = {
-      persona_id: 0,
-      ubicacion_id: sender.data.vive_municipio,
-      municipio_ubicacion_id: sender.data.vive_municipio,
-      vereda_ubicacion_id:sender.data.vive_vereda === 9999 ? null: sender.data.vive_vereda,
+      persona: 0,
+      ubicacion: sender.data.vive_municipio,
+      municipio_ubicacion: sender.data.vive_municipio,
+      vereda_ubicacion:sender.data.vive_vereda === 9999 ? null: sender.data.vive_vereda,
       cabecera: sender.data.vive_lugar === "1" ? 1 : 0,
       centro_poblado: sender.data.vive_lugar === "3" ? 1 : 0,
       corregimiento: sender.data.vive_lugar === "2" ? sender.data.vive_vereda_otra : null,
@@ -1231,7 +1274,7 @@
       area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
       proyecto_productivo: 0,
       tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-      documento_relacion_predio: "",
+      documento_relacion_predio: "SIN DOCUMENTO",
       origen: 'preregistro_catatumbo',
       sig: 0,
       coordenada_registro: `${latitud} ${longitud}`, 
@@ -1257,10 +1300,10 @@
     };
 
     const predioLoteDesplazadoData = {
-      persona_id: 0,
-      ubicacion_id: sender.data.desplazado_municipio,
-      municipio_ubicacion_id: sender.data.desplazado_municipio,
-      vereda_ubicacion_id:sender.data.desplazado_vereda === 9999 ? null: sender.data.desplazado_vereda,
+      persona: 0,
+      ubicacion: sender.data.desplazado_municipio,
+      municipio_ubicacion: sender.data.desplazado_municipio,
+      vereda_ubicacion:sender.data.desplazado_vereda === 9999 ? null: sender.data.desplazado_vereda,
       cabecera: sender.data.deplazado_lugar === "1" ? 1 : 0,
       centro_poblado: sender.data.deplazado_lugar === "3" ? 1 : 0,
       corregimiento: sender.data.deplazado_lugar === "2" ? sender.data.desplazado_otra_vereda : null,
@@ -1272,7 +1315,7 @@
       area_total_hectareas: 0,
       area_cultivo_hectareas: 0,
       proyecto_productivo: 0,
-      documento_relacion_predio: "",
+      documento_relacion_predio: "SIN DOCUMENTO",
       origen: 'preregistro_catatumbo',
       sig: 0,
       coordenada_registro: `${latitud} ${longitud}`, 
@@ -1282,10 +1325,10 @@
     };
 
     const predioLoteCocaData = {
-      persona_id: 0,
-      ubicacion_id: sender.data.predio_coca_municipio,
-      municipio_ubicacion_id: sender.data.predio_coca_municipio,
-      vereda_ubicacion_id:sender.data.predio_coca_vereda === 9999 ? null: sender.data.predio_coca_vereda,
+      persona: 0,
+      ubicacion: sender.data.predio_coca_municipio,
+      municipio_ubicacion: sender.data.predio_coca_municipio,
+      vereda_ubicacion:sender.data.predio_coca_vereda === 9999 ? null: sender.data.predio_coca_vereda,
       cabecera: sender.data.predio_coca_lugar === "1" ? 1 : 0,
       centro_poblado: sender.data.predio_coca_lugar === "3" ? sender.data.predio_coca_vereda_otra : null,
       corregimiento: sender.data.predio_coca_lugar === "2" ? sender.data.predio_coca_vereda_otra : null,
@@ -1297,7 +1340,7 @@
       area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
       proyecto_productivo: 0,
       tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-      documento_relacion_predio: "",
+      documento_relacion_predio: "SIN DOCUMENTO",
       origen: 'preregistro_catatumbo',
       sig: 0,
       coordenada_registro: `${latitud} ${longitud}`, 
@@ -1314,10 +1357,10 @@
     }
 
     const predioLoteCocaOtroData = {
-      persona_id: 0,
-      ubicacion_id: sender.data.predio_coca_otro_municipio,
-      municipio_ubicacion_id: sender.data.predio_coca_otro_municipio,
-      vereda_ubicacion_id:sender.data.predio_coca_otro_vereda === 9999 ? null: sender.data.predio_coca_otro_vereda,
+      persona: 0,
+      ubicacion: sender.data.predio_coca_otro_municipio,
+      municipio_ubicacion: sender.data.predio_coca_otro_municipio,
+      vereda_ubicacion:sender.data.predio_coca_otro_vereda === 9999 ? null: sender.data.predio_coca_otro_vereda,
       cabecera: sender.data.predio_coca_otro_lugar === "1" ? 1 : 0,
       centro_poblado: sender.data.predio_coca_otro_lugar === "3" ? 1 : 0,
       corregimiento: sender.data.predio_coca_otro_lugar === "2" ? sender.data.predio_coca_otro_vereda_otra : null,
@@ -1330,7 +1373,7 @@
       area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
       proyecto_productivo: 0,
       tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-      documento_relacion_predio: "",
+      documento_relacion_predio: "SIN DOCUMENTO",
       origen: 'preregistro_catatumbo',
       sig: 0,
       coordenada_registro: `${latitud} ${longitud}`, 
@@ -1346,9 +1389,9 @@
     }
 
     const personaLineaProductivaData = {
-      persona_id: sender.data.Persona_Id,
-      linea_productiva_id: sender.data.linea_productiva,
-      tipo_experiencia_id: sender.data.establece_fortalece,
+      persona: sender.data.Persona_Id,
+      linea_productiva: sender.data.linea_productiva,
+      tipo_experiencia: sender.data.establece_fortalece,
       otra_cual: sender.data.otra_cual,
       experiencia_linea_productiva: 0,
       tiempo_experiencia_linea: 0,
@@ -1359,17 +1402,17 @@
       fmodifica: new Date().toISOString()
     };
 
-    uCrud.create(personaData)
+    uCrud.create(personaData, apikey)
       .then((item:any) => {
-        formularioPersonaData.persona_id = item.id
-        uCrud2.create(formularioPersonaData).then((item2:any) => {})
+        formularioPersonaData.persona = item.id
+        uCrud2.create(formularioPersonaData, apikey).then((item2:any) => {})
         personaAdjuntoData1.persona_id = item.id
-        uCrud3.create(personaAdjuntoData1).then((item3:any) => {})
+        uCrud3.create(personaAdjuntoData1, apikey).then((item3:any) => {})
         personaAdjuntoData2.persona_id = item.id
-        uCrud3.create(personaAdjuntoData2).then((item4:any) => {})
+        uCrud3.create(personaAdjuntoData2, apikey).then((item4:any) => {})
 
-        predioLoteViveData.persona_id = item.id
-        uCrud4.create(predioLoteViveData).then((item6:any) => {
+        predioLoteViveData.persona = item.id
+        uCrud4.create(predioLoteViveData, apikey).then((item6:any) => {
           console.log('item6')
           console.log(item6)
           coordenadaLoteCocaData.predio_id = item6.id
@@ -1378,8 +1421,8 @@
           // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
         })
         if (sender.data.desplazado_2025) {
-          predioLoteDesplazadoData.persona_id = item.id
-          uCrud4.create(predioLoteDesplazadoData).then((item61:any) => {
+          predioLoteDesplazadoData.persona = item.id
+          uCrud4.create(predioLoteDesplazadoData, apikey).then((item61:any) => {
             console.log('item61')
             console.log(item61)
             coordenadaLoteCocaData.predio_id = item61.id
@@ -1387,8 +1430,8 @@
           })
         }
 
-        predioLoteCocaData.persona_id = item.id
-        uCrud4.create(predioLoteCocaData).then((item62:any) => {
+        predioLoteCocaData.persona = item.id
+        uCrud4.create(predioLoteCocaData, apikey).then((item62:any) => {
           console.log('item62')
           console.log(item62)
           coordenadaLoteCocaData.predio_id = item62.id
@@ -1396,16 +1439,16 @@
         })
 
         if (sender.data.predio_coca_ubicacion==='2') {
-          predioLoteCocaOtroData.persona_id = item.id
-          uCrud4.create(predioLoteCocaOtroData).then((item7:any) => {
+          predioLoteCocaOtroData.persona = item.id
+          uCrud4.create(predioLoteCocaOtroData, apikey).then((item7:any) => {
             console.log('item7')
             console.log(item7)
             coordenadaLoteCocaData.predio_id = item7.id
             // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
           })
         }
-        personaLineaProductivaData.persona_id = item.id
-        uCrud5.create(personaLineaProductivaData).then((item5:any) => {})
+        personaLineaProductivaData.persona = item.id
+        uCrud5.create(personaLineaProductivaData, apikey).then((item5:any) => {})
 
         uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
         sender.clear(true);
@@ -1422,28 +1465,27 @@
 
     const asociacionesQuestion = survey.getQuestionByName("asociaciones");
     const perteneceQuestion = survey.getQuestionByName("pertenecegrupo");
-    const prediococaOtroDepQuestion = survey.getQuestionByName("predio_coca_otro_departamento");
-
+    
     if (perteneceQuestion) {
       asociacionesQuestion.choices = itemsAsociaciones.value;
 
-      const villages = await getVillageList(1, 'NA');
+      // const villages = await getVillageList(1, 'NA');
 
-      if (Array.isArray(villages)) {
-        itemsVillages.value = [...villages];
-      }
+      // if (Array.isArray(villages)) {
+      //   itemsVillages.value = [...villages];
+      // }
 
-      if (prediococaOtroDepQuestion) {
-        prediococaOtroDepQuestion.choices = itemsVillages.value;
-      }
+      // if (prediococaOtroDepQuestion) {
+      //   prediococaOtroMunicipioQuestion.choices = itemsVillages.value;
+      // }
       // await getVillageList(1, 'NA');
     }
 
     if (options.name === "titular_numero_documento") {
       if (options.value === null || options.value === "")
         return;
-        axios.get(`/api/2.0/nucleo/forms/catatumbo/validar_documento/?documento=${options.value}`)
-        .then((resp: any) => {
+        apiUrl.value = `/api/2.0/inscripciones/forms/catatumbo/validar_documento/?documento=${options.value}`
+        await llamarApi().then((resp: any) => {
           console.log("Primera respuesta:", resp);
 
           // Si data es `true`, el documento ya está registrado
