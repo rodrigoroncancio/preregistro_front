@@ -262,8 +262,13 @@ const routes: RouteRecordRaw[] = [
         component: () => import(/* webpackChunkName: "PublicListafichas" */ "@/modules/public/pages/argelia/testSurvey.vue"),
       },
       {//call-center
+        path: "search-user-call-center",
+        name: "public-search-user-call-center",
+        component: () => import("@/modules/public/pages/search-user-call-center.vue"),
+      },
+      {//call-center
         path: "preregistro-call-center/:id", // Ruta relativa al path padre
-        name: "pnis-catatumbo-preregistro-call-center",
+        name: "preregistro-call-center",
         component: () => import("@/modules/public/pages/catatumbo/callcenterformpreregistro.vue"),
       },
     ],

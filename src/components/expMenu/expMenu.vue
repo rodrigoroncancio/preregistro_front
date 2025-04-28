@@ -201,7 +201,16 @@ const itemsMenu = [
       url: "/catatumbo/preregistro",
     }]
   },
-  
+  {
+    title: "Call Center",
+    icon: "mdi-solar-panel",
+    roles: [1,7],
+    children: [{
+      title: "Buscar Usuario",
+      icon: "mdi-human-male-board-poll",
+      url: "/search-user-call-center",
+    }]
+  },
   
 ];
 
