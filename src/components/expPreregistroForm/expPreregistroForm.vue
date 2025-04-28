@@ -25,8 +25,6 @@
     import { ref, onMounted } from "vue";
     import { object } from 'yup';
 
-    
-
     const uLoading = useLoading();
     const uToast = useToast();
     const base_url1 = 'http://localhost:8002/'
@@ -41,7 +39,7 @@
     // const uCrud6 = useCrud("api/2.0/nucleo/lote");
     const modelValue = defineModel<object>();
     const api = axios.create()
-    const apikey = 'gAAAAABoDAoAK62G2X52O3HtVq6b40VgHydW_eKBzaouhXV4GrdTwlu8XXKqDKNP9CQD6p-THOI_4iDMa6G18Van94sbp8A2LK4DzQjs9D5oe9y8XSw3RYpK2Z9nmkSS-W-jrxaRC56k'
+    const apikey = 'gAAAAABoDtFn9gi3OV4aLVbvYNvjReVfBFOsjfPH7TEpTCCmppTjoZPPzcKSRZycbhgV9diSwSBGGjmoiZfeu9kEoKoncDHDMwmsyA7LEnRc20FRh_fwVYLFyYO2sn3q-Jhu9jYRk_4q'
 
     const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
 
@@ -1288,7 +1286,6 @@
         predioLoteViveData.documento_relacion_predio = resizedImage;
       });
     }
-
 
     const coordenadaLoteCocaData = {
       predio_id: 0,

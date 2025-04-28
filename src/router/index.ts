@@ -233,7 +233,7 @@ const routes: RouteRecordRaw[] = [
             path: "vercupos",
             name: "public-catatumbo-vercupos",
             component: () => import( /* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/catatumbo/vercupos.vue"),
-          }
+          },
         ],
       },
       {
@@ -260,6 +260,11 @@ const routes: RouteRecordRaw[] = [
         path: "vertest", // Ruta relativa al path padre ("/listafichas")
         name: "public-vertest",
         component: () => import(/* webpackChunkName: "PublicListafichas" */ "@/modules/public/pages/argelia/testSurvey.vue"),
+      },
+      {//call-center
+        path: "preregistro-call-center/:id", // Ruta relativa al path padre
+        name: "pnis-catatumbo-preregistro-call-center",
+        component: () => import("@/modules/public/pages/catatumbo/callcenterformpreregistro.vue"),
       },
     ],
   },

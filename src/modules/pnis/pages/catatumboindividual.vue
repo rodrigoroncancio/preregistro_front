@@ -4,7 +4,7 @@
     <v-card>
       <v-card-text class="pa-0">
         <exp-data-table
-          uuid="table-users_pnis"
+          uuid="table-users_pnis-call"
           :endpoint="`${endpoint}/catatumboindividual/filterbysurvey/4/${tipo}`"
           :showHeader="false"
           :drawRefresh="drawRefresh"

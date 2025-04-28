@@ -8,7 +8,6 @@
    </exp-survey-view>
 </template>
 
-
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -43,7 +42,6 @@ const props = defineProps({
     default: null,
   },
 });
-
 
 const surveyJsonBase = ref({
   "description": "",
@@ -4709,9 +4707,6 @@ const surveyJsonBase = ref({
     "completeText": "Enviar",
     "showNavigationButtons": true
 });
-
-
-
 
 const isAdmin = computed(() => {
   try {

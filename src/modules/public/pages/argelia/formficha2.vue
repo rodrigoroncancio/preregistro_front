@@ -26,19 +26,18 @@
   import { ref, onMounted } from "vue";
   
   const uLoading = useLoading();
-
-  const uCrud_persona = useCrud("api/2.0/nucleo/persona");
-  const uCrud_edades= useCrud("api/2.0/nucleo/composicionedades");
-  const uCrud_nucleo = useCrud("api/2.0/nucleo/composicionucleo");
-  const uCrud_formpersona = useCrud("api/2.0/nucleo/formpersona");
-  const uCrud_linea = useCrud("api/2.0/nucleo/personalinea");
-
-  const uToast = useToast();
-
-  const api = axios.create()
-  const apikey = 'gAAAAABoDAoAK62G2X52O3HtVq6b40VgHydW_eKBzaouhXV4GrdTwlu8XXKqDKNP9CQD6p-THOI_4iDMa6G18Van94sbp8A2LK4DzQjs9D5oe9y8XSw3RYpK2Z9nmkSS-W-jrxaRC56k'
   const base_url1 = 'http://localhost:8002/'
   const base_url2 = 'http://localhost:8002'
+  const uCrud_persona = useCrud(base_url1 + "api/2.0/nucleo/persona");
+  const uCrud_edades= useCrud(base_url1 + "api/2.0/nucleo/composicionedades");
+  const uCrud_nucleo = useCrud(base_url1 + "api/2.0/nucleo/composicionucleo");
+  const uCrud_formpersona = useCrud(base_url1 + "api/2.0/nucleo/formpersona");
+  const uCrud_linea = useCrud(base_url1 + "api/2.0/nucleo/personalinea");
+
+  const uToast = useToast();
+  
+  const api = axios.create()
+  const apikey = 'gAAAAABoDtFn9gi3OV4aLVbvYNvjReVfBFOsjfPH7TEpTCCmppTjoZPPzcKSRZycbhgV9diSwSBGGjmoiZfeu9kEoKoncDHDMwmsyA7LEnRc20FRh_fwVYLFyYO2sn3q-Jhu9jYRk_4q'
   const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
 
     return api.get(base_url2 + url, {
