@@ -26,8 +26,10 @@
   import { ref, onMounted } from "vue";
   
   const uLoading = useLoading();
-  const base_url1 = 'http://localhost:8002/'
-  const base_url2 = 'http://localhost:8002'
+  // const base_url1 = 'http://localhost:8002/'
+  // const base_url2 = 'http://localhost:8002'
+  const base_url1 = ''
+  const base_url2 = ''
   const uCrud_persona = useCrud(base_url1 + "api/2.0/nucleo/persona");
   const uCrud_edades= useCrud(base_url1 + "api/2.0/nucleo/composicionedades");
   const uCrud_nucleo = useCrud(base_url1 + "api/2.0/nucleo/composicionucleo");

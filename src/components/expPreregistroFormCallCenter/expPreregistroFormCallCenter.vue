@@ -26,6 +26,10 @@ import { ref, onMounted } from "vue";
 import { object } from 'yup';
 import {useRoute} from "vue-router";
 
+//
+import { getApiKey } from '@/helpers/apiKey';
+import cleanAxios from '@/helpers/cleanAxios';
+
 const isLoading = ref(true);
 const isSurveyReady = ref(false);
 
@@ -34,13 +38,6 @@ const userSurveyId = route.params.id;
 
 const uLoading = useLoading();
 const uToast = useToast();
-
-const uCrud = useCrud("api/2.0/nucleo/persona");
-const uCrud2 = useCrud("api/2.0/nucleo/formpersona");
-const uCrud3 = useCrud("api/2.0/nucleo/personaadjunto");
-const uCrud4 = useCrud("api/2.0/nucleo/predio");
-const uCrud5 = useCrud("api/2.0/nucleo/personalinea");
-const uCrud6 = useCrud("api/2.0/nucleo/lote");
 
 const modelValue = defineModel<object>();
 
@@ -1085,7 +1082,7 @@ const getVillageList = async (ubicacionId: number, tipo: string) => {
 const itemsAsociaciones = ref<Array<{ value: number; text: string }>>([]);
 const getAsociaciones = async () => {
   try {
-    const response = await axios.get(`/api/2.0/nucleo/asociacion/by-origen/${props.origenasociaciones}`);
+    const response = await apiGet(`${base_url1}/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`);
     const results = response?.data?.results || [];
 
     if (results.length === 0) {
@@ -1127,15 +1124,33 @@ const resizeBase64Img = (base64:string, callback:any) => {
 const survey = new Model(json);
 survey.data = {}; // Empieza vacío
 
+const apiGet = (url: string) => {
+  return cleanAxios.get(url, {
+    headers: {
+      'Authorization': `Api-Key ${getApiKey()}`,
+    }
+  });
+};
+// const base_url1 = 'http://localhost:8002'
+const base_url1 = ''
 const getSurveyData = async () => {
   try {
-    const responsePersona = await axios.get(`api/2.0/nucleo/persona/${userSurveyId}/`);
-    const responseFormpersona = await axios.get(`api/2.0/nucleo/formpersona/7030/`);
-    const responseAdjunto1 = await axios.get(`api/2.0/nucleo/personaadjunto/129/`);
-    const responseAdjunto2 = await axios.get(`api/2.0/nucleo/personaadjunto/130/`);
-    const responsePredio = await axios.get(`api/2.0/nucleo/predio/38/`);
-    const responseLinea = await axios.get(`api/2.0/nucleo/personalinea/17/`);
-    await fillOutForm(responsePersona, responseFormpersona, responseAdjunto1, responseAdjunto2, responsePredio, responseLinea);
+    const responsePersona = await apiGet(`${base_url1}/api/2.0/inscripciones/persona/${userSurveyId}/`);
+    const responseFormpersona = await apiGet(`${base_url1}/api/2.0/inscripciones/formpersona/7030/`);
+    const responseAdjunto1 = await apiGet(`${base_url1}/api/2.0/inscripciones/personaadjunto/129/`);
+    const responseAdjunto2 = await apiGet(`${base_url1}/api/2.0/inscripciones/personaadjunto/130/`);
+    const responsePredio = await apiGet(`${base_url1}/api/2.0/inscripciones/predio/38/`);
+    const responseLinea = await apiGet(`${base_url1}/api/2.0/inscripciones/personalinea/17/`);
+
+    await fillOutForm(
+        responsePersona.data,
+        responseFormpersona.data,
+        responseAdjunto1.data,
+        responseAdjunto2.data,
+        responsePredio.data,
+        responseLinea.data
+    );
+
     isSurveyReady.value = true;
   } catch (error) {
     console.error("Error cargando survey:", error);
@@ -1147,58 +1162,65 @@ const getSurveyData = async () => {
 
 const fillOutForm = async (responsePersona: any, responseFormpersona: any, responseAdjunto1: any, responseAdjunto2: any, responsePredio: any, responseLinea: any) => {
   try {
+
+    console.log('responsePersona')
+    console.log(responsePersona)
+
     survey.stopTimer();
 
     survey.data = {
       // === PAGE 1 ===
-      pertenecegrupo: responsePersona.data.vinculado_asociacion || false,
-      asociaciones: responsePersona.data.cub_asociacion || 99999, // 99999 = Sin asociación
-      tiene_coca: responseFormpersona.data.tiene_coca ?? 1,
-      tipo_exclusion: responseFormpersona.data.tipo_exclusion_id ?? null,
+      pertenecegrupo: responsePersona.vinculado_asociacion || false,
+
+      asociaciones: responsePersona.cub_asociacion || 99999, // 99999 = Sin asociación
+
+      tiene_coca: responseFormpersona.tiene_coca ?? 1,
+      tipo_exclusion: responseFormpersona.tipo_exclusion_id ?? null,
+
 
       // === PAGE 2 ===
-      desplazado_2025: responsePersona.data.desplazado_2025 || false,
+      desplazado_2025: responsePersona.desplazado_2025 || false,
 
       // === PAGE 4 ===
-      titular_nombres: responsePersona.data.nombre,
-      titular_apellidos: responsePersona.data.apellido,
-      titular_tipo_identificacion: responsePersona.data.tipo_identificacion_id,
-      titular_numero_documento: responsePersona.data.numero_documento,
-      titular_fecha_nacimiento: responsePersona.data.fecha_nacimiento,
-      titular_fecha_expedicion: responsePersona.data.fecha_expedicion,
-      titular_celular: responsePersona.data.telefono_celular,
-      titular_whatsapp: responsePersona.data.whatsapp?.trim(),
-      tiene_email: responsePersona.data.email && responsePersona.data.email !== "NA",
-      titular_email: responsePersona.data.email && responsePersona.data.email !== "NA" ? responsePersona.data.email : "",
+      titular_nombres: responsePersona.nombre,
+      titular_apellidos: responsePersona.apellido,
+      titular_tipo_identificacion: responsePersona.tipo_identificacion_id,
+      titular_numero_documento: responsePersona.numero_documento,
+      titular_fecha_nacimiento: responsePersona.fecha_nacimiento,
+      titular_fecha_expedicion: responsePersona.fecha_expedicion,
+      titular_celular: responsePersona.telefono_celular,
+      titular_whatsapp: responsePersona.whatsapp?.trim(),
+      // tiene_email: responsePersona.email && responsePersona.email !== "NA",
+      // titular_email: responsePersona.email && responsePersona.email !== "NA" ? responsePersona.data.email : "",
 
       // === PAGE 5 ===
-      titular_sexo: responsePersona.data.sexo_id,
-      titular_cabeza_familia: responsePersona.data.cabeza_flia || false,
-      tipo_comunidad_etnica: responsePersona.data.tipo_comunidad_etnica_id ?? "",
-      tipo_comunidad_etnica_nombre: responsePersona.data.nombre_comunidad ?? "NA",
-      num_nucleo: responsePersona.data.num_nucleo ?? "",
+      titular_sexo: responsePersona.sexo_id,
+      titular_cabeza_familia: responsePersona.cabeza_flia || false,
+      tipo_comunidad_etnica: responsePersona.tipo_comunidad_etnica_id ?? "",
+      tipo_comunidad_etnica_nombre: responsePersona.nombre_comunidad ?? "NA",
+      num_nucleo: responsePersona.num_nucleo ?? "",
 
       // === PAGE 6 ===
-      predio_coca_tipo_residencia: responsePredio.data.tipo_relacion_predio_id ?? null,
-      predio_coca_area_total: responsePredio.data.area_total_hectareas ?? "",
-      predio_coca_area_cultivo: responsePredio.data.area_cultivo_hectareas ?? "",
-      predio_coca_vive: responsePredio.data.residencia || false,
+      predio_coca_tipo_residencia: responsePredio.tipo_relacion_predio_id ?? null,
+      predio_coca_area_total: responsePredio.area_total_hectareas ?? "",
+      predio_coca_area_cultivo: responsePredio.area_cultivo_hectareas ?? "",
+      predio_coca_vive: responsePredio.residencia || false,
 
       // === PAGE 7 ===
-      tienecoordenadas: !!responsePredio.data.coordenada_registro, // si hay coordenada, asumimos que sí
-      // coordinates: (AQUÍ se arma especial si quieres cargar coordenadas)
+      // tienecoordenadas: !!responsePredio.data.coordenada_registro, // si hay coordenada, asumimos que sí
+      // coordinates:
 
-      predio_coca_altitud: responsePredio.data.altitud ?? "",
-      predio_coca_precision: responsePredio.data.presion ?? "",
+      predio_coca_altitud: responsePredio.altitud ?? "",
+      predio_coca_precision: responsePredio.presion ?? "",
 
       // === PAGE 8 ===
-      establece_fortalece: responseLinea.data.tipo_experiencia_id ?? null,
-      linea_productiva: responseLinea.data.linea_productiva_id ?? null,
-      otra_cual: responseLinea.data.otra_cual ?? "",
+      establece_fortalece: responseLinea.tipo_experiencia_id ?? null,
+      linea_productiva: responseLinea.linea_productiva_id ?? null,
+      otra_cual: responseLinea.otra_cual ?? "",
 
       // === Aceptaciones
-      question2: responseFormpersona.data.acepta_terminos ? "1" : "",
-      question6: responseFormpersona.data.acepta_tratamiento_datos ? "Item 1" : "",
+      question2: responseFormpersona.acepta_terminos ? "1" : "",
+      question6: responseFormpersona.acepta_tratamiento_datos ? "Item 1" : "",
     };
 
     survey.startTimer();
@@ -1207,293 +1229,6 @@ const fillOutForm = async (responsePersona: any, responseFormpersona: any, respo
     throw error;
   }
 };
-
-/*survey.onCompleting.add((sender, options) => {
-  options.allowComplete = false;
-
-  const personaData = {
-    tipo_identificacion_id: parseInt(sender.data.titular_tipo_identificacion),
-    cub_asociacion: sender.data.asociaciones === 99999 ? null : sender.data.asociaciones,
-    cub: 0,
-    numero_documento: String(sender.data.titular_numero_documento),
-    nombre: sender.data.titular_nombres,
-    apellido: sender.data.titular_apellidos,
-    fecha_expedicion: sender.data.titular_fecha_expedicion,
-    fecha_nacimiento: sender.data.titular_fecha_nacimiento,
-    sexo_id: parseInt(sender.data.titular_sexo),
-    email: sender.data.tiene_email ? sender.data.titular_email : 'NA',
-    telefono_celular: sender.data.titular_celular,
-    whatsapp: sender.data.titular_whatsapp,
-    tipo_comunidad_etnica_id: parseInt(sender.data.tipo_comunidad_etnica),
-    nombre_comunidad: sender.data.tipo_comunidad_etnica_nombre,
-    pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0,
-    desplazado_2025: sender.data.desplazado_2025? 1 : 0,
-    cabeza_flia: sender.data.titular_cabeza_familia? 1 : 0,
-    num_nucleo: sender.data.num_nucleo,
-    ha_total_predios: sender.data.predio_coca_area_total,
-    ha_total_loteCoca: sender.data.predio_coca_area_cultivo,
-    menor_edad: sender.data.Menor_Edad,
-    beneficiario: 0,
-    vinculado_asociacion:0,
-    estado_id: 111,
-    fase:props.fasename,
-    discapacidad:0,
-    fecha_estado: new Date().toISOString() ,
-    origen: props.origen,
-    num_predios: 0
-  };
-
-  const formularioPersonaData = {
-    formulario_id: props.formid,
-    tiene_coca: sender.data.tiene_coca?1:0,
-    persona_id: 0,
-    acepta_terminos: 1,
-    acepta_tratamiento_datos: 1,
-    compromiso_proceso_susticion:1,
-    fcrea: new Date().toISOString(),
-    fecha_aceptacion: new Date().toISOString(),
-    beca_desea: 0,
-    vivienda:0,
-    beca_num: 0
-  };
-
-  const personaAdjuntoData1 = {
-    persona_id: 0,
-    tipo_documento_id: 13,
-    ruta: "",
-    origen: 'preregistro_catatumbo',
-    fcrea: new Date().toISOString(),
-  };
-
-  if (Array.isArray(sender.data.titular_foto_cara) && sender.data.titular_foto_cara.length > 0) {
-    resizeBase64Img(sender.data.titular_foto_cara[0].content, (resizedImage:any) => {
-      personaAdjuntoData1.ruta = resizedImage;
-      console.log('transformado')
-    });
-  }
-
-  const personaAdjuntoData2 = {
-    persona_id: 0,
-    tipo_documento_id: 14,
-    ruta: "",
-    origen: 'preregistro_catatumbo',
-    fcrea: new Date().toISOString(),
-  }
-
-  if (Array.isArray(sender.data.titular_foto_contracara) && sender.data.titular_foto_contracara.length > 0) {
-    resizeBase64Img(sender.data.titular_foto_contracara[0].content, (resizedImage:any) => {
-      personaAdjuntoData2.ruta = resizedImage;
-      console.log('transformado')
-    });
-  }
-
-  let longitud = 0;
-  let latitud = 0;
-
-  if (sender.data?.coordinates) {
-    const coords = sender.data.coordinates.split('|').map(parseFloat);
-    if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
-      [longitud, latitud] = coords;
-    }
-  }
-
-  const altitud = sender.data?.predio_coca_altitud ?? 0;
-  const presicion = sender.data?.predio_coca_precision ?? 0;
-
-  const predioLoteViveData = {
-    persona_id: 0,
-    ubicacion_id: (sender.data.vive_corregimiento != null && sender.data.vive_corregimiento != 9999) ? sender.data.vive_corregimiento : (sender.data.vive_vereda != null && sender.data.vive_vereda != 9999) ?sender.data.vive_vereda : sender.data.vive_municipio,
-    cabecera: sender.data.vive_lugar === "1" ? 1 : 0,
-    centro_poblado: sender.data.viveLugar === "2" ? 1 : 0,
-    corregimiento: sender.data.viveLugar === "3" ? 1 : 0,
-    vereda: sender.data.viveLugar === "4" ? 1 : 0,
-    direccion: sender.data.vive_direccion != null ? sender.data.vive_direccion : 'Sin dirección',
-    nombre_lugar: sender.data.vive_vereda_otra != null ? sender.data.vive_vereda_otra : 'Sin nombre',
-    residencia: 1,
-    lotecoca:sender.data.predio_coca_vive? 1 : 0,
-    area_total_hectareas: sender.data.predio_coca_area_total,
-    area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
-    proyecto_productivo: 0,
-    tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-    documento_relacion_predio: "",
-    origen: 'preregistro_catatumbo',
-    sig: 0,
-    coordenada_registro: `${latitud} ${longitud}`,
-    altitud: altitud,
-    presion: presicion,
-    tiempo_propietario_predio:0
-  };
-
-  if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
-    resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
-      predioLoteViveData.documento_relacion_predio = resizedImage;
-    });
-  }
-
-  const coordenadaLoteCocaData = {
-    predio_id: 0,
-    coordenadastr: `${latitud} ${longitud}`,
-    altitud,
-    presicion,
-    origen: 'preregistro_catatumbo',
-    fcrea: new Date().toISOString()
-  };
-
-  const predioLoteDesplazadoData = {
-    persona_id: 0,
-    ubicacion_id: (sender.data.desplazado_corregimiento != null && sender.data.desplazado_corregimiento != 9999) ? sender.data.desplazado_corregimiento : (sender.data.desplazado_vereda != null && sender.data.desplazado_vereda != 9999) ?sender.data.desplazado_vereda : sender.data.desplazado_municipio,
-    cabecera: sender.data.deplazado_lugar === "1" ? 1 : 0,
-    centro_poblado: sender.data.deplazado_lugar === "2" ? 1 : 0,
-    corregimiento: sender.data.deplazado_lugar === "3" ? 1 : 0,
-    vereda: sender.data.deplazado_lugar === "4" ? 1 : 0,
-    direccion: sender.data.desplazado_lugar_direccion != null ? sender.data.desplazado_lugar_direccion : 'Sin dirección',
-    nombre_lugar: sender.data.desplazado_otra_vereda != null ? sender.data.desplazado_otra_vereda : 'Sin nombre',
-    residencia: 0,
-    lotecoca:0,
-    area_total_hectareas: 0,
-    area_cultivo_hectareas: 0,
-    proyecto_productivo: 0,
-    documento_relacion_predio: "",
-    origen: 'preregistro_catatumbo',
-    sig: 0,
-    coordenada_registro: `${latitud} ${longitud}`,
-    altitud: altitud,
-    presion: presicion,
-    tiempo_propietario_predio:0
-  };
-
-  const predioLoteCocaData = {
-    persona_id: 0,
-    ubicacion_id: (sender.data.predio_coca_corregimiento != null && sender.data.predio_coca_corregimiento != 9999) ? sender.data.predio_coca_corregimiento : (sender.data.predio_coca_vereda != null && sender.data.predio_coca_vereda != 9999) ?sender.data.predio_coca_vereda : sender.data.predio_coca_municipio,
-    cabecera: sender.data.predio_coca_lugar === "1" ? 1 : 0,
-    centro_poblado: sender.data.predio_coca_lugar === "2" ? 1 : 0,
-    corregimiento: sender.data.predio_coca_lugar === "3" ? 1 : 0,
-    direccion: sender.data.predio_coca_lugar_direccion != null ? sender.data.predio_coca_lugar_direccion : 'Sin dirección',
-    nombre_lugar: sender.data.predio_coca_vereda_otra != null ? sender.data.predio_coca_vereda_otra : 'Sin nombre',
-    residencia: 0,
-    lotecoca:1,
-    area_total_hectareas: sender.data.predio_coca_area_total,
-    area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
-    proyecto_productivo: 0,
-    tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-    documento_relacion_predio: "",
-    origen: 'preregistro_catatumbo',
-    sig: 0,
-    coordenada_registro: `${latitud} ${longitud}`,
-    altitud: altitud,
-    presion: presicion,
-    tiempo_propietario_predio:0
-  };
-
-  if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
-    resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
-      predioLoteCocaData.documento_relacion_predio = resizedImage;
-      console.log('transformado')
-    });
-  }
-
-  const predioLoteCocaOtroData = {
-    persona_id: 0,
-    ubicacion_id: (sender.data.predio_coca_otro_corregimiento != null && sender.data.predio_coca_otro_corregimiento != 9999) ? sender.data.predio_coca_otro_corregimiento : (sender.data.predio_coca_vereda != null && sender.data.predio_coca_vereda != 9999) ?sender.data.predio_coca_vereda : sender.data.predio_coca_otro_municipio,
-    cabecera: sender.data.predio_coca_otro_lugar === "1" ? 1 : 0,
-    centro_poblado: sender.data.predio_coca_otro_lugar === "2" ? 1 : 0,
-    corregimiento: sender.data.predio_coca_otro_lugar === "3" ? 1 : 0,
-    vereda: sender.data.predio_coca_otro_lugar === "4" ? 1 : 0,
-    direccion: sender.data.predio_coca_otro_direccion != null ? sender.data.predio_coca_otro_direccion : 'Sin dirección',
-    nombre_lugar: sender.data.predio_coca_otro_vereda_otra != null ? sender.data.predio_coca_otro_vereda_otra : 'Sin nombre',
-    residencia: 0,
-    lotecoca:1,
-    area_total_hectareas: sender.data.predio_coca_area_total,
-    area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
-    proyecto_productivo: 0,
-    tipo_relacion_predio_id: parseInt(sender.data.predio_coca_tipo_residencia),
-    documento_relacion_predio: "",
-    origen: 'preregistro_catatumbo',
-    sig: 0,
-    coordenada_registro: `${latitud} ${longitud}`,
-    altitud: altitud,
-    presion: presicion,
-    tiempo_propietario_predio:0
-  };
-
-  if (Array.isArray(sender.data.predio_coca_tipo_documento) && sender.data.predio_coca_tipo_documento.length > 0) {
-    resizeBase64Img(sender.data.predio_coca_tipo_documento[0].content, (resizedImage:any) => {
-      predioLoteCocaOtroData.documento_relacion_predio = resizedImage;
-    });
-  }
-
-  const personaLineaProductivaData = {
-    persona_id: sender.data.Persona_Id,
-    linea_productiva_id: sender.data.linea_productiva,
-    tipo_experiencia_id: sender.data.establece_fortalece,
-    otra_cual: sender.data.otra_cual,
-    experiencia_linea_productiva: 0,
-    tiempo_experiencia_linea: 0,
-    vinculado_asociacion: 0,
-    activa: 1,
-    fcrea: new Date().toISOString(),
-    origen: 'preregistro_catatumbo',
-    fmodifica: new Date().toISOString()
-  };
-
-  uCrud.create(personaData)
-      .then((item:any) => {
-        formularioPersonaData.persona_id = item.id
-        uCrud2.create(formularioPersonaData).then((item2:any) => {})
-        personaAdjuntoData1.persona_id = item.id
-        uCrud3.create(personaAdjuntoData1).then((item3:any) => {})
-        personaAdjuntoData2.persona_id = item.id
-        uCrud3.create(personaAdjuntoData2).then((item4:any) => {})
-
-        predioLoteViveData.persona_id = item.id
-        uCrud4.create(predioLoteViveData).then((item6:any) => {
-          console.log('item6')
-          console.log(item6)
-          coordenadaLoteCocaData.predio_id = item6.id
-          console.log('coordenadaLoteCocaData')
-          console.log(coordenadaLoteCocaData)
-          // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
-        })
-        if (sender.data.desplazado_2025) {
-          predioLoteDesplazadoData.persona_id = item.id
-          uCrud4.create(predioLoteDesplazadoData).then((item61:any) => {
-            console.log('item61')
-            console.log(item61)
-            coordenadaLoteCocaData.predio_id = item61.id
-            // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
-          })
-        }
-
-        predioLoteCocaData.persona_id = item.id
-        uCrud4.create(predioLoteCocaData).then((item62:any) => {
-          console.log('item62')
-          console.log(item62)
-          coordenadaLoteCocaData.predio_id = item62.id
-          // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
-        })
-
-        if (sender.data.predio_coca_ubicacion==='2') {
-          predioLoteCocaOtroData.persona_id = item.id
-          uCrud4.create(predioLoteCocaOtroData).then((item7:any) => {
-            console.log('item7')
-            console.log(item7)
-            coordenadaLoteCocaData.predio_id = item7.id
-            // uCrud6.create(coordenadaLoteCocaData).then((item8:any) => {})
-          })
-        }
-        personaLineaProductivaData.persona_id = item.id
-        uCrud5.create(personaLineaProductivaData).then((item5:any) => {})
-
-        uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
-        sender.clear(true);
-        survey.showNavigationButtons = false;
-      })
-      .catch((error) => {
-        uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
-      });
-
-  return false;
-});*/
 
 survey.onCompleting.add(async (sender, options) => {
   options.allowComplete = false; // Bloquear mientras actualizamos
