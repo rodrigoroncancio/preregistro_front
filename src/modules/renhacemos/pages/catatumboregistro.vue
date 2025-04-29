@@ -5,10 +5,11 @@
       <v-card-text class="pa-0">
         <exp-data-table
           uuid="table-users_pnis"
-          :endpoint="`${endpoint}/catatumboindividual/filterbysurvey/4/${tipo}`"
+          :endpoint="`${base_url}/api/2.0/inscripciones/personavalidaciones/by-documento/0/18`"
           :showHeader="false"
           :drawRefresh="drawRefresh"
           :headers="headers"
+          apikey="gAAAAABoDtFn9gi3OV4aLVbvYNvjReVfBFOsjfPH7TEpTCCmppTjoZPPzcKSRZycbhgV9diSwSBGGjmoiZfeu9kEoKoncDHDMwmsyA7LEnRc20FRh_fwVYLFyYO2sn3q-Jhu9jYRk_4q"
           :extraMenuItems="[{
             title: $t('modules.core.validate'),
             icon: 'mdi-check-all',
@@ -33,11 +34,11 @@
               mdi-account-hard-hat
             </v-icon>
           </template>
-          <template v-slot:item.number_completed="{item}">
-            <v-btn @click="modalValidados(item, 'si')"  variant="flat" color="green" block>{{ item.number_completed }}</v-btn>
+          <template v-slot:item.aprobados="{item}">
+            <v-btn @click="modalValidados(item, 'si')"  variant="flat" color="green" block>{{ item.aprobados }}</v-btn>
           </template>
-          <template v-slot:item.number_uncompleted="{item}">
-            <v-btn @click="modalValidados(item, 'no')"  variant="flat" color="red" block>{{ item.number_uncompleted }}</v-btn>
+          <template v-slot:item.noaprobados="{item}">
+            <v-btn @click="modalValidados(item, 'no')"  variant="flat" color="red" block>{{ item.noaprobados }}</v-btn>
           </template>
           <template v-slot:item.validado_final="{ item }">
             <v-icon 
@@ -185,9 +186,41 @@ import axios from "axios";
 import { useLoading } from "vue-loading-overlay";
 import Swal from "sweetalert2";
 import { useRoute } from 'vue-router';
+import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 const route = useRoute();
 
 const tipo = route.params.id;
+
+const api = axios.create()
+const apikey = 'gAAAAABoDtFn9gi3OV4aLVbvYNvjReVfBFOsjfPH7TEpTCCmppTjoZPPzcKSRZycbhgV9diSwSBGGjmoiZfeu9kEoKoncDHDMwmsyA7LEnRc20FRh_fwVYLFyYO2sn3q-Jhu9jYRk_4q'
+const base_url2 = 'http://localhost:8002'
+const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
+
+  return api.get(base_url2 + url, {
+    ...config,
+    headers: {
+      ...config.headers,
+      'Authorization': 'Api-Key ' + apikey,
+    },
+  })
+}
+
+const apiUrl = ref<string>('')
+
+const llamarApi = async () => {
+  if (!apiUrl.value) {
+    console.error('No se ha definido la URL')
+    return
+  }
+
+  try {
+    const response = await customGet(apiUrl.value)
+    console.log('Respuesta:', response?.data)
+    return response
+  } catch (error) {
+    console.error('Error al llamar la API:', error)
+  }
+}
 
 const tipoTranslation = computed(() => {
   switch (tipo) {
@@ -205,6 +238,7 @@ const tipoTranslation = computed(() => {
 });
 
 const uLoading = useLoading();
+const base_url = 'http://localhost:8002'
 const endpoint = "/api/1.0/core";
 const { t } = useI18n();
 const router = useRouter();
@@ -217,12 +251,11 @@ const rolsActual = ref([]);
 
 const headers: any[] = [
   // { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: false },
-  { key: 'identificacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
-  { key: 'nombres', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
-  { key: 'apellidos', title: "Apellidos", width: "auto", align: "start", searchable: true, sortable: false, },
-  { key: 'fase', title: "fase", width: "auto", align: "start", searchable: false, sortable: false, },
-  { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
-  { key: 'number_uncompleted', title: "Alertas", width: "auto", align: "start", sortable: false, },
+  { key: 'numero_documento', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'nombre', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'apellido', title: "Apellidos", width: "auto", align: "start", searchable: true, sortable: false, },
+  { key: 'aprobados', title: "Validados", width: "auto", align: "start", sortable: false, },
+  { key: 'noaprobados', title: "Alertas", width: "auto", align: "start", sortable: false, },
   { key: 'validado_final', title: "Superv.", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
 ];
@@ -273,14 +306,17 @@ const getValidationItems = async () => {
   let loader = uLoading.show({});
   itemsValidation.value = [];
   try {
-    const response = await axios.get(
-      `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/4`
-    );
+    // const response = await axios.get(
+    //   `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/4`
+    // );
+
+    apiUrl.value = `/api/2.0/inscripciones/validacionesitems_persona/missing-validation-items/${identificationnumber.value}/18`
+    const response = await llamarApi()
     // Verifica si response.data tiene la estructura esperada
     if (response.data.missing_items) {
       itemsValidation.value = response.data.missing_items.map((item: any) => ({
         id: item.id,
-        label: item.nombre || item.name || "Sin nombre",
+        label: item.nombre || item.descripcion || "Sin nombre",
       }));
     } else {
       console.warn("Formato inesperado en la respuesta:", response.data);
@@ -294,7 +330,9 @@ const getValidationItems = async () => {
 
 const getItemsValidadosBase = async () => {
   try {
-    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/4/`);
+    // const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/4/`);
+    apiUrl.value = `/api/2.0/inscripciones/validacionesitems/by-form/2`
+    const response = await llamarApi()
     itemsValidadosBase.value = response.data;
   } catch (error) {
     console.error("Error fetching validation items:", error);
@@ -314,7 +352,7 @@ const modalValidados = async (item: any, tipo: string='si') => {
   try {
     let loader = uLoading.show({});
     formModalValidadosTitulo.value = tipo == 'si' ? 'Items validados' : 'Alertas';
-    const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.identificacion}/4/${tipo}`);
+    const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.numero_documento}/4/${tipo}`);
     itemsValidados.value = response.data;
     loader.hide();
     formModalValidados.value = true;    
@@ -394,11 +432,11 @@ const clickAction = (item: any, action: string) => {
   console.log(item, action);
   if (action === 'validate') {
     formModalValidate.value = true;
-    identificationnumber.value = item.identificacion;
+    identificationnumber.value = item.numero_documento;
     getValidationItems();
   }
   if (action === 'validate_super') {
-    identificationnumber.value = item.identificacion;
+    identificationnumber.value = item.numero_documento;
     clickSelectSuperForm();
   }
 };

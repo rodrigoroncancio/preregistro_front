@@ -26,10 +26,10 @@
   import { ref, onMounted } from "vue";
   
   const uLoading = useLoading();
-  // const base_url1 = 'http://localhost:8002/'
-  // const base_url2 = 'http://localhost:8002'
-  const base_url1 = ''
-  const base_url2 = ''
+  const base_url1 = 'http://localhost:8002/'
+  const base_url2 = 'http://localhost:8002'
+  // const base_url1 = ''
+  // const base_url2 = ''
   const uCrud_persona = useCrud(base_url1 + "api/2.0/inscripciones/persona");
   const uCrud_edades= useCrud(base_url1 + "api/2.0/inscripciones/composicionedades");
   const uCrud_nucleo = useCrud(base_url1 + "api/2.0/inscripciones/composicionucleo");
@@ -42,14 +42,14 @@
   const apikey = 'gAAAAABoDtFn9gi3OV4aLVbvYNvjReVfBFOsjfPH7TEpTCCmppTjoZPPzcKSRZycbhgV9diSwSBGGjmoiZfeu9kEoKoncDHDMwmsyA7LEnRc20FRh_fwVYLFyYO2sn3q-Jhu9jYRk_4q'
   const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
 
-  return api.get(base_url2 + url, {
-    ...config,
-    headers: {
-      ...config.headers,
-      'Authorization': 'Api-Key ' + apikey,
-    },
-  })
-}
+    return api.get(base_url2 + url, {
+      ...config,
+      headers: {
+        ...config.headers,
+        'Authorization': 'Api-Key ' + apikey,
+      },
+    })
+  }
 
 const apiUrl = ref<string>('')
 
@@ -129,6 +129,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
       // const response = await axios.get(`/api/2.0/nucleo/lineaproductiva/by-id/${personaId}/`);
       apiUrl.value = `/api/2.0/inscripciones/personalinea/by-persona/${personaId}/`
       const response = await llamarApi()
+
       dataLineaProductiva.value = response.data[0]
       survey.setValue('establece_fortalece', dataLineaProductiva.value.tipo_experiencia_id || 0);
       survey.setValue('linea_productiva', dataLineaProductiva.value.linea_productiva_id || 0);
@@ -1166,6 +1167,8 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
       if (options.value === null || options.value === "")
         return;
         const loading = uLoading.show({});
+        apiUrl.value = `/api/2.0/inscripciones/personavalidaciones/by-documento/88170468/18`
+        const response2 = await llamarApi()
         // axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
         apiUrl.value = `/api/2.0/inscripciones/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`
         await llamarApi()

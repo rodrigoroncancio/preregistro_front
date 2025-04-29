@@ -17,6 +17,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  apikey:{
+    type: String,
+    default: null,
+  },
   drawRefresh: {
     type: String,
     default: "",
@@ -76,7 +80,8 @@ const emit = defineEmits([
 const uDataTable = useDataTable(
   props.uuid,
   props.headers,
-  props.endpoint
+  props.endpoint,
+  props.apikey
 );
 
 const search = ref("");
