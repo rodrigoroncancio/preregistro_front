@@ -24,6 +24,7 @@
     import { useLoading } from "vue-loading-overlay";
     import { ref, onMounted } from "vue";
     import { object } from 'yup';
+    
 
     const uLoading = useLoading();
     const uToast = useToast();
@@ -40,7 +41,7 @@
     // const uCrud6 = useCrud("api/2.0/nucleo/lote");
     const modelValue = defineModel<object>();
     const api = axios.create()
-    const apikey = 'gAAAAABoDtFn9gi3OV4aLVbvYNvjReVfBFOsjfPH7TEpTCCmppTjoZPPzcKSRZycbhgV9diSwSBGGjmoiZfeu9kEoKoncDHDMwmsyA7LEnRc20FRh_fwVYLFyYO2sn3q-Jhu9jYRk_4q'
+    const apikey = 'gAAAAABoEqasTj16HrxYAWXiBUbdnPiY7PCa7z0m8Jd6pqDLxHNFiioBWptP-RCbId9JS2hr8DxR-QBXNeKNiy7aiqdb1iH3krEeG7KJA0imDbeUgdSjbLDFaQgfdWSX4I6hIHAhOS3A'
 
     const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
 
@@ -306,19 +307,6 @@
               "visibleIf": "{vive_lugar} <> 4 and {vive_lugar} notempty",
               "title": "Dirección"
             },
-            // {
-            //   "type": "dropdown",
-            //   "name": "vive_nucleo_veredal",
-            //   "visibleIf": "{vive_lugar} = 4",
-            //   "title": "Nucleo veredal",
-            //   "isRequired": true,
-            //   "choices": [
-            //     {
-            //       "value": "Item 1",
-            //       "text": "Sin nucleo"
-            //     }
-            //   ]
-            // },
             {
               "type": "dropdown",
               "name": "vive_vereda",
@@ -415,18 +403,6 @@
               "visibleIf": "{deplazado_lugar} != '4' and {desplazado_2025} = true",
               "title": "Dirección"
             },
-            // {
-            //   "type": "dropdown",
-            //   "name": "desplazado_nucleo_veredal",
-            //   "visibleIf": "{deplazado_lugar} = 4 and {desplazado_2025} = true",
-            //   "title": "Nucleo Veredal",
-            //   "choices": [
-            //     {
-            //       "value": "Item 1",
-            //       "text": "Sin corregimiento"
-            //     }
-            //   ]
-            // },
             {
               "type": "dropdown",
               "name": "desplazado_vereda",
@@ -764,18 +740,6 @@
               "visibleIf": "{predio_coca_lugar} <3 and {predio_coca_vive} = false",
               "title": "Dirección"
             },
-            // {
-            //   "type": "dropdown",
-            //   "name": "predio_coca_nucleo_veredal",
-            //   "visibleIf": "{predio_coca_lugar} > 2 and {predio_coca_vive} = false",
-            //   "title": "Nucleo veredal",
-            //   "choices": [
-            //     {
-            //       "value": "Item 1",
-            //       "text": "Sin corregimiento"
-            //     }
-            //   ]
-            // },
             {
               "type": "dropdown",
               "name": "predio_coca_vereda",
@@ -805,20 +769,6 @@
               "name": "question49",
               "html": "<h4>\n8. Ingrese los Datos del lote de coca. \n</h4>"
             },
-            // {
-            //   "type": "text",
-            //   "name": "predio_coca_latitud",
-            //   "title": "Latitud (x.y °)",
-            //   "isRequired": true,
-            //   "validators": [
-            //     {
-            //       "type": "regex",
-            //       "text": "El número debe tener máximo 9 caracteres y hasta 4 decimales.",
-            //       "regex": "^-?\\d{1,5}(\\.\\d{1,4})?$"
-            //     }
-            //   ],
-            //   "inputType": "number"
-            // },
             {
               "type": "boolean",
               "name": "tienecoordenadas",
@@ -834,20 +784,6 @@
               "isRequired": true,
               "polygon": props.polygon
             },
-            // {
-            //   "type": "text",
-            //   "name": "predio_coca_longitud",
-            //   "title": "Longitud (x.y °) ",
-            //   "isRequired": true,
-            //   "validators": [
-            //     {
-            //       "type": "regex",
-            //       "text": "El número debe tener máximo 9 caracteres y hasta 4 decimales.",
-            //       "regex": "^-?\\d{1,5}(\\.\\d{1,4})?$"
-            //     }
-            //   ],
-            //   "inputType": "number"
-            // },
             {
               "type": "text",
               "name": "predio_coca_altitud",
@@ -950,18 +886,6 @@
               "visibleIf": "{predio_coca_otro_lugar} != 4",
               "title": "Dirección"
             },
-            // {
-            //   "type": "dropdown",
-            //   "name": "predio_coca_otro_nucleo_veredal",
-            //   "visibleIf": "{predio_coca_otro_lugar} = 4",
-            //   "title": "Nucleo veredal",
-            //   "choices": [
-            //     {
-            //       "value": "Item 1",
-            //       "text": "Sin Corregimiento"
-            //     }
-            //   ]
-            // },
             {
               "type": "dropdown",
               "name": "predio_coca_otro_vereda",

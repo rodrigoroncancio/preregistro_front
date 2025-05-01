@@ -6,6 +6,7 @@ import { getApiKey } from '@/helpers/apiKey';
 import cleanAxios from '@/helpers/cleanAxios';
 
 const loading = useLoading();
+const apiKey= 'gAAAAABoEqasTj16HrxYAWXiBUbdnPiY7PCa7z0m8Jd6pqDLxHNFiioBWptP-RCbId9JS2hr8DxR-QBXNeKNiy7aiqdb1iH3krEeG7KJA0imDbeUgdSjbLDFaQgfdWSX4I6hIHAhOS3A'
 
 const queryParams = (extra: Object = null) => {
   try {
@@ -43,7 +44,7 @@ const useCrud = (endpoint: string, extra: Object = null) => {
 
             cleanAxios.get(`${endpoint}/lts/`, {
                 headers: {
-                    'Authorization': `Api-Key ${getApiKey()}`
+                    'Authorization': `Api-Key ${apiKey}`
                 }
             })
                 .then((resp: any) => {
