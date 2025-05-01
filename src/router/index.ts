@@ -209,26 +209,42 @@ const routes: RouteRecordRaw[] = [
             name: "public-catatumbo-ficha",
             component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formficha.vue"),
           },
+          // {
+          //   path: "preregistro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+          //   name: "public-catatumbo-preregistro",
+          //   component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfichapreregistro2.vue"),
+          // },
           {
-            path: "preregistro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
-            name: "public-catatumbo-preregistro",
-            component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfichapreregistro2.vue"),
+            path: "preregistro",
+            redirect: "/formularios/catatumbo/preregistro"
+          },
+          // {
+          //   path: "familiasproductores/preregistro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+          //   name: "public-catatumbo-preregfamiliaproductores",
+          //   component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfamiliaproductores.vue"),
+          // },
+          {
+            path: "familiasproductores/preregistro",
+            redirect: "/formularios/catatumbo/familiasproductores/preregistro"
+          },
+          // {
+          //   path: "familiasdesplazados/preregistro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+          //   name: "public-catatumbo-preregfamiliadesplazados",
+          //   component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfamiliadesplazados.vue"),
+          // },
+          {
+            path: "familiasdesplazados/preregistro",
+            redirect: "/formularios/catatumbo/familiasdesplazados/preregistro"
           },
           {
-            path: "familiasproductores/preregistro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
-            name: "public-catatumbo-preregfamiliaproductores",
-            component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfamiliaproductores.vue"),
+            path: "fichaacuerdofase2",
+            redirect: "/formularios/catatumbo/fichaacuerdo"
           },
-          {
-            path: "familiasdesplazados/preregistro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
-            name: "public-catatumbo-preregfamiliadesplazados",
-            component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfamiliadesplazados.vue"),
-          },
-          {
-            path: "fichaacuerdofase2", // Ruta relativa al path padre ("/catatumbo/asociaciones")
-            name: "public-catatumbo-ficha2",
-            component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formficha2.vue"),
-          },
+          // {
+          //   path: "fichaacuerdofase2", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+          //   name: "public-catatumbo-ficha2",
+          //   component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formficha2.vue"),
+          // },
           {
             path: "vercupos",
             name: "public-catatumbo-vercupos",
@@ -272,6 +288,19 @@ const routes: RouteRecordRaw[] = [
         component: () => import("@/modules/public/pages/catatumbo/callcenterformpreregistro.vue"),
       },
     ],
+  },
+  {
+    path: "/formularios", // Añade el path raíz
+    meta: { requiresAuth: true },
+    name: "formularios",
+    component: () => import("@/layouts/formularios.vue"),
+    children: [
+      {
+        path: "catatumbo/fichaacuerdo", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+        name: "public-catatumbo-ficha3",
+        component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formficha2.vue"),
+      }
+    ]
   },
   {
     path: "/auth",
