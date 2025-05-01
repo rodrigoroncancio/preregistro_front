@@ -106,7 +106,7 @@ const convocatorias = [
     colorBorderFecha: "#d6513e",
     colorBtn: "#d6513e",
     link: "/catatumbo/inicio",
-    proximamente: false,
+    proximamente: true,
     img: "https://expansionti.com/pnis/catatumbo.png",
   },
   {
