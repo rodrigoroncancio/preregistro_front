@@ -280,7 +280,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/formularios", // Añade el path raíz
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: false },
     name: "formularios",
     component: () => import("@/layouts/formularios.vue"),
     children: [
