@@ -17,8 +17,8 @@ import { useLoading } from "vue-loading-overlay";
 const base_url2 = ''
 const uLoading = useLoading();
 const apikey="gAAAAABoEqasTj16HrxYAWXiBUbdnPiY7PCa7z0m8Jd6pqDLxHNFiioBWptP-RCbId9JS2hr8DxR-QBXNeKNiy7aiqdb1iH3krEeG7KJA0imDbeUgdSjbLDFaQgfdWSX4I6hIHAhOS3A"
-const uCrud = useCrud(`${base_url2}/api/2.0/inscripciones/validacionesitems_persona`);
-const uCrudAdjunto = useCrud(`${base_url2}/api/2.0/inscripciones/validaciones_adjunto`);
+const uCrud = useCrud(`${base_url2}/api/2.0/validacion/item-persona`);
+const uCrudAdjunto = useCrud(`${base_url2}/api/2.0/validacion/validaciones_adjunto`);
 const uToast = useToast();
 
 const resizeBase64Img = (base64:string, callback:any) => {
