@@ -23,7 +23,7 @@ import useToast from "@/composables/useToast";
 import axios from "axios";
 import { useLoading } from "vue-loading-overlay";
 import { ref, onMounted } from "vue";
-import { object } from 'yup';
+import { number, object } from 'yup';
 import {useRoute} from "vue-router";
 
 //
@@ -221,15 +221,15 @@ const json ={
           "name": "question4",
           "html": "<h4>\n1. ¿Dónde vive usted actualmente?\n</h4>"
         },
-        {
-          "type": "dropdown",
-          "name": "vive_departamento",
-          "title": "1.1 Departamento",
-          "isRequired": true,
-          "choices": props.departamentosVive.data,
-          "defaultValue": props.departamentosVive.datadefault,
-          "readOnly": props.departamentosVive.readOnlyState
-        },
+        // {
+        //   "type": "dropdown",
+        //   "name": "vive_departamento",
+        //   "title": "1.1 Departamento",
+        //   "isRequired": true,
+        //   "choices": props.departamentosVive.data,
+        //   "defaultValue": props.departamentosVive.datadefault,
+        //   "readOnly": props.departamentosVive.readOnlyState
+        // },
         {
           "type": "dropdown",
           "name": "vive_municipio",
@@ -1131,16 +1131,16 @@ const apiGet = (url: string) => {
     }
   });
 };
-// const base_url1 = 'http://localhost:8002'
-const base_url1 = ''
+const base_url1 = 'http://localhost:8002'
+// const base_url1 = ''
 const getSurveyData = async () => {
   try {
     const responsePersona = await apiGet(`${base_url1}/api/2.0/inscripciones/persona/${userSurveyId}/`);
-    const responseFormpersona = await apiGet(`${base_url1}/api/2.0/inscripciones/formpersona/7030/`);
-    const responseAdjunto1 = await apiGet(`${base_url1}/api/2.0/inscripciones/personaadjunto/129/`);
-    const responseAdjunto2 = await apiGet(`${base_url1}/api/2.0/inscripciones/personaadjunto/130/`);
-    const responsePredio = await apiGet(`${base_url1}/api/2.0/inscripciones/predio/38/`);
-    const responseLinea = await apiGet(`${base_url1}/api/2.0/inscripciones/personalinea/17/`);
+    const responseFormpersona = await apiGet(`${base_url1}/api/2.0/inscripciones/formpersona/filterbyformperson/${responsePersona.data.id}/19`);
+    const responseAdjunto1 = await apiGet(`${base_url1}/api/2.0/inscripciones/personaadjunto/filterbydoctypeperson/${responsePersona.data.id}/13`);
+    const responseAdjunto2 = await apiGet(`${base_url1}/api/2.0/inscripciones/personaadjunto/filterbydoctypeperson/${responsePersona.data.id}/14`);
+    const responsePredio = await apiGet(`${base_url1}/api/2.0/inscripciones/predio/by-persona/${responsePersona.data.id}/`);
+    const responseLinea = await apiGet(`${base_url1}/api/2.0/inscripciones/personalinea/by-persona/${responsePersona.data.id}/`);
 
     await fillOutForm(
         responsePersona.data,
@@ -1165,6 +1165,11 @@ const fillOutForm = async (responsePersona: any, responseFormpersona: any, respo
 
     console.log('responsePersona')
     console.log(responsePersona)
+    responsePredio[0].coordenada_registro
+    var coordenadas = responsePredio[0].coordenada_registro.split(' ')
+    var coorstring = responsePredio[0].coordenada_registro.replace(' ', '|')
+    console.log('coorstring')
+    console.log(coorstring)
 
     survey.stopTimer();
 
@@ -1176,15 +1181,17 @@ const fillOutForm = async (responsePersona: any, responseFormpersona: any, respo
 
       tiene_coca: responseFormpersona.tiene_coca ?? 1,
       tipo_exclusion: responseFormpersona.tipo_exclusion_id ?? null,
+      vive_municipio: responsePredio[0].municipio_ubicacion,
 
 
       // === PAGE 2 ===
       desplazado_2025: responsePersona.desplazado_2025 || false,
 
+
       // === PAGE 4 ===
       titular_nombres: responsePersona.nombre,
       titular_apellidos: responsePersona.apellido,
-      titular_tipo_identificacion: responsePersona.tipo_identificacion_id,
+      titular_tipo_identificacion: responsePersona.tipo_identificacion,
       titular_numero_documento: responsePersona.numero_documento,
       titular_fecha_nacimiento: responsePersona.fecha_nacimiento,
       titular_fecha_expedicion: responsePersona.fecha_expedicion,
@@ -1194,33 +1201,48 @@ const fillOutForm = async (responsePersona: any, responseFormpersona: any, respo
       // titular_email: responsePersona.email && responsePersona.email !== "NA" ? responsePersona.data.email : "",
 
       // === PAGE 5 ===
-      titular_sexo: responsePersona.sexo_id,
+      titular_sexo: responsePersona.sexo,
       titular_cabeza_familia: responsePersona.cabeza_flia || false,
-      tipo_comunidad_etnica: responsePersona.tipo_comunidad_etnica_id ?? "",
+      tipo_comunidad_etnica: responsePersona.tipo_comunidad_etnica ?? "",
       tipo_comunidad_etnica_nombre: responsePersona.nombre_comunidad ?? "NA",
       num_nucleo: responsePersona.num_nucleo ?? "",
 
       // === PAGE 6 ===
-      predio_coca_tipo_residencia: responsePredio.tipo_relacion_predio_id ?? null,
-      predio_coca_area_total: responsePredio.area_total_hectareas ?? "",
-      predio_coca_area_cultivo: responsePredio.area_cultivo_hectareas ?? "",
-      predio_coca_vive: responsePredio.residencia || false,
+      predio_coca_tipo_residencia: responsePredio[0].tipo_relacion_predio ?? null,
+      predio_coca_area_total: responsePredio[0].ha_cultivo_hectareas ?? "",
+      predio_coca_area_cultivo: responsePredio[0].ha_total_hectareas ?? "",
+      predio_coca_vive: responsePredio[0].residencia || false,
 
       // === PAGE 7 ===
-      // tienecoordenadas: !!responsePredio.data.coordenada_registro, // si hay coordenada, asumimos que sí
+      tienecoordenadas: parseFloat(coordenadas[0]) > 0, 
       // coordinates:
-
-      predio_coca_altitud: responsePredio.altitud ?? "",
-      predio_coca_precision: responsePredio.presion ?? "",
+      coordinates: coorstring,
+      predio_coca_altitud: responsePredio[0].altitud ?? "",
+      predio_coca_precision: responsePredio[0].presion ?? "",
 
       // === PAGE 8 ===
-      establece_fortalece: responseLinea.tipo_experiencia_id ?? null,
-      linea_productiva: responseLinea.linea_productiva_id ?? null,
-      otra_cual: responseLinea.otra_cual ?? "",
+      establece_fortalece: responseLinea[0].tipo_experiencia ?? null,
+      linea_productiva: responseLinea[0].linea_productiva ?? null,
+      otra_cual: responseLinea[0].otra_cual ?? "",
 
       // === Aceptaciones
       question2: responseFormpersona.acepta_terminos ? "1" : "",
       question6: responseFormpersona.acepta_tratamiento_datos ? "Item 1" : "",
+
+      titular_foto_cara: [
+        {
+          content: responseAdjunto1[0].ruta
+        }
+      ],
+
+      titular_foto_contracara: [
+        {
+          content: responseAdjunto2[0].ruta
+        }
+      ],
+      tiene_email: responsePersona.email && typeof responsePersona.email === 'string' && responsePersona.email.length > 0 ? 1 : 0,
+      titular_email: responsePersona.email || ""
+      
     };
 
     survey.startTimer();

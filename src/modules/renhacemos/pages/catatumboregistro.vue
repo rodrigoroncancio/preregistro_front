@@ -5,7 +5,7 @@
       <v-card-text class="pa-0">
         <exp-data-table
           uuid="table-users_pnis"
-          :endpoint="`${base_url}/api/2.0/inscripciones/personavalidaciones/by-documento/0/18`"
+          :endpoint="`/api/1.0/inscripciones/personavalidaciones/by-documento/0/18`"
           :showHeader="false"
           :drawRefresh="drawRefresh"
           :headers="headers"
@@ -240,7 +240,6 @@ const tipoTranslation = computed(() => {
 });
 
 const uLoading = useLoading();
-const base_url = 'http://localhost:8002'
 const endpoint = "/api/1.0/core";
 const { t } = useI18n();
 const router = useRouter();
@@ -278,7 +277,7 @@ const numValidados = ref(0);
 const deleteItem = async (itemid: any) => {
   console.log('itemid')
   console.log(itemid)
-  await apiDelete(`${base_url2}/api/2.0/inscripciones/validacionesitems_persona/${itemid}/`);
+  await apiDelete(`/api/1.0/inscripciones/validacionesitems_persona/${itemid}/`);
   Swal.fire("Eliminado", "El registro ha sido eliminado", "success");
   formModalValidados.value = false;  
   fnReloadTable()
@@ -313,7 +312,7 @@ const getValidationItems = async () => {
     //   `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/4`
     // );
 
-    const response = await apiGet(`${base_url}/api/2.0/inscripciones/vwalidacionesitems_persona/missing-validation-items/${identificationnumber.value}/18`)
+    const response = await apiGet(`/api/2.0/inscripciones/vwalidacionesitems_persona/missing-validation-items/${identificationnumber.value}/18`)
     // Verifica si response.data tiene la estructura esperada
     if (response.data.missing_items) {
       itemsValidation.value = response.data.missing_items.map((item: any) => ({
@@ -334,7 +333,7 @@ const getItemsValidadosBase = async () => {
   try {
     // const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/4/`);
 
-    const response = await apiGet(`${base_url2}/api/2.0/inscripciones/validacionesitems/by-form/18`)
+    const response = await apiGet(`/api/2.0/inscripciones/validacionesitems/by-form/18`)
     itemsValidadosBase.value = response.data;
     numValidados.value = response.data.length
   } catch (error) {
@@ -357,7 +356,7 @@ const modalValidados = async (item: any, tipo: number) => {
     formModalValidadosTitulo.value = tipo == 1 ? 'Items validados' : 'Alertas';
     // const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.numero_documento}/4/${tipo}`);
     // api/2.0/inscripciones/personavalidaciones/by-documento/0/18/
-    const response = await apiGet(`${base_url}/api/2.0/inscripciones/vwalidacionesitems_persona/filterbydocumentnumber/${item.numero_documento}/18/${tipo}`)
+    const response = await apiGet(`/api/1.0/inscripciones/vwalidacionesitems_persona/filterbydocumentnumber/${item.numero_documento}/18/${tipo}`)
     itemsValidados.value = response.data;
     loader.hide();
     formModalValidados.value = true;    

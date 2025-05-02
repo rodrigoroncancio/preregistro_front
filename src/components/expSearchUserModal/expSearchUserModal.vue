@@ -77,8 +77,8 @@ const buscarUsuario = async () => {
   const headers = {
     'Authorization': `Api-Key ${getApiKey()}`,
   }
-  // const base_url1 = 'http://localhost:8002'
-  const base_url1 = ''
+  const base_url1 = 'http://localhost:8002'
+  // const base_url1 = ''
   try {
     const {data, status} = await cleanAxios.get(`${base_url1}/api/2.0/inscripciones/ficha/catatumbo/validar_documento/`, {
       params: {
@@ -89,6 +89,7 @@ const buscarUsuario = async () => {
     });
 
     const user = data.data;
+    console.log(data, status)
 
     if (status === 200 && Object.keys(user).length > 0) {
       router.push({name: 'preregistro-call-center', params: {id: user?.id}});
