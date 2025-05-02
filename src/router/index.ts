@@ -280,9 +280,9 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/formularios", // Añade el path raíz
-    meta: { requiresAuth: false },
+    meta: { requiresAuth: true },
     name: "formularios",
-    component: () => import("@/layouts/public.vue"),
+    component: () => import("@/layouts/formularios.vue"),
     children: [
       {
         path: "catatumbo/fichaacuerdo", // Ruta relativa al path padre ("/catatumbo/asociaciones")
