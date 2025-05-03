@@ -1,15 +1,19 @@
 <template>
   <v-main>
     <v-container class="flex-grow-1">
-      <v-row>
-        <v-col class="text-center mt-6">
-          <v-img :src="'/src/assets/img/header-colombia.png'" :width="360" class="mx-auto" />
-        </v-col>
-      </v-row>
-      <div class="main-container">
+      <!-- <div class="main-container">
         <v-progress-circular v-if="isLoading" indeterminate color="primary"></v-progress-circular>
-        <SurveyComponent v-else-if="isSurveyReady" :model="survey" />
-      </div>
+        <SurveyComponent v-else-if="isSurveyReady" 
+        :model="survey"
+        :is-read-only="true" />
+      </div> -->
+      <exp-survey-view 
+        v-if="isSurveyReady"
+        :surveyJson="json" 
+        :surveyData="survey.data"
+        :is-read-only="props.readOnly"
+        >
+        </exp-survey-view>
     </v-container>
   </v-main>
 </template>
@@ -18,6 +22,7 @@
 import 'survey-core/defaultV2.min.css';
 import { Model } from "survey-core";
 import { SurveyComponent } from "survey-vue3-ui";
+import expSurveyView from "@/components/expSurveyView";
 import useCrud from "@/composables/useCrud";
 import useToast from "@/composables/useToast";
 import axios from "axios";
@@ -1131,8 +1136,8 @@ const apiGet = (url: string) => {
     }
   });
 };
-// const base_url1 = 'http://localhost:8002'
-const base_url1 = ''
+const base_url1 = 'http://localhost:8002'
+// const base_url1 = ''
 const getSurveyData = async () => {
   try {
     const responsePersona = await apiGet(`${base_url1}/api/2.0/inscripciones/persona/${userSurveyId}/`);
@@ -1163,11 +1168,14 @@ const getSurveyData = async () => {
 const fillOutForm = async (responsePersona: any, responseFormpersona: any, responseAdjunto1: any, responseAdjunto2: any, responsePredio: any, responseLinea: any) => {
   try {
 
-    console.log('responsePersona')
-    console.log(responsePersona)
     responsePredio[0].coordenada_registro
-    var coordenadas = responsePredio[0].coordenada_registro.split(' ')
-    var coorstring = responsePredio[0].coordenada_registro.replace(' ', '|')
+    var coordenadas = [];
+    var coorstring = '';
+
+    if (responsePredio[0].coordenada_registro && responsePredio[0].coordenada_registro.length > 0) {
+        coordenadas = responsePredio[0].coordenada_registro.split(' ');
+        coorstring = responsePredio[0].coordenada_registro.replace(' ', '|');
+    }
     console.log('coorstring')
     console.log(coorstring)
 
@@ -1231,13 +1239,13 @@ const fillOutForm = async (responsePersona: any, responseFormpersona: any, respo
 
       titular_foto_cara: [
         {
-          content: responseAdjunto1[0].ruta
+          content: responseAdjunto1?.[0]?.ruta || ''
         }
       ],
 
       titular_foto_contracara: [
         {
-          content: responseAdjunto2[0].ruta
+          content: responseAdjunto2?.[0]?.ruta || ''
         }
       ],
       tiene_email: responsePersona.email && typeof responsePersona.email === 'string' && responsePersona.email.length > 0 ? 1 : 0,

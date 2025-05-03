@@ -5,7 +5,7 @@
       <v-card-text class="pa-0">
         <exp-data-table
           uuid="table-users_pnis"
-          :endpoint="`${base_url2}/api/2.0/inscripciones/personavalidaciones/by-documento/0/18`"
+          :endpoint="`${base_url2}/api/2.0/inscripciones/personavalidaciones/by-documento/0/${surveyId}`"
           :showHeader="false"
           :drawRefresh="drawRefresh"
           :headers="headers"
@@ -14,11 +14,6 @@
             title: $t('modules.core.validate'),
             icon: 'mdi-check-all',
             action: 'validate'
-          },
-          {
-            title: 'Valida Superv.',
-            icon: 'mdi-check-circle',
-            action: 'validate_super'
           }]"
           :menuItems="menuItems"
           :labelNew="'modules.core.new_userspnis'"
@@ -204,6 +199,7 @@ const apikey = getApiKey
 const tipo = route.params.id;
 const formularioPersonaSelected = ref(0)
 const base_url2 = 'http://localhost:8002'
+const surveyId = route.params.id;
 
 const apiGet = (url: string) => {
   return cleanAxios.get(url, {
@@ -259,6 +255,8 @@ const headers: any[] = [
   // { key: 'validado_final', title: "Superv.", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
   { key: 'formulario_persona', title: 'Formulario Persona', visible: false },
+  { key: 'formularioid', title: 'formularioid', visible: false },
+  { key: 'id', title: 'id', visible: false },
 ];
 const drawRefresh = ref("");
 const validationKey = ref("");
@@ -312,7 +310,7 @@ const getValidationItems = async () => {
     //   `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/4`
     // );
 
-    const response = await apiGet(`${base_url2}/api/2.0/validacion/item-persona/missing-validation-items/${identificationnumber.value}/18`)
+    const response = await apiGet(`${base_url2}/api/2.0/validacion/item-persona/missing-validation-items/${identificationnumber.value}/${surveyId}`)
     // Verifica si response.data tiene la estructura esperada
     if (response.data.missing_items) {
       itemsValidation.value = response.data.missing_items.map((item: any) => ({
@@ -333,7 +331,7 @@ const getItemsValidadosBase = async () => {
   try {
     // const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/4/`);
 
-    const response = await apiGet(`${base_url2}/api/2.0/validacion/item/by-form/18`)
+    const response = await apiGet(`${base_url2}/api/2.0/validacion/item/by-form/${surveyId}`)
     itemsValidadosBase.value = response.data;
     numValidados.value = response.data.length
   } catch (error) {
@@ -356,7 +354,7 @@ const modalValidados = async (item: any, tipo: number) => {
     formModalValidadosTitulo.value = tipo == 1 ? 'Items validados' : 'Alertas';
     // const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.numero_documento}/4/${tipo}`);
     // api/2.0/inscripciones/personavalidaciones/by-documento/0/18/
-    const response = await apiGet(`${base_url2}/api/2.0/validacion/item-persona/filterbydocumentnumber/${item.numero_documento}/18/${tipo}`)
+    const response = await apiGet(`${base_url2}/api/2.0/validacion/item-persona/filterbydocumentnumber/${item.numero_documento}/${surveyId}/${tipo}`)
     itemsValidados.value = response.data;
     loader.hide();
     formModalValidados.value = true;    
@@ -411,7 +409,7 @@ const isValidForm = computed(() => {
 });
 
 const clickView = async (item: any) => {
-  router.push(`/pnis/catatumboindividual/open/${item.id}`);
+  router.push(`/renhacemos/catatumbo/registro/open/${item.id}`);
 };
 
 const clickDocuments = (item: any) => {

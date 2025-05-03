@@ -293,13 +293,18 @@ const routes: RouteRecordRaw[] = [
     path: "/formularios", // Añade el path raíz
     meta: { requiresAuth: false },
     name: "formularios",
-    component: () => import("@/layouts/formularios.vue"),
+    component: () => import("@/layouts/public.vue"),
     children: [
       {
         path: "catatumbo/fichaacuerdo", // Ruta relativa al path padre ("/catatumbo/asociaciones")
         name: "public-catatumbo-ficha3",
         component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formficha2.vue"),
-      }
+      },
+      {
+        path: "catatumbo/registro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+        name: "formulario-catatumbo-fichaacuerdo",
+        component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfichapreregistro2.vue"),
+      },
     ]
   },
   {
