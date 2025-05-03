@@ -4,6 +4,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import authRouter from "../modules/auth/router";
 import coreRouter from "../modules/core/router";
 import pnisRouter from "../modules/pnis/router";
+import renhacemosRouter from "../modules/renhacemos/router";
 
 import useGlobalState from "../stores/global";
 
@@ -276,6 +277,16 @@ const routes: RouteRecordRaw[] = [
         name: "public-vertest",
         component: () => import(/* webpackChunkName: "PublicListafichas" */ "@/modules/public/pages/argelia/testSurvey.vue"),
       },
+      {//call-center
+        path: "search-user-call-center",
+        name: "public-search-user-call-center",
+        component: () => import("@/modules/public/pages/search-user-call-center.vue"),
+      },
+      {//call-center
+        path: "preregistro-call-center/:id", // Ruta relativa al path padre
+        name: "preregistro-call-center",
+        component: () => import("@/modules/public/pages/catatumbo/callcenterformpreregistro.vue"),
+      },
     ],
   },
   {
@@ -297,6 +308,19 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
+    path: "/formpublicos", // Añade el path raíz
+    meta: { requiresAuth: false },
+    name: "formulariospublicos",
+    component: () => import("@/layouts/formularios.vue"),
+    children: [
+      {
+        path: "catatumbo/registro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+        name: "public-catatumbo-registro",
+        component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfichapreregistro2.vue"),
+      }
+    ]
+  },
+  {
     path: "/auth",
     meta: { requiresAuth: false },
     ...authRouter,
@@ -310,6 +334,11 @@ const routes: RouteRecordRaw[] = [
     path: "/pnis",
     meta: { requiresAuth: true },
     ...pnisRouter,
+  },
+  {
+    path: "/renhacemos",
+    meta: { requiresAuth: true },
+    ...renhacemosRouter,
   },
   {
     path: "/:pathMatch(.*)*",

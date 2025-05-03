@@ -21,20 +21,54 @@
   import useCrud from "@/composables/useCrud";
   import useToast from "@/composables/useToast";
   import axios from "axios";
+  import type { AxiosRequestConfig, AxiosResponse } from 'axios'
   import { useLoading } from "vue-loading-overlay";
   import { ref, onMounted } from "vue";
   
   const uLoading = useLoading();
-
-  const uCrud_persona = useCrud("api/2.0/nucleo/persona");
-  const uCrud_edades= useCrud("api/2.0/nucleo/composicionedades");
-  const uCrud_nucleo = useCrud("api/2.0/nucleo/composicionucleo");
-  const uCrud_formpersona = useCrud("api/2.0/nucleo/formpersona");
-  const uCrud_linea = useCrud("api/2.0/nucleo/personalinea");
+  // const base_url1 = 'http://localhost:8002/'
+  // const base_url2 = 'http://localhost:8002'
+  const base_url1 = ''
+  const base_url2 = ''
+  const uCrud_persona = useCrud(base_url1 + "api/2.0/inscripciones/persona");
+  const uCrud_edades= useCrud(base_url1 + "api/2.0/inscripciones/composicionedades");
+  const uCrud_nucleo = useCrud(base_url1 + "api/2.0/inscripciones/composicionucleo");
+  const uCrud_formpersona = useCrud(base_url1 + "api/2.0/inscripciones/formpersona");
+  const uCrud_linea = useCrud(base_url1 + "api/2.0/inscripciones/personalinea");
 
   const uToast = useToast();
 
-  const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
+  const api = axios.create()
+  const apikey = 'gAAAAABoDtFn9gi3OV4aLVbvYNvjReVfBFOsjfPH7TEpTCCmppTjoZPPzcKSRZycbhgV9diSwSBGGjmoiZfeu9kEoKoncDHDMwmsyA7LEnRc20FRh_fwVYLFyYO2sn3q-Jhu9jYRk_4q'
+  const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
+
+    return api.get(base_url2 + url, {
+      ...config,
+      headers: {
+        ...config.headers,
+        'Authorization': 'Api-Key ' + apikey,
+      },
+    })
+  }
+
+const apiUrl = ref<string>('')
+
+const llamarApi = async () => {
+  if (!apiUrl.value) {
+    console.error('No se ha definido la URL')
+    return
+  }
+
+  try {
+    const response = await customGet(apiUrl.value)
+    console.log('Respuesta:', response?.data)
+    return response
+  } catch (error) {
+    console.error('Error al llamar la API:', error)
+  }
+}
+
+const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
   const dataLineaProductiva = ref({
     id: 0,
     linea_productiva_id: 0,
@@ -45,7 +79,7 @@
   })
   const dataUser = ref({
     id: 0,
-    tipo_identificacion_id: null,
+    tipo_identificacion: null,
     numero_documento: '',
     cub_asociacion: null,
     cub: 0,
@@ -59,7 +93,7 @@
     apellido: '',
     fecha_expedicion: '',
     fecha_nacimiento: '',
-    sexo_id: null,
+    sexo: null,
     genero_orientacion_sexual_id: null,
     estado_civil_id: null,
     nivel_escolaridad_id: null,
@@ -73,7 +107,7 @@
     ubicacion_ant2025_id: null,
     cabeza_flia: false,
     grupo_atencion_especial_dsci_id: null,
-    tipo_comunidad_etnica_id: null,
+    tipo_comunidad_etnica: null,
     nombre_comunidad: null,
     ingresos_mensuales: '0.0000',
     gastos_mensuales: '0.0000',
@@ -82,27 +116,20 @@
     parentesco_id: null,
     menor_edad: false,
     fase: '',
-    estado_id: null,
+    estado: null,
     fecha_estado: '',
     fcrea: '',
     observacion: null,
     fmodifica: null
   })
-  const getVillageList = async (ubicacionId: number) => {
-    try {
-      const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
-      itemsVillages.value = response.data.map((dept: any) => ({
-        value: dept.id,
-        text: dept.nombre // Asegurar compatibilidad
-      }));
-    } catch (error) {
-      console.error("Error fetching village list:", error);
-    }
-  };
+
 
   const getLineaProductiva = async (personaId: number) => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/lineaproductiva/by-id/${personaId}/`);
+      // const response = await axios.get(`/api/2.0/nucleo/lineaproductiva/by-id/${personaId}/`);
+      apiUrl.value = `/api/2.0/inscripciones/personalinea/by-persona/${personaId}/`
+      const response = await llamarApi()
+
       dataLineaProductiva.value = response.data[0]
       survey.setValue('establece_fortalece', dataLineaProductiva.value.tipo_experiencia_id || 0);
       survey.setValue('linea_productiva', dataLineaProductiva.value.linea_productiva_id || 0);
@@ -113,7 +140,9 @@
 
   const getFormularioPersona = async (personaId: number) => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/formulariopersona/by-id/${personaId}/`);
+      // const response = await axios.get(`/api/2.0/nucleo/formulariopersona/by-id/${personaId}/`);
+      apiUrl.value = `/api/2.0/inscripciones/formulariopersona/by-id/${personaId}/`
+      const response = await llamarApi()
       dataFormularioPersona.value = response.data[0]
     } catch (error) {
       console.error("Error fetching village list:", error);
@@ -928,7 +957,7 @@
 
     const personaData = {
       id: dataUser.value.id,
-      tipo_identificacion_id: sender.data.titular_tipo_identificacion,
+      tipo_identificacion: sender.data.titular_tipo_identificacion,
       numero_documento: sender.data.titular_numero_identificacion,
       nombre: sender.data.titular_nombres,
       apellido: sender.data.titular_apellidos,
@@ -955,7 +984,7 @@
         sexo_id,
         numero,
         fcrea: new Date().toISOString()
-      });
+      }, apikey);
     }
   };
 
@@ -991,7 +1020,7 @@
         tipo_composicion_id,
         numero,
         fcrea: new Date().toISOString()
-      });
+      }, apikey);
     }
   };
 
@@ -1011,7 +1040,7 @@
       otra_cual: sender.data.otra_cual,
       fmodifica: new Date().toISOString()
     };
-    uCrud_linea.update(personaLineaProductivaData);
+    uCrud_linea.update(personaLineaProductivaData, apikey);
   } else {
     personaLineaProductivaData = {
       persona_id: dataUser.value.id,
@@ -1051,8 +1080,8 @@
       }
 
       const formularioPersonaData = {
-        persona_id: dataUser.value.id,
-        formulario_id: 18,
+        persona: dataUser.value.id,
+        formulario: 18,
         tiene_coca: 1,
         acepta_terminos: 1,
         acepta_tratamiento_datos: 1,
@@ -1067,7 +1096,7 @@
         origen: 'CATATUMBO - FICHA ACUERDO INDIVIDUAL (FASE 3)'
       };
 
-      uCrud_formpersona.create(formularioPersonaData);
+      uCrud_formpersona.create(formularioPersonaData, apikey);
       console.log('Datos enviados:', formularioPersonaData);
     }
 
@@ -1080,16 +1109,16 @@
           titular_id: dataUser.value.id,
           vinculado_asociacion: 0,
           fecha_nacimiento: "1900-01-01",
-          sexo_id: 15,
+          sexo: 15,
           discapacidad: 0,
           email: "no email",
-          tipo_identificacion_id: 12,
+          tipo_identificacion: 12,
           telefono_celular: "3000000000",
           whatsapp: "3000000000",
           pertenece_comunidad_etnica: 0,
           desplazado_2025: 0,
           cabeza_flia: 0,
-          tipo_comunidad_etnica_id: 28,
+          tipo_comunidad_etnica: 28,
           numero_documento: usuariodata.numero_documento,
           nombre: usuariodata.nombres,
           apellido: usuariodata.apellidos,
@@ -1101,19 +1130,19 @@
           ha_total_loteCoca: 0,
           menor_edad: 0,
           fase: "FASE 3",
-          estado_id: 1,
+          estado: 111,
           fcrea: dataUser.value.fcrea,
           fecha_estado: dataUser.value.fecha_estado,
           origen: 'CATATUMBO - FICHA ACUERDO INDIVIDUAL (FASE 3)'
         };
 
-        uCrud_persona.create(personaDataVarios);
+        uCrud_persona.create(personaDataVarios, apikey);
         console.log(personaDataVarios);
       });
     }
 
 
-    uCrud_persona.update(personaData)
+    uCrud_persona.update(personaData, apikey)
         .then((item:any) => {
             
 
@@ -1138,7 +1167,11 @@
       if (options.value === null || options.value === "")
         return;
         const loading = uLoading.show({});
-        axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
+        apiUrl.value = `/api/2.0/inscripciones/personavalidaciones/by-documento/88170468/18`
+        const response2 = await llamarApi()
+        // axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
+        apiUrl.value = `/api/2.0/inscripciones/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`
+        await llamarApi()
         .then((resp: any) => {
           console.log(resp)
           getLineaProductiva(resp.data.data.id)
@@ -1154,7 +1187,7 @@
             survey.setValue('fecha_nacimiento', resp.data.data.fecha_nacimiento || "");
             survey.setValue('fecha_expedicion', resp.data.data.fecha_expedicion || "");
             survey.setValue('telefono', resp.data.data.telefono_celular || "");
-            survey.setValue('titular_tipo_identificacion', resp.data.data.tipo_identificacion_id || "");
+            survey.setValue('titular_tipo_identificacion', resp.data.data.tipo_identificacion || "");
           }else if (resp.data && resp.data.status===2) {
             survey.setValue('titular_nombres', "");
             uToast.toastError("Ya existe una ficha diligenciada con este número de documento");
@@ -1490,56 +1523,8 @@
       }
     }
     
-    const municipioNucleoQuestion = survey.getQuestionByName("municipio_nucleo_familiar");
-    const corregimientoQuestion = survey.getQuestionByName("corregimiento");
-    const veredaQuestion = survey.getQuestionByName("vive_vereda");
-    const desplazadoveredaQuestion = survey.getQuestionByName("desplazado_vereda");
-    const prediococaveredaQuestion = survey.getQuestionByName("predio_coca_vereda");
-    const prediococaotroveredaQuestion = survey.getQuestionByName("predio_coca_otro_vereda");
 
-    if (options.name === "vive_municipio") {
-        const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(municipio_id);
-          if (veredaQuestion) {
-            veredaQuestion.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "desplazado_municipio") {
-        const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(municipio_id);
-          if (desplazadoveredaQuestion) {
-            desplazadoveredaQuestion.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio_coca_municipio") {
-        const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(municipio_id);
-          if (prediococaveredaQuestion) {
-            prediococaveredaQuestion.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-    if (options.name === "predio_coca_otro_municipio") {
-        const municipio_id = options.value;
-        let loading = uLoading.show({});
-        await getVillageList(municipio_id);
-          if (prediococaotroveredaQuestion) {
-            prediococaotroveredaQuestion.choices = itemsVillages.value
-          }
-        loading.hide()
-    }
-
-
-
-
+    
     if (options.name === "posee_predios") {
       survey.showNavigationButtons = false;
       sender.clearValue("numero_documento");

@@ -4,20 +4,16 @@
     <v-card>
       <v-card-text class="pa-0">
         <exp-data-table
-          uuid="table-users_pnis-call"
-          :endpoint="`${endpoint}/catatumboindividual/filterbysurvey/4/${tipo}`"
+          uuid="table-users_pnis"
+          :endpoint="`${base_url2}/api/2.0/inscripciones/personavalidaciones/by-documento/0/${surveyId}`"
           :showHeader="false"
           :drawRefresh="drawRefresh"
           :headers="headers"
+          apikey="gAAAAABoEqasTj16HrxYAWXiBUbdnPiY7PCa7z0m8Jd6pqDLxHNFiioBWptP-RCbId9JS2hr8DxR-QBXNeKNiy7aiqdb1iH3krEeG7KJA0imDbeUgdSjbLDFaQgfdWSX4I6hIHAhOS3A"
           :extraMenuItems="[{
             title: $t('modules.core.validate'),
             icon: 'mdi-check-all',
             action: 'validate'
-          },
-          {
-            title: 'Valida Superv.',
-            icon: 'mdi-check-circle',
-            action: 'validate_super'
           }]"
           :menuItems="menuItems"
           :labelNew="'modules.core.new_userspnis'"
@@ -33,11 +29,11 @@
               mdi-account-hard-hat
             </v-icon>
           </template>
-          <template v-slot:item.number_completed="{item}">
-            <v-btn @click="modalValidados(item, 'si')"  variant="flat" color="green" block>{{ item.number_completed }}</v-btn>
+          <template v-slot:item.aprobados="{item}">
+            <v-btn @click="modalValidados(item, 1)"  variant="flat" color="green" block>{{ item.aprobados }} / {{ numValidados }}</v-btn>
           </template>
-          <template v-slot:item.number_uncompleted="{item}">
-            <v-btn @click="modalValidados(item, 'no')"  variant="flat" color="red" block>{{ item.number_uncompleted }}</v-btn>
+          <template v-slot:item.noaprobados="{item}">
+            <v-btn @click="modalValidados(item, 0)"  variant="flat" color="red" block>{{ item.noaprobados }}</v-btn>
           </template>
           <template v-slot:item.validado_final="{ item }">
             <v-icon 
@@ -65,7 +61,7 @@
         <frm-valida 
           :identificationnumber="identificationnumber"
           :validationitem="validationid"
-          :fomularioid="4"
+          :fomularioid="formularioPersonaSelected"
           @onClickSave="fnReloadTable"
         />
       </v-col>
@@ -141,18 +137,18 @@
               :class="index % 2 === 0 ? 'shadow-md bg-gray-50' : ''"
             >
               <td class="py-3 px-4">
-                {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.rolname || '-' }}
+                {{ itemsValidadosBase.find(option => option.id === item.validacion_item)?.rolname || '-' }}
               </td>
               <td class="py-3 px-4">  
-                  {{ itemsValidadosBase.find(option => option.id === item.validationitems_id)?.name || 'Sin nombre' }}
+                  {{ itemsValidadosBase.find(option => option.id === item.validacion_item)?.descripcion || 'Sin nombre' }}
               </td>
               <td class="py-3 px-4">
-                {{ item.status || 'Sin establecer' }}
+                {{ item.aprobado === true ? 'Cumple' : item.aprobado === false ? 'No Cumple' : 'Sin establecer' }}
               </td>
               <td class="py-3 px-4 observation-cell">
-                {{ item.observation || 'Sin observación' }}
+                {{ item.observacion || 'Sin observación' }}
               </td>
-              <td>{{item.user_name}}</td>
+              <td>{{item.nombre_completo}}</td>
               <td class="py-3 px-4">
                 <template v-if="item.attachment">
                   <v-btn @click="downloadDocument(item, 2)" variant="text" color="green" block>
@@ -161,7 +157,17 @@
                 </template>
                 <template v-else> <v-btn variant="text" color="red" block disabled>Sin Evidencia</v-btn></template>
               </td>
-              <td><v-icon color="red" size="32" @click="confirmDelete(item.id)">mdi-delete</v-icon></td>
+              <td>
+                <v-icon
+                  :color="item.id ? 'red' : 'grey lighten-1'"
+                  size="32"
+                  @click="item.id ? confirmDelete(item.id) : null"
+                  class="cursor-pointer"
+                  :style="{ pointerEvents: item.id ? 'auto' : 'none', opacity: item.id ? 1 : 0.4 }"
+                >
+                  mdi-delete
+                </v-icon>
+              </td>
             </tr>
           </tbody>
         </v-table>
@@ -179,15 +185,40 @@ import { useRouter } from "vue-router";
 import useAuth from "@/modules/auth/composables/useAuth";
 import expDataTable from "@/components/expDataTable";
 import expModalForm from "@/components/expModalForm";
-import frmValida from "./forms/valida.vue";
+import frmValida from "./forms/validaitems.vue";
 import useUtils from "@/composables/useUtils";
 import axios from "axios";
 import { useLoading } from "vue-loading-overlay";
 import Swal from "sweetalert2";
 import { useRoute } from 'vue-router';
 const route = useRoute();
+import { getApiKey } from '@/helpers/apiKey';
+import cleanAxios from '@/helpers/cleanAxios';
 
+const apikey = getApiKey
 const tipo = route.params.id;
+const formularioPersonaSelected = ref(0)
+const base_url2 = ''
+const surveyId = route.params.id;
+
+const apiGet = (url: string) => {
+  return cleanAxios.get(url, {
+    headers: {
+      'Authorization': `Api-Key ${getApiKey()}`,
+    }
+  });
+};
+
+const apiDelete= (url: string) => {
+  return cleanAxios.delete(url, {
+    headers: {
+      'Authorization': `Api-Key ${getApiKey()}`,
+    }
+  });
+};
+
+
+const apiUrl = ref<string>('')
 
 const tipoTranslation = computed(() => {
   switch (tipo) {
@@ -216,15 +247,16 @@ const identificationnumber = ref(null);
 const rolsActual = ref([]);
 
 const headers: any[] = [
-  // { key: 'id', title: t("commons.common.id"), width: "auto", align: "start", sortable: false },
-  { key: 'identificacion', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
-  { key: 'nombres', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
-  { key: 'apellidos', title: "Apellidos", width: "auto", align: "start", searchable: true, sortable: false, },
-  { key: 'fase', title: "fase", width: "auto", align: "start", searchable: false, sortable: false, },
-  { key: 'number_completed', title: "Validados", width: "auto", align: "start", sortable: false, },
-  { key: 'number_uncompleted', title: "Alertas", width: "auto", align: "start", sortable: false, },
-  { key: 'validado_final', title: "Superv.", width: "auto", align: "start", sortable: false, },
+  { key: 'numero_documento', title: "Num. identificación", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'nombre', title: "Nombre", width: "auto", align: "start",  searchable: true, sortable: false, },
+  { key: 'apellido', title: "Apellidos", width: "auto", align: "start", searchable: true, sortable: false, },
+  { key: 'aprobados', title: "Validados", width: "auto", align: "start", sortable: false, },
+  { key: 'noaprobados', title: "Alertas", width: "auto", align: "start", sortable: false, },
+  // { key: 'validado_final', title: "Superv.", width: "auto", align: "start", sortable: false, },
   { key: "actions", title: t("commons.common.actions"), width: "90px", type: "actions", sortable: false, },
+  { key: 'formulario_persona', title: 'Formulario Persona', visible: false },
+  { key: 'formularioid', title: 'formularioid', visible: false },
+  { key: 'id', title: 'id', visible: false },
 ];
 const drawRefresh = ref("");
 const validationKey = ref("");
@@ -238,11 +270,12 @@ const itemsValidation = ref<Array<{ id: number; label: string }>>([]);
 const itemsDocuments = ref([]);
 const itemsValidados = ref([]);
 const itemsValidadosBase = ref([]);
+const numValidados = ref(0);
 
 const deleteItem = async (itemid: any) => {
   console.log('itemid')
   console.log(itemid)
-  await axios.delete(`/api/1.0/core/validationregister/${itemid}/delete/`);
+  await apiDelete(`/api/1.0/inscripciones/validacionesitems_persona/${itemid}/`);
   Swal.fire("Eliminado", "El registro ha sido eliminado", "success");
   formModalValidados.value = false;  
   fnReloadTable()
@@ -273,14 +306,16 @@ const getValidationItems = async () => {
   let loader = uLoading.show({});
   itemsValidation.value = [];
   try {
-    const response = await axios.get(
-      `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/4`
-    );
+    // const response = await axios.get(
+    //   `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/4`
+    // );
+
+    const response = await apiGet(`${base_url2}/api/2.0/validacion/item-persona/missing-validation-items/${identificationnumber.value}/${surveyId}`)
     // Verifica si response.data tiene la estructura esperada
     if (response.data.missing_items) {
       itemsValidation.value = response.data.missing_items.map((item: any) => ({
         id: item.id,
-        label: item.nombre || item.name || "Sin nombre",
+        label: item.nombre || item.descripcion || "Sin nombre",
       }));
     } else {
       console.warn("Formato inesperado en la respuesta:", response.data);
@@ -294,8 +329,11 @@ const getValidationItems = async () => {
 
 const getItemsValidadosBase = async () => {
   try {
-    const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/4/`);
+    // const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/4/`);
+
+    const response = await apiGet(`${base_url2}/api/2.0/validacion/item/by-form/${surveyId}`)
     itemsValidadosBase.value = response.data;
+    numValidados.value = response.data.length
   } catch (error) {
     console.error("Error fetching validation items:", error);
   }
@@ -310,11 +348,13 @@ const getValidationKey = async () => {
   }
 };
 
-const modalValidados = async (item: any, tipo: string='si') => {
+const modalValidados = async (item: any, tipo: number) => {
   try {
     let loader = uLoading.show({});
-    formModalValidadosTitulo.value = tipo == 'si' ? 'Items validados' : 'Alertas';
-    const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.identificacion}/4/${tipo}`);
+    formModalValidadosTitulo.value = tipo == 1 ? 'Items validados' : 'Alertas';
+    // const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.numero_documento}/4/${tipo}`);
+    // api/2.0/inscripciones/personavalidaciones/by-documento/0/18/
+    const response = await apiGet(`${base_url2}/api/2.0/validacion/item-persona/filterbydocumentnumber/${item.numero_documento}/${surveyId}/${tipo}`)
     itemsValidados.value = response.data;
     loader.hide();
     formModalValidados.value = true;    
@@ -369,7 +409,7 @@ const isValidForm = computed(() => {
 });
 
 const clickView = async (item: any) => {
-  router.push(`/pnis/catatumboindividual/open/${item.id}`);
+  router.push(`/renhacemos/catatumbo/registro/open/${item.id}`);
 };
 
 const clickDocuments = (item: any) => {
@@ -391,14 +431,16 @@ const clickDocuments = (item: any) => {
 };
 
 const clickAction = (item: any, action: string) => {
+  console.log('item, action');
   console.log(item, action);
   if (action === 'validate') {
     formModalValidate.value = true;
-    identificationnumber.value = item.identificacion;
+    identificationnumber.value = item.numero_documento;
     getValidationItems();
+    formularioPersonaSelected.value = item.formulario_persona
   }
   if (action === 'validate_super') {
-    identificationnumber.value = item.identificacion;
+    identificationnumber.value = item.numero_documento;
     clickSelectSuperForm();
   }
 };

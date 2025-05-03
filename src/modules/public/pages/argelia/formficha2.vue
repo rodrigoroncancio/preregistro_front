@@ -21,18 +21,52 @@
   import useCrud from "@/composables/useCrud";
   import useToast from "@/composables/useToast";
   import axios from "axios";
+  import type { AxiosRequestConfig, AxiosResponse } from 'axios'
   import { useLoading } from "vue-loading-overlay";
   import { ref, onMounted } from "vue";
   
   const uLoading = useLoading();
-
-  const uCrud_persona = useCrud("api/2.0/nucleo/persona");
-  const uCrud_edades= useCrud("api/2.0/nucleo/composicionedades");
-  const uCrud_nucleo = useCrud("api/2.0/nucleo/composicionucleo");
-  const uCrud_formpersona = useCrud("api/2.0/nucleo/formpersona");
-  const uCrud_linea = useCrud("api/2.0/nucleo/personalinea");
+  // const base_url1 = 'http://localhost:8002/'
+  // const base_url2 = 'http://localhost:8002'
+  const base_url1 = ''
+  const base_url2 = ''
+  const uCrud_persona = useCrud(base_url1 + "api/2.0/nucleo/persona");
+  const uCrud_edades= useCrud(base_url1 + "api/2.0/nucleo/composicionedades");
+  const uCrud_nucleo = useCrud(base_url1 + "api/2.0/nucleo/composicionucleo");
+  const uCrud_formpersona = useCrud(base_url1 + "api/2.0/nucleo/formpersona");
+  const uCrud_linea = useCrud(base_url1 + "api/2.0/nucleo/personalinea");
 
   const uToast = useToast();
+  
+  const api = axios.create()
+  const apikey = 'gAAAAABoEqasTj16HrxYAWXiBUbdnPiY7PCa7z0m8Jd6pqDLxHNFiioBWptP-RCbId9JS2hr8DxR-QBXNeKNiy7aiqdb1iH3krEeG7KJA0imDbeUgdSjbLDFaQgfdWSX4I6hIHAhOS3A'
+  const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
+
+    return api.get(base_url2 + url, {
+      ...config,
+      headers: {
+        ...config.headers,
+        'Authorization': 'Api-Key ' + apikey,
+      },
+    })
+  }
+
+  const apiUrl = ref<string>('')
+
+  const llamarApi = async () => {
+    if (!apiUrl.value) {
+      console.error('No se ha definido la URL')
+      return
+    }
+
+    try {
+      const response = await customGet(apiUrl.value)
+      console.log('Respuesta:', response?.data)
+      return response
+    } catch (error) {
+      console.error('Error al llamar la API:', error)
+    }
+  }
 
   const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
   const dataLineaProductiva = ref({
@@ -1138,7 +1172,9 @@
       if (options.value === null || options.value === "")
         return;
         const loading = uLoading.show({});
-        axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
+        // axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
+        apiUrl.value = `/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`
+        await llamarApi()
         .then((resp: any) => {
           console.log(resp)
           getLineaProductiva(resp.data.data.id)

@@ -42,6 +42,7 @@
                   href="/catatumbo/preregistro"
                   rel="noreferrer"
               >
+              <!-- href="https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/ScZ9D8KhyfMlrMpAohyxPqeUAWGGSyC?st=02FzOAJCo6zTYlaoOIdSGbobqMfnBvccipGw2m1C9o2SZKRdUWJR9ajHU9KK6jHe" -->
                   Familias PNIS que renegociaron y recolectores
               </a>
               <p className="btnCat description red">Beneficiarios del programa</p>

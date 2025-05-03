@@ -161,6 +161,11 @@ const itemsMenu = [
       // ] 
     },
     {
+      title: "modules.pnis.catatumboindividual2",
+      icon: "mdi-human-male-board-poll",
+      url: "/renhacemos/catatumbo/registro/18",
+    },
+    {
       title: "modules.pnis.preregistrocatatumbogrupos",
       icon: "mdi-human-male-board-poll",
       url: "/pnis/catatumbogrupos",
@@ -201,7 +206,16 @@ const itemsMenu = [
       url: "/catatumbo/preregistro",
     }]
   },
-  
+  {
+    title: "Call Center",
+    icon: "mdi-solar-panel",
+    roles: [1,7],
+    children: [{
+      title: "Buscar Usuario",
+      icon: "mdi-human-male-board-poll",
+      url: "/search-user-call-center",
+    }]
+  },
   
 ];
 
