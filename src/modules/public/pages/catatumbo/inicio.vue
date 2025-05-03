@@ -35,10 +35,11 @@
             <p className="btnCat description blue">Para quienes se registran a través de su asociación</p>
             <a target="blank" href="http://stpnis.blob.core.windows.net/testdsci/Terminos_catatumbo/Abc_convocatoria%20CATATUMBO_asociaciones_17032025.pptx.pdf" className="btnCat grey">ABC de la convocatoria</a>
           </div>
+          <!-- href="https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/ScZ9D8KhyfMlrMpAohyxPqeUAWGGSyC?st=02FzOAJCo6zTYlaoOIdSGbobqMfnBvccipGw2m1C9o2SZKRdUWJR9ajHU9KK6jHe" -->
           <div className="button-group">
               <a className="btnCat red"
                   target="_blank"
-                  href="/formularios/catatumbo/preregistro"
+                  href="/catatumbo/preregistro"
                   rel="noreferrer"
               >
               <!-- href="https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/ScZ9D8KhyfMlrMpAohyxPqeUAWGGSyC?st=02FzOAJCo6zTYlaoOIdSGbobqMfnBvccipGw2m1C9o2SZKRdUWJR9ajHU9KK6jHe" -->
