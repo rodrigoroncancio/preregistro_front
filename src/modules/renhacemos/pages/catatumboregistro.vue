@@ -198,7 +198,7 @@ import cleanAxios from '@/helpers/cleanAxios';
 const apikey = getApiKey
 const tipo = route.params.id;
 const formularioPersonaSelected = ref(0)
-const base_url2 = 'http://localhost:8002'
+const base_url2 = ''
 const surveyId = route.params.id;
 
 const apiGet = (url: string) => {
