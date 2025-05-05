@@ -1,7 +1,7 @@
 <template>
   <formularioslista
     :formid="18"
-    title='Lista de Registros Individual de personas :: Catatumbo'
+    title='Lista de Fichas de Acuerdo Individual :: Catatumbo Fase 1|2'
   >
 
   </formularioslista>
