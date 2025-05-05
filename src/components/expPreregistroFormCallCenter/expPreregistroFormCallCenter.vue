@@ -1136,8 +1136,8 @@ const apiGet = (url: string) => {
     }
   });
 };
-// const base_url1 = 'http://localhost:8002'
-const base_url1 = ''
+const base_url1 = 'http://localhost:8002'
+// const base_url1 = ''
 const getSurveyData = async () => {
   try {
     const responsePersona = await apiGet(`${base_url1}/api/2.0/inscripciones/persona/${userSurveyId}/`);

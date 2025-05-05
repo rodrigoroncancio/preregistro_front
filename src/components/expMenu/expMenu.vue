@@ -109,72 +109,63 @@ const itemsMenu = [
       url: "/pnis/argeliagrupo",
     },
     {
-      title: "modules.pnis.preregistroindividual",
+      title: "modules.pnis.preregistroindividual1",
       icon: "mdi-human-male-board-poll",
-      url: "/pnis/argeliapersonas",
+      url: "/renhacemos/argeliafase1/registro",
     },
     {
-      title: "modules.pnis.fichaacuerdo",
+      title: "modules.pnis.preregistroindividual2",
       icon: "mdi-human-male-board-poll",
-      url: "/pnis/fichaacuerdo",
+      url: "/renhacemos/argeliafase2/registro",
     },
+    // {
+    //   title: "modules.pnis.fichaacuerdo",
+    //   icon: "mdi-human-male-board-poll",
+    //   url: "/pnis/fichaacuerdo",
+    // },
     {
       title: "modules.pnis.fichaacuerdo2",
       icon: "mdi-human-male-board-poll",
-      url: "/pnis/fichaacuerdo2",
+      url: "/renhacemos/argeliafase2/ficha",
     },
-    {
-      title: "modules.pnis.personasvalidadas",
-      icon: "mdi-human-male-board-poll",
-      url: "/pnis/personasvalidadas",
-    }]
+    // {
+    //   title: "modules.pnis.personasvalidadas",
+    //   icon: "mdi-human-male-board-poll",
+    //   url: "/pnis/personasvalidadas",
+    // }
+  ]
   },
   {
     title: "modules.pnis.convocatoria_catatumbo",
     icon: "mdi-solar-panel",
     roles: [1,2,3,4,5,6],
-    children: [{
-      title: "modules.pnis.preregistrocatatumboindividual",
-      icon: "mdi-human-male-board-poll",
-      url: "/pnis/catatumboindividual/0"
-      // children: [
-      //   {
-      //     title: "modules.pnis.preregcataindividual_propietarios",
-      //     icon: "mdi-human-male-board-poll",
-      //     url: "/pnis/catatumboindividual/5",
-      //   },
-      //   {
-      //     title: "modules.pnis.preregcataindividual_desplazados",
-      //     icon: "mdi-human-male-board-poll",
-      //     url: "/pnis/catatumboindividual/desplazados/2",
-      //   },
-      //   {
-      //     title: "modules.pnis.preregcataindividual_extranjeros",
-      //     icon: "mdi-human-male-board-poll",
-      //     url: "/pnis/catatumboindividual/extranjeros/6",
-      //   },
-      //   {
-      //     title: "modules.pnis.preregcataindividual_nopropietarios",
-      //     icon: "mdi-human-male-board-poll",
-      //     url: "/pnis/catatumboindividual/arrendatarios/4",
-      //   }
-      // ] 
-    },
-    {
-      title: "modules.pnis.catatumboindividual2",
-      icon: "mdi-human-male-board-poll",
-      url: "/renhacemos/catatumbo/registro/18",
-    },
-    {
-      title: "modules.pnis.preregistrocatatumbogrupos",
-      icon: "mdi-human-male-board-poll",
-      url: "/pnis/catatumbogrupos",
-    },
-    {
-      title: "modules.pnis.fichacatatumbo",
-      icon: "mdi-human-male-board-poll",
-      url: "/pnis/catatumboficha",
-    }]
+    children: [
+      {
+        title: "modules.pnis.preregistrocatatumbogrupos",
+        icon: "mdi-human-male-board-poll",
+        url: "/pnis/catatumbogrupos",
+      },
+      {
+        title: "modules.pnis.preregistrocatatumboindividual",
+        icon: "mdi-human-male-board-poll",
+        url: "/renhacemos/catatumbo/registro"
+      },
+      {
+        title: "modules.pnis.fichaacuerdo1",
+        icon: "mdi-human-male-board-poll",
+        url: "/renhacemos/catatumbofase1/ficha"
+      },
+      {
+        title: "modules.pnis.fichaacuerdo2",
+        icon: "mdi-human-male-board-poll",
+        url: "/renhacemos/catatumbofase2/ficha"
+      },
+      // {
+      //   title: "modules.pnis.fichacatatumbo",
+      //   icon: "mdi-human-male-board-poll",
+      //   url: "/pnis/catatumboficha",
+      // }
+    ]
   },
   {
     title: "modules.pnis.fichas_acuerdos",
@@ -183,17 +174,17 @@ const itemsMenu = [
     children: [{
       title: "modules.pnis.ficha_catatumbo",
       icon: "mdi-human-male-board-poll",
-      url: "/catatumbo/fichaacuerdo",
+      url: "/formularios/catatumbo/fichaacuerdo",
     },
-    {
-      title: "modules.pnis.fichacatatumbo3",
-      icon: "mdi-human-male-board-poll",
-      url: "/catatumbo/fichaacuerdofase2",
-    },
+    // {
+    //   title: "modules.pnis.fichacatatumbo3",
+    //   icon: "mdi-human-male-board-poll",
+    //   url: "/catatumbo/fichaacuerdofase2",
+    // },
     {
       title: "modules.pnis.ficha_argelia",
       icon: "mdi-human-male-board-poll",
-      url: "/pnis/catatumbogrupos",
+      url: "/argelia/fichaacuerdofinal",
     }]
   },
   {

@@ -1,7 +1,7 @@
 <template>
   <formularioslista
-    :formid="18"
-    title='Lista de Registros Individual de personas :: Catatumbo'
+    :formid="1"
+    title='Lista de Registros Individual de personas :: Argelia Fase 1'
   >
 
   </formularioslista>
