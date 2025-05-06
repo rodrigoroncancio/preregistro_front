@@ -41,4 +41,12 @@ export default defineConfig({
     // host: '0.0.0.0', // Permite acceder desde cualquier IP
     // allowedHosts: ['local.expansionti.co'], // Mueve aquí allowedHosts
   },
+  css: {
+    loaderOptions: {
+      sass: {
+        // implementation: require('sass'),  // Fuerza usar Dart Sass moderno
+        additionalData: `@import "./src/assets/scss/app.scss";`
+      }
+    }
+  }
 })
