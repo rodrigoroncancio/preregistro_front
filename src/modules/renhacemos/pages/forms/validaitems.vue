@@ -14,8 +14,8 @@ import useCrud from "@/composables/useCrud";
 import useToast from "@/composables/useToast";
 import { useLoading } from "vue-loading-overlay";
 import { getApiKey } from '@/helpers/apiKey';
-const base_url2 = 'http://localhost:8002'
-// const base_url2 = ''
+// const base_url2 = 'http://localhost:8002'
+const base_url2 = ''
 const uLoading = useLoading();
 const apikey=getApiKey
 const uCrud = useCrud(`${base_url2}/api/2.0/validacion/item-persona`);
