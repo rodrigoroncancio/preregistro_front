@@ -78,7 +78,8 @@ const buscarUsuario = async () => {
     'Authorization': `Api-Key ${getApiKey()}`,
   }
   // const base_url1 = 'http://localhost:8002'
-  // const base_url1 = ''
+
+  const base_url1 = ''
   try {
     const {data, status} = await cleanAxios.get(`/api/2.0/inscripciones/ficha/catatumbo/validar_documento/`, {
       params: {

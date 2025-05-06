@@ -218,8 +218,9 @@ const apikey = getApiKey
 const formularioPersonaSelected = ref(0)
 // const base_url1 = 'http://localhost:8002/'
 // const base_url2 = 'http://localhost:8002'
-// const base_url1 = ''
-// const base_url2 = ''
+const base_url1 = ''
+const base_url2 = ''
+
 const surveyId = props.formid;
 
 const apiGet = (url: string) => {
