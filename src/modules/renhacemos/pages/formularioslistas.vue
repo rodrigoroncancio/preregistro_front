@@ -5,7 +5,7 @@
       <v-card-text class="pa-0">
         <exp-data-table
           uuid="table-users_pnis"
-          :endpoint="`${base_url2}/api/2.0/inscripciones/personavalidaciones/by-documento/0/${surveyId}`"
+          :endpoint="`/api/2.0/inscripciones/personavalidaciones/by-documento/0/${surveyId}`"
           :showHeader="false"
           :drawRefresh="drawRefresh"
           :headers="headers"
@@ -36,8 +36,8 @@
             <v-btn @click="modalValidados(item, 0)"  variant="flat" color="red" block>{{ item.noaprobados }}</v-btn>
           </template>
           <template v-slot:item.validado_final="{ item }">
-            <v-icon 
-              :color="item.validado_final === 'si' ? 'green' : 'red'" 
+            <v-icon
+              :color="item.validado_final === 'si' ? 'green' : 'red'"
               size="32"
             >
               {{ item.validado_final === 'si' ? 'mdi-check-circle' : 'mdi-close-circle' }}
@@ -58,7 +58,7 @@
   >
     <v-row>
       <v-col cols="12">
-        <frm-valida 
+        <frm-valida
           :identificationnumber="identificationnumber"
           :validationitem="validationid"
           :fomularioid="formularioPersonaSelected"
@@ -79,10 +79,10 @@
     <v-row>
       <v-col cols="12">
         <v-radio-group v-model="validationid">
-          <v-radio 
-            v-for="option in itemsValidation" 
-            :key="option.id" 
-            :label="option.label" 
+          <v-radio
+            v-for="option in itemsValidation"
+            :key="option.id"
+            :label="option.label"
             :value="option.id"
           />
         </v-radio-group>
@@ -139,7 +139,7 @@
               <td class="py-3 px-4">
                 {{ itemsValidadosBase.find(option => option.id === item.validacion_item)?.rolname || '-' }}
               </td>
-              <td class="py-3 px-4">  
+              <td class="py-3 px-4">
                   {{ itemsValidadosBase.find(option => option.id === item.validacion_item)?.descripcion || 'Sin nombre' }}
               </td>
               <td class="py-3 px-4">
@@ -173,7 +173,7 @@
         </v-table>
       </v-card>
       </v-col>
-    </v-row>          
+    </v-row>
   </exp-modal-form>
 </template>
 
@@ -216,8 +216,8 @@ import cleanAxios from '@/helpers/cleanAxios';
 
 const apikey = getApiKey
 const formularioPersonaSelected = ref(0)
-const base_url1 = 'http://localhost:8002/'
-const base_url2 = 'http://localhost:8002'
+// const base_url1 = 'http://localhost:8002/'
+// const base_url2 = 'http://localhost:8002'
 // const base_url1 = ''
 // const base_url2 = ''
 const surveyId = props.formid;
@@ -244,7 +244,7 @@ const apiUrl = ref<string>('')
 
 
 const uLoading = useLoading();
-const endpoint = "/api/1.0/core";
+// const endpoint = "/api/1.0/core";
 const { t } = useI18n();
 const router = useRouter();
 const uAuth = useAuth();
@@ -285,7 +285,7 @@ const deleteItem = async (itemid: any) => {
   console.log(itemid)
   await apiDelete(`/api/1.0/inscripciones/validacionesitems_persona/${itemid}/`);
   Swal.fire("Eliminado", "El registro ha sido eliminado", "success");
-  formModalValidados.value = false;  
+  formModalValidados.value = false;
   fnReloadTable()
 }
 
@@ -318,7 +318,7 @@ const getValidationItems = async () => {
     //   `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/4`
     // );
 
-    const response = await apiGet(`${base_url2}/api/2.0/validacion/item-persona/missing-validation-items/${identificationnumber.value}/${surveyId}`)
+    const response = await apiGet(`/api/2.0/validacion/item-persona/missing-validation-items/${identificationnumber.value}/${surveyId}`)
     // Verifica si response.data tiene la estructura esperada
     if (response.data.missing_items) {
       itemsValidation.value = response.data.missing_items.map((item: any) => ({
@@ -339,7 +339,7 @@ const getItemsValidadosBase = async () => {
   try {
     // const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/4/`);
 
-    const response = await apiGet(`${base_url2}/api/2.0/validacion/item/by-form/${surveyId}`)
+    const response = await apiGet(`/api/2.0/validacion/item/by-form/${surveyId}`)
     itemsValidadosBase.value = response.data;
     numValidados.value = response.data.length
   } catch (error) {
@@ -362,10 +362,10 @@ const modalValidados = async (item: any, tipo: number) => {
     formModalValidadosTitulo.value = tipo == 1 ? 'Items validados' : 'Alertas';
     // const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.numero_documento}/4/${tipo}`);
     // api/2.0/inscripciones/personavalidaciones/by-documento/0/18/
-    const response = await apiGet(`${base_url2}/api/2.0/validacion/item-persona/filterbydocumentnumber/${item.numero_documento}/${surveyId}/${tipo}`)
+    const response = await apiGet(`/api/2.0/validacion/item-persona/filterbydocumentnumber/${item.numero_documento}/${surveyId}/${tipo}`)
     itemsValidados.value = response.data;
     loader.hide();
-    formModalValidados.value = true;    
+    formModalValidados.value = true;
   } catch (error) {
     console.error("Error fetching validation items:", error);
   }

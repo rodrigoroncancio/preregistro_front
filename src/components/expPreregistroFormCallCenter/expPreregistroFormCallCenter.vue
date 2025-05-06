@@ -3,13 +3,13 @@
     <v-container class="flex-grow-1">
       <!-- <div class="main-container">
         <v-progress-circular v-if="isLoading" indeterminate color="primary"></v-progress-circular>
-        <SurveyComponent v-else-if="isSurveyReady" 
+        <SurveyComponent v-else-if="isSurveyReady"
         :model="survey"
         :is-read-only="true" />
       </div> -->
-      <exp-survey-view 
+      <exp-survey-view
         v-if="isSurveyReady"
-        :surveyJson="json" 
+        :surveyJson="json"
         :surveyData="survey.data"
         :is-read-only="props.readOnly"
         >
@@ -1087,7 +1087,7 @@ const getVillageList = async (ubicacionId: number, tipo: string) => {
 const itemsAsociaciones = ref<Array<{ value: number; text: string }>>([]);
 const getAsociaciones = async () => {
   try {
-    const response = await apiGet(`${base_url1}/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`);
+    const response = await apiGet(`/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`);
     const results = response?.data?.results || [];
 
     if (results.length === 0) {
@@ -1107,23 +1107,51 @@ const getAsociaciones = async () => {
   }
 };
 
-const resizeBase64Img = (base64:string, callback:any) => {
-  const img = new Image();
-  img.src = base64;
-  img.onload = () => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+// const resizeBase64Img = (base64:string, callback:any) => {
+//   const img = new Image();
+//   img.src = base64;
+//   img.onload = () => {
+//     const canvas = document.createElement("canvas");
+//     const ctx = canvas.getContext("2d");
 
-    // Reducción al 50%
-    canvas.width = img.width / 3;
-    canvas.height = img.height / 3;
+//     // Reducción al 50%
+//     canvas.width = img.width / 3;
+//     canvas.height = img.height / 3;
 
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+//     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    // Convertir a Base64 nuevamente
-    const resizedBase64 = canvas.toDataURL("image/jpeg", 0.7);
-    callback(resizedBase64);
-  };
+//     // Convertir a Base64 nuevamente
+//     const resizedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+//     callback(resizedBase64);
+//   };
+// };
+const resizeBase64Img = (base64: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = base64;
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error('Could not get canvas context'));
+          return;
+        }
+        // Reducción al 33%
+        canvas.width = img.width / 3;
+        canvas.height = img.height / 3;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        // Convertir a Base64 nuevamente
+        const resizedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+        resolve(resizedBase64);
+      } catch (error) {
+        reject(error);
+      }
+    };
+    img.onerror = () => {
+      reject(new Error('Failed to load image'));
+    };
+  });
 };
 
 const survey = new Model(json);
@@ -1136,16 +1164,16 @@ const apiGet = (url: string) => {
     }
   });
 };
-const base_url1 = 'http://localhost:8002'
+// const base_url1 = 'http://localhost:8002'
 // const base_url1 = ''
 const getSurveyData = async () => {
   try {
-    const responsePersona = await apiGet(`${base_url1}/api/2.0/inscripciones/persona/${userSurveyId}/`);
-    const responseFormpersona = await apiGet(`${base_url1}/api/2.0/inscripciones/formpersona/filterbyformperson/${responsePersona.data.id}/19`);
-    const responseAdjunto1 = await apiGet(`${base_url1}/api/2.0/inscripciones/personaadjunto/filterbydoctypeperson/${responsePersona.data.id}/13`);
-    const responseAdjunto2 = await apiGet(`${base_url1}/api/2.0/inscripciones/personaadjunto/filterbydoctypeperson/${responsePersona.data.id}/14`);
-    const responsePredio = await apiGet(`${base_url1}/api/2.0/inscripciones/predio/by-persona/${responsePersona.data.id}/`);
-    const responseLinea = await apiGet(`${base_url1}/api/2.0/inscripciones/personalinea/by-persona/${responsePersona.data.id}/`);
+    const responsePersona = await apiGet(`/api/2.0/inscripciones/persona/${userSurveyId}/`);
+    const responseFormpersona = await apiGet(`/api/2.0/inscripciones/formpersona/filterbyformperson/${responsePersona.data.id}/19`);
+    const responseAdjunto1 = await apiGet(`/api/2.0/inscripciones/personaadjunto/filterbydoctypeperson/${responsePersona.data.id}/13`);
+    const responseAdjunto2 = await apiGet(`/api/2.0/inscripciones/personaadjunto/filterbydoctypeperson/${responsePersona.data.id}/14`);
+    const responsePredio = await apiGet(`/api/2.0/inscripciones/predio/by-persona/${responsePersona.data.id}/`);
+    const responseLinea = await apiGet(`/api/2.0/inscripciones/personalinea/by-persona/${responsePersona.data.id}/`);
 
     await fillOutForm(
         responsePersona.data,
@@ -1160,8 +1188,8 @@ const getSurveyData = async () => {
   } catch (error) {
     console.error("Error cargando survey:", error);
     isSurveyReady.value = false;
-  } finally {
-    modelValue.value = true;
+  // } finally {
+  //   modelValue.value = true;
   }
 };
 
@@ -1222,7 +1250,7 @@ const fillOutForm = async (responsePersona: any, responseFormpersona: any, respo
       predio_coca_vive: responsePredio[0].residencia || false,
 
       // === PAGE 7 ===
-      tienecoordenadas: parseFloat(coordenadas[0]) > 0, 
+      tienecoordenadas: parseFloat(coordenadas[0]) > 0,
       // coordinates:
       coordinates: coorstring,
       predio_coca_altitud: responsePredio[0].altitud ?? "",
@@ -1250,7 +1278,7 @@ const fillOutForm = async (responsePersona: any, responseFormpersona: any, respo
       ],
       tiene_email: responsePersona.email && typeof responsePersona.email === 'string' && responsePersona.email.length > 0 ? 1 : 0,
       titular_email: responsePersona.email || ""
-      
+
     };
 
     survey.startTimer();
@@ -1459,24 +1487,36 @@ const updateLineaProductiva = async (id: any, data: any) => {
 
 const updateAdjuntos = async (id: any, data: any) => {
   if (Array.isArray(data.titular_foto_cara) && data.titular_foto_cara.length > 0) {
-    const resizedImage = await resizeBase64Img(data.titular_foto_cara[0].content);
-    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/persona/${id}/`, {
-      titular_foto_cara: resizedImage
-    });
+    try {
+      const resizedImage = await resizeBase64Img(data.titular_foto_cara[0].content);
+      await axios.patch(`/api/2.0/nucleo/forms/catatumbo/persona/${id}/`, {
+        titular_foto_cara: resizedImage
+      });
+    } catch (error) {
+      console.error('Error al redimensionar:', error);
+    }
   }
 
   if (Array.isArray(data.titular_foto_contracara) && data.titular_foto_contracara.length > 0) {
-    const resizedImage = await resizeBase64Img(data.titular_foto_contracara[0].content);
-    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/persona/${id}/`, {
-      titular_foto_contracara: resizedImage
-    });
+    try {
+      const resizedImage = await resizeBase64Img(data.titular_foto_contracara[0].content);
+      await axios.patch(`/api/2.0/nucleo/forms/catatumbo/persona/${id}/`, {
+        titular_foto_contracara: resizedImage
+      });
+    } catch (error) {
+      console.error('Error al redimensionar:', error);
+    }
   }
 
   if (Array.isArray(data.predio_coca_tipo_documento) && data.predio_coca_tipo_documento.length > 0) {
-    const resizedImage = await resizeBase64Img(data.predio_coca_tipo_documento[0].content);
-    await axios.patch(`/api/2.0/nucleo/forms/catatumbo/predio/${id}/`, {
-      predio_coca_tipo_documento: resizedImage
-    });
+    try {
+      const resizedImage = await resizeBase64Img(data.predio_coca_tipo_documento[0].content);
+      await axios.patch(`/api/2.0/nucleo/forms/catatumbo/predio/${id}/`, {
+        predio_coca_tipo_documento: resizedImage
+      });
+    } catch (error) {
+      console.error('Error al redimensionar:', error);
+    }
   }
 };
 

@@ -14,12 +14,15 @@ import useCrud from "@/composables/useCrud";
 import useToast from "@/composables/useToast";
 import { useLoading } from "vue-loading-overlay";
 import { getApiKey } from '@/helpers/apiKey';
-const base_url2 = 'http://localhost:8002'
+import useConst from "@/composables/useConst";
+
+const consts = useConst();
+// const base_url2 = 'http://localhost:8002'
 // const base_url2 = ''
 const uLoading = useLoading();
-const apikey=getApiKey
-const uCrud = useCrud(`${base_url2}/api/2.0/validacion/item-persona`);
-const uCrudAdjunto = useCrud(`${base_url2}/api/2.0/validacion/validaciones_adjunto`);
+const apikey = consts.apiKey
+const uCrud = useCrud(`/api/2.0/validacion/item-persona`);
+const uCrudAdjunto = useCrud(`/api/2.0/validacion/validaciones_adjunto`);
 const uToast = useToast();
 
 const resizeBase64Img = (base64:string, callback:any) => {
@@ -131,7 +134,7 @@ survey.onCompleting.add((sender, options) => {
 
   options.allowComplete = false; // Evitar que cierre el formulario automáticamente
 
-  
+
   const senderData = {
     ...sender.data,
     rol: 1,
@@ -158,7 +161,7 @@ survey.onCompleting.add((sender, options) => {
           };
           uCrudAdjunto.create(senderAdjuntoData, apikey)
         });
-        
+
       }
       uToast.toastSuccess("Su validación ha sido guardada correctamente.");
       sender.clear(true);
@@ -170,7 +173,7 @@ survey.onCompleting.add((sender, options) => {
     });
 
   return false;
-  
+
 });
 </script>
 

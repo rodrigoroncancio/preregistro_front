@@ -24,28 +24,28 @@
     import { useLoading } from "vue-loading-overlay";
     import { ref, onMounted } from "vue";
     import { object } from 'yup';
-    
+    import useConst from "@/composables/useConst";
 
+    const consts = useConst();
     const uLoading = useLoading();
     const uToast = useToast();
-    const base_url1 = 'http://localhost:8002/'
-    const base_url2 = 'http://localhost:8002'
-    // const base_url1 = ''
-    // const base_url2 = ''
+    // const base_url1 = 'http://localhost:8002/'
+    // const base_url2 = 'http://localhost:8002'
 
-    const uCrud = useCrud(base_url1 + "api/2.0/inscripciones/persona");
-    const uCrud2 = useCrud(base_url1 + "api/2.0/inscripciones/formpersona");
-    const uCrud3 = useCrud(base_url1 + "api/2.0/inscripciones/personaadjunto");
-    const uCrud4 = useCrud(base_url1 + "api/2.0/inscripciones/predio");
-    const uCrud5 = useCrud(base_url1 + "api/2.0/inscripciones/personalinea");
+    const uCrud = useCrud("api/2.0/inscripciones/persona");
+    const uCrud2 = useCrud("api/2.0/inscripciones/formpersona");
+    const uCrud3 = useCrud("api/2.0/inscripciones/personaadjunto");
+    const uCrud4 = useCrud("api/2.0/inscripciones/predio");
+    const uCrud5 = useCrud("api/2.0/inscripciones/personalinea");
     // const uCrud6 = useCrud("api/2.0/nucleo/lote");
     const modelValue = defineModel<object>();
     const api = axios.create()
-    const apikey = 'gAAAAABoEqasTj16HrxYAWXiBUbdnPiY7PCa7z0m8Jd6pqDLxHNFiioBWptP-RCbId9JS2hr8DxR-QBXNeKNiy7aiqdb1iH3krEeG7KJA0imDbeUgdSjbLDFaQgfdWSX4I6hIHAhOS3A'
+    const apikey = consts.apiKey
+    // const apikey = 'gAAAAABoEqasTj16HrxYAWXiBUbdnPiY7PCa7z0m8Jd6pqDLxHNFiioBWptP-RCbId9JS2hr8DxR-QBXNeKNiy7aiqdb1iH3krEeG7KJA0imDbeUgdSjbLDFaQgfdWSX4I6hIHAhOS3A'
 
     const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
 
-      return api.get(base_url2 + url, {
+      return api.get(url, {
         ...config,
         headers: {
           ...config.headers,
@@ -353,7 +353,7 @@
               "title": "Departamento",
               "isRequired": true,
               "choices": props.departamentos.data,
-              "defaultValue": props.departamentos.datadefault 
+              "defaultValue": props.departamentos.datadefault
             },
             {
               "type": "dropdown",
@@ -690,7 +690,7 @@
               "title": "7.1. Departamento",
               "isRequired": true,
               "choices": props.departamentos.data,
-              "defaultValue": props.departamentos.datadefault 
+              "defaultValue": props.departamentos.datadefault
             },
             {
               "type": "dropdown",
@@ -837,7 +837,7 @@
               "title": "9.1. Departamento",
               "isRequired": true,
               "choices": props.departamentos.data,
-              "defaultValue": props.departamentos.datadefault 
+              "defaultValue": props.departamentos.datadefault
             },
             {
               "type": "dropdown",
@@ -1018,7 +1018,7 @@
       "pageNextText": "Página siguiente",
       "completeText": "Enviar"
     };
-  
+
 
   const itemsVillages = ref<Array<{ value: number; text: string }>>([]);
   const getVillageList = async (ubicacionId: number, tipo: string) => {
@@ -1027,7 +1027,7 @@
       apiUrl.value = `/api/2.0/nucleo/ubicacion/by-id/?padre_id=${ubicacionId}&tipos=${tipo}`
       const response = await llamarApi()
       console.log(response)
-      
+
       itemsVillages.value = response.data.map((dept: any) => ({
           value: dept.id,
           text: dept.nombre // Asegurar compatibilidad
@@ -1046,14 +1046,14 @@
 
       console.log('response')
       console.log(response)
-      
-      const results = response?.data || []; 
+
+      const results = response?.data || [];
 
       if (results.length === 0) {
         itemsAsociaciones.value = [{ value: 99999, text: 'Sin asociación' }];
       } else {
         itemsAsociaciones.value = results.map((asocia: any) => ({
-          value: asocia.id, 
+          value: asocia.id,
           text: asocia.nombre_grupo
         }));
       }
@@ -1089,7 +1089,7 @@
 
   survey.onCompleting.add((sender, options) => {
     options.allowComplete = false;
-    
+
     const personaData = {
       tipo_identificacion: parseInt(sender.data.titular_tipo_identificacion),
       cub_asociacion: sender.data.asociaciones === 99999 ? null : sender.data.asociaciones,
@@ -1105,7 +1105,7 @@
       whatsapp: sender.data.titular_whatsapp,
       tipo_comunidad_etnica: parseInt(sender.data.tipo_comunidad_etnica),
       nombre_comunidad: sender.data.tipo_comunidad_etnica_nombre,
-      pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0, 
+      pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0,
       desplazado_2025: sender.data.desplazado_2025? 1 : 0,
       cabeza_flia: sender.data.titular_cabeza_familia? 1 : 0,
       num_nucleo: sender.data.num_nucleo,
@@ -1200,7 +1200,7 @@
       documento_relacion_predio: "SIN DOCUMENTO",
       origen: 'preregistro_catatumbo',
       sig: 0,
-      coordenada_registro: `${latitud} ${longitud}`, 
+      coordenada_registro: `${latitud} ${longitud}`,
       altitud: altitud,
       presion: presicion,
       tiempo_propietario_predio:0
@@ -1240,7 +1240,7 @@
       documento_relacion_predio: "SIN DOCUMENTO",
       origen: 'preregistro_catatumbo',
       sig: 0,
-      coordenada_registro: `${latitud} ${longitud}`, 
+      coordenada_registro: `${latitud} ${longitud}`,
       altitud: altitud,
       presion: presicion,
       tiempo_propietario_predio:0
@@ -1265,7 +1265,7 @@
       documento_relacion_predio: "SIN DOCUMENTO",
       origen: 'preregistro_catatumbo',
       sig: 0,
-      coordenada_registro: `${latitud} ${longitud}`, 
+      coordenada_registro: `${latitud} ${longitud}`,
       altitud: altitud,
       presion: presicion,
       tiempo_propietario_predio:0
@@ -1298,7 +1298,7 @@
       documento_relacion_predio: "SIN DOCUMENTO",
       origen: 'preregistro_catatumbo',
       sig: 0,
-      coordenada_registro: `${latitud} ${longitud}`, 
+      coordenada_registro: `${latitud} ${longitud}`,
       altitud: altitud,
       presion: presicion,
       tiempo_propietario_predio:0
@@ -1387,7 +1387,7 @@
 
     const asociacionesQuestion = survey.getQuestionByName("asociaciones");
     const perteneceQuestion = survey.getQuestionByName("pertenecegrupo");
-    
+
     if (perteneceQuestion) {
       asociacionesQuestion.choices = itemsAsociaciones.value;
 
@@ -1455,7 +1455,7 @@
       } else {
         survey.showNavigationButtons = false;
       }
-    }  
+    }
 
     if (options.name === "coordinates") {
       console.log('options.value')
@@ -1467,8 +1467,8 @@
     //     return;
     //   if (options.value < 6.839111 || options.value > 9.316977) {
     //     survey.setValue(options.name, "");
-    //     uToast.toastError("La latitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");  
-    //   }    
+    //     uToast.toastError("La latitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");
+    //   }
     // }
 
     // if (options.name === "longitud") {
@@ -1476,8 +1476,8 @@
     //     return;
     //   if (options.value < -73.644220 || options.value > -72.025764) {
     //     survey.setValue(options.name, "");
-    //     uToast.toastError("La Longitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");  
-    //   }    
+    //     uToast.toastError("La Longitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");
+    //   }
     // }
 
 
@@ -1490,7 +1490,7 @@
     const desplazadonucleoveredalQuestion = survey.getQuestionByName("desplazado_nucleo_veredal")
     const desplazadoveredaQuestion = survey.getQuestionByName("desplazado_vereda");
 
-    
+
     const prediococaMunicipioQuestion = survey.getQuestionByName("predio_coca_municipio");
     const prediococaCorregimientoQuestion = survey.getQuestionByName("predio_coca_corregimiento");
     const prediococanucleoveredalQuestion = survey.getQuestionByName("predio_coca_nucleo_veredal")
@@ -1805,11 +1805,11 @@
     }
 
   });
-  
+
 
   onMounted(async () => {
     await getAsociaciones();
   });
-    
+
 
 </script>

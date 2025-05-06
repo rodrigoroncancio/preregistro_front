@@ -32,7 +32,7 @@
 
   <table class="w-100">
     <tr>
-      <th class="text-left">Longitud</th>
+      <td class="text-left">Longitud</td>
       <td class="py-1 pl-4 w-100">
         <input
           v-model="longitude"
@@ -47,7 +47,7 @@
       </td>
     </tr>
     <tr>
-      <th class="text-left">Latitud</th>
+      <td class="text-left">Latitud</td>
       <td class="py-1 pl-4 w-100">
         <input
           v-model="latitude"

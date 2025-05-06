@@ -24,17 +24,17 @@
   import type { AxiosRequestConfig, AxiosResponse } from 'axios'
   import { useLoading } from "vue-loading-overlay";
   import { ref, onMounted } from "vue";
-  
+
   const uLoading = useLoading();
-  const base_url1 = 'http://localhost:8002/'
-  const base_url2 = 'http://localhost:8002'
+  // const base_url1 = 'http://localhost:8002/'
+  // const base_url2 = 'http://localhost:8002'
   // const base_url1 = ''
   // const base_url2 = ''
-  const uCrud_persona = useCrud(base_url1 + "api/2.0/inscripciones/persona");
-  const uCrud_edades= useCrud(base_url1 + "api/2.0/inscripciones/composicionedades");
-  const uCrud_nucleo = useCrud(base_url1 + "api/2.0/inscripciones/composicionucleo");
-  const uCrud_formpersona = useCrud(base_url1 + "api/2.0/inscripciones/formpersona");
-  const uCrud_linea = useCrud(base_url1 + "api/2.0/inscripciones/personalinea");
+  const uCrud_persona = useCrud("api/2.0/inscripciones/persona");
+  const uCrud_edades= useCrud("api/2.0/inscripciones/composicionedades");
+  const uCrud_nucleo = useCrud("api/2.0/inscripciones/composicionucleo");
+  const uCrud_formpersona = useCrud("api/2.0/inscripciones/formpersona");
+  const uCrud_linea = useCrud("api/2.0/inscripciones/personalinea");
 
   const uToast = useToast();
 
@@ -42,7 +42,7 @@
   const apikey = 'gAAAAABoDtFn9gi3OV4aLVbvYNvjReVfBFOsjfPH7TEpTCCmppTjoZPPzcKSRZycbhgV9diSwSBGGjmoiZfeu9kEoKoncDHDMwmsyA7LEnRc20FRh_fwVYLFyYO2sn3q-Jhu9jYRk_4q'
   const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
 
-    return api.get(base_url2 + url, {
+    return api.get(url, {
       ...config,
       headers: {
         ...config.headers,
@@ -951,7 +951,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
 }
 
   const survey = new Model(json);
-  
+
   survey.onCompleting.add((sender, options) => {
     options.allowComplete = false;
 
@@ -1011,7 +1011,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
   // Mayores de 70 años
   crearComposicionEdad(86, 15, sender.data.mujeres_de70);
   crearComposicionEdad(86, 16, sender.data.hombres_de70);
-    
+
   const crearComposicionNucleo = (tipo_composicion_id: number, valor: number) => {
     const numero = Number(valor);
     if (!isNaN(numero) && numero > 0) {
@@ -1144,7 +1144,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
 
     uCrud_persona.update(personaData, apikey)
         .then((item:any) => {
-            
+
 
             uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
             sender.clear(true);
@@ -1199,12 +1199,12 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
             survey.setValue('titular_numero_identificacion', "");
           }
           loading.hide();
-        })   
+        })
         // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
     }
 
     // const match = options.name.match(/^persona(\d+)_num_identificación$/);
-  
+
     // if (match) {
     //   const personaIndex = match[1]; // Extrae el número de persona (1-10)
 
@@ -1266,7 +1266,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
     //          uToast.toastError("Número de cedula no se encuentra en preregistro");
     //       }
 
-    //     })   
+    //     })
     //     // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
     // }
 
@@ -1287,23 +1287,23 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
       } else {
         survey.showNavigationButtons = false;
       }
-    }  
+    }
 
     if (options.name === "latitud") {
       if (options.value === null || options.value === "")
         return;
       if (options.value < 6.839111 || options.value > 9.316977) {
         survey.setValue(options.name, "");
-        uToast.toastError("La latitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");  
-      }    
+        uToast.toastError("La latitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");
+      }
     }
     if (options.name === "longitud") {
       if (options.value === null || options.value === "")
         return;
       if (options.value < -73.644220 || options.value > -72.025764) {
         survey.setValue(options.name, "");
-        uToast.toastError("La Longitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");  
-      }    
+        uToast.toastError("La Longitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");
+      }
     }
 
     if (options.name.startsWith("predio") && options.name.endsWith("_latitud")) {
@@ -1333,7 +1333,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
         });
 
         sender.setVariable("fechahoy", fechaHoy);
-        
+
     }
 
     if (["predio1_area_coca", "predio2_area_coca", "predio3_area_coca", "predio4_area_coca", "predio5_area_coca", "predio6_area_coca", "predio7_area_coca", "predio8_area_coca", "predio9_area_coca", "predio10_area_coca"].includes(options.name)) {
@@ -1359,13 +1359,13 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
       if (options.value === null || options.value === "")
         return;
         sender.setVariable("predionombre", options.value);
-        
+
     }
 
     if (options.name === "municipio") {
       if (options.value === null || options.value === "")
         return;
-       
+
         const municipioId = sender.getValue("municipio");
 
         const municipioArraigoQuestion = survey.getQuestionByName("municipio");
@@ -1375,7 +1375,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
     if (options.name === "vereda") {
       if (options.value === null || options.value === "")
         return;
-       
+
         const veredaId = sender.getValue("vereda");
 
         const veredaArraigoQuestion = survey.getQuestionByName("vereda");
@@ -1386,7 +1386,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
       if (options.value === null || options.value === "")
         return;
         sender.setVariable("vereda_arraigo", options.value);
-        
+
     }
     if (options.name === "numero_identificacion") {
       if (options.value === null || options.value === "")
@@ -1394,7 +1394,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
 
       try {
         let loader = uLoading.show({});
-        
+
         axios.get(`api/1.0/core/validationregister/filterbydocumentnumber/${options.value}/4/no`)
         .then((resp: any) => {
           let alertQuestion = survey.getQuestionByName("alertasvalidacion");
@@ -1416,7 +1416,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
             .then((resp: any) => {
               console.log('resp.data.status')
               console.log(resp.data.status)
-              
+
               if (resp.data.status === 1) {
                 const data = resp.data.data
 
@@ -1484,10 +1484,10 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
                   }
                 });
 
-                
+
                 survey.showNavigationButtons = true;
                 survey.setVariable("mostrar_campos", true);
-                
+
               } else {
                 if (resp.data.status === 2) {
                   uToast.toastError("Usuario con ficha diligenciada. No se puede continuar con el formulario.");
@@ -1500,16 +1500,16 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
                 }
                 survey.showNavigationButtons = false;
                 survey.setVariable("mostrar_campos", false);
-                
+
               }
               axios.get(`api/1.0/core/cedulasrnec/getbyidentification/${options.value}`)
               .then((resp: any) => {
                 console.log(resp)
-                survey.setValue("fecha_nacimiento", resp.data.fecha_nacimiento); 
-                survey.setValue("fecha_expedicion", resp.data.fecha_expedicion);   
+                survey.setValue("fecha_nacimiento", resp.data.fecha_nacimiento);
+                survey.setValue("fecha_expedicion", resp.data.fecha_expedicion);
               })
               .catch((err: any) => { console.log(err) })
-              
+
             })
           .catch((err: any) => { console.log(err) })
           .finally(() => { loader.hide() });
@@ -1517,14 +1517,14 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
           survey.setVariable("mostrar_campos", false);
           uToast.toastError("Digite un número de cedula valido");
           loader.hide()
-        }  
+        }
       } catch (error) {
         console.error("Error al consultar el endpoint:", error);
       }
     }
-    
 
-    
+
+
     if (options.name === "posee_predios") {
       survey.showNavigationButtons = false;
       sender.clearValue("numero_documento");
