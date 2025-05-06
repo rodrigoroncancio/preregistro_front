@@ -37,7 +37,7 @@ const useDataTable = (
         listParams[`columns[${index}][name]`] = header.key;
         listParams[`columns[${index}][searchable]`] = header.searchable ? "true" : "false";
         listParams[`columns[${index}][orderable]`] = header.sortable ? "true" : "false";
-        listParams[`columns[${index}][search][value]`] = search;
+        listParams[`columns[${index}][search][value]`] = "";
         listParams[`columns[${index}][search][regex]`] = "false";
       });
 
