@@ -31,33 +31,35 @@
   </expModalForm>
 
   <table class="w-100">
-    <tr>
-      <td class="text-left">Longitud</td>
-      <td class="py-1 pl-4 w-100">
-        <input
-          v-model="longitude"
-          class="sd-input sd-text"
-          type="number"
-          aria-required="false"
-          @change="updateValue()"
-        >
-      </td>
-      <td rowspan="2" class="pl-4">
-        <v-btn icon="mdi-map-marker" size="x-small" @click="clickView()"></v-btn>
-      </td>
-    </tr>
-    <tr>
-      <td class="text-left">Latitud</td>
-      <td class="py-1 pl-4 w-100">
-        <input
-          v-model="latitude"
-          class="sd-input sd-text"
-          type="number"
-          aria-required="false"
-          @change="updateValue()"
-        >
-      </td>
-    </tr>
+    <tbody>
+      <tr>
+        <td class="text-left">Longitud</td>
+        <td class="py-1 pl-4 w-100">
+          <input
+            v-model="longitude"
+            class="sd-input sd-text"
+            type="number"
+            aria-required="false"
+            @change="updateValue()"
+          >
+        </td>
+        <td rowspan="2" class="pl-4">
+          <v-btn icon="mdi-map-marker" size="x-small" @click="clickView()"></v-btn>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-left">Latitud</td>
+        <td class="py-1 pl-4 w-100">
+          <input
+            v-model="latitude"
+            class="sd-input sd-text"
+            type="number"
+            aria-required="false"
+            @change="updateValue()"
+          >
+        </td>
+      </tr>
+    </tbody>
   </table>
   <div v-if="!result" class="error-message">
     <h3 class="text-center text-red">Las coordenadas no son válidas</h3>

@@ -63,9 +63,11 @@
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-typescript": "^13.0.0",
     "eslint-plugin-vue": "^9.26.0",
-    "sass": "^1.77.6",
+    "sass": "^1.87.0",
+    "sass-loader": "^16.0.5",
     "typescript": "^5.5.2",
     "vite": "^5.3.3",
+    "vite-plugin-sass": "^0.1.0",
     "vite-plugin-vuetify": "^2.0.3",
     "vue-tsc": "^2.0.22"
   },
