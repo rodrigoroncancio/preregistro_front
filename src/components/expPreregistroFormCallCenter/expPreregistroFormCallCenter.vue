@@ -1087,7 +1087,7 @@ const getVillageList = async (ubicacionId: number, tipo: string) => {
 const itemsAsociaciones = ref<Array<{ value: number; text: string }>>([]);
 const getAsociaciones = async () => {
   try {
-    const response = await apiGet(`/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`);
+    const response = await axios.get(`/api/2.0/ficha/asociacion/by-origen/${props.origenasociaciones}`);
     const results = response?.data?.results || [];
 
     if (results.length === 0) {
@@ -1169,12 +1169,12 @@ const base_url1 = ''
 
 const getSurveyData = async () => {
   try {
-    const responsePersona = await apiGet(`/api/2.0/inscripciones/persona/${userSurveyId}/`);
-    const responseFormpersona = await apiGet(`/api/2.0/inscripciones/formpersona/filterbyformperson/${responsePersona.data.id}/19`);
-    const responseAdjunto1 = await apiGet(`/api/2.0/inscripciones/personaadjunto/filterbydoctypeperson/${responsePersona.data.id}/13`);
-    const responseAdjunto2 = await apiGet(`/api/2.0/inscripciones/personaadjunto/filterbydoctypeperson/${responsePersona.data.id}/14`);
-    const responsePredio = await apiGet(`/api/2.0/inscripciones/predio/by-persona/${responsePersona.data.id}/`);
-    const responseLinea = await apiGet(`/api/2.0/inscripciones/personalinea/by-persona/${responsePersona.data.id}/`);
+    const responsePersona = await axios.get(`/api/2.0/ficha/persona/${userSurveyId}/`);
+    const responseFormpersona = await axios.get(`/api/2.0/ficha/formpersona/filterbyformperson/${responsePersona.data.id}/19`);
+    const responseAdjunto1 = await axios.get(`/api/2.0/ficha/personaadjunto/filterbydoctypeperson/${responsePersona.data.id}/13`);
+    const responseAdjunto2 = await axios.get(`/api/2.0/ficha/personaadjunto/filterbydoctypeperson/${responsePersona.data.id}/14`);
+    const responsePredio = await axios.get(`/api/2.0/inscripciones/predio/by-persona/${responsePersona.data.id}/`);
+    const responseLinea = await axios.get(`/api/2.0/ficha/personalinea/by-persona/${responsePersona.data.id}/`);
 
     await fillOutForm(
         responsePersona.data,

@@ -319,7 +319,7 @@ const getValidationItems = async () => {
     //   `/api/1.0/core/validationregister/missing-validation-items/${identificationnumber.value}/4`
     // );
 
-    const response = await apiGet(`/api/2.0/validacion/item-persona/missing-validation-items/${identificationnumber.value}/${surveyId}`)
+    const response = await axios.get(`/api/2.0/validacion/item-persona/missing-validation-items/${identificationnumber.value}/${surveyId}`)
     // Verifica si response.data tiene la estructura esperada
     if (response.data.missing_items) {
       itemsValidation.value = response.data.missing_items.map((item: any) => ({
@@ -340,7 +340,7 @@ const getItemsValidadosBase = async () => {
   try {
     // const response = await axios.get(`/api/1.0/core/validationregister/items-validacion/4/`);
 
-    const response = await apiGet(`/api/2.0/validacion/item/by-form/${surveyId}`)
+    const response = await axios.get(`/api/2.0/validacion/item/by-form/${surveyId}`)
     itemsValidadosBase.value = response.data;
     numValidados.value = response.data.length
   } catch (error) {
@@ -363,7 +363,7 @@ const modalValidados = async (item: any, tipo: number) => {
     formModalValidadosTitulo.value = tipo == 1 ? 'Items validados' : 'Alertas';
     // const response = await axios.get(`/api/1.0/core/validationregister/filterbydocumentnumber/${item.numero_documento}/4/${tipo}`);
     // api/2.0/inscripciones/personavalidaciones/by-documento/0/18/
-    const response = await apiGet(`/api/2.0/validacion/item-persona/filterbydocumentnumber/${item.numero_documento}/${surveyId}/${tipo}`)
+    const response = await axios.get(`/api/2.0/validacion/item-persona/filterbydocumentnumber/${item.numero_documento}/${surveyId}/${tipo}`)
     itemsValidados.value = response.data;
     loader.hide();
     formModalValidados.value = true;
@@ -387,7 +387,7 @@ const downloadDocument = (item: any, tipo: number=1) => {
 }
 
 onMounted(async () => {
-  getValidationKey();
+  // getValidationKey();
   getItemsValidadosBase();
   const role = uAuth.getUserRole();
   console.log('role')
@@ -402,15 +402,15 @@ const fnReloadTable = () => {
 }
 
 const menuItems = computed(() => {
-  if (uAuth.isAdmin()) {
-    return ['view', 'validate', 'validate_super', 'documents'];
-  } else if (rolsActual.value.includes(1) || rolsActual.value.includes(3)) {
-    return ['view', 'validate', 'validate_super', 'documents'];
-  } else if (uAuth.isAudit()) {
-    return ['view', 'documents'];
-  } else {
-    return ['view'];
-  }
+  // if (uAuth.isAdmin()) {
+  //   return ['view', 'validate', 'validate_super', 'documents'];
+  // } else if (rolsActual.value.includes(1) || rolsActual.value.includes(3)) {
+  return ['view', 'validate', 'validate_super', 'documents'];
+  // } else if (uAuth.isAudit()) {
+  //   return ['view', 'documents'];
+  // } else {
+  //   return ['view'];
+  // }
 });
 
 const isValidForm = computed(() => {

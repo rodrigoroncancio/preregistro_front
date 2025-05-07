@@ -1043,9 +1043,9 @@
   const itemsAsociaciones = ref<Array<{ value: number; text: string }>>([]);
   const getAsociaciones = async () => {
     try {
-      // const response = await axios.get(`http://localhost:8002/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`);
-      apiUrl.value = `/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`
-      const response = await llamarApi()
+      const response = await axios.get(`/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`);
+      // apiUrl.value = `/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`
+      // const response = await llamarApi()
 
       console.log('response')
       console.log(response)
