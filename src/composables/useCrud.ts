@@ -14,6 +14,14 @@ const queryParams = (extra: Object = null) => {
   } catch { return "" }
 }
 
+const axiosPublicCrud = axios.create({
+  baseURL: '',
+  headers: {
+    // Asegurarte de que Authorization no se incluya
+    'Authorization': undefined,
+  },
+});
+
 const useCrud = (endpoint: string, extra: Object = null) => {
   const retrieve = (id: number) => {
     return new Promise((resolve, reject) => {
@@ -85,6 +93,23 @@ const useCrud = (endpoint: string, extra: Object = null) => {
     });
   };
 
+  const createPublic = (data: any) => {
+    return new Promise((resolve, reject) => {
+      let loader = loading.show({});
+      axiosPublicCrud
+        .post(`${endpoint}/${queryParams(extra)}`, data)
+          .then((resp: any) => {
+            resolve(resp.data);
+          })
+          .catch((err: any) => {
+            reject(err);
+          })
+          .finally(() => {
+            loader.hide();
+          })
+    });
+  };
+
   const update = (data: any) => {
     return new Promise((resolve, reject) => {
       let loader = loading.show({});
@@ -101,6 +126,24 @@ const useCrud = (endpoint: string, extra: Object = null) => {
           })
     });
   };
+
+  const updatePublic = (data: any) => {
+    return new Promise((resolve, reject) => {
+      let loader = loading.show({});
+      axiosPublicCrud
+        .patch(`${endpoint}/${data.id}/${queryParams(extra)}`, data)
+          .then((resp: any) => {
+            resolve(resp.data);
+          })
+          .catch((err: any) => {
+            reject(err);
+          })
+          .finally(() => {
+            loader.hide();
+          })
+    });
+  };
+
 
   const remove = (id: number) => {
     return new Promise((resolve, reject) => {
@@ -124,7 +167,9 @@ const useCrud = (endpoint: string, extra: Object = null) => {
     list,
     save,
     create,
+    createPublic,
     update,
+    updatePublic,
     remove
   };
 };
