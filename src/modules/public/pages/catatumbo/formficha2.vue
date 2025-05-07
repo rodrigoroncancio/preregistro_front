@@ -102,7 +102,8 @@
 
   const getLineaProductiva = async (personaId: number) => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/lineaproductiva/by-id/${personaId}/`);
+      // const response = await axios.get(`/api/2.0/nucleo/lineaproductiva/by-id/${personaId}/`);
+      const response = await axiosPublic.get(`/api/2.0/nucleo/lineaproductiva/by-id/${personaId}/`);
       dataLineaProductiva.value = response.data[0]
       survey.setValue('establece_fortalece', dataLineaProductiva.value.tipo_experiencia_id || 0);
       survey.setValue('linea_productiva', dataLineaProductiva.value.linea_productiva_id || 0);
@@ -113,7 +114,8 @@
 
   const getFormularioPersona = async (personaId: number) => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/formulariopersona/by-id/${personaId}/`);
+      // const response = await axios.get(`/api/2.0/nucleo/formulariopersona/by-id/${personaId}/`);
+      const response = await axiosPublic.get(`/api/2.0/nucleo/formulariopersona/by-id/${personaId}/`);
       dataFormularioPersona.value = response.data[0]
     } catch (error) {
       console.error("Error fetching village list:", error);
@@ -862,7 +864,17 @@
           "type": "file",
           "name": "interesado_mejora_foto",
           "visibleIf": "{interesado_mejora} = 1",
-          "title": "Foto de la vivienda a mejorar\n"
+          "title": "Foto de la vivienda a mejorar\n (Solo imagenes)",
+          "isRequired": true,
+          "acceptedTypes": "image/jpeg,image/png",
+          "validators": [
+            {
+              "type": "file",
+              "maxSize": 10485760,  // 1MB en bytes
+              "allowedExtensions": "jpeg,jpg,png",
+              "errorText": "El archivo debe ser una imagen (JPG/PNG) de menos de 1MB."
+            }
+          ]
         },
         {
           "type": "html",
@@ -908,8 +920,17 @@
           "type": "file",
           "name": "firma_file",
           "visibleIf": "{tipo_firma} = 'Item 2'",
-          "title": "Documento de firma",
-          "isRequired": true
+          "title": "Sube tu firma (solo imágenes):",
+          "isRequired": true,
+          "acceptedTypes": "image/jpeg,image/png",
+          "validators": [
+            {
+              "type": "file",
+              "maxSize": 10485760,  // 1MB en bytes
+              "allowedExtensions": "jpeg,jpg,png",
+              "errorText": "El archivo debe ser una imagen (JPG/PNG) de menos de 1MB."
+            }
+          ]
         }
       ]
     }
@@ -1128,6 +1149,14 @@
       return false;
   });
 
+  const axiosPublic = axios.create({
+    baseURL: '',
+    headers: {
+      // Asegurarte de que Authorization no se incluya
+      'Authorization': undefined,
+    },
+  });
+
 
   survey.onValueChanged.add(async (sender, options) => {
     if (options.name === "interesado_mejora_foto") {
@@ -1138,7 +1167,7 @@
       if (options.value === null || options.value === "")
         return;
         const loading = uLoading.show({});
-        axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
+        axiosPublic.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
         .then((resp: any) => {
           console.log(resp)
           getLineaProductiva(resp.data.data.id)
