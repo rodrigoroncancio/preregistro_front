@@ -970,7 +970,7 @@
     const crearComposicionEdad = (tipo_grupo_etario: number, sexo_id: number, valor: any) => {
     const numero = Number(valor);
     if (!isNaN(numero) && numero > 0) {
-      uCrud_edades.create({
+      uCrud_edades.createPublic({
         persona_id: dataUser.value.id,
         tipo_grupo_etario,
         sexo_id,
@@ -1007,7 +1007,7 @@
   const crearComposicionNucleo = (tipo_composicion_id: number, valor: number) => {
     const numero = Number(valor);
     if (!isNaN(numero) && numero > 0) {
-      uCrud_nucleo.create({
+      uCrud_nucleo.createPublic({
         persona_id: dataUser.value.id,
         tipo_composicion_id,
         numero,
@@ -1032,7 +1032,7 @@
       otra_cual: sender.data.otra_cual,
       fmodifica: new Date().toISOString()
     };
-    uCrud_linea.update(personaLineaProductivaData);
+    uCrud_linea.updatePublic(personaLineaProductivaData);
   } else {
     personaLineaProductivaData = {
       persona_id: dataUser.value.id,
@@ -1046,7 +1046,7 @@
       origen: 'ficha_catatumbo',
       fmodifica: new Date().toISOString()
     };
-    uCrud_linea.create(personaLineaProductivaData);
+    uCrud_linea.createPublic(personaLineaProductivaData);
   }
 
     function resizeBase64ImgAsync(base64: string): Promise<string> {
@@ -1088,7 +1088,7 @@
         origen: 'CATATUMBO - FICHA ACUERDO INDIVIDUAL (FASE 3)'
       };
 
-      uCrud_formpersona.create(formularioPersonaData);
+      uCrud_formpersona.createPublic(formularioPersonaData);
       console.log('Datos enviados:', formularioPersonaData);
     }
 
@@ -1128,13 +1128,13 @@
           origen: 'CATATUMBO - FICHA ACUERDO INDIVIDUAL (FASE 3)'
         };
 
-        uCrud_persona.create(personaDataVarios);
+        uCrud_persona.createPublic(personaDataVarios);
         console.log(personaDataVarios);
       });
     }
 
 
-    uCrud_persona.update(personaData)
+    uCrud_persona.updatePublic(personaData)
         .then((item:any) => {
             
 
