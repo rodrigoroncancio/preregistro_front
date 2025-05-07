@@ -15,7 +15,7 @@ const queryParams = (extra: Object = null) => {
 }
 
 const axiosPublicCrud = axios.create({
-  baseURL: '',
+  baseURL: 'https://preregistro.direccionsustitucion.gov.co',
   headers: {
     // Asegurarte de que Authorization no se incluya
     'Authorization': undefined,
