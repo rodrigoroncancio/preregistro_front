@@ -5,7 +5,7 @@ import axios from "axios";
 
 const sGlobalState = useGlobalState();
 const uUtils = useUtils();
-const endpoint = "/api/1.0/core"
+const endpointBase = import.meta.env.MODE === 'development' ? "http://dev.direccionsustitucion.gov.co/api/1.0" : "/api/1.0"
 
 const useAuth = (authStore: any = null) => {
   if (authStore == undefined) {
@@ -24,7 +24,8 @@ const useAuth = (authStore: any = null) => {
     return new Promise((resolve, reject) => {
       authLogOut();
       axios
-        .post(`/api/1.0/auth/jwt/create`, {
+        // .post(`${endpointBase}/auth/jwt/create`, {
+        .post(`/api/2.0/auth/jwt/create`, {
           username: data.username,
           password: data.password,
         })
@@ -32,10 +33,12 @@ const useAuth = (authStore: any = null) => {
           data = {
             accessToken: resp.data["access"],
             refreshToken: resp.data["refresh"],
-            userData: ""
+            userData: resp.data["data"]
           }
+          data.userData.image = "";
+          data.userData.phone = "";
           authStore.setAuthData(data);
-          await authData();
+          // await authData();
           sGlobalState.value.auth = true;
           resolve(resp.data);
         })
@@ -55,10 +58,11 @@ const useAuth = (authStore: any = null) => {
     sGlobalState.value.auth = false;
   };
 
+  // Obsoleta en /api/2.0/
   const authData = () => {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${endpoint}/user/data/`)
+        .get(`${endpointBase}/core/user/data/`)
         .then((resp: any) => {
           const data = {
             accessToken: authStore.getAccessToken,
@@ -92,14 +96,14 @@ const useAuth = (authStore: any = null) => {
 
   const getUserRole = () => {
     try {
-      const token = getToken();      
+      const token = getToken();
       const data = token.split(".")[1];
       const dataDecoded: any = uUtils.base64Decode(data);
       const objDecoded: any = uUtils.JsonParse(dataDecoded);
       return objDecoded["roles"];
     } catch {
       return [];
-    }    
+    }
   }
 
   const isAdmin = () => {
