@@ -102,7 +102,8 @@
 
   const getLineaProductiva = async (personaId: number) => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/lineaproductiva/by-id/${personaId}/`);
+      // const response = await axios.get(`/api/2.0/nucleo/lineaproductiva/by-id/${personaId}/`);
+      const response = await axiosPublic.get(`/api/2.0/nucleo/lineaproductiva/by-id/${personaId}/`);
       dataLineaProductiva.value = response.data[0]
       survey.setValue('establece_fortalece', dataLineaProductiva.value.tipo_experiencia_id || 0);
       survey.setValue('linea_productiva', dataLineaProductiva.value.linea_productiva_id || 0);
@@ -113,7 +114,8 @@
 
   const getFormularioPersona = async (personaId: number) => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/formulariopersona/by-id/${personaId}/`);
+      // const response = await axios.get(`/api/2.0/nucleo/formulariopersona/by-id/${personaId}/`);
+      const response = await axiosPublic.get(`/api/2.0/nucleo/formulariopersona/by-id/${personaId}/`);
       dataFormularioPersona.value = response.data[0]
     } catch (error) {
       console.error("Error fetching village list:", error);
@@ -949,7 +951,7 @@
     const crearComposicionEdad = (tipo_grupo_etario: number, sexo_id: number, valor: any) => {
     const numero = Number(valor);
     if (!isNaN(numero) && numero > 0) {
-      uCrud_edades.create({
+      uCrud_edades.createPublic({
         persona_id: dataUser.value.id,
         tipo_grupo_etario,
         sexo_id,
@@ -986,7 +988,7 @@
   const crearComposicionNucleo = (tipo_composicion_id: number, valor: number) => {
     const numero = Number(valor);
     if (!isNaN(numero) && numero > 0) {
-      uCrud_nucleo.create({
+      uCrud_nucleo.createPublic({
         persona_id: dataUser.value.id,
         tipo_composicion_id,
         numero,
@@ -1011,7 +1013,7 @@
       otra_cual: sender.data.otra_cual,
       fmodifica: new Date().toISOString()
     };
-    uCrud_linea.update(personaLineaProductivaData);
+    uCrud_linea.updatePublic(personaLineaProductivaData);
   } else {
     personaLineaProductivaData = {
       persona_id: dataUser.value.id,
@@ -1025,7 +1027,7 @@
       origen: 'ficha_catatumbo',
       fmodifica: new Date().toISOString()
     };
-    uCrud_linea.create(personaLineaProductivaData);
+    uCrud_linea.createPublic(personaLineaProductivaData);
   }
 
     function resizeBase64ImgAsync(base64: string): Promise<string> {
@@ -1067,7 +1069,7 @@
         origen: 'ficha_acuerdo_argelia'
       };
 
-      uCrud_formpersona.create(formularioPersonaData);
+      uCrud_formpersona.createPublic(formularioPersonaData);
       console.log('Datos enviados:', formularioPersonaData);
     }
 
@@ -1107,13 +1109,13 @@
           origen: 'ficha_acuerdo_argelia'
         };
 
-        uCrud_persona.create(personaDataVarios);
+        uCrud_persona.createPublic(personaDataVarios);
         console.log(personaDataVarios);
       });
     }
 
 
-    uCrud_persona.update(personaData)
+    uCrud_persona.updatePublic(personaData)
         .then((item:any) => {
             
 
@@ -1128,6 +1130,13 @@
       return false;
   });
 
+  const axiosPublic = axios.create({
+    baseURL: '',
+    headers: {
+      // Asegurarte de que Authorization no se incluya
+      'Authorization': undefined,
+    },
+  });
 
   survey.onValueChanged.add(async (sender, options) => {
     if (options.name === "interesado_mejora_foto") {
@@ -1138,7 +1147,8 @@
       if (options.value === null || options.value === "")
         return;
         const loading = uLoading.show({});
-        axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
+        // axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
+        axiosPublic.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
         .then((resp: any) => {
           console.log(resp)
           getLineaProductiva(resp.data.data.id)
