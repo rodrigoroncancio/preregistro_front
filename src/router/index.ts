@@ -279,9 +279,9 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: "/formularios", // Añade el path raíz
+    path: "/formrenhacemos", // Añade el path raíz
     meta: { requiresAuth: true },
-    name: "formularios",
+    name: "formrenhacemos",
     component: () => import("@/layouts/formularios.vue"),
     children: [
       {
@@ -290,8 +290,21 @@ const routes: RouteRecordRaw[] = [
         component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formficha2.vue"),
       },
       {
-        path: "catatumbo/registro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+        path: "argelia/fichaacuerdo", // Ruta relativa al path padre ("/catatumbo/asociaciones")
         name: "formulario-catatumbo-fichaacuerdo",
+        component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/argelia/formficha2.vue"),
+      },
+    ]
+  },
+  {
+    path: "/formularios", // Añade el path raíz
+    meta: { requiresAuth: true },
+    name: "formularios",
+    component: () => import("@/layouts/public.vue"),
+    children: [
+      {
+        path: "catatumbo/registro", // Ruta relativa al path padre ("/catatumbo/asociaciones")
+        name: "formulario-catatumbo-registro",
         component: () => import(/* webpackChunkName: "CatatumboAsociaciones" */ "@/modules/public/pages/catatumbo/formfichapreregistro2.vue"),
       },
     ]
