@@ -183,12 +183,12 @@ const itemsMenu = [
     {
       title: "modules.pnis.fichacatatumbo3",
       icon: "mdi-human-male-board-poll",
-      url: "/catatumbo/fichaacuerdofase2",
+      url: "/formrenhacemos/catatumbo/fichaacuerdo",
     },
     {
       title: "modules.pnis.ficha_argelia",
       icon: "mdi-human-male-board-poll",
-      url: "/pnis/catatumbogrupos",
+      url: "/formrenhacemos/argelia/fichaacuerdo",
     }]
   },
   {
@@ -198,7 +198,7 @@ const itemsMenu = [
     children: [{
       title: "modules.pnis.catatumbo_form_preregistro2",
       icon: "mdi-human-male-board-poll",
-      url: "/catatumbo/preregistro",
+      url: "formularios/catatumbo/registro",
     }]
   },
   

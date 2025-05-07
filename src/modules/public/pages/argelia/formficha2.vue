@@ -864,7 +864,17 @@
           "type": "file",
           "name": "interesado_mejora_foto",
           "visibleIf": "{interesado_mejora} = 1",
-          "title": "Foto de la vivienda a mejorar\n"
+          "title": "Foto de la vivienda a mejorar\n (Solo imagenes)",
+          "isRequired": true,
+          "acceptedTypes": "image/jpeg,image/png",
+          "validators": [
+            {
+              "type": "file",
+              "maxSize": 10485760,  // 1MB en bytes
+              "allowedExtensions": "jpeg,jpg,png",
+              "errorText": "El archivo debe ser una imagen (JPG/PNG) de menos de 1MB."
+            }
+          ]
         },
         {
           "type": "html",
@@ -910,8 +920,17 @@
           "type": "file",
           "name": "firma_file",
           "visibleIf": "{tipo_firma} = 'Item 2'",
-          "title": "Documento de firma",
-          "isRequired": true
+          "title": "Sube tu firma (solo imágenes):",
+          "isRequired": true,
+          "acceptedTypes": "image/jpeg,image/png",
+          "validators": [
+            {
+              "type": "file",
+              "maxSize": 10485760,  // 1MB en bytes
+              "allowedExtensions": "jpeg,jpg,png",
+              "errorText": "El archivo debe ser una imagen (JPG/PNG) de menos de 1MB."
+            }
+          ]
         }
       ]
     }
