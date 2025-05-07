@@ -21,15 +21,9 @@
   import useCrud from "@/composables/useCrud";
   import useToast from "@/composables/useToast";
   import axios from "axios";
-  import type { AxiosRequestConfig, AxiosResponse } from 'axios'
+  // import type { AxiosRequestConfig, AxiosResponse } from 'axios'
   import { useLoading } from "vue-loading-overlay";
   import { ref, onMounted } from "vue";
-  import { getApiKey } from '@/helpers/apiKey';
-  import cleanAxios from '@/helpers/cleanAxios';
-
-  const apikey = getApiKey
-
-  const modelValue = defineModel<object>();
 
   const props = defineProps({
     form_title: {
@@ -45,33 +39,41 @@
       default: 1
     },
   })
-  
+
   const uLoading = useLoading();
-  // const base_url1 = 'http://localhost:8002/'
-  // const base_url2 = 'http://localhost:8002'
-  const base_url1 = ''
-  const base_url2 = ''
-  const uCrud_persona = useCrud(base_url1 + "api/2.0/inscripciones/persona");
-  const uCrud_edades= useCrud(base_url1 + "api/2.0/inscripciones/composicionedades");
-  const uCrud_nucleo = useCrud(base_url1 + "api/2.0/inscripciones/composicionucleo");
-  const uCrud_formpersona = useCrud(base_url1 + "api/2.0/inscripciones/formpersona");
-  const uCrud_linea = useCrud(base_url1 + "api/2.0/inscripciones/personalinea");
+  const uCrud_persona = useCrud("/api/2.0/inscripciones/persona");
+  const uCrud_edades= useCrud("/api/2.0/inscripciones/composicionedades");
+  const uCrud_nucleo = useCrud("/api/2.0/inscripciones/composicionucleo");
+  const uCrud_formpersona = useCrud("/api/2.0/inscripciones/formpersona");
+  const uCrud_linea = useCrud("/api/2.0/inscripciones/personalinea");
 
   const uToast = useToast();
 
-  const apiGet = (url: string) => {
-    return cleanAxios.get(url, {
-      headers: {
-        'Authorization': `Api-Key ${getApiKey()}`,
-      }
-    });
-  };
+  // const apiGet = (url: string) => {
+  //   return cleanAxios.get(url, {
+  //     headers: {
+  //       'Authorization': `Api-Key ${getApiKey()}`,
+  //     }
+  //   });
+  // };
 
+  // const apiUrl = ref<string>('')
+  // const llamarApi = async () => {
+  //   if (!apiUrl.value) {
+  //     console.error('No se ha definido la URL')
+  //     return
+  //   }
 
+  //   try {
+  //     const response = await axios.get(apiUrl.value)
+  //     console.log('Respuesta:', response?.data)
+  //     return response
+  //   } catch (error) {
+  //     console.error('Error al llamar la API:', error)
+  //   }
+  // }
 
-
-
-const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
+  // const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
   const dataLineaProductiva = ref({
     id: 0,
     linea_productiva: 0,
@@ -129,10 +131,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
 
   const getLineaProductiva = async (personaId: number) => {
     try {
-      // const response = await axios.get(`/api/2.0/nucleo/lineaproductiva/by-id/${personaId}/`);
-
-      const response = await apiGet(`${base_url2}/api/2.0/inscripciones/personalinea/by-persona/${personaId}/`)
-
+      const response = await axios.get(`/api/2.0/inscripciones/personalinea/by-persona/${personaId}/`)
       dataLineaProductiva.value = response.data[0]
       survey.setValue('establece_fortalece', dataLineaProductiva.value.tipo_experiencia || 0);
       survey.setValue('linea_productiva', dataLineaProductiva.value.linea_productiva || 0);
@@ -143,9 +142,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
 
   const getFormularioPersona = async (personaId: number) => {
     try {
-      // const response = await axios.get(`/api/2.0/nucleo/formulariopersona/by-id/${personaId}/`);
-      apiUrl.value = `/api/2.0/inscripciones/formulariopersona/by-id/${personaId}/`
-      const response = await llamarApi()
+      const response = await axios.get(`/api/2.0/inscripciones/formulariopersona/by-id/${personaId}/`)
       dataFormularioPersona.value = response.data[0]
     } catch (error) {
       console.error("Error fetching village list:", error);
@@ -172,26 +169,26 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
   };
 
   const personasNUcleo = ref({})
-  const enviarNucleoFamiliar = async () => {
-  try {
-    const response = await axios.post('/forms/catatumbo/fichaacuerdonucleo/', personasNUcleo.value, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    console.log('Respuesta del servidor:', response.data);
-    alert('Formulario enviado con éxito');
-  } catch (error) {
-    console.error('Error al enviar el formulario:', error.response?.data || error);
-    alert('Error al enviar los datos');
-  }
-};
+  // const enviarNucleoFamiliar = async () => {
+  //   try {
+  //     const response = await axios.post('/forms/catatumbo/fichaacuerdonucleo/', personasNUcleo.value, {
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       }
+  //     });
+  //     console.log('Respuesta del servidor:', response.data);
+  //     alert('Formulario enviado con éxito');
+  //   } catch (error) {
+  //     console.error('Error al enviar el formulario:', error.response?.data || error);
+  //     alert('Error al enviar los datos');
+  //   }
+  // };
 
   onMounted(async () => {
 
   });
 
-  const json ={
+  const json = {
   "title": props.form_title,
   "pages": [
     {
@@ -951,10 +948,10 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
   "completeText": "Enviar",
   "showNavigationButtons": true,
   "locale": "es"
-}
+  }
 
   const survey = new Model(json);
-  
+
   survey.onCompleting.add((sender, options) => {
     options.allowComplete = false;
 
@@ -975,9 +972,6 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
       ha_total_predios: sender.data.predios_hectareas_total,
       ha_total_loteCoca: sender.data.predios_hectareas_coca
     };
-    console.log('personaData')
-    console.log(personaData)
-
     const crearComposicionEdad = (tipo_grupo_etario: number, sexo_id: number, valor: any) => {
     const numero = Number(valor);
     if (!isNaN(numero) && numero > 0) {
@@ -987,7 +981,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
         sexo_id,
         numero,
         fcrea: new Date().toISOString()
-      }, apikey);
+      });
     }
   };
 
@@ -1014,7 +1008,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
   // Mayores de 70 años
   crearComposicionEdad(86, 15, sender.data.mujeres_de70);
   crearComposicionEdad(86, 16, sender.data.hombres_de70);
-    
+
   const crearComposicionNucleo = (tipo_composicion_id: number, valor: number) => {
     const numero = Number(valor);
     if (!isNaN(numero) && numero > 0) {
@@ -1023,7 +1017,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
         tipo_composicion_id,
         numero,
         fcrea: new Date().toISOString()
-      }, apikey);
+      });
     }
   };
 
@@ -1043,7 +1037,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
       otra_cual: sender.data.otra_cual,
       fmodifica: new Date().toISOString()
     };
-    uCrud_linea.update(personaLineaProductivaData, apikey);
+    uCrud_linea.update(personaLineaProductivaData);
   } else {
     personaLineaProductivaData = {
       persona_id: dataUser.value.id,
@@ -1099,12 +1093,11 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
         origen: props.origen,
       };
 
-      uCrud_formpersona.create(formularioPersonaData, apikey);
+      uCrud_formpersona.create(formularioPersonaData);
       console.log('Datos enviados:', formularioPersonaData);
     }
 
     enviarFormularioPersona();
-
 
     if (Array.isArray(sender.data.nucleo_mayores)) {
       sender.data.nucleo_mayores.forEach((usuariodata: { numero_documento: any; nombres: any; apellidos: any; fecha_exp: any; beneficiario: any; }) => {
@@ -1138,76 +1131,93 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
           fecha_estado: dataUser.value.fecha_estado,
           origen: props.origen,
         };
-
-        uCrud_persona.create(personaDataVarios, apikey);
+        uCrud_persona.create(personaDataVarios);
         console.log(personaDataVarios);
       });
     }
-
-
-    uCrud_persona.update(personaData, apikey)
-        .then((item:any) => {
-            
-
-            uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
-            sender.clear(true);
-            // survey.showNavigationButtons = false;
-        })
-        .catch((error) => {
-              uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
-        });
-
-      return false;
+    uCrud_persona.update(personaData)
+    .then((item:any) => {
+        uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
+        sender.clear(true);
+        // survey.showNavigationButtons = false;
+    })
+    .catch((error) => {
+          uToast.toastError("Ocurrió un error al guardar su formulario. Por favor, inténtelo de nuevo.");
+    });
+    return false;
   });
 
 
   survey.onValueChanged.add(async (sender, options) => {
-    if (options.name === "interesado_mejora_foto") {
-      console.log('options.value')
-      console.log(options.value)
-    }
+    // if (options.name === "interesado_mejora_foto") {
+    //   console.log('options.value')
+    //   console.log(options.value)
+    // }
     if (options.name === "titular_numero_identificacion") {
       if (options.value === null || options.value === "")
         return;
-        const loading = uLoading.show({});
-        apiUrl.value = `/api/2.0/inscripciones/personavalidaciones/by-documento/88170468/18`
-        const response2 = await llamarApi()
-        // axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`)
-        apiUrl.value = `/api/2.0/inscripciones/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`
-        await llamarApi()
-        .then((resp: any) => {
-          console.log(resp)
-          getLineaProductiva(resp.data.data.id)
-          getFormularioPersona(resp.data.data.id)
-          if (resp.data && resp.data.status===1 ) {
-            console.log('resp.data')
-            console.log(resp.data.data.nombre)
-            dataUser.value = resp.data.data
-            console.log(dataUser.value.id)
-            // titular_nombres
-            survey.setValue('titular_nombres', resp.data.data.nombre || "");
-            survey.setValue('titular_apellidos', resp.data.data.apellido || "");
-            survey.setValue('fecha_nacimiento', resp.data.data.fecha_nacimiento || "");
-            survey.setValue('fecha_expedicion', resp.data.data.fecha_expedicion || "");
-            survey.setValue('telefono', resp.data.data.telefono_celular || "");
-            survey.setValue('titular_tipo_identificacion', resp.data.data.tipo_identificacion || "");
-          }else if (resp.data && resp.data.status===2) {
-            survey.setValue('titular_nombres', "");
-            uToast.toastError("Ya existe una ficha diligenciada con este número de documento");
-            survey.setValue('titular_numero_identificacion', "");
-          }
-          else{
-            survey.setValue('titular_nombres', "");
-            uToast.toastError("Número de cedula no se encuentra en Pre- Registro");
-            survey.setValue('titular_numero_identificacion', "");
-          }
-          loading.hide();
-        })   
-        // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
+      const loading = uLoading.show({});
+      const resp = await axios.get(`/api/2.0/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=${props.formid}`);
+      console.log(resp)
+      getLineaProductiva(resp.data.data.id)
+      getFormularioPersona(resp.data.data.id)
+      if (resp.data && resp.data.status===1 ) {
+        console.log('resp.data')
+        console.log(resp.data.data.nombre)
+        dataUser.value = resp.data.data
+        console.log(dataUser.value.id)
+        // titular_nombres
+        survey.setValue('titular_nombres', resp.data.data.nombre || "");
+        survey.setValue('titular_apellidos', resp.data.data.apellido || "");
+        survey.setValue('fecha_nacimiento', resp.data.data.fecha_nacimiento || "");
+        survey.setValue('fecha_expedicion', resp.data.data.fecha_expedicion || "");
+        survey.setValue('telefono', resp.data.data.telefono_celular || "");
+        survey.setValue('titular_tipo_identificacion', resp.data.data.tipo_identificacion || "");
+      } else if (resp.data && resp.data.status===2) {
+        survey.setValue('titular_nombres', "");
+        uToast.toastError("Ya existe una ficha diligenciada con este número de documento");
+        survey.setValue('titular_numero_identificacion', "");
+      }
+      else{
+        survey.setValue('titular_nombres', "");
+        uToast.toastError("Número de cedula no se encuentra en Pre- Registro");
+        survey.setValue('titular_numero_identificacion', "");
+      }
+      loading.hide();
+        // apiUrl.value = `/api/2.0/inscripciones/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`
+        // await llamarApi()
+        // .then((resp: any) => {
+        //   console.log(resp)
+        //   getLineaProductiva(resp.data.data.id)
+        //   getFormularioPersona(resp.data.data.id)
+        //   if (resp.data && resp.data.status===1 ) {
+        //     console.log('resp.data')
+        //     console.log(resp.data.data.nombre)
+        //     dataUser.value = resp.data.data
+        //     console.log(dataUser.value.id)
+        //     // titular_nombres
+        //     survey.setValue('titular_nombres', resp.data.data.nombre || "");
+        //     survey.setValue('titular_apellidos', resp.data.data.apellido || "");
+        //     survey.setValue('fecha_nacimiento', resp.data.data.fecha_nacimiento || "");
+        //     survey.setValue('fecha_expedicion', resp.data.data.fecha_expedicion || "");
+        //     survey.setValue('telefono', resp.data.data.telefono_celular || "");
+        //     survey.setValue('titular_tipo_identificacion', resp.data.data.tipo_identificacion || "");
+        //   } else if (resp.data && resp.data.status===2) {
+        //     survey.setValue('titular_nombres', "");
+        //     uToast.toastError("Ya existe una ficha diligenciada con este número de documento");
+        //     survey.setValue('titular_numero_identificacion', "");
+        //   }
+        //   else{
+        //     survey.setValue('titular_nombres', "");
+        //     uToast.toastError("Número de cedula no se encuentra en Pre- Registro");
+        //     survey.setValue('titular_numero_identificacion', "");
+        //   }
+        //   loading.hide();
+        // })
     }
 
     // const match = options.name.match(/^persona(\d+)_num_identificación$/);
-  
+
     // if (match) {
     //   const personaIndex = match[1]; // Extrae el número de persona (1-10)
 
@@ -1269,7 +1279,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
     //          uToast.toastError("Número de cedula no se encuentra en preregistro");
     //       }
 
-    //     })   
+    //     })
     //     // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
     // }
 
@@ -1290,23 +1300,23 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
       } else {
         survey.showNavigationButtons = false;
       }
-    }  
+    }
 
     if (options.name === "latitud") {
       if (options.value === null || options.value === "")
         return;
       if (options.value < 6.839111 || options.value > 9.316977) {
         survey.setValue(options.name, "");
-        uToast.toastError("La latitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");  
-      }    
+        uToast.toastError("La latitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");
+      }
     }
     if (options.name === "longitud") {
       if (options.value === null || options.value === "")
         return;
       if (options.value < -73.644220 || options.value > -72.025764) {
         survey.setValue(options.name, "");
-        uToast.toastError("La Longitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");  
-      }    
+        uToast.toastError("La Longitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");
+      }
     }
 
     if (options.name.startsWith("predio") && options.name.endsWith("_latitud")) {
@@ -1336,7 +1346,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
         });
 
         sender.setVariable("fechahoy", fechaHoy);
-        
+
     }
 
     if (["predio1_area_coca", "predio2_area_coca", "predio3_area_coca", "predio4_area_coca", "predio5_area_coca", "predio6_area_coca", "predio7_area_coca", "predio8_area_coca", "predio9_area_coca", "predio10_area_coca"].includes(options.name)) {
@@ -1362,13 +1372,13 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
       if (options.value === null || options.value === "")
         return;
         sender.setVariable("predionombre", options.value);
-        
+
     }
 
     if (options.name === "municipio") {
       if (options.value === null || options.value === "")
         return;
-       
+
         const municipioId = sender.getValue("municipio");
 
         const municipioArraigoQuestion = survey.getQuestionByName("municipio");
@@ -1378,7 +1388,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
     if (options.name === "vereda") {
       if (options.value === null || options.value === "")
         return;
-       
+
         const veredaId = sender.getValue("vereda");
 
         const veredaArraigoQuestion = survey.getQuestionByName("vereda");
@@ -1389,7 +1399,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
       if (options.value === null || options.value === "")
         return;
         sender.setVariable("vereda_arraigo", options.value);
-        
+
     }
     if (options.name === "numero_identificacion") {
       if (options.value === null || options.value === "")
@@ -1397,7 +1407,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
 
       try {
         let loader = uLoading.show({});
-        
+
         axios.get(`api/1.0/core/validationregister/filterbydocumentnumber/${options.value}/4/no`)
         .then((resp: any) => {
           let alertQuestion = survey.getQuestionByName("alertasvalidacion");
@@ -1419,7 +1429,7 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
             .then((resp: any) => {
               console.log('resp.data.status')
               console.log(resp.data.status)
-              
+
               if (resp.data.status === 1) {
                 const data = resp.data.data
 
@@ -1487,10 +1497,10 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
                   }
                 });
 
-                
+
                 survey.showNavigationButtons = true;
                 survey.setVariable("mostrar_campos", true);
-                
+
               } else {
                 if (resp.data.status === 2) {
                   uToast.toastError("Usuario con ficha diligenciada. No se puede continuar con el formulario.");
@@ -1503,16 +1513,16 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
                 }
                 survey.showNavigationButtons = false;
                 survey.setVariable("mostrar_campos", false);
-                
+
               }
               axios.get(`api/1.0/core/cedulasrnec/getbyidentification/${options.value}`)
               .then((resp: any) => {
                 console.log(resp)
-                survey.setValue("fecha_nacimiento", resp.data.fecha_nacimiento); 
-                survey.setValue("fecha_expedicion", resp.data.fecha_expedicion);   
+                survey.setValue("fecha_nacimiento", resp.data.fecha_nacimiento);
+                survey.setValue("fecha_expedicion", resp.data.fecha_expedicion);
               })
               .catch((err: any) => { console.log(err) })
-              
+
             })
           .catch((err: any) => { console.log(err) })
           .finally(() => { loader.hide() });
@@ -1520,14 +1530,14 @@ const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
           survey.setVariable("mostrar_campos", false);
           uToast.toastError("Digite un número de cedula valido");
           loader.hide()
-        }  
+        }
       } catch (error) {
         console.error("Error al consultar el endpoint:", error);
       }
     }
-    
 
-    
+
+
     if (options.name === "posee_predios") {
       survey.showNavigationButtons = false;
       sender.clearValue("numero_documento");

@@ -1088,6 +1088,8 @@
     };
   };
 
+  console.log(json);
+  console.log("form_id", props.formid);
   const survey = new Model(json);
 
   survey.onCompleting.add((sender, options) => {
