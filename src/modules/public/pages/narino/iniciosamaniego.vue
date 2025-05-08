@@ -23,7 +23,7 @@
                   <span className="title-primary-argelia">Convocatoria abierta </span>
                   <span className="title-highlight-argelia">Samaniego</span>
                 </h1>
-                <p className="date-argelia-page">Del <strong>1 de aaaaaa</strong> <strong>al 13 de bbbbbb</strong></p>
+                <p className="date-argelia-page">Del <strong>07 de mayo</strong> al <br> <strong>05 de julio</strong></p>
               </div>
             </v-col>
           </v-row>
@@ -31,13 +31,10 @@
             <v-col>
               <div className="buttons-container-argelia-page">
                 <div className="button-group-argelia-page">
-                  <a href="/catatumbo/form2" target="blank" className="btn-arge-page green">Preregistro de Asociaciones</a>
-                  <a href="" className="btn-arge-page play green">Ver tutorial</a>
+                  <a href="#" className="btn-arge-page green disabled-btn">Preregistro de Asociaciones</a>
                 </div>
-
                 <div className="button-group-argelia-page">
-                  <a href="/narino/samaniego/preregistro" target="blank" className="btn-arge-page blue">Preregistro de núcleos de familiares</a>
-                  <a href="" className="btn-arge-page play blue">Ver tutorial</a>
+                  <a href="/inscripcion/narino-samaniego/fase1" target="_blank" className="btn-arge-page blue">Preregistro de núcleos de familiares</a>
                 </div>
               </div>
             </v-col>
@@ -46,7 +43,7 @@
             <v-col>
               <a className="ABC"
                 target="blank"
-                href="https://stpnis.blob.core.windows.net/testdsci/preregistroArgelia/_Abc_convocatoria%20argelia.pdf" >
+                href="https://stpnis.blob.core.windows.net/testdsci/samaniego/_Abc_convocatoria_abades.pptx.pdf">
                 ABC de la convocatoria
               </a>
             </v-col>
@@ -56,7 +53,7 @@
 
               <a className="pdf"
                 target="blank"
-                href="https://stpnis.blob.core.windows.net/testdsci/preregistroArgelia/10032025_Inscripcion_Argelia_TdR_CONVOCATORIA1_Fase1_v7.pdf"
+                href="https://stpnis.blob.core.windows.net/testdsci/samaniego/2025_03_17_TdR_Abades_V5.pdf"
               >
                 Ver términos de referencia de la convocatoria
               </a>
@@ -66,23 +63,81 @@
 
           <v-row>
             <v-col>
-
-              <a 
-                  target="_blank"
-                  href="/argelia/vercupos"
-                  style="color: black; background-color: rgba(255, 255, 255, 0.6); padding: 5px 10px; text-decoration: none; border-radius: 5px;"
+              <a href="#"
+                style="color: black; background-color: rgba(255, 255, 255, 0.6); padding: 5px 10px; text-decoration: none; border-radius: 5px;"
+                @click="openModal()"
               >
-                  Ver cupos
+                Ver cupos
               </a>
-
             </v-col>
           </v-row>
-          
         </v-col>
       </v-row>
     </v-container>
   </v-main>
+  <expModalForm
+    title="Ver cupos"
+    v-model="showModal"
+    width="500"
+    :btn-save="false"
+  >
+    <v-card elevation="0">
+      <v-card-text>
+        <v-row>
+          <v-col cols="7" class="ma-3">
+            <v-text-field type="number" label="Código de la asociación" v-model="codigoAsociacion" variant="outlined"></v-text-field>
+          </v-col>
+          <v-col class="ma-3">
+            <v-btn block color="green" style="height: 55px" @click="getCupos">Button</v-btn>
+          </v-col>
+        </v-row>
+
+      </v-card-text>
+      <v-card-text>
+        <v-table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="cupo in listCupos" :key="cupo.id">
+              <td>{{ cupo.codigo }}</td>
+              <td>{{ cupo.estado }}</td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-card-text>
+    </v-card>
+  </expModalForm>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+
+import expModalForm from '@/components/expModalForm/expModalForm.vue';
+import useCrud from '@/composables/useCrud';
+
+const uCrud = useCrud("api/2.0/inscripciones");
+
+const showModal = ref(false);
+const codigoAsociacion = ref('');
+const listCupos = ref([]);
+
+const openModal = () => {
+  showModal.value = true;
+};
+
+const getCupos = async () => {
+  try {
+    let cupos = await uCrud.custom(`asociacion/codigos/${codigoAsociacion.value}`, "GET");
+    listCupos.value = (cupos as any)?.data || [];
+  } catch {
+    listCupos.value = []
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .v-main {
@@ -160,7 +215,7 @@ color: #106737; /* Cambia de color al pasar el mouse */
   }
 }
 
- 
+
 .v-row {
     margin-top: 3px !important;
 }
@@ -311,6 +366,16 @@ color: #106737; /* Cambia de color al pasar el mouse */
     width: 35px;
     height: 35px;
     margin-right: 20px;
+}
+
+.disabled-btn {
+  background-color: #ccc !important;
+  cursor: not-allowed;
+}
+
+.disabled-text {
+  color: #6c757d !important;
+  cursor: not-allowed;
 }
 
 /* MEDIA QUERIES PARA RESPONSIVE */

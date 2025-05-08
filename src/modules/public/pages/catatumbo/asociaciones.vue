@@ -30,7 +30,8 @@
             <div className="buttons-container-asociaciones">
               <div className="button-group">
                 <p className="step green">Paso 1</p>
-                <a href='https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/xWxTv0FddatZVoe12IMXDEj0qP78OBb?st=!mqBGwgIUx$UN2GQdtkG0CH0fuS8CvmriLczoie7kvVJMLgJ6IEswwHxZm00dZZ6' class="btnCatAsoc green">
+                <!-- https://pnis-odk.direccionsustitucion-pnis.gov.co/-/single/xWxTv0FddatZVoe12IMXDEj0qP78OBb?st=!mqBGwgIUx$UN2GQdtkG0CH0fuS8CvmriLczoie7kvVJMLgJ6IEswwHxZm00dZZ6 -->
+                <a href='/formularios/catatumbo/preregistro' class="btnCatAsoc green">
                   Preinscripción grupo de productores, asociación o JAC
                 </a>
                 <p className="btnCatAsoc description green">

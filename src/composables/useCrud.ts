@@ -23,154 +23,143 @@ const axiosPublicCrud = axios.create({
 });
 
 const useCrud = (endpoint: string, extra: Object = null) => {
-  const retrieve = (id: number) => {
-    return new Promise((resolve, reject) => {
+
+    const retrieve = (id: number) => {
+      return new Promise((resolve, reject) => {
       let loader = loading.show({});
-      axios
-        .get(`${endpoint}/${id}/${queryParams(extra)}`)
+      axios.get(`${endpoint}/${id}/${queryParams(extra)}`)
+        .then((resp: any) => {
+          resolve(resp.data);
+        })
+        .catch((err: any) => {
+          reject(err);
+        })
+        .finally(() => {
+          loader.hide();
+        })
+      });
+    };
+
+    const list = () => {
+      return new Promise((resolve, reject) => {
+        const loader = loading.show({});
+        axios.get(`${endpoint}/lts/`)
           .then((resp: any) => {
-            resolve(resp.data);
+              resolve(resp.data);
           })
           .catch((err: any) => {
-            reject(err);
+              reject(err);
           })
           .finally(() => {
-            loader.hide();
-          })
-    });
-  };
+              loader.hide();
+          });
+      });
+    };
 
-  const list = () => {
-    return new Promise((resolve, reject) => {
-      let loader = loading.show({});
-      axios
-        .get(`${endpoint}/lts/`)
-          .then((resp: any) => {
-            resolve(resp.data);
-          })
-          .catch((err: any) => {
-            reject(err);
-          })
-          .finally(() => {
-            loader.hide();
-          })
-    });
-  }
-
-  const save = (data: any) => {
-    return new Promise(async (resolve, reject) => {
-      for (const prop in data) {
-        if (data[prop] === null) {
-          delete data[prop]
+    const save = (data: any) => {
+      return new Promise(async (resolve, reject) => {
+        for (const prop in data) {
+          if (data[prop] === null) {
+            delete data[prop]
+          }
         }
-      }
-      if (!data.id) {
-        await create(data)
-          .then((resp: any) => resolve(resp))
-          .catch((err: any) => reject(err))
-      } else {
-        await update(data)
-          .then((resp: any) => resolve(resp))
-          .catch((err: any) => reject(err))
-      }
-    });
-  }
+        if (!data.id) {
+          await create(data)
+            .then((resp: any) => resolve(resp))
+            .catch((err: any) => reject(err))
+        } else {
+          await update(data)
+            .then((resp: any) => resolve(resp))
+            .catch((err: any) => reject(err))
+        }
+      });
+    }
 
-  const create = (data: any) => {
-    return new Promise((resolve, reject) => {
-      let loader = loading.show({});
-      axios
-        .post(`${endpoint}/${queryParams(extra)}`, data)
-          .then((resp: any) => {
-            resolve(resp.data);
-          })
-          .catch((err: any) => {
-            reject(err);
-          })
-          .finally(() => {
-            loader.hide();
-          })
-    });
-  };
+    const create = (data: any) => {
+        return new Promise((resolve, reject) => {
+          const loader = loading.show({});
+          axios.post(`${endpoint}/${queryParams(extra)}`, data)
+            .then((resp: any) => {
+              resolve(resp.data);
+            })
+            .catch((err: any) => {
+              reject(err);
+            })
+            .finally(() => {
+              loader.hide();
+            });
+        });
+    };
 
-  const createPublic = (data: any) => {
-    return new Promise((resolve, reject) => {
-      let loader = loading.show({});
-      axiosPublicCrud
-        .post(`${endpoint}/${queryParams(extra)}`, data)
-          .then((resp: any) => {
-            resolve(resp.data);
-          })
-          .catch((err: any) => {
-            reject(err);
-          })
-          .finally(() => {
-            loader.hide();
-          })
-    });
-  };
+    const update = (data: any) => {
+        return new Promise((resolve, reject) => {
+          const loader = loading.show({});
+          axios.patch(`${endpoint}/${data.id}/${queryParams(extra)}`, data)
+            .then((resp: any) => {
+              resolve(resp.data);
+            })
+            .catch((err: any) => {
+              reject(err);
+            })
+            .finally(() => {
+              loader.hide();
+            });
+        });
+    };
 
-  const update = (data: any) => {
-    return new Promise((resolve, reject) => {
-      let loader = loading.show({});
-      axios
-        .patch(`${endpoint}/${data.id}/${queryParams(extra)}`, data)
-          .then((resp: any) => {
-            resolve(resp.data);
-          })
-          .catch((err: any) => {
-            reject(err);
-          })
-          .finally(() => {
-            loader.hide();
-          })
-    });
-  };
+    const remove = (id: number) => {
+        return new Promise((resolve, reject) => {
+          let loader = loading.show({});
+          axios.delete(`${endpoint}/${id}/${queryParams(extra)}`)
+            .then((resp: any) => {
+              resolve(resp.data);
+            })
+            .catch((err: any) => {
+              reject(err);
+            })
+            .finally(() => {
+              loader.hide();
+            })
+        });
+    }
 
-  const updatePublic = (data: any) => {
-    return new Promise((resolve, reject) => {
-      let loader = loading.show({});
-      axiosPublicCrud
-        .patch(`${endpoint}/${data.id}/${queryParams(extra)}`, data)
-          .then((resp: any) => {
-            resolve(resp.data);
-          })
-          .catch((err: any) => {
-            reject(err);
-          })
-          .finally(() => {
-            loader.hide();
-          })
-    });
-  };
-
-
-  const remove = (id: number) => {
-    return new Promise((resolve, reject) => {
-      let loader = loading.show({});
-      axios
-        .delete(`${endpoint}/${id}/${queryParams(extra)}`)
-          .then((resp: any) => {
-            resolve(resp.data);
-          })
-          .catch((err: any) => {
-            reject(err);
-          })
-          .finally(() => {
-            loader.hide();
-          })
-    });
-  }
+    const custom = (urlExtend: string, method = "GET", data: Object = null) => {
+      return new Promise((resolve, reject) => {
+        let loader = loading.show({});
+        if (method == "GET") {
+          axios.get(`${endpoint}/${urlExtend}/${queryParams(data)}`)
+            .then((resp: any) => {
+              resolve(resp.data);
+            })
+            .catch((err: any) => {
+              reject(err);
+            })
+            .finally(() => {
+              loader.hide();
+            })
+        } else if (method == "POST") {
+          axios.post(`${endpoint}/${urlExtend}/`, data)
+            .then((resp: any) => {
+              resolve(resp.data);
+            })
+            .catch((err: any) => {
+              reject(err);
+            })
+            .finally(() => {
+              loader.hide();
+            })
+          }
+      });
+    }
 
   return {
-    retrieve,
-    list,
-    save,
-    create,
-    createPublic,
-    update,
-    updatePublic,
-    remove
+      retrieve,
+      list,
+      save,
+      create,
+      update,
+      remove,
+      custom
   };
 };
 

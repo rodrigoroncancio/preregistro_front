@@ -13,9 +13,9 @@ const auth = useAuth();
 const sGlobalState = useGlobalState();
 
 onMounted(async () => {
-  if (auth.isAuthenticated()) {
-    sGlobalState.value.auth = true;
-    await auth.authData();
-  }
+  // if (auth.isAuthenticated()) {
+  //   sGlobalState.value.auth = true;
+  //   await auth.authData();
+  // }
 });
 </script>

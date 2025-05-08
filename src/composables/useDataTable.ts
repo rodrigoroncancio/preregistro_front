@@ -4,7 +4,8 @@ import useErrors from "./useErrors";
 const useDataTable = (
   id: string,
   headers: any,
-  endpoint: string
+  endpoint: string,
+  apikey?: string
 ) => {
   const errors = useErrors();
 
@@ -17,7 +18,7 @@ const useDataTable = (
   }: {
     page: number;
     itemsPerPage: number;
-    sortBy: Array<[{ key: "", dir: "asc" }]>,
+    sortBy: Array<{ key: string; dir: "asc" | "desc" }>;
     search: string;
     extra: Object;
   }) => {
@@ -29,28 +30,41 @@ const useDataTable = (
       "search[regex]": false,
     };
 
-    // Construir los parámetros para las columnas usando los headers
-    headers.filter((item:any) => {!(item.virtual === true)}).forEach((header:any, index:number) => { headers.
-      listParams[`columns[${index}][data]`] = header.key;
-      listParams[`columns[${index}][name]`] = header.key;
-      listParams[`columns[${index}][searchable]`] = header.searchable ? "true" : "false";
-      listParams[`columns[${index}][orderable]`] = header.sortable ? "true" : "false";
-      listParams[`columns[${index}][search][value]`] = search;
-      listParams[`columns[${index}][search][regex]`] = "false";
-    });
+    headers
+      .filter((item: any) => !(item.virtual === true))
+      .forEach((header: any, index: number) => {
+        listParams[`columns[${index}][data]`] = header.key;
+        listParams[`columns[${index}][name]`] = header.key;
+        listParams[`columns[${index}][searchable]`] = header.searchable ? "true" : "false";
+        listParams[`columns[${index}][orderable]`] = header.sortable ? "true" : "false";
+        listParams[`columns[${index}][search][value]`] = "";
+        listParams[`columns[${index}][search][regex]`] = "false";
+      });
 
-    if(sortBy.length > 0) {
-      sortBy.forEach((order:any, index:any) => {
-        listParams[`order[0][column]`] = headers.findIndex((x: any) => x.key == order.key);
-        listParams[`order[0][dir]`] = order.order;
+    if (sortBy.length > 0) {
+      sortBy.forEach((order: any, index: number) => {
+        listParams[`order[${index}][column]`] = headers.findIndex((x: any) => x.key === order.key);
+        listParams[`order[${index}][dir]`] = order.dir;
       });
     }
 
     const _listParams = { ...listParams, ...extra };
+    const cleanAxios = axios.create();
     return new Promise((resolve, reject) => {
-      axios
-        .get(endpoint + "/?format=datatables", {
+      const client = apikey ? cleanAxios : axios;
+
+      const headersConfig = apikey
+        ? {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Api-Key ${apikey}`,
+          }
+        : undefined;
+
+      client
+        .get(`${endpoint}/?format=datatables`, {
           params: _listParams,
+          headers: headersConfig,
         })
         .then((resp: any) => {
           resolve({
