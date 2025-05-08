@@ -39,7 +39,7 @@ const itemsMenuFiltered = computed({
       if ('roles' in item) {
         if ((item.roles as Array<number>).includes(role)) {
           if ('sub_roles' in item) {
-            if (roles.some(role => (item.sub_roles as number[]).includes(role))) {
+            if (roles.some((role: any) => (item.sub_roles as number[]).includes(role))) {
               _itemsFiltered.push(item)
             }
           } else {

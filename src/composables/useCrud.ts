@@ -115,7 +115,7 @@ const useCrud = (endpoint: string, extra: Object = null) => {
         });
     }
 
-    const custom = (urlExtend: string, method = "GET", data: any) => {
+    const custom = (urlExtend: string, method = "GET", data: Object = null) => {
       return new Promise((resolve, reject) => {
         let loader = loading.show({});
         if (method == "GET") {

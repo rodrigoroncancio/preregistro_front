@@ -18,26 +18,14 @@
           @click="openConsultaForm"
           style="color: black; background-color: rgba(255, 255, 255, 0.8); padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-flex; align-items: center; height: 60px; justify-content: center;"
         >
-          <v-icon left>mdi-magnify</v-icon> <!-- Icono de lupa -->
+          <v-icon left>mdi-magnify</v-icon>
           Consultar estado de Aspirante por Número documento
         </a>
       </v-col>
     </v-row>
 
     <div class="carrusel-wrapper">
-      <Swiper
-        :modules="[Navigation, Pagination]"
-        :slides-per-view="1"
-        :space-between="0"
-        :navigation="true"
-        :loop="true"
-        :breakpoints="{
-          768: { slidesPerView: 1.2 },
-          960: { slidesPerView: 2.2 },
-          1264: { slidesPerView: 3.2 },
-          1904: { slidesPerView: 4 }
-        }"
-      >
+      <Swiper v-bind="swiperOptions">
         <SwiperSlide v-for="conv in convocatorias" :key="conv.municipio">
           <div class="convocatoria-card" :style="{ backgroundImage: `url('${conv.img}')` }">
             <div class="card-content-top">
@@ -76,10 +64,9 @@
   />
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Navigation, Pagination } from 'swiper/modules';
-import type { SwiperOptions } from 'swiper/types';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -88,11 +75,12 @@ import 'swiper/css/pagination';
 import { ref, onMounted } from "vue";
 import consultaForm from "@/modules/public/pages/components/consultar.vue";
 
-const swiperOptions: SwiperOptions = {
-  navigation: {
-    nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev'
-  },
+const swiperOptions = {
+  modules: [Navigation, Pagination],
+  slidesPerView: 1,
+  spaceBetween: 0,
+  navigation: true,
+  loop: true,
   breakpoints: {
     768: { slidesPerView: 1.2 },
     960: { slidesPerView: 2.2 },
@@ -102,14 +90,14 @@ const swiperOptions: SwiperOptions = {
 };
 
 const consultaModal = ref(false);
-const onFindDocument = (uuid: string) => {
+const onFindDocument = (uuid) => {
   consultaModal.value = false;
 }
 const openConsultaForm = () => {
   consultaModal.value = true;
 }
 
-const getStatus = (fecha_ini: string, fecha_fin: string) => {
+const getStatus = (fecha_ini, fecha_fin) => {
   if (fecha_ini === "" && fecha_fin === "") {
     return "PRÓXIMAMENTE";
   }
@@ -125,11 +113,11 @@ const getStatus = (fecha_ini: string, fecha_fin: string) => {
   }
 }
 
-const getStatusBtn = (fecha_ini: string, fecha_fin: string) => {
+const getStatusBtn = (fecha_ini, fecha_fin) => {
   return getStatus(fecha_ini, fecha_fin) === "CERRADA" || getStatus(fecha_ini, fecha_fin) === "PRÓXIMAMENTE";
 }
 
-const getStatusIcon = (fecha_ini: string, fecha_fin: string) => {
+const getStatusIcon = (fecha_ini, fecha_fin) => {
   switch (getStatus(fecha_ini, fecha_fin)) {
     case "CERRADA":
       return "mdi-lock-outline";
@@ -139,7 +127,6 @@ const getStatusIcon = (fecha_ini: string, fecha_fin: string) => {
       return "mdi-play-circle-outline";
   }
 }
-
 
 const convocatorias = [
   {

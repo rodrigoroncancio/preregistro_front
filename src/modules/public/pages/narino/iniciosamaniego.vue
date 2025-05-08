@@ -131,7 +131,8 @@ const openModal = () => {
 
 const getCupos = async () => {
   try {
-    listCupos.value = await uCrud.custom(`asociacion/codigos/${codigoAsociacion.value}`, "GET");
+    let cupos = await uCrud.custom(`asociacion/codigos/${codigoAsociacion.value}`, "GET");
+    listCupos.value = (cupos as any)?.data || [];
   } catch {
     listCupos.value = []
   }
