@@ -93,6 +93,15 @@ const { t } = useI18n();
 const uAuth = useAuth();
 
 const modelValue = defineModel<boolean>();
+
+const axiosPublic = axios.create({
+  baseURL: '',
+  headers: {
+    // Asegurarte de que Authorization no se incluya
+    'Authorization': undefined,
+  },
+});
+
 const props = defineProps({
   id: {
     type: Number,
@@ -173,7 +182,8 @@ const clickSave = () => {
       } else if (fichaData.value.id_validado_pre !== null) {
         fichaData.value.estadoactual = 'Pendiente para revisión de datos de Preregistro';
       } else {
-        axios.get(`/api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${formData.value.numdocumento}&formulario=19`)
+        // axios.get(`api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${formData.value.numdocumento}&formulario=19`)
+        axiosPublic.get(`api/2.0/nucleo/ficha/catatumbo/validar_documento/?documento=${formData.value.numdocumento}&formulario=19`)
         .then((resp: any) => {
           if (resp.data && resp.data.status===1 ) {
             fichaData.value.estadoactual = 'Pendiente para revisión de datos de Preregistro';

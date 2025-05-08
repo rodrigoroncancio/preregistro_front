@@ -14,6 +14,14 @@ const queryParams = (extra: Object = null) => {
   } catch { return "" }
 }
 
+const axiosPublicCrud = axios.create({
+  baseURL: 'https://preregistro.direccionsustitucion.gov.co',
+  headers: {
+    // Asegurarte de que Authorization no se incluya
+    'Authorization': undefined,
+  },
+});
+
 const useCrud = (endpoint: string, extra: Object = null) => {
 
     const retrieve = (id: number) => {

@@ -159,7 +159,7 @@ const itemsMenu = [
     children: [{
       title: "modules.pnis.catatumbo_form_preregistro2",
       icon: "mdi-human-male-board-poll",
-      url: "/catatumbo/preregistro",
+      url: "formularios/catatumbo/registro",
     }]
   },
   {
