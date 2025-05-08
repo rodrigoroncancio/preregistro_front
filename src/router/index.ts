@@ -58,6 +58,11 @@ const routes: RouteRecordRaw[] = [
         ],
       },
       {
+        path: "inscripcion/:convocatoria/:fase",
+        name: "public-inscripcion",
+        component: () => import(/* webpackChunkName: "PublicInscripcion" */ "@/modules/public/pages/inscripcion/index.vue"),
+      },
+      {
         path: "narino", // Ruta relativa al path padre ("/catatumbo")
         name: "public-narino",
         component: () => import("@/modules/public/pages/narino/index.vue"), // Añade un componente para el layout de Catatumbo
@@ -86,11 +91,6 @@ const routes: RouteRecordRaw[] = [
             path: "robertopayan/preregistro", // Ruta raíz relativa al path padre ("/catatumbo")
             name: "public-narino-robertopayan",
             component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/narino/robertopreregistro.vue"),
-          },
-          {
-            path: "samaniego/preregistro", // Ruta raíz relativa al path padre ("/catatumbo")
-            name: "public-narino-samaniego",
-            component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/narino/samaniegopreregistro.vue"),
           }
         ]
       },
@@ -153,7 +153,7 @@ const routes: RouteRecordRaw[] = [
             component: () => import(/* webpackChunkName: "CatatumboIndex" */ "@/modules/public/pages/vichada/cumaribopreregistro.vue"),
           }
         ]
-      },      
+      },
       {
         path: "catatumbo", // Ruta relativa al path padre ("/catatumbo")
         name: "public-catatumbo",

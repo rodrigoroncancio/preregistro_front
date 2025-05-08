@@ -151,14 +151,46 @@ const useCrud = (endpoint: string, extra: Object = null) => {
         });
     }
 
-    return {
-       retrieve,
-       list,
-       save,
-       create,
-       update,
-       remove
-    };
+    const custom = (urlExtend: string, method = "GET", data: any) => {
+      return new Promise((resolve, reject) => {
+        let loader = loading.show({});
+        if (method == "GET") {
+          axios
+            .get(`${endpoint}/${urlExtend}/${queryParams(data)}`)
+              .then((resp: any) => {
+                resolve(resp.data);
+              })
+              .catch((err: any) => {
+                reject(err);
+              })
+              .finally(() => {
+                loader.hide();
+              })
+        } else if (method == "POST") {
+          axios
+            .post(`${endpoint}/${urlExtend}/`, data)
+              .then((resp: any) => {
+                resolve(resp.data);
+              })
+              .catch((err: any) => {
+                reject(err);
+              })
+              .finally(() => {
+                loader.hide();
+              })
+          }
+      });
+    }
+
+  return {
+      retrieve,
+      list,
+      save,
+      create,
+      update,
+      remove,
+      custom
+  };
 };
 
 export default useCrud;
