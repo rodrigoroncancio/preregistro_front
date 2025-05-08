@@ -41,39 +41,14 @@
   })
 
   const uLoading = useLoading();
-  const uCrud_persona = useCrud("/api/2.0/inscripciones/persona");
-  const uCrud_edades= useCrud("/api/2.0/inscripciones/composicionedades");
-  const uCrud_nucleo = useCrud("/api/2.0/inscripciones/composicionucleo");
-  const uCrud_formpersona = useCrud("/api/2.0/inscripciones/formpersona");
-  const uCrud_linea = useCrud("/api/2.0/inscripciones/personalinea");
+  const uCrud_persona = useCrud("/api/2.0/ficha/persona");
+  const uCrud_edades= useCrud("/api/2.0/ficha/composicionedades");
+  const uCrud_nucleo = useCrud("/api/2.0/ficha/composicionucleo");
+  const uCrud_formpersona = useCrud("/api/2.0/ficha/formpersona");
+  const uCrud_linea = useCrud("/api/2.0/ficha/personalinea");
 
   const uToast = useToast();
 
-  // const apiGet = (url: string) => {
-  //   return cleanAxios.get(url, {
-  //     headers: {
-  //       'Authorization': `Api-Key ${getApiKey()}`,
-  //     }
-  //   });
-  // };
-
-  // const apiUrl = ref<string>('')
-  // const llamarApi = async () => {
-  //   if (!apiUrl.value) {
-  //     console.error('No se ha definido la URL')
-  //     return
-  //   }
-
-  //   try {
-  //     const response = await axios.get(apiUrl.value)
-  //     console.log('Respuesta:', response?.data)
-  //     return response
-  //   } catch (error) {
-  //     console.error('Error al llamar la API:', error)
-  //   }
-  // }
-
-  // const itemsVillages = ref<Array<{ id: number; label: string }>>([]);
   const dataLineaProductiva = ref({
     id: 0,
     linea_productiva: 0,
@@ -131,7 +106,7 @@
 
   const getLineaProductiva = async (personaId: number) => {
     try {
-      const response = await axios.get(`/api/2.0/inscripciones/personalinea/by-persona/${personaId}/`)
+      const response = await axios.get(`/api/2.0/ficha/personalinea/by-persona/${personaId}/`)
       dataLineaProductiva.value = response.data[0]
       survey.setValue('establece_fortalece', dataLineaProductiva.value.tipo_experiencia || 0);
       survey.setValue('linea_productiva', dataLineaProductiva.value.linea_productiva || 0);
@@ -142,7 +117,7 @@
 
   const getFormularioPersona = async (personaId: number) => {
     try {
-      const response = await axios.get(`/api/2.0/inscripciones/formulariopersona/by-id/${personaId}/`)
+      const response = await axios.get(`/api/2.0/ficha/formulariopersona/by-id/${personaId}/`)
       dataFormularioPersona.value = response.data[0]
     } catch (error) {
       console.error("Error fetching village list:", error);
@@ -168,21 +143,6 @@
     };
   };
 
-  const personasNUcleo = ref({})
-  // const enviarNucleoFamiliar = async () => {
-  //   try {
-  //     const response = await axios.post('/forms/catatumbo/fichaacuerdonucleo/', personasNUcleo.value, {
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       }
-  //     });
-  //     console.log('Respuesta del servidor:', response.data);
-  //     alert('Formulario enviado con éxito');
-  //   } catch (error) {
-  //     console.error('Error al enviar el formulario:', error.response?.data || error);
-  //     alert('Error al enviar los datos');
-  //   }
-  // };
 
   onMounted(async () => {
 
@@ -891,7 +851,17 @@
           "type": "file",
           "name": "interesado_mejora_foto",
           "visibleIf": "{interesado_mejora} = 1",
-          "title": "Foto de la vivienda a mejorar\n"
+          "title": "Foto de la vivienda a mejorar\n (Solo imagenes)",
+          "isRequired": true,
+          "acceptedTypes": "image/jpeg,image/png",
+          "validators": [
+            {
+              "type": "file",
+              "maxSize": 10485760,  // 1MB en bytes
+              "allowedExtensions": "jpeg,jpg,png",
+              "errorText": "El archivo debe ser una imagen (JPG/PNG) de menos de 1MB."
+            }
+          ]
         },
         {
           "type": "html",
@@ -937,8 +907,17 @@
           "type": "file",
           "name": "firma_file",
           "visibleIf": "{tipo_firma} = 'Item 2'",
-          "title": "Documento de firma",
-          "isRequired": true
+          "title": "Sube tu firma (solo imágenes):",
+          "isRequired": true,
+          "acceptedTypes": "image/jpeg,image/png",
+          "validators": [
+            {
+              "type": "file",
+              "maxSize": 10485760,  // 1MB en bytes
+              "allowedExtensions": "jpeg,jpg,png",
+              "errorText": "El archivo debe ser una imagen (JPG/PNG) de menos de 1MB."
+            }
+          ]
         }
       ]
     }
@@ -1094,7 +1073,6 @@
       };
 
       uCrud_formpersona.create(formularioPersonaData);
-      console.log('Datos enviados:', formularioPersonaData);
     }
 
     enviarFormularioPersona();
@@ -1132,7 +1110,6 @@
           origen: props.origen,
         };
         uCrud_persona.create(personaDataVarios);
-        console.log(personaDataVarios);
       });
     }
     uCrud_persona.update(personaData)
@@ -1149,24 +1126,17 @@
 
 
   survey.onValueChanged.add(async (sender, options) => {
-    // if (options.name === "interesado_mejora_foto") {
-    //   console.log('options.value')
-    //   console.log(options.value)
-    // }
     if (options.name === "titular_numero_identificacion") {
       if (options.value === null || options.value === "")
         return;
       const loading = uLoading.show({});
       const resp = await axios.get(`/api/2.0/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=${props.formid}`);
-      console.log(resp)
+
       getLineaProductiva(resp.data.data.id)
       getFormularioPersona(resp.data.data.id)
       if (resp.data && resp.data.status===1 ) {
-        console.log('resp.data')
-        console.log(resp.data.data.nombre)
         dataUser.value = resp.data.data
-        console.log(dataUser.value.id)
-        // titular_nombres
+
         survey.setValue('titular_nombres', resp.data.data.nombre || "");
         survey.setValue('titular_apellidos', resp.data.data.apellido || "");
         survey.setValue('fecha_nacimiento', resp.data.data.fecha_nacimiento || "");
@@ -1184,104 +1154,8 @@
         survey.setValue('titular_numero_identificacion', "");
       }
       loading.hide();
-        // apiUrl.value = `/api/2.0/inscripciones/ficha/catatumbo/validar_documento/?documento=${options.value}&formulario=19`
-        // await llamarApi()
-        // .then((resp: any) => {
-        //   console.log(resp)
-        //   getLineaProductiva(resp.data.data.id)
-        //   getFormularioPersona(resp.data.data.id)
-        //   if (resp.data && resp.data.status===1 ) {
-        //     console.log('resp.data')
-        //     console.log(resp.data.data.nombre)
-        //     dataUser.value = resp.data.data
-        //     console.log(dataUser.value.id)
-        //     // titular_nombres
-        //     survey.setValue('titular_nombres', resp.data.data.nombre || "");
-        //     survey.setValue('titular_apellidos', resp.data.data.apellido || "");
-        //     survey.setValue('fecha_nacimiento', resp.data.data.fecha_nacimiento || "");
-        //     survey.setValue('fecha_expedicion', resp.data.data.fecha_expedicion || "");
-        //     survey.setValue('telefono', resp.data.data.telefono_celular || "");
-        //     survey.setValue('titular_tipo_identificacion', resp.data.data.tipo_identificacion || "");
-        //   } else if (resp.data && resp.data.status===2) {
-        //     survey.setValue('titular_nombres', "");
-        //     uToast.toastError("Ya existe una ficha diligenciada con este número de documento");
-        //     survey.setValue('titular_numero_identificacion', "");
-        //   }
-        //   else{
-        //     survey.setValue('titular_nombres', "");
-        //     uToast.toastError("Número de cedula no se encuentra en Pre- Registro");
-        //     survey.setValue('titular_numero_identificacion', "");
-        //   }
-        //   loading.hide();
-        // })
     }
 
-    // const match = options.name.match(/^persona(\d+)_num_identificación$/);
-
-    // if (match) {
-    //   const personaIndex = match[1]; // Extrae el número de persona (1-10)
-
-    //   if (!options.value) return;
-
-    //   try {
-    //     let loader = uLoading.show({});
-    //     if (parseInt(options.value) < 2000000000) {
-    //       const response = await axios.get(`forms/catatumbo/ficha/validar_nucleo/?documento=${options.value}`);
-    //       console.log(response);
-
-    //       const status = response.data.status;
-    //       const mostrarKey = `mostrar_persona${personaIndex}`; // Genera la clave correcta
-
-    //       if (status > 1) {
-    //         survey.setVariable(mostrarKey, false);
-    //         survey.setValue(options.name, ""); // Borra el número de identificación
-
-    //         let mensajeError = "";
-    //         switch (status) {
-    //           case 2:
-    //             mensajeError = "Usuario con ficha de acuerdo diligenciada. No se puede ingresar como núcleo familiar.";
-    //             break;
-    //           case 3:
-    //             mensajeError = "Usuario se encuentra entre los validados para firma de ficha de acuerdo Catatumbo. No se puede ingresar como núcleo familiar.";
-    //             break;
-    //           case 4:
-    //             mensajeError = "El usuario ha sido titular en el proyecto PNIS. No se puede ingresar como núcleo familiar.";
-    //             break;
-    //           case 5:
-    //             mensajeError = "El usuario ya aparece como nucleo familiar de otro titular. No se puede ingresar como núcleo familiar.";
-    //             break;
-    //         }
-
-    //         if (mensajeError) uToast.toastError(mensajeError);
-    //       } else {
-    //         survey.setVariable(mostrarKey, true);
-    //       }
-    //     } else {
-    //       const mostrarKey = `mostrar_persona${personaIndex}`;
-    //       survey.setVariable(mostrarKey, false)
-    //       survey.setValue(options.name, "");
-    //       uToast.toastError("Digite un número de cedula valido");
-    //     }
-    //     loader.hide();
-    //   } catch (error) {
-    //     console.error("Error al consultar el endpoint:", error);
-    //   }
-    // }
-
-    // if (options.name === "titular_numero_documento") {
-    //   if (options.value === null || options.value === "")
-    //     return;
-    //     axios.get(`/api/2.0/nucleo/forms/catatumbo/validar_documento/?documento=${options.value}`)
-    //     .then((resp: any) => {
-    //       console.log(resp)
-    //       if (resp.data) {
-    //           survey.setValue("titular_numero_identificacion", "");
-    //          uToast.toastError("Número de cedula no se encuentra en preregistro");
-    //       }
-
-    //     })
-    //     // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
-    // }
 
     if (options.name === "tiene_coca" || options.name === "tipo_exclusion") {
       const tipoexclusion = sender.getValue("tipo_exclusion");
@@ -1427,8 +1301,6 @@
         if (options.value < 2000000000){
           axios.get(`forms/catatumbo/ficha/validar_documento/?documento=${options.value}`)
             .then((resp: any) => {
-              console.log('resp.data.status')
-              console.log(resp.data.status)
 
               if (resp.data.status === 1) {
                 const data = resp.data.data
@@ -1517,7 +1389,6 @@
               }
               axios.get(`api/1.0/core/cedulasrnec/getbyidentification/${options.value}`)
               .then((resp: any) => {
-                console.log(resp)
                 survey.setValue("fecha_nacimiento", resp.data.fecha_nacimiento);
                 survey.setValue("fecha_expedicion", resp.data.fecha_expedicion);
               })
