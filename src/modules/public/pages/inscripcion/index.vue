@@ -61,8 +61,8 @@
   onMounted(async () => {
     const data = await uCrud.custom(`estructura/${convocatoria}/${fase}`, "GET");
 
-    json.value = data?.json || {};
-    formId.value = data?.id || 0;
+    json.value = (data as any)?.json || {};
+    formId.value = (data as any)?.id || 0;
     isLoaded.value = true;
   });
 
@@ -106,14 +106,14 @@
     }
 
     try {
-      const page = json.value.pages.find((x) => x.name === currentPage.name);
+      const page = (json.value as any).pages.find((x: any) => x.name === currentPage.name);
       if (!page || !page.rule) {
         options.allowChanging = true;
         return;
       }
 
       options.allowChanging = false;
-      let isValid = '';
+      let isValid: any = '';
 
       switch (page.rule) {
         case 'validar_cupo':
