@@ -1,16 +1,5 @@
 <template>
-  <v-main>
-      <v-container class="flex-grow-1">
-        <v-row>
-          <v-col class="text-center mt-6">
-            <v-img :src="'/src/assets/img/header-colombia.png'" :width="360" class="mx-auto" />
-          </v-col>
-        </v-row>
-        <div class="main-container">
-          <SurveyComponent :model="survey" />
-        </div>
-      </v-container>
-  </v-main>
+  <SurveyComponent :model="survey" />
 </template>
 
 <script setup lang="ts">
@@ -27,6 +16,18 @@
     json: {
       type: Object,
       required: true
+    },
+    onCurrentPageChanging: {
+      type: Function,
+      required: true
+    },
+    onCompleting: {
+      type: Function,
+      required: true
+    },
+    onValueChanged: {
+      type: Function,
+      required: true
     }
   });
 
@@ -38,12 +39,16 @@
 
   const survey = new Model(json.value);
 
-  survey.onCompleting.add((sender, options) => {
-    emit('onCompleting', sender, options);
+  survey.onValueChanged.add(async (sender, options) => {
+    props.onValueChanged(sender, options);
   });
 
-  survey.onValueChanged.add(async (sender, options) => {
-    emit('onValueChanged', sender, options);
+  survey.onCurrentPageChanging.add(function (sender, options) {
+    props.onCurrentPageChanging(sender, options);
+  });
+
+  survey.onCompleting.add((sender, options) => {
+    props.onCompleting(sender, options);
   });
 </script>
 
