@@ -10,8 +10,6 @@
   import { Model } from "survey-core";
   import { SurveyComponent } from "survey-vue3-ui";
 
-  const emit = defineEmits(['onCompleting', 'onValueChanged']);
-
   const props = defineProps({
     json: {
       type: Object,
