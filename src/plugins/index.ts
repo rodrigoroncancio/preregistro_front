@@ -11,12 +11,17 @@ import type { App } from "vue";
 import useAuth from "@/modules/auth/composables/useAuth";
 import useConst from "@/composables/useConst";
 
-const consts = useConst();
-axios.defaults.baseURL = consts.baseApi;
+const uConst = useConst();
+axios.defaults.baseURL = uConst.baseApi;
+
 axios.interceptors.request.use((config) => {
   const auth = useAuth();
   if (auth.isAuthenticated() && auth.getToken() != "") {
     config.headers["Authorization"] = 'Bearer ' + auth.getToken();
+  } else {
+    if (uConst.apiKey) {
+      config.headers["Authorization"] = 'Api-Key ' + uConst.apiKey;
+    }
   }
   return config
 })
@@ -28,7 +33,10 @@ axios.interceptors.response.use(
   (error) => {
     if (error.status == 401) {
       const auth = useAuth();
-      auth.authLogOut();
+      if (auth.isAuthenticated() && auth.getToken() != "") {
+        const auth = useAuth();
+        auth.authLogOut();
+      }
     }
     // Aquí puedes manejar el error como quieras
     // if (error.response) {

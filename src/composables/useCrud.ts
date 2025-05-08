@@ -1,12 +1,7 @@
 import axios from "axios";
 import { useLoading } from "vue-loading-overlay";
 
-//Helpers
-import { getApiKey } from '@/helpers/apiKey';
-import cleanAxios from '@/helpers/cleanAxios';
-
 const loading = useLoading();
-const apiKey= 'gAAAAABoEqasTj16HrxYAWXiBUbdnPiY7PCa7z0m8Jd6pqDLxHNFiioBWptP-RCbId9JS2hr8DxR-QBXNeKNiy7aiqdb1iH3krEeG7KJA0imDbeUgdSjbLDFaQgfdWSX4I6hIHAhOS3A'
 
 const queryParams = (extra: Object = null) => {
   try {
@@ -22,78 +17,60 @@ const queryParams = (extra: Object = null) => {
 const useCrud = (endpoint: string, extra: Object = null) => {
 
     const retrieve = (id: number) => {
-        return new Promise((resolve, reject) => {
-          let loader = loading.show({});
-          axios
-            .get(`${endpoint}/${id}/${queryParams(extra)}`)
-              .then((resp: any) => {
-                resolve(resp.data);
-              })
-              .catch((err: any) => {
-                reject(err);
-              })
-              .finally(() => {
-                loader.hide();
-              })
-        });
+      return new Promise((resolve, reject) => {
+      let loader = loading.show({});
+      axios.get(`${endpoint}/${id}/${queryParams(extra)}`)
+        .then((resp: any) => {
+          resolve(resp.data);
+        })
+        .catch((err: any) => {
+          reject(err);
+        })
+        .finally(() => {
+          loader.hide();
+        })
+      });
     };
 
     const list = () => {
-        return new Promise((resolve, reject) => {
-            const loader = loading.show({});
-
-            cleanAxios.get(`${endpoint}/lts/`, {
-                headers: {
-                    'Authorization': `Api-Key ${apiKey}`
-                }
-            })
-                .then((resp: any) => {
-                    resolve(resp.data);
-                })
-                .catch((err: any) => {
-                    reject(err);
-                })
-                .finally(() => {
-                    loader.hide();
-                });
-        });
+      return new Promise((resolve, reject) => {
+        const loader = loading.show({});
+        axios.get(`${endpoint}/lts/`)
+          .then((resp: any) => {
+              resolve(resp.data);
+          })
+          .catch((err: any) => {
+              reject(err);
+          })
+          .finally(() => {
+              loader.hide();
+          });
+      });
     };
 
     const save = (data: any) => {
-    return new Promise(async (resolve, reject) => {
-      for (const prop in data) {
-        if (data[prop] === null) {
-          delete data[prop]
+      return new Promise(async (resolve, reject) => {
+        for (const prop in data) {
+          if (data[prop] === null) {
+            delete data[prop]
+          }
         }
-      }
-      if (!data.id) {
-        await create(data)
-          .then((resp: any) => resolve(resp))
-          .catch((err: any) => reject(err))
-      } else {
-        await update(data)
-          .then((resp: any) => resolve(resp))
-          .catch((err: any) => reject(err))
-      }
-    });
-  }
+        if (!data.id) {
+          await create(data)
+            .then((resp: any) => resolve(resp))
+            .catch((err: any) => reject(err))
+        } else {
+          await update(data)
+            .then((resp: any) => resolve(resp))
+            .catch((err: any) => reject(err))
+        }
+      });
+    }
 
-    const create = (data: any, apiKey?: string) => {
+    const create = (data: any) => {
         return new Promise((resolve, reject) => {
           const loader = loading.show({});
-
-          const client = apiKey ? cleanAxios : axios; // Usa cleanAxios si quieres apiKey
-
-          const headers = apiKey
-            ? {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Api-Key ${apiKey}`,
-              }
-            : undefined; // usa los normales
-
-          client
-            .post(`${endpoint}/${queryParams(extra)}`, data, { headers })
+          axios.post(`${endpoint}/${queryParams(extra)}`, data)
             .then((resp: any) => {
               resolve(resp.data);
             })
@@ -106,22 +83,10 @@ const useCrud = (endpoint: string, extra: Object = null) => {
         });
     };
 
-    const update = (data: any, apiKey?: string) => {
+    const update = (data: any) => {
         return new Promise((resolve, reject) => {
           const loader = loading.show({});
-
-          const client = apiKey ? cleanAxios : axios; // Usa cleanAxios si hay apiKey
-
-          const headers = apiKey
-            ? {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Api-Key ${apiKey}`,
-              }
-            : undefined; // usa los headers por defecto si no hay apiKey
-
-          client
-            .patch(`${endpoint}/${data.id}/${queryParams(extra)}`, data, { headers })
+          axios.patch(`${endpoint}/${data.id}/${queryParams(extra)}`, data)
             .then((resp: any) => {
               resolve(resp.data);
             })
@@ -137,28 +102,57 @@ const useCrud = (endpoint: string, extra: Object = null) => {
     const remove = (id: number) => {
         return new Promise((resolve, reject) => {
           let loader = loading.show({});
-          axios
-            .delete(`${endpoint}/${id}/${queryParams(extra)}`)
-              .then((resp: any) => {
-                resolve(resp.data);
-              })
-              .catch((err: any) => {
-                reject(err);
-              })
-              .finally(() => {
-                loader.hide();
-              })
+          axios.delete(`${endpoint}/${id}/${queryParams(extra)}`)
+            .then((resp: any) => {
+              resolve(resp.data);
+            })
+            .catch((err: any) => {
+              reject(err);
+            })
+            .finally(() => {
+              loader.hide();
+            })
         });
     }
 
-    return {
-       retrieve,
-       list,
-       save,
-       create,
-       update,
-       remove
-    };
+    const custom = (urlExtend: string, method = "GET", data: any) => {
+      return new Promise((resolve, reject) => {
+        let loader = loading.show({});
+        if (method == "GET") {
+          axios.get(`${endpoint}/${urlExtend}/${queryParams(data)}`)
+            .then((resp: any) => {
+              resolve(resp.data);
+            })
+            .catch((err: any) => {
+              reject(err);
+            })
+            .finally(() => {
+              loader.hide();
+            })
+        } else if (method == "POST") {
+          axios.post(`${endpoint}/${urlExtend}/`, data)
+            .then((resp: any) => {
+              resolve(resp.data);
+            })
+            .catch((err: any) => {
+              reject(err);
+            })
+            .finally(() => {
+              loader.hide();
+            })
+          }
+      });
+    }
+
+  return {
+      retrieve,
+      list,
+      save,
+      create,
+      update,
+      remove,
+      custom
+  };
 };
 
 export default useCrud;
