@@ -32,7 +32,7 @@
 
   const getDepartmentList = async () => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/1/`);
+      const response = await axios.get(`/api/2.0/nucleo//api/2.0/nucleo/ubicacion/1/`);
       itemsDepartments.value = response.data.map((dept: any) => ({
         value: dept.id,
         text: dept.nombre // Asegurar compatibilidad
@@ -58,7 +58,7 @@
   const itemsVillages = ref<Array<{ value: number; text: string }>>([]);
   const getVillageList = async (ubicacionId: number) => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
+      const response = await axios.get(`/api/2.0/nucleo//api/2.0/nucleo/ubicacion/${ubicacionId}/`);
       itemsVillages.value = response.data.map((dept: any) => ({
         value: dept.id,
         text: dept.nombre // Asegurar compatibilidad
@@ -127,7 +127,7 @@
                 {
                   "value": "90",
                   "text": "No Agropecuaría"
-                } 
+                }
               ]
               }
           ]
@@ -235,7 +235,7 @@
                 "value": "104",
                 "text": "Servicios y otras actividades Este campo es obligatorio"
                 }
-                  
+
               ]
               },
               {
@@ -527,7 +527,7 @@
   }
 
   const survey = new Model(json);
-  
+
   survey.onCompleting.add((sender, options) => {
       options.allowComplete = false;
       const asociacionaData = {
@@ -584,14 +584,14 @@
     const departamentoQuestion = survey.getQuestionByName("departamento");
     const departamentocoberturaQuestion = survey.getQuestionByName("departamento_cobertura");
     const departamentocreacionQuestion = survey.getQuestionByName("departamento_creacion");
-    
+
     if (departamentoQuestion) {
       departamentoQuestion.choices = itemsDepartments.value;
       departamentocoberturaQuestion.choices = itemsDepartments.value;
       departamentocreacionQuestion.choices = itemsDepartments.value;
     }
     const municipioQuestion = survey.getQuestionByName("municipio");
-    
+
     if (options.name === "departamento") {
         const departamento_id = options.value;
         let loading = uLoading.show({});
@@ -603,7 +603,7 @@
     }
 
     const municipiocreacionQuestion = survey.getQuestionByName("municipio_creacion");
-    
+
     if (options.name === "departamento_creacion") {
         const departamento_id = options.value;
         let loading = uLoading.show({});
@@ -615,7 +615,7 @@
     }
 
     const corregimientoQuestion = survey.getQuestionByName("corregimiento");
-    
+
     if (options.name === "municipio") {
         const departamento_id = options.value;
         let loading = uLoading.show({});
@@ -627,7 +627,7 @@
     }
 
     const veredaQuestion = survey.getQuestionByName("vereda");
-    
+
     if (options.name === "corregimiento") {
         const departamento_id = options.value;
         let loading = uLoading.show({});
