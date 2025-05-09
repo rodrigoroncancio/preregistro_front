@@ -1043,9 +1043,9 @@
   const itemsAsociaciones = ref<Array<{ value: number; text: string }>>([]);
   const getAsociaciones = async () => {
     try {
-      // const response = await axios.get(`http://localhost:8002/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`);
-      apiUrl.value = `/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`
-      const response = await llamarApi()
+      const response = await axios.get(`/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`);
+      // apiUrl.value = `/api/2.0/inscripciones/asociacion/by-origen/${props.origenasociaciones}`
+      // const response = await llamarApi()
 
       console.log('response')
       console.log(response)
@@ -1329,17 +1329,17 @@
       fmodifica: new Date().toISOString()
     };
 
-    uCrud.create(personaData, apikey)
+    uCrud.create(personaData)
       .then((item:any) => {
         formularioPersonaData.persona = item.id
-        uCrud2.create(formularioPersonaData, apikey).then((item2:any) => {})
+        uCrud2.create(formularioPersonaData).then((item2:any) => {})
         personaAdjuntoData1.persona_id = item.id
-        uCrud3.create(personaAdjuntoData1, apikey).then((item3:any) => {})
+        uCrud3.create(personaAdjuntoData1).then((item3:any) => {})
         personaAdjuntoData2.persona_id = item.id
-        uCrud3.create(personaAdjuntoData2, apikey).then((item4:any) => {})
+        uCrud3.create(personaAdjuntoData2).then((item4:any) => {})
 
         predioLoteViveData.persona = item.id
-        uCrud4.create(predioLoteViveData, apikey).then((item6:any) => {
+        uCrud4.create(predioLoteViveData).then((item6:any) => {
           console.log('item6')
           console.log(item6)
           coordenadaLoteCocaData.predio_id = item6.id
@@ -1349,7 +1349,7 @@
         })
         if (sender.data.desplazado_2025) {
           predioLoteDesplazadoData.persona = item.id
-          uCrud4.create(predioLoteDesplazadoData, apikey).then((item61:any) => {
+          uCrud4.create(predioLoteDesplazadoData).then((item61:any) => {
             console.log('item61')
             console.log(item61)
             coordenadaLoteCocaData.predio_id = item61.id
@@ -1358,7 +1358,7 @@
         }
 
         predioLoteCocaData.persona = item.id
-        uCrud4.create(predioLoteCocaData, apikey).then((item62:any) => {
+        uCrud4.create(predioLoteCocaData).then((item62:any) => {
           console.log('item62')
           console.log(item62)
           coordenadaLoteCocaData.predio_id = item62.id
@@ -1367,7 +1367,7 @@
 
         if (sender.data.predio_coca_ubicacion==='2') {
           predioLoteCocaOtroData.persona = item.id
-          uCrud4.create(predioLoteCocaOtroData, apikey).then((item7:any) => {
+          uCrud4.create(predioLoteCocaOtroData).then((item7:any) => {
             console.log('item7')
             console.log(item7)
             coordenadaLoteCocaData.predio_id = item7.id
@@ -1375,7 +1375,7 @@
           })
         }
         personaLineaProductivaData.persona = item.id
-        uCrud5.create(personaLineaProductivaData, apikey).then((item5:any) => {})
+        uCrud5.create(personaLineaProductivaData).then((item5:any) => {})
 
         uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
         sender.clear(true);

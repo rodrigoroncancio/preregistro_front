@@ -18,32 +18,20 @@
           @click="openConsultaForm"
           style="color: black; background-color: rgba(255, 255, 255, 0.8); padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-flex; align-items: center; height: 60px; justify-content: center;"
         >
-          <v-icon left>mdi-magnify</v-icon> <!-- Icono de lupa -->
+          <v-icon left>mdi-magnify</v-icon>
           Consultar estado de Aspirante por Número documento
         </a>
       </v-col>
     </v-row>
 
     <div class="carrusel-wrapper">
-      <Swiper
-        :modules="[Navigation, Pagination]"
-        :slides-per-view="1"
-        :space-between="0"
-        :navigation="true"
-        :loop="true"
-        :breakpoints="{
-          768: { slidesPerView: 1.2 },
-          960: { slidesPerView: 2.2 },
-          1264: { slidesPerView: 3.2 },
-          1904: { slidesPerView: 4 }
-        }"
-      >
+      <Swiper v-bind="swiperOptions">
         <SwiperSlide v-for="conv in convocatorias" :key="conv.municipio">
           <div class="convocatoria-card" :style="{ backgroundImage: `url('${conv.img}')` }">
             <div class="card-content-top">
               <h1 :style="{ color: conv.colorTitulo }">{{ conv.municipio }}</h1>
               <h2 :style="{ color: conv.colorSub }">{{ conv.departamento }}</h2>
-              <h3 v-if="conv.fecha" v-html="conv.fecha"
+              <h3 v-if="conv.fecha_str" v-html="conv.fecha_str"
                 :style="{
                   border: '1px solid ' + conv.colorBorderFecha,
                   color: conv.colorFecha
@@ -54,13 +42,14 @@
               <v-btn
                 :color="conv.colorBtn"
                 :to="conv.link"
-                :disabled="conv.proximamente"
+                :disabled="getStatusBtn(conv.fecha_inicio, conv.fecha_fin)"
                 class="btn-convocatoria"
               >
                 <v-icon start size="35" color="white" class="me-2">
-                  {{ conv.proximamente ? "mdi-clock-outline" : "mdi-play-circle-outline" }}
+                  {{ getStatusIcon(conv.fecha_inicio, conv.fecha_fin) }}
                 </v-icon>
-                {{ conv.proximamente ? "PRÓXIMAMENTE" : "INSCRÍBETE AQUÍ" }}
+
+                {{ getStatus(conv.fecha_inicio, conv.fecha_fin) }}
               </v-btn>
             </div>
           </div>
@@ -75,10 +64,9 @@
   />
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Navigation, Pagination } from 'swiper/modules';
-import type { SwiperOptions } from 'swiper/types';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -87,11 +75,12 @@ import 'swiper/css/pagination';
 import { ref, onMounted } from "vue";
 import consultaForm from "@/modules/public/pages/components/consultar.vue";
 
-const swiperOptions: SwiperOptions = {
-  navigation: {
-    nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev'
-  },
+const swiperOptions = {
+  modules: [Navigation, Pagination],
+  slidesPerView: 1,
+  spaceBetween: 0,
+  navigation: true,
+  loop: true,
   breakpoints: {
     768: { slidesPerView: 1.2 },
     960: { slidesPerView: 2.2 },
@@ -101,18 +90,51 @@ const swiperOptions: SwiperOptions = {
 };
 
 const consultaModal = ref(false);
-const onFindDocument = (uuid: string) => {
+const onFindDocument = (uuid) => {
   consultaModal.value = false;
 }
 const openConsultaForm = () => {
   consultaModal.value = true;
 }
 
+const getStatus = (fecha_ini, fecha_fin) => {
+  if (fecha_ini === "" && fecha_fin === "") {
+    return "PRÓXIMAMENTE";
+  }
+
+  const fecha_actual = new Date();
+  const fecha_ini_date = new Date(fecha_ini);
+  const fecha_fin_date = new Date(fecha_fin);
+
+  if (fecha_actual >= fecha_ini_date && fecha_actual <= fecha_fin_date) {
+    return "INSCRÍBETE AQUÍ";
+  } else {
+    return "CERRADA";
+  }
+}
+
+const getStatusBtn = (fecha_ini, fecha_fin) => {
+  return getStatus(fecha_ini, fecha_fin) === "CERRADA" || getStatus(fecha_ini, fecha_fin) === "PRÓXIMAMENTE";
+}
+
+const getStatusIcon = (fecha_ini, fecha_fin) => {
+  switch (getStatus(fecha_ini, fecha_fin)) {
+    case "CERRADA":
+      return "mdi-lock-outline";
+    case "PRÓXIMAMENTE":
+      return "mdi-clock-outline";
+    default:
+      return "mdi-play-circle-outline";
+  }
+}
+
 const convocatorias = [
   {
     municipio: "Catatumbo",
     departamento: "Norte de Santander",
-    fecha: "Del <strong>01 al <br> 30 de abril</strong>",
+    fecha_ini: "2025-04-01",
+    fecha_fin: "2025-04-30",
+    fecha_str: "Del <strong>01 al <br> 30 de abril</strong>",
     colorTitulo: "#566180",
     colorSub: "#d6513e",
     colorFecha: "#566180",
@@ -125,7 +147,9 @@ const convocatorias = [
   {
     municipio: "Argelia",
     departamento: "Cauca",
-    fecha: "Del <strong>1 al <br> 13 de abril</strong>",
+    fecha_inicio: "2025-04-01",
+    fecha_fin: "2025-02-13",
+    fecha_str: "Del <strong>1 al <br> 13 de abril</strong>",
     colorTitulo: "#20c069",
     colorSub: "#0d6efd",
     colorFecha: "#0d6efd",
@@ -138,7 +162,9 @@ const convocatorias = [
   {
     municipio: "Tumaco",
     departamento: "Nariño",
-    fecha: "---------- <br> --------------",
+    fecha_inicio: "",
+    fecha_fin: "",
+    fecha_str: "---------- <br> --------------",
     colorTitulo: "#009971",
     colorSub: "#009971",
     colorFecha: "#009971",
@@ -151,7 +177,9 @@ const convocatorias = [
   {
     municipio: "Roberto Payán",
     departamento: "Nariño",
-    fecha: "---------- <br> --------------",
+    fecha_inicio: "",
+    fecha_fin: "",
+    fecha_str: "---------- <br> --------------",
     colorTitulo: "#223942",
     colorSub: "#223942",
     colorFecha: "#223942",
@@ -164,20 +192,24 @@ const convocatorias = [
   {
     municipio: "Samaniego",
     departamento: "Nariño",
-    fecha: "---------- <br> --------------",
+    fecha_inicio: "2025-05-07",
+    fecha_fin: "2025-07-05",
+    fecha_str: "Del <strong>07 de mayo</strong> al <br> <strong>05 de julio</strong>",
     colorTitulo: "#009971",
     colorSub: "#009971",
     colorFecha: "#009971",
     colorBorderFecha: "#1a8f1a",
     colorBtn: "#8BBD06",
     link: "/narino/iniciosamaniego",
-    proximamente: true,
+    proximamente: false,
     img: "https://expansionti.com/pnis/samananiego.png",
   },
   {
     municipio: "Valle del Guamuez Villagarzón",
     departamento: "Putumayo",
-    fecha: "---------- <br> --------------",
+    fecha_inicio: "",
+    fecha_fin: "",
+    fecha_str: "---------- <br> --------------",
     colorTitulo: "#566180",
     colorSub: "#566180",
     colorFecha: "#566180",
@@ -190,7 +222,9 @@ const convocatorias = [
   {
     municipio: "Riosucio",
     departamento: "Choco",
-    fecha: "---------- <br> --------------",
+    fecha_inicio: "",
+    fecha_fin: "",
+    fecha_str: "---------- <br> --------------",
     colorTitulo: "#911C09",
     colorSub: "#911C09",
     colorFecha: "#911C09",
@@ -203,7 +237,9 @@ const convocatorias = [
   {
     municipio: "Ituango",
     departamento: "Antioquia",
-    fecha: "---------- <br> --------------",
+    fecha_inicio: "",
+    fecha_fin: "",
+    fecha_str: "---------- <br> --------------",
     colorTitulo: "#004276",
     colorSub: "#004276",
     colorFecha: "#004276",
@@ -216,7 +252,9 @@ const convocatorias = [
   {
     municipio: "Buenaventura",
     departamento: "Valle del cauca",
-    fecha: "---------- <br> --------------",
+    fecha_inicio: "",
+    fecha_fin: "",
+    fecha_str: "---------- <br> --------------",
     colorTitulo: "#1A3891",
     colorSub: "#1A3891",
     colorFecha: "#0076CE",
@@ -229,7 +267,9 @@ const convocatorias = [
   {
     municipio: "Cumaribo",
     departamento: "Vichada",
-    fecha: "---------- <br> --------------",
+    fecha_inicio: "",
+    fecha_fin: "",
+    fecha_str: "---------- <br> --------------",
     colorTitulo: "#BB7918",
     colorSub: "#BB7918",
     colorFecha: "#BB7918",
