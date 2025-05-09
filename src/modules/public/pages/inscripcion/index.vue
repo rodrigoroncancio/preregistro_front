@@ -116,9 +116,19 @@
       let isValid: any = '';
 
       switch (page.rule) {
+        case 'validar_acepta':
+          const acepta_politica = sender.getValue("acepta_politica");
+          isValid = acepta_politica ? "" : "No puede continuar sin aceptar";
+          break;
         case 'validar_cupo':
-          const cupo = sender.getValue("cupo");
-          isValid = await uCrud.custom(`verificar-cupo/${convocatoria}/${cupo}`, "GET");
+          const es_colectivo = sender.getValue("es_colectivo");
+          if (es_colectivo){
+            const cupo = sender.getValue("cupo");
+            isValid = await uCrud.custom(`verificar-cupo/${convocatoria}/${cupo}`, "GET");
+          }
+          else {
+            isValid = "";
+          }
           break;
         case 'validar_documento':
           const numero_documento = sender.getValue("numero_documento");

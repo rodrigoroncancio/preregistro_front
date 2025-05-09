@@ -22,7 +22,7 @@
   import axios from "axios";
   import { useLoading } from "vue-loading-overlay";
   import { ref, onMounted } from "vue";
-  
+
   const uLoading = useLoading();
 
   const uCrud = useCrud("api/2.0/nucleo/persona");
@@ -37,7 +37,7 @@
   const itemsVillages = ref<Array<{ value: number; text: string }>>([]);
   const getVillageList = async (ubicacionId: number) => {
     try {
-      const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
+      const response = await axios.get(`/api/2.0/nucleo//api/2.0/nucleo/ubicacion/${ubicacionId}/`);
       itemsVillages.value = response.data.map((dept: any) => ({
         value: dept.id,
         text: dept.nombre // Asegurar compatibilidad
@@ -1088,7 +1088,7 @@
   "completeText": "Enviar"
 }
 
-   
+
   const survey = new Model(json);
 
   // survey.onStarted.add(() => {
@@ -1100,7 +1100,7 @@
   //     ];
   //   }
   // });
-  
+
   survey.onCompleting.add((sender, options) => {
       options.allowComplete = false;
       console.log('sender.data')
@@ -1152,7 +1152,7 @@
         whatsapp: sender.data.titular_whatsapp,
         tipo_comunidad_etnica_id: parseInt(sender.data.tipo_comunidad_etnica),
         nombre_comunidad: sender.data.tipo_comunidad_etnica_nombre,
-        pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0, 
+        pertenece_comunidad_etnica: sender.data.tipo_comunidad_etnica !== null ? 1 : 0,
         desplazado_2025: sender.data.desplazado_2025? 1 : 0,
         cabeza_flia: sender.data.titular_cabeza_familia? 1 : 0,
         num_nucleo: sender.data.num_nucleo,
@@ -1165,7 +1165,7 @@
         fase:1,
         discapacidad:0,
         fcrea: new Date().toISOString(),
-        fecha_estado: new Date().toISOString() 
+        fecha_estado: new Date().toISOString()
     };
     console.log('personaData')
     console.log(personaData)
@@ -1178,7 +1178,7 @@
         acepta_tratamiento_datos: 1,
         compromiso_proceso_susticion:1,
         fcrea: new Date().toISOString(),
-        fecha_aceptacion: new Date().toISOString() 
+        fecha_aceptacion: new Date().toISOString()
     };
     // persona_id
     console.log('sender.data.titular_foto_cara')
@@ -1220,7 +1220,7 @@
         corregimiento: sender.data.viveLugar === "3" ? 1 : 0,
         vereda: sender.data.viveLugar === "4" ? 1 : 0,
         direccion: sender.data.viveLugar === "4" ? sender.data.vive_vereda_otra : sender.data.vive_direccion,
-        residencia: 1,   
+        residencia: 1,
         lotecoca:sender.data.predio_coca_vive? 1 : 0,
         area_total_hectareas: sender.data.predio_coca_area_total,
         area_cultivo_hectareas: sender.data.predio_coca_area_cultivo,
@@ -1239,12 +1239,12 @@
         console.log('transformado')
       });
     }
-    
+
 
     // const coordenadaLoteCocaData = {
     //     predio_id: 0,
     //     coordenada: `POINT (${longitud} ${latitud})`,
-    //     coordenadastr: `${latitud} ${longitud}`,   
+    //     coordenadastr: `${latitud} ${longitud}`,
     //     origen: 'preregistro_catatumbo',
     //     fcrea: new Date().toISOString()
     // };
@@ -1442,7 +1442,7 @@
   survey.onValueChanged.add(async (sender, options) => {
 
     const match = options.name.match(/^persona(\d+)_num_identificación$/);
-  
+
     if (match) {
       const personaIndex = match[1]; // Extrae el número de persona (1-10)
 
@@ -1504,8 +1504,8 @@
              uToast.toastError("Número de cedula ya registrado en la convocatoria");
           }
 
-        })   
-        // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
+        })
+        // const response = await axios.get(`/api/2.0/nucleo//api/2.0/nucleo/ubicacion/${ubicacionId}/`);
     }
 
     if (options.name === "tiene_coca" || options.name === "tipo_exclusion") {
@@ -1525,29 +1525,29 @@
       } else {
         survey.showNavigationButtons = false;
       }
-    }  
+    }
 
     if (options.name === "latitud") {
       if (options.value === null || options.value === "")
         return;
       if (options.value < 6.839111 || options.value > 9.316977) {
         survey.setValue(options.name, "");
-        uToast.toastError("La latitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");  
-      }    
+        uToast.toastError("La latitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");
+      }
     }
 
     if (options.name === "coordinates") {
       console.log('options.value')
       console.log(options.value)
     }
-    
+
     if (options.name === "longitud") {
       if (options.value === null || options.value === "")
         return;
       if (options.value < -73.644220 || options.value > -72.025764) {
         survey.setValue(options.name, "");
-        uToast.toastError("La Longitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");  
-      }    
+        uToast.toastError("La Longitud ingresada esta por fuera de la ubicación establecida. Confirme los datos e ingreselos de nuevo");
+      }
     }
 
     if (options.name.startsWith("predio") && options.name.endsWith("_latitud")) {
@@ -1577,7 +1577,7 @@
         });
 
         sender.setVariable("fechahoy", fechaHoy);
-        
+
     }
 
     if (["predio1_area_coca", "predio2_area_coca", "predio3_area_coca", "predio4_area_coca", "predio5_area_coca", "predio6_area_coca", "predio7_area_coca", "predio8_area_coca", "predio9_area_coca", "predio10_area_coca"].includes(options.name)) {
@@ -1603,13 +1603,13 @@
       if (options.value === null || options.value === "")
         return;
         sender.setVariable("predionombre", options.value);
-        
+
     }
 
     if (options.name === "municipio") {
       if (options.value === null || options.value === "")
         return;
-       
+
         const municipioId = sender.getValue("municipio");
 
         const municipioArraigoQuestion = survey.getQuestionByName("municipio");
@@ -1619,7 +1619,7 @@
     if (options.name === "vereda") {
       if (options.value === null || options.value === "")
         return;
-       
+
         const veredaId = sender.getValue("vereda");
 
         const veredaArraigoQuestion = survey.getQuestionByName("vereda");
@@ -1630,7 +1630,7 @@
       if (options.value === null || options.value === "")
         return;
         sender.setVariable("vereda_arraigo", options.value);
-        
+
     }
     if (options.name === "numero_identificacion") {
       if (options.value === null || options.value === "")
@@ -1638,7 +1638,7 @@
 
       try {
         let loader = uLoading.show({});
-        
+
         axios.get(`api/1.0/core/validationregister/filterbydocumentnumber/${options.value}/4/no`)
         .then((resp: any) => {
           let alertQuestion = survey.getQuestionByName("alertasvalidacion");
@@ -1660,7 +1660,7 @@
             .then((resp: any) => {
               console.log('resp.data.status')
               console.log(resp.data.status)
-              
+
               if (resp.data.status === 1) {
                 const data = resp.data.data
 
@@ -1690,7 +1690,7 @@
                 survey.setValue("predio1_longitud", longitud);
                 survey.setValue("predio1_altura", altitud);
 
-                
+
 
 
                 if (data.foto_documento_frente && data.foto_documento_frente.trim().length > 0) {
@@ -1720,10 +1720,10 @@
                   { "origin": ["area_coca"], "target": "predio1_area_coca" },
                   { "origin": ["predio_residencia"], "target": "predio_nombre" },
                   { "origin": ["area_predio"], "target": "predio_area" },
-                  
+
                 ]
 
-                
+
 
                 fields.forEach(field => {
                   let dataOrigin = field.origin.map(key => (data as any)[key]).filter(Boolean).join(" ");
@@ -1735,10 +1735,10 @@
                   }
                 });
 
-                
+
                 survey.showNavigationButtons = true;
                 survey.setVariable("mostrar_campos", true);
-                
+
               } else {
                 if (resp.data.status === 2) {
                   uToast.toastError("Usuario con ficha diligenciada. No se puede continuar con el formulario.");
@@ -1751,16 +1751,16 @@
                 }
                 survey.showNavigationButtons = false;
                 survey.setVariable("mostrar_campos", false);
-                
+
               }
               axios.get(`api/1.0/core/cedulasrnec/getbyidentification/${options.value}`)
               .then((resp: any) => {
                 console.log(resp)
-                survey.setValue("fecha_nacimiento", resp.data.fecha_nacimiento); 
-                survey.setValue("fecha_expedicion", resp.data.fecha_expedicion);   
+                survey.setValue("fecha_nacimiento", resp.data.fecha_nacimiento);
+                survey.setValue("fecha_expedicion", resp.data.fecha_expedicion);
               })
               .catch((err: any) => { console.log(err) })
-              
+
             })
           .catch((err: any) => { console.log(err) })
           .finally(() => { loader.hide() });
@@ -1768,7 +1768,7 @@
           survey.setVariable("mostrar_campos", false);
           uToast.toastError("Digite un número de cedula valido");
           loader.hide()
-        }  
+        }
       } catch (error) {
         console.error("Error al consultar el endpoint:", error);
       }
@@ -1777,7 +1777,7 @@
 
 
 
-    
+
     const municipioNucleoQuestion = survey.getQuestionByName("municipio_nucleo_familiar");
     const corregimientoQuestion = survey.getQuestionByName("corregimiento");
     const vivecorregimientoQuestion = survey.getQuestionByName("vive_corregimiento");
@@ -1786,7 +1786,7 @@
     const desplazadoCorregimientoQuestion = survey.getQuestionByName("desplazado_corregimiento");
     const desplazadonucleoveredalQuestion = survey.getQuestionByName("desplazado_nucleo_veredal")
     const desplazadoveredaQuestion = survey.getQuestionByName("desplazado_vereda");
-  
+
 
 
     const prediococaCorregimientoQuestion = survey.getQuestionByName("predio_coca_corregimiento");
@@ -1861,7 +1861,7 @@
 
       loading.hide();
     }
-    
+
 
     if (options.name === "predio_coca_otro_municipio") {
       const municipio_id = options.value;

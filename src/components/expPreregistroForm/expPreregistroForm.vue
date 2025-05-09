@@ -1026,8 +1026,8 @@
   const itemsVillages = ref<Array<{ value: number; text: string }>>([]);
   const getVillageList = async (ubicacionId: number, tipo: string) => {
       try {
-      // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/${tipo}`);
-      apiUrl.value = `/api/2.0/nucleo/ubicacion/by-id/?padre_id=${ubicacionId}&tipos=${tipo}`
+      // const response = await axios.get(`/api/2.0/nucleo//api/2.0/nucleo/ubicacion/${ubicacionId}/${tipo}`);
+      apiUrl.value = `/api/2.0/nucleo//api/2.0/nucleo/ubicacion/?padre_id=${ubicacionId}&tipos=${tipo}`
       const response = await llamarApi()
       console.log(response)
 
@@ -1440,7 +1440,7 @@
           console.error("Error en primera validación:", error);
         });
 
-        // const response = await axios.get(`/api/2.0/nucleo/ubicacion/by-id/${ubicacionId}/`);
+        // const response = await axios.get(`/api/2.0/nucleo//api/2.0/nucleo/ubicacion/${ubicacionId}/`);
     }
 
     if (options.name === "tiene_coca" || options.name === "tipo_exclusion") {
