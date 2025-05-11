@@ -51,7 +51,7 @@
   const convocatoria = route.params.convocatoria;
   const fase = route.params.fase;
 
-  const uCrud = useCrud("api/2.0/inscripciones");
+  const uCrud = useCrud("/api/2.0/inscripciones");
   const uToast = useToast();
 
   const isLoaded = ref(false);

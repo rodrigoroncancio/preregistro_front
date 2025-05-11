@@ -47,7 +47,7 @@
     // const apikey = 'gAAAAABoEqasTj16HrxYAWXiBUbdnPiY7PCa7z0m8Jd6pqDLxHNFiioBWptP-RCbId9JS2hr8DxR-QBXNeKNiy7aiqdb1iH3krEeG7KJA0imDbeUgdSjbLDFaQgfdWSX4I6hIHAhOS3A'
 
     const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
-
+      console.log("llama la llama 1")
       return api.get(url, {
         ...config,
         headers: {
