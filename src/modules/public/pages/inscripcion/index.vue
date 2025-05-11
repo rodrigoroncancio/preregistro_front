@@ -25,12 +25,14 @@
     :btn-cancel-text="'Cerrar'"
   >
     <v-card-text>
-      <h3 class="text-center">
-        <p>Su formulario ha sido guardado correctamente.</p><br />
+      <h3 class="text-center">Su formulario ha sido guardado correctamente.</h3>
+      <div>
         <p>Por favor, haga una captura de pantalla de este código.</p>
-        <p>{{ msg_alerta }}</p>
-      </h3>
+      </div>
       <h1 class="text-center mt-6 mb-0">{{ code }}</h1>
+      <div>
+        <p style="text-align: justify; font-style: italic;">{{ msg_alerta }}</p>
+      </div>
     </v-card-text>
   </expModalForm>
 </template>
@@ -85,7 +87,10 @@
         uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
         sender.clear(true);
         showModal.value = true;
-        msg_alerta.value = "El núcleo familiar deberá aportar en los 30 días siguientes a su vinculación al programa el documento que acredite su relación con el predio";
+        // const predio_coca_tipo_documento = senderData["predio_coca_tipo_documento"];
+        // msg_alerta.value = predio_coca_tipo_documento ? "" : "El núcleo familiar deberá aportar en los 30 días siguientes a su vinculación al programa el documento que acredite su relación con el predio";
+
+        msg_alerta.value = response.alertas;
         code.value = response.code;
       })
       .catch((error: any) => {
@@ -124,7 +129,7 @@
           isValid = acepta_politica ? "" : "No puede continuar sin aceptar";
           break;
         case 'validar_cupo':
-          const es_colectivo = sender.getValue("es_colectivo");
+          const es_colectivo: boolean = sender.getValue("es_colectivo") ?? true;
           if (es_colectivo){
             const cupo = sender.getValue("cupo");
             isValid = await uCrud.custom(`verificar-cupo/${convocatoria}/${cupo}`, "GET");
