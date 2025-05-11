@@ -5,6 +5,7 @@ const api = axios.create()
 
 // Crear el método customGet como una función fuera del componente
 export const customGet = (url: string, config: any = {}) => {
+  console.log("llama la llama 3")
   return api.get(url, {
     ...config,
     headers: {

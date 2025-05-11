@@ -7,6 +7,7 @@ const api = axios.create()
 
 // Creamos el método
 const customGet = (url: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
+  console.log("llama la llama 2")
   return api.get(url, {
     ...config,
     headers: {
