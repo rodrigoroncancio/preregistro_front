@@ -25,11 +25,14 @@
     :btn-cancel-text="'Cerrar'"
   >
     <v-card-text>
-      <h3 class="text-center">
-        <p>Su formulario ha sido guardado correctamente.</p><br />
+      <h3 class="text-center">Su formulario ha sido guardado correctamente.</h3>
+      <div>
         <p>Por favor, haga una captura de pantalla de este código.</p>
-      </h3>
+      </div>
       <h1 class="text-center mt-6 mb-0">{{ code }}</h1>
+      <div>
+        <p style="text-align: justify; font-style: italic;">{{ msg_alerta }}</p>
+      </div>
     </v-card-text>
   </expModalForm>
 </template>
@@ -48,7 +51,7 @@
   const convocatoria = route.params.convocatoria;
   const fase = route.params.fase;
 
-  const uCrud = useCrud("api/2.0/inscripciones");
+  const uCrud = useCrud("/api/2.0/inscripciones");
   const uToast = useToast();
 
   const isLoaded = ref(false);
@@ -56,6 +59,7 @@
   const formId = ref(0);
   const validatePage = ref(true);
   const showModal = ref(false);
+  const msg_alerta = ref('');
   const code = ref('');
 
   onMounted(async () => {
@@ -83,6 +87,10 @@
         uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
         sender.clear(true);
         showModal.value = true;
+        // const predio_coca_tipo_documento = senderData["predio_coca_tipo_documento"];
+        // msg_alerta.value = predio_coca_tipo_documento ? "" : "El núcleo familiar deberá aportar en los 30 días siguientes a su vinculación al programa el documento que acredite su relación con el predio";
+
+        msg_alerta.value = response.alertas;
         code.value = response.code;
       })
       .catch((error: any) => {
@@ -121,7 +129,7 @@
           isValid = acepta_politica ? "" : "No puede continuar sin aceptar";
           break;
         case 'validar_cupo':
-          const es_colectivo = sender.getValue("es_colectivo");
+          const es_colectivo: boolean = sender.getValue("es_colectivo") ?? true;
           if (es_colectivo){
             const cupo = sender.getValue("cupo");
             isValid = await uCrud.custom(`verificar-cupo/${convocatoria}/${cupo}`, "GET");
@@ -138,7 +146,7 @@
           const tiene_coca = sender.getValue("tiene_coca");
           const tipo_exclusion = sender.getValue("tipo_exclusion");
           if (!(tiene_coca && tipo_exclusion == 11))
-            isValid = "No cumple los criterios para poder participar en la convocatoria";
+            isValid = "En este momento usted no puede continuar con la inscripción al programa RenHacemos, de acuerdo con los criterios de la Resolución 0076 de 2025 -y las normas que la modifiquen, deroguen o subroguen- de la Dirección de Sustitución de Cultivos de Uso Ilícito, de la Agencia de Renovación del Territorio";
           break;
         default:
           options.allowChanging = true;
