@@ -63,6 +63,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import(/* webpackChunkName: "PublicInscripcion" */ "@/modules/public/pages/inscripcion/index.vue"),
       },
       {
+        path: "ficha/:convocatoria/:fase",
+        name: "public-ficha",
+        component: () => import(/* webpackChunkName: "PublicFicha" */ "@/modules/public/pages/ficha/index.vue"),
+      },
+      {
         path: "narino", // Ruta relativa al path padre ("/catatumbo")
         name: "public-narino",
         component: () => import("@/modules/public/pages/narino/index.vue"), // Añade un componente para el layout de Catatumbo

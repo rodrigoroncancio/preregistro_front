@@ -51,7 +51,7 @@
   const convocatoria = route.params.convocatoria;
   const fase = route.params.fase;
 
-  const uCrud = useCrud("/api/2.0/inscripciones");
+  const uCrud = useCrud("/api/2.0");
   const uToast = useToast();
 
   const isLoaded = ref(false);
@@ -62,9 +62,20 @@
   const msg_alerta = ref('');
   const code = ref('');
 
-  onMounted(async () => {
-    const data = await uCrud.custom(`estructura/${convocatoria}/${fase}`, "GET");
+  const obtenerDatos = async (numero_documento: number) => {
+    try {
+      const response = await uCrud.custom(`ficha/${numero_documento}/obtener-datos`)
+      console.log(response);
+      // dataLineaProductiva.value = response.data[0]
+      // survey.setValue('establece_fortalece', dataLineaProductiva.value.tipo_experiencia || 0);
+      // survey.setValue('linea_productiva', dataLineaProductiva.value.linea_productiva || 0);
+    } catch (error) {
+      console.error("Error fetching village list:", error);
+    }
+  };
 
+  onMounted(async () => {
+    const data = await uCrud.custom(`inscripciones/estructura/${convocatoria}/${fase}`, "GET", {"parameters":{"tipo":1}});
     json.value = (data as any)?.json || {};
     formId.value = (data as any)?.id || 0;
     isLoaded.value = true;
@@ -87,6 +98,9 @@
         uToast.toastSuccess("Su formulario ha sido guardado correctamente.");
         sender.clear(true);
         showModal.value = true;
+        // const predio_coca_tipo_documento = senderData["predio_coca_tipo_documento"];
+        // msg_alerta.value = predio_coca_tipo_documento ? "" : "El núcleo familiar deberá aportar en los 30 días siguientes a su vinculación al programa el documento que acredite su relación con el predio";
+
         msg_alerta.value = response.alertas;
         code.value = response.code;
       })
@@ -137,17 +151,16 @@
           break;
         case 'validar_documento':
           const numero_documento = sender.getValue("numero_documento");
-          isValid = await uCrud.custom(`verificar-documento/${numero_documento}/${formId.value}`, "GET");
+          isValid = await uCrud.custom(`inscripciones/verificar-documento/${numero_documento}/${formId.value}`, "GET");
+          if (isValid == ""){
+            obtenerDatos(numero_documento);
+          }
           break;
         case 'validar_inhabilidad':
-          const no_tiene_coca = !Boolean(sender.getValue("tiene_coca"));
-          let tipo_exclusion = false;
-          for (let ind = 1; ind <= 7; ind++) {
-            tipo_exclusion = tipo_exclusion || Boolean(sender.getValue("tipo_exclusion_" + ind));
-          }
-          if (no_tiene_coca || tipo_exclusion){
+          const tiene_coca = sender.getValue("tiene_coca");
+          const tipo_exclusion = sender.getValue("tipo_exclusion");
+          if (!(tiene_coca && tipo_exclusion == 11))
             isValid = "En este momento usted no puede continuar con la inscripción al programa RenHacemos, de acuerdo con los criterios de la Resolución 0076 de 2025 -y las normas que la modifiquen, deroguen o subroguen- de la Dirección de Sustitución de Cultivos de Uso Ilícito, de la Agencia de Renovación del Territorio";
-          }
           break;
         default:
           options.allowChanging = true;
