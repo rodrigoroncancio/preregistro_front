@@ -12,9 +12,7 @@ import useAuth from "@/modules/auth/composables/useAuth";
 import useConst from "@/composables/useConst";
 
 const uConst = useConst();
-console.log(uConst);
 axios.defaults.baseURL = uConst.baseApi;
-console.log(axios.defaults.baseURL);
 
 axios.interceptors.request.use((config) => {
   const auth = useAuth();
