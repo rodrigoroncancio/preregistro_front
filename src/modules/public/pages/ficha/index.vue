@@ -68,23 +68,23 @@
 
   const obtenerDatos = async (numero_documento: number) => {
     try {
+      numero_documento = 1093913093;
       const response = await uCrud.custom(`ficha/${numero_documento}/obtener-datos`);
 
       if (surveyRef.value) {
         // Para persona
-        if (response?.persona) {
-          Object.entries(response.persona).forEach(([key, value]) => {
+        if ((response as any)?.persona) {
+          Object.entries((response as any).persona).forEach(([key, value]) => {
             if (value !== undefined && value !== null) {
               surveyRef.value.setValue(`persona.${key}`, value);
             }
           });
         }
-
         // Para inscripcion
-        if (response?.inscripcion) {
-          Object.entries(response.inscripcion).forEach(([key, value]) => {
+        if ((response as any)?.inscripcion) {
+          Object.entries((response as any).inscripcion).forEach(([key, value]) => {
             if (value !== undefined && value !== null) {
-              surveyRef.value.setValue(`inscripcion.${key}`, value);
+              surveyRef.value.setValue(`ficha.${key}`, value);
             }
           });
         }
@@ -98,6 +98,7 @@
     const data = await uCrud.custom(`inscripciones/estructura/${convocatoria}/${fase}`, "GET", {"parameters":{"tipo":1}});
     json.value = (data as any)?.json || {};
     formId.value = (data as any)?.id || 0;
+    obtenerDatos(0);
     isLoaded.value = true;
   });
 
