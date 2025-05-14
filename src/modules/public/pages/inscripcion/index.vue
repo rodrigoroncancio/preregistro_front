@@ -71,7 +71,13 @@
   });
 
   const onValueChanged = async (sender: any, options: any) => {
-
+    if (options.name === "cantidad") {
+      const cantidad = options.value;
+      const matrixQuestion = sender.getQuestionByName("panel_quest");
+      if (matrixQuestion) {
+        matrixQuestion.panelCount = cantidad;
+      }
+    }
   }
 
   const onCompleting = async (sender: any, options: any) => {
