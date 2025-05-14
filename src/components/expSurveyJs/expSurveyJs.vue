@@ -3,8 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue';
-
+  import { computed, ref, defineExpose } from 'vue';
   import 'survey-core/defaultV2.min.css';
   import "survey-core/survey.i18n.js";
   import { Model } from "survey-core";
@@ -29,6 +28,47 @@
     }
   });
 
+  const survey = ref<Model>();
+
+  // Inicialización del survey
+  const initializeSurvey = () => {
+    const _json = {
+      ...props.json,
+      locale: 'es'
+    };
+
+    survey.value = new Model(_json);
+
+    survey.value.onValueChanged.add(async (sender, options) => {
+      props.onValueChanged(sender, options);
+    });
+
+    survey.value.onCurrentPageChanging.add(function (sender, options) {
+      props.onCurrentPageChanging(sender, options);
+    });
+
+    survey.value.onCompleting.add((sender, options) => {
+      props.onCompleting(sender, options);
+    });
+  };
+
+  // Inicializamos el survey
+  initializeSurvey();
+
+  // Función para establecer valores
+  const setValue = (key: string, value: any) => {
+    if (survey.value) {
+      survey.value.setValue(key, value);
+    } else {
+      console.warn('Survey model no está inicializado');
+    }
+  };
+
+  // Exponemos la función setValue al componente padre
+  defineExpose({
+    setValue
+  });
+/*
   const json = computed(() => {
     let _json = props.json;
     _json.locale = 'es';
@@ -48,6 +88,7 @@
   survey.onCompleting.add((sender, options) => {
     props.onCompleting(sender, options);
   });
+  */
 </script>
 
 <style lang="scss">

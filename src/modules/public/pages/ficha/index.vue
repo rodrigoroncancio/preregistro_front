@@ -8,6 +8,7 @@
       </v-row>
       <div class="main-container">
         <exp-survey-js
+          ref="surveyRef"
           :json="json"
           :onCurrentPageChanging="onCurrentPageChanging"
           :onCompleting="onCompleting"
@@ -40,6 +41,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
+  import { Model } from "survey-core";
 
   import useCrud from '@/composables/useCrud';
   import useToast from '@/composables/useToast';
@@ -62,15 +64,33 @@
   const msg_alerta = ref('');
   const code = ref('');
 
+  const surveyRef = ref();
+
   const obtenerDatos = async (numero_documento: number) => {
     try {
-      const response = await uCrud.custom(`ficha/${numero_documento}/obtener-datos`)
-      console.log(response);
-      // dataLineaProductiva.value = response.data[0]
-      // survey.setValue('establece_fortalece', dataLineaProductiva.value.tipo_experiencia || 0);
-      // survey.setValue('linea_productiva', dataLineaProductiva.value.linea_productiva || 0);
+      const response = await uCrud.custom(`ficha/${numero_documento}/obtener-datos`);
+
+      if (surveyRef.value) {
+        // Para persona
+        if (response?.persona) {
+          Object.entries(response.persona).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+              surveyRef.value.setValue(`persona.${key}`, value);
+            }
+          });
+        }
+
+        // Para inscripcion
+        if (response?.inscripcion) {
+          Object.entries(response.inscripcion).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+              surveyRef.value.setValue(`inscripcion.${key}`, value);
+            }
+          });
+        }
+      }
     } catch (error) {
-      console.error("Error fetching village list:", error);
+      console.error("Error al obtener los datos:", error);
     }
   };
 
